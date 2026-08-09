@@ -1,0 +1,49 @@
+site_name: FFWF Robotics Docs
+site_description: Documentation for Tectum, Tau, and JMFTS
+site_url: https://ffwfrobotics.github.io/
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - search.suggest
+    - content.code.copy
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Tectum:
+      - Quickstart: tectum/quickstart.md
+      - Tutorial: tectum/tutorial.md
+      - Cookbook: tectum/cookbook.md
+      - Reference: tectum/reference.md
+  - Tau:
+      - Quickstart: tau/quickstart.md
+      - Tutorial: tau/tutorial.md
+      - Cookbook: tau/cookbook.md
+      - Reference: tau/reference.md
+  - JMFTS:
+      - Quickstart: jmfts/quickstart.md
+      - Tutorial: jmfts/tutorial.md
+      - Cookbook: jmfts/cookbook.md
+      - Reference: jmfts/reference.md
