@@ -1,12 +1,12 @@
 # Tau — Reference
 
+<p class="axis">In-depth × Self-guided</p>
+
+Tau's API surface, configuration, schemas, and invariants. Built for search and lookup, not for reading start to finish.
+
 !!! warning "Not yet written"
-    This page is scaffolding only. No content has been authored yet.
+    This page is scaffolding. No content has been authored for it yet.
 
-**In-depth + self-guided.** Exhaustive, lookup-oriented material — API surface, config options, schemas, invariants. Optimized for search, not reading start to end.
-
----
-
-*Contributing:* replace this stub with real reference content for Tau. See the
-[repo README](https://github.com/ffwfrobotics/ffwfrobotics.github.io) for the
-authoring guide and the four-category rationale.
+Replace this stub with real reference material for Tau. The
+[style guide](../style-guide.md) covers the tokens and components available,
+and what belongs in each quadrant.

@@ -1,12 +1,12 @@
 # Tau — Cookbook
 
+<p class="axis">Fast × Self-guided</p>
+
+Recipes for one specific job in Tau, for people who already know the basics and want the steps without the narration.
+
 !!! warning "Not yet written"
-    This page is scaffolding only. No content has been authored yet.
+    This page is scaffolding. No content has been authored for it yet.
 
-**Fast + self-guided.** Task-oriented recipes for people who already know the basics and want the steps for one specific job, with minimal surrounding explanation.
-
----
-
-*Contributing:* replace this stub with real cookbook content for Tau. See the
-[repo README](https://github.com/ffwfrobotics/ffwfrobotics.github.io) for the
-authoring guide and the four-category rationale.
+Replace this stub with real cookbook material for Tau. The
+[style guide](../style-guide.md) covers the tokens and components available,
+and what belongs in each quadrant.

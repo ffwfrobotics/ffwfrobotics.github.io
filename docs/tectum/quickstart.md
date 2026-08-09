@@ -1,12 +1,12 @@
 # Tectum — Quickstart
 
+<p class="axis">Fast × Learning</p>
+
+The smallest path to seeing Tectum run — no explanation of why, just enough to confirm it works on your machine.
+
 !!! warning "Not yet written"
-    This page is scaffolding only. No content has been authored yet.
+    This page is scaffolding. No content has been authored for it yet.
 
-**Fast + learning-oriented.** The smallest set of steps to get Tectum running and see it do something — no explanation of why, just enough to confirm it works.
-
----
-
-*Contributing:* replace this stub with real quickstart content for Tectum. See the
-[repo README](https://github.com/ffwfrobotics/ffwfrobotics.github.io) for the
-authoring guide and the four-category rationale.
+Replace this stub with real quickstart material for Tectum. The
+[style guide](../style-guide.md) covers the tokens and components available,
+and what belongs in each quadrant.

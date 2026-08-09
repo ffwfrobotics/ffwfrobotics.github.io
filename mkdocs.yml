@@ -4,17 +4,20 @@ site_url: https://ffwfrobotics.github.io/
 
 theme:
   name: material
+  logo: assets/logo.png
+  favicon: assets/favicon.ico
+  # No webfont fetch: the site stays self-contained and Courier/system-sans
+  # are the intended faces anyway.
+  font: false
   palette:
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
+    - scheme: slate
       toggle:
-        icon: material/brightness-7
-        name: Switch to dark mode
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
-      toggle:
-        icon: material/brightness-4
+        icon: material/skull
         name: Switch to light mode
+    - scheme: default
+      toggle:
+        icon: material/skull-outline
+        name: Switch to dark mode
   features:
     - navigation.tabs
     - navigation.sections
@@ -23,8 +26,13 @@ theme:
     - search.suggest
     - content.code.copy
 
+extra_css:
+  - stylesheets/ffwf.css
+
 markdown_extensions:
   - admonition
+  - attr_list
+  - md_in_html
   - pymdownx.details
   - pymdownx.superfences
   - toc:
@@ -47,3 +55,4 @@ nav:
       - Tutorial: jmfts/tutorial.md
       - Cookbook: jmfts/cookbook.md
       - Reference: jmfts/reference.md
+  - Style guide: style-guide.md

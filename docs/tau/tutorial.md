@@ -1,12 +1,12 @@
 # Tau — Tutorial
 
+<p class="axis">In-depth × Learning</p>
+
+A guided build that teaches Tau's concepts as you go. Assumes you have never seen the system before.
+
 !!! warning "Not yet written"
-    This page is scaffolding only. No content has been authored yet.
+    This page is scaffolding. No content has been authored for it yet.
 
-**In-depth + learning-oriented.** A guided, narrated walkthrough that teaches Tau's concepts by building something real with it. Assumes no prior familiarity.
-
----
-
-*Contributing:* replace this stub with real tutorial content for Tau. See the
-[repo README](https://github.com/ffwfrobotics/ffwfrobotics.github.io) for the
-authoring guide and the four-category rationale.
+Replace this stub with real tutorial material for Tau. The
+[style guide](../style-guide.md) covers the tokens and components available,
+and what belongs in each quadrant.

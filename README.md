@@ -27,6 +27,15 @@ mkdocs.yml          # nav + theme config
 Category pages currently ship as stubs (clearly marked "Not yet written") —
 structure first, content per project as a follow-up pass.
 
+## Styling
+
+The visual system is derived from the FFwF Robotics homepage: red as the only
+accent, Courier New as the machine voice, dark by default. Tokens live in
+`docs/stylesheets/ffwf.css`; `docs/style-guide.md` documents them with live
+examples and records what was deliberately dropped from the homepage.
+
+No webfonts are fetched — the site is self-contained.
+
 ## Local dev
 
 ```bash
