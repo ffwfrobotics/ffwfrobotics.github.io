@@ -36,6 +36,13 @@
   /* One step deeper than #ff0000 so headings and links clear AA at every
      size on white. #ff0000 on white is only 4.0:1. */
   --ffwf-ink-red: #cc0000;
+
+  /* Documentation state. The one place the site is not monochrome-plus-red —
+     see the style guide for why status is data rather than emphasis. */
+  --ffwf-state-grey: #5c5a57;
+  --ffwf-state-red: #cc0000;
+  --ffwf-state-yellow: #8a6a00;
+  --ffwf-state-green: #1a7a45;
 }
 
 /* Dark scheme */
@@ -47,6 +54,11 @@
   --ffwf-hairline: #2a2a2d;
   --ffwf-ink-red: #ff0000;  /* 4.8:1 on the ground — full intensity earns its place here */
   --ffwf-halo: rgba(255, 255, 255, 0.92);
+
+  --ffwf-state-grey: #8c8a87;
+  --ffwf-state-red: #ff0000;
+  --ffwf-state-yellow: #d9a400;
+  --ffwf-state-green: #3ec27a;
 }
 
 /* --- Map onto Material -------------------------------------------------- */
@@ -372,6 +384,22 @@
   text-transform: uppercase;
 }
 
+/* On a project page the whole quadrant is one destination, so the heading is
+   the link and there is no row of per-project shortcuts under it. */
+.md-typeset .crosswalk__cell h3 a,
+.md-typeset .roster__item h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.md-typeset .crosswalk__cell h3 a:hover,
+.md-typeset .crosswalk__cell h3 a:focus-visible,
+.md-typeset .roster__item h3 a:hover,
+.md-typeset .roster__item h3 a:focus-visible {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
 /* Redundant while the axis rails are visible, so it only appears once they
    drop out at narrow widths. Without it the quadrants lose their coordinates,
    which is the whole point of the grid. */
@@ -387,13 +415,18 @@
 }
 
 /* Project shortcuts inside each quadrant. */
-.md-typeset .crosswalk__links {
+.md-typeset .crosswalk__links,
+.md-typeset .roster__badges {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 0.4rem;
 }
 
-.md-typeset .crosswalk__links a {
+/* The quiet pill: a link that is a destination, not a claim about state.
+   Same geometry as the axis eyebrow, without the filled red border. */
+.md-typeset .crosswalk__links a,
+.md-typeset .chip {
   padding: 3px 10px;
   font-family: var(--ffwf-mono);
   font-size: 0.62rem;
@@ -406,7 +439,9 @@
 }
 
 .md-typeset .crosswalk__links a:hover,
-.md-typeset .crosswalk__links a:focus-visible {
+.md-typeset .crosswalk__links a:focus-visible,
+.md-typeset .chip:hover,
+.md-typeset .chip:focus-visible {
   color: var(--ffwf-ink-red);
   border-color: var(--ffwf-red);
 }
@@ -434,9 +469,81 @@
 }
 
 .md-typeset .roster__item p {
-  margin: 0;
+  margin: 0 0 0.8em;
   font-size: 0.7rem;
   line-height: 1.55;
+  color: var(--ffwf-ash);
+}
+
+.md-typeset .roster__item p:last-child {
+  margin-bottom: 0;
+}
+
+/* --- Documentation state ------------------------------------------------ */
+
+/* Four states, four colors — the only chromatic exception on the site. Status
+   is data, not emphasis, and a reader scanning a table needs to sort it at a
+   glance. Outlined rather than filled so it stays in the pill vocabulary the
+   rest of the site already speaks, and the word is always spelled out so the
+   color is never the only signal. */
+.md-typeset .state {
+  display: inline-block;
+  padding: 2px 9px;
+  font-family: var(--ffwf-mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  border: 1px solid currentcolor;
+  border-radius: var(--ffwf-pill);
+  text-decoration: none;
+}
+
+.md-typeset a.state:hover,
+.md-typeset a.state:focus-visible {
+  border-width: var(--ffwf-rule);
+}
+
+.md-typeset .state--grey   { color: var(--ffwf-state-grey); }
+.md-typeset .state--red    { color: var(--ffwf-state-red); }
+.md-typeset .state--yellow { color: var(--ffwf-state-yellow); }
+.md-typeset .state--green  { color: var(--ffwf-state-green); }
+
+/* The table itself is unclassed so it inherits the base table styling; the
+   wrapper carries the scroll and the column sizing. */
+.md-typeset .docstate {
+  overflow-x: auto;
+  margin: 1.5rem 0 1rem;
+}
+
+.md-typeset .docstate table {
+  width: 100%;
+}
+
+.md-typeset .docstate th[scope="row"] {
+  font-family: var(--ffwf-mono);
+  background: transparent;
+  border-bottom: 1px solid var(--ffwf-hairline);
+  text-transform: none;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.md-typeset .docstate__version {
+  font-family: var(--ffwf-mono);
+  font-size: 0.65rem;
+  color: var(--ffwf-ash);
+}
+
+.md-typeset a.docstate__version {
+  color: var(--ffwf-ink-red);
+}
+
+.md-typeset .state-legend {
+  font-family: var(--ffwf-mono);
+  font-size: 0.62rem;
+  line-height: 2.2;
   color: var(--ffwf-ash);
 }
 

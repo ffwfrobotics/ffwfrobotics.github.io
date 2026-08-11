@@ -1,12 +1,14 @@
+---
+title: "Cookbook"
+category: "cookbook"
+status: "stub"
+---
+
 # JMFTS — Cookbook
 
-<p class="axis">Fast × Self-guided</p>
+<p class="axis">Action × Application</p>
 
-Recipes for one specific job in JMFTS, for people who already know the basics and want the steps without the narration.
+Recipes for specific JMFTS jobs — tuning matryoshka dimensions, reweighting BM25 against the vector score, adding a reranking stage.
 
 !!! warning "Not yet written"
     This page is scaffolding. No content has been authored for it yet.
-
-Replace this stub with real cookbook material for JMFTS. The
-[style guide](../style-guide.md) covers the tokens and components available,
-and what belongs in each quadrant.

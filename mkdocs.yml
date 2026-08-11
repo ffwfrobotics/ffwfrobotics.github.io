@@ -29,6 +29,10 @@ theme:
 extra_css:
   - stylesheets/ffwf.css
 
+# Expands the docstate table and integration roster from page frontmatter.
+hooks:
+  - hooks/docstate.py
+
 markdown_extensions:
   - admonition
   - attr_list
@@ -41,18 +45,33 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Tectum:
-      - Quickstart: tectum/quickstart.md
-      - Tutorial: tectum/tutorial.md
+      - tectum/index.md
+      - Tutorials:
+          - tectum/tutorials/index.md
+          - Quickstart: tectum/tutorials/quickstart.md
       - Cookbook: tectum/cookbook.md
+      - DevOps Manual: tectum/devops.md
       - Reference: tectum/reference.md
   - Tau:
-      - Quickstart: tau/quickstart.md
-      - Tutorial: tau/tutorial.md
+      - tau/index.md
+      - Tutorials:
+          - tau/tutorials/index.md
+          - Quickstart: tau/tutorials/quickstart.md
       - Cookbook: tau/cookbook.md
+      - DevOps Manual: tau/devops.md
       - Reference: tau/reference.md
   - JMFTS:
-      - Quickstart: jmfts/quickstart.md
-      - Tutorial: jmfts/tutorial.md
+      - jmfts/index.md
+      - Tutorials:
+          - jmfts/tutorials/index.md
+          - Quickstart: jmfts/tutorials/quickstart.md
       - Cookbook: jmfts/cookbook.md
+      - DevOps Manual: jmfts/devops.md
       - Reference: jmfts/reference.md
+  - Integrations:
+      - integrations/index.md
+      - Tectum + Tau: integrations/tectum-tau.md
+      - Tectum + JMFTS: integrations/tectum-jmfts.md
+      - Tau + JMFTS: integrations/tau-jmfts.md
+      - The FFwF Full Stack Agent: integrations/full-stack-agent.md
   - Style guide: style-guide.md

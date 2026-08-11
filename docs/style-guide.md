@@ -8,7 +8,8 @@ theme with the skull in the header to see both schemes.
 Two rules govern the rest:
 
 1. **One accent.** Red is the only chromatic color on the site. If something
-   needs to stand out, it is red or it is not emphasized.
+   needs to stand out, it is red or it is not emphasized. The
+   [state badges](#documentation-state) are the single deliberate exception.
 2. **Courier is the machine voice.** Headings, code, nav, and labels are
    Courier New. Prose is not machine output, so prose is not Courier.
 
@@ -100,14 +101,25 @@ applied in CSS, not baked into the asset.
 
 ### Axis eyebrow
 
-Every category page states its coordinates. The recipe — black fill, `2px`
-solid red border, `15px` radius — is lifted verbatim from the homepage's
-`ProjectTagLink` component.
+Every category page states its coordinates on the 2×2. The recipe — black
+fill, `2px` solid red border, `15px` radius — is lifted verbatim from the
+homepage's `ProjectTagLink` component.
 
-<p class="axis">Fast × Learning</p>
+<p class="axis">Action × Acquisition</p>
 
 ```html
-<p class="axis">Fast × Learning</p>
+<p class="axis">Action × Acquisition</p>
+```
+
+### Chips
+
+The quiet pill: same geometry, hairline border instead of red. A chip is a
+destination, never a claim about state.
+
+<a class="chip" href="../tectum/tutorials/quickstart/">Quickstart</a>
+
+```html
+<a class="chip" href="../tectum/tutorials/quickstart/">Quickstart</a>
 ```
 
 ### Code blocks
@@ -136,7 +148,23 @@ neutral.
 
 `.crosswalk` draws the four categories as a 2×2 with real axis rails; the axis
 labels are the content, not decoration. `.roster` is the auto-fitting card grid
-used for the project list. Both are on the [home page](index.md).
+used for the project list and the integration list. Both are on the
+[home page](index.md).
+
+The axes are Diátaxis's own: **action against cognition** on the rows, and
+**acquisition against application** on the columns. An earlier version of this
+site used "fast against in-depth", which quietly collapsed the cognition half —
+every quadrant became a way of doing something, and nothing was a way of
+understanding it.
+
+|  | Acquisition (studying) | Application (working) |
+|--|------------------------|-----------------------|
+| **Action** | Tutorials | Cookbook |
+| **Cognition** | DevOps Manual | Reference |
+
+The home page's crosswalk links all three projects from each quadrant. A
+project page reuses the same grid, but each quadrant is a single destination,
+so the heading itself is the link and the shortcut row is dropped.
 
 Cards lift `5px` on hover, matching the homepage's `ProjectCard`. The lift is
 suppressed under `prefers-reduced-motion`.
@@ -144,6 +172,57 @@ suppressed under `prefers-reduced-motion`.
 Below 45em the crosswalk collapses to one column and the axis rails come out.
 Each cell then prints its own coordinates instead — without that, the quadrants
 would lose the only thing the grid exists to show.
+
+## Documentation state
+
+Every category page declares what it is worth in its own frontmatter:
+
+```yaml
+---
+title: Cookbook
+category: cookbook
+status: stub        # stub | outdated | draft | stable
+---
+```
+
+`hooks/docstate.py` reads those declarations at build time and expands the
+`<!-- docstate-table -->` marker on the home page. There is no second list to
+keep in sync, and a missing or misspelled `status` fails the build rather than
+rendering a table that lies.
+
+Four states, four colors — the one place the site is not monochrome plus red:
+
+<span class="state state--grey">stub</span>
+<span class="state state--red">outdated</span>
+<span class="state state--yellow">draft</span>
+<span class="state state--green">stable</span>
+
+Status is data, not emphasis. A reader scanning a state table needs to sort it
+without reading it, and red-or-nothing cannot express four ordered values.
+Three concessions keep it inside the system: the badges are outlined rather
+than filled, so they stay in the same pill vocabulary as chips and axis
+eyebrows; the word is always spelled out, so color is never the only signal;
+and the palette flips by scheme like every other text color, keeping all four
+above the AA floor on both grounds.
+
+Nothing else on the site may use these colors.
+
+### Version
+
+Project index pages carry `version`, and `repo` when the project is on GitHub:
+
+```yaml
+---
+title: Tau
+kind: project
+version: v0.9.1
+repo: jmccardle/tau
+---
+```
+
+With a `repo`, the version links to that release tag. Without one it renders as
+plain text — projects hosted elsewhere get an honest unlinked version rather
+than a GitHub URL that does not resolve.
 
 ## What was deliberately dropped
 

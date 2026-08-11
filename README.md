@@ -6,26 +6,44 @@ Deployed as a GitHub user site at `https://ffwfrobotics.github.io/`.
 
 ## Layout
 
-Docs for each project are organized into the same four categories:
+Docs for each project are organized into the same four categories, on the
+[Diátaxis](https://diataxis.fr/) axes:
 
-| Category   | Axis                          |
-|------------|--------------------------------|
-| Quickstart | Fast + learning-oriented       |
-| Tutorial   | In-depth + learning-oriented   |
-| Cookbook   | Fast + self-guided             |
-| Reference  | In-depth + self-guided         |
+|               | Acquisition (studying) | Application (working) |
+|---------------|------------------------|-----------------------|
+| **Action**    | Tutorials              | Cookbook              |
+| **Cognition** | DevOps Manual          | Reference             |
 
 ```
 docs/
-  index.md          # landing page
-  tectum/            {quickstart,tutorial,cookbook,reference}.md
-  tau/               {quickstart,tutorial,cookbook,reference}.md
-  jmfts/             {quickstart,tutorial,cookbook,reference}.md
-mkdocs.yml          # nav + theme config
+  index.md              # landing page
+  <project>/
+    index.md            # kind: project — intro + the 2x2 for that project
+    tutorials/
+      index.md          # quickstart is the first tutorial
+      quickstart.md
+    cookbook.md
+    devops.md
+    reference.md
+  integrations/         # cross-project pages, kind: integration
+  style-guide.md
+hooks/docstate.py       # expands the state table and integration roster
+mkdocs.yml              # nav + theme config
 ```
 
-Category pages currently ship as stubs (clearly marked "Not yet written") —
-structure first, content per project as a follow-up pass.
+Every page ships as a stub (clearly marked "Not yet written") — structure
+first, content per project as a follow-up pass.
+
+## Documentation state
+
+Each category page declares `status: stub|outdated|draft|stable` in its own
+frontmatter; project index pages declare `version` and, when the project is on
+GitHub, `repo: owner/name`. `hooks/docstate.py` reads those declarations and
+generates the state table on the home page, so there is no second list to keep
+in sync.
+
+A missing or misspelled `status` fails the build. The full frontmatter contract
+is documented at the top of `hooks/docstate.py` and in `docs/style-guide.md`.
 
 ## Styling
 
@@ -54,6 +72,12 @@ python3 -m venv .venv && ./.venv/bin/pip install -r requirements.txt
 
 ## Adding a new project
 
-1. Add a directory under `docs/<project>/` with the four category files.
-2. Add the corresponding section to `nav:` in `mkdocs.yml`.
-3. Link it from `docs/index.md`.
+1. Create `docs/<project>/index.md` with `kind: project`, `title`, `version`,
+   and optionally `repo`.
+2. Add the four category pages, each with `category` and `status`.
+3. Add the section to `nav:` in `mkdocs.yml` — the state table orders projects
+   by their nav position.
+4. Add a card to "The projects" on `docs/index.md`, and a link per quadrant in
+   the crosswalk.
+
+The state table and the integration roster pick the project up on their own.
