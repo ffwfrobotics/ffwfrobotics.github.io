@@ -13,11 +13,19 @@ Recipes for specific JMFTS jobs — tuning matryoshka dimensions, reweighting BM
 !!! note "Marked stub on purpose"
     The recipes below are real, drawn from the source repo's own benchmark runs and defect write-ups — but they have not been organized into full step-by-step walkthroughs or checked against a fresh deployment, so this page stays `stub` until that pass happens.
 
-## Use `rerank_method=maxsim`, not the default reranker
+## Pick a rerank method by what your corpus already stores
 
-Every search endpoint accepts `?rerank=true`, but the *default* `rerank_method` is `cross_encoder` — a cross-encoder reranker whose own critique write-up (`docs/RERANKER_CRITIQUE.md`) verdicts it "broken by design": it uses the weakest head of its underlying model, tokenizes query and document in the wrong premise/hypothesis order for NLI, and NLI entailment is not a relevance signal to begin with.
+Every search endpoint accepts `?rerank=true`, and `rerank_method` picks the second stage. The two are not ranked best-to-worst — they have different prerequisites, and the right one depends on your corpus.
 
-The fix is one query param: `?rerank=true&rerank_method=maxsim`. This dispatches to `SearchRepository.maxsim_rerank` — JMFTS's own late-interaction reranking, which shares the search's own embedding service (so a failure there is loud, not silently skipped, unlike the cross-encoder path's best-effort fallback). On the MultiHop-RAG benchmark (609 articles, 2,255 multi-hop queries — a case BEIR's single-hop datasets don't exercise), `vector→maxsim@200` measured **72.2% Hits@4 against plain vector's 58.4%**, a 13.8-point gain that BM25 alone (69.4%) and the tuned hybrid (63.8%) both fall short of.
+**`maxsim`** reuses the per-token vectors already in `token_embeddings`, so it loads no model and adds no GPU memory. On the MultiHop-RAG benchmark (609 articles, 2,255 multi-hop queries — a case BEIR's single-hop datasets don't exercise), `vector→maxsim@200` measured **72.2% Hits@4 against plain vector's 58.4%**, a 13.8-point gain that BM25 alone (69.4%) and the tuned hybrid (63.8%) both fall short of.
+
+The catch is the storage. Token embeddings are one row per selected token per document, so the late-interaction index is far larger than the document vectors. A candidate with no stored tokens scores 0 and sinks to the bottom of the reranked list. On a corpus where only part of the tree has been through `/documents/{id}/tokens`, that silently demotes real hits — so use `maxsim` when token coverage is complete, not merely present.
+
+**`cross_encoder`** (the default) reads nothing from the database. It scores each (query, document) pair with a cross-encoder model set by `JMFTS_RERANKER_MODEL`, so it ranks any document the first stage can return, whether or not it has been tokenized. The cost is one forward pass per candidate and a second model in memory.
+
+An honest caveat: the shipped default, `cross-encoder/ms-marco-MiniLM-L-6-v2`, is standard and trained on relevance judgments, but nobody has yet benchmarked it against `maxsim` on JMFTS's own datasets. The harness accepts `vector→crossenc@100` alongside `vector→maxsim@200` for exactly that comparison; the sweep has not been run. Until it is, treat the choice as a prerequisites question, not a quality claim.
+
+Neither method degrades quietly. If the stage you asked for cannot run, the request fails rather than returning the first-stage ranking under a `+rerank` label.
 
 ## Tune the hybrid weight to the corpus, don't assume one number
 

@@ -60,6 +60,14 @@ Document and token embeddings both come from `nomic-ai/modernbert-embed-base` (c
 
 `JMFTS_EMBEDDING_DEVICE` is `cpu` in the dev image on purpose (no CUDA in that container). Set it to `cuda` for anything that embeds at volume — see the next section for why this matters more than it sounds like it should.
 
+## The reranker is a second model, loaded only if asked
+
+`?rerank=true&rerank_method=cross_encoder` loads a second model, separate from the embedder. The default is `cross-encoder/ms-marco-MiniLM-L-6-v2` (~22M params), small enough to run on CPU, and it downloads into the same Hugging Face cache on first use. Change it with `JMFTS_RERANKER_MODEL` — any Hub cross-encoder works, but a larger one is a real GPU-memory decision on top of the embedder, not a free swap.
+
+`JMFTS_RERANKER_DEVICE` defaults to blank, which means "follow `JMFTS_EMBEDDING_DEVICE`". A CPU-only deployment therefore stays CPU-only without setting a second variable. Pin it only when you want the reranker on a different device from the embedder.
+
+Nothing loads until a request actually asks for reranking, so a deployment that never passes `rerank=true` pays nothing. When a request does ask and the model cannot load, the request fails — it does not quietly return the unreranked ranking.
+
 ## Sizing the write path — and why it is CPU-bound
 
 A 2026-07-23 baseline (`scripts/benchmark_write.py`, CPU embedding, empty pgvector DB) measured each write op in isolation:
@@ -85,7 +93,7 @@ The BM25 side is different: `POST /indexes/{index_name}/index-document/{document
 Two source-repo documents are worth reading before running this in anger:
 
 - **`docs/KNOWN-DEFECTS.md`** — a set of silent-failure defects (embedding truncation past 512 tokens, unbounded chunk merging, the BM25 double-count above) found and fixed against a live instance. All are resolved in the current codebase; the document is kept because the *pattern* — a system that loses text or corrupts a statistic and reports success — is the thing worth internalizing, not just the four fixes.
-- **`docs/RERANKER_CRITIQUE.md`** — `?rerank=true` on its own uses the *default* `rerank_method=cross_encoder`, verdicted "broken by design": wrong NLI head, premise/hypothesis reversed, and NLI entailment is not a relevance signal to begin with. Pass `rerank_method=maxsim` instead — it dispatches to JMFTS's own late-interaction reranking, which is benchmarked and shares the search's own embedding service. See the [Cookbook](cookbook.md).
+- **`docs/RERANKER_CRITIQUE.md`** — the write-up that condemned the original reranker backend, which repurposed an NLI model's entailment probability as a relevance score. Resolved on 2026-08-11 by deleting that backend: `?rerank=true` now runs a standard cross-encoder. The document is kept as the reasoning trail, and because its closing caution still holds — the shipped default model was chosen for size and CPU viability, not for measured retrieval quality. See the [Cookbook](cookbook.md) for choosing between the two rerank methods.
 
 ## LLM-backed features are optional, and JMFTS does not host one
 

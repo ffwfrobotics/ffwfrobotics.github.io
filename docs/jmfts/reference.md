@@ -65,6 +65,10 @@ A caller-facing note: several `GET` endpoints across these families lost their F
 | `JMFTS_TOKEN_TOP_PERCENT` | `0.10` | Fraction of a document's tokens kept for late interaction, selected by MMR + attention variance + stopword penalties. |
 | `JMFTS_TOKEN_EMBED_DIMS` | `[256, 384, 512]` | Matryoshka dims the schema *supports*; only 256 is populated by default. |
 | Hybrid vector/BM25 weight | corpus-dependent | Not a single global default — see the [Cookbook](cookbook.md) for measured weightings and why the right one varies by dataset. |
+| `JMFTS_RERANKER_MODEL` | `cross-encoder/ms-marco-MiniLM-L-6-v2` | Second-stage model for `?rerank=true&rerank_method=cross_encoder`. Any Hub cross-encoder. |
+| `JMFTS_RERANKER_DEVICE` | blank | Blank follows `JMFTS_EMBEDDING_DEVICE`. Pin only to split the two across devices. |
+| `JMFTS_RERANKER_MAX_LENGTH` | `512` | Tokens per (query, document) pair. |
+| `JMFTS_RERANKER_BATCH_SIZE` | `32` | Pairs scored per forward pass. |
 
 ## Embedding and LLM configuration
 
