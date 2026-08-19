@@ -8,7 +8,7 @@ status: "stub"
 
 <p class="axis">Action × Application</p>
 
-Recipes for specific Tau jobs — writing an extension, branching a session, pointing the TUI at a different backend.
+Recipes for specific Tau jobs — writing an extension, branching a session, storing state in the tree, supervising a fleet, pointing the TUI at a different backend. Each one is drawn from an example or script that ships in the source tree; the cited file is always the working version.
 
 !!! note "Marked stub on purpose"
     The recipes below are real, drawn from extensions and scripts that ship
@@ -126,6 +126,147 @@ For undoing a turn rather than branching from it, `AgentSession.submit()`'s
 turn that gets rolled back becomes an abandoned sibling branch, not a
 deletion — nothing in a Tau session is destroyed by a rollback. In the TUI
 this is `Ctrl+Z`.
+
+## Keep state in the tree, not beside it
+
+The obvious way to give an agent a todo list is a JSON file next to the
+session. `examples/38_todo.py` does it with **no side database at all**:
+every mutation the tool performs writes the new list snapshot as a durable
+`customEntry` node, and a read reconstructs the list from the latest
+snapshot on the **active path**. `customEntry` nodes are excluded from the
+model's context *by kind*, so this costs no tokens — the model sees the
+list only when the tool shows it.
+
+The payoff is that the state inherits every property of the tree, for free:
+
+- `Ctrl+Z` rolls back a turn — and the todo mutations from that turn vanish
+  with it, because they hang off the abandoned branch.
+- Fork the session and each branch carries its own divergent list.
+- Reload, resume, or export the session and the list comes along, because
+  there is nothing beside the session to lose.
+
+`ext_kit/state.py` ships `TreeStore`, the generic replaying wrapper, for any
+extension state that should time-travel with the conversation instead of
+outliving it in a stale file.
+
+## Ask one model for a dozen verdicts, one forward pass each
+
+`ctx.complete()` is stateless — no tree writes, no cursor movement — so it
+is safe under `asyncio.gather` at any fan-out. Combine that with
+`DecodeConstraints(choices=[...])` and a classification over N candidates
+becomes N concurrent calls, each pinned to a label set so tightly that on a
+llama.cpp/llguidance backend a verdict costs about one forward pass:
+
+```python
+from tau_ai.constraints import DecodeConstraints
+
+constraints = DecodeConstraints(choices=["supported", "contradicted", "unrelated"])
+```
+
+`examples/60_retrieval_review.py` is the working version: it takes real
+retrieval hits and scores every one concurrently against a claim. Three
+contract details matter, all enforced at construction or at the boundary:
+
+- Exactly one of `grammar` / `json_schema` / `choices` may be set.
+- A hand-written `grammar=` string must also carry `verify=` — a callable that
+  checks the output actually conforms. τ will not reimplement a grammar engine
+  to check a grammar it did not build, and it will not report a constraint held
+  when it cannot tell. Build the grammar with `tau_ai.grammar`
+  (`choice`/`fixed`/`regex`/`sequence`, each of which carries its own checker)
+  and the verifier comes with it; `choices=[...]` needs nothing extra.
+- If the server's output somehow escapes the declared constraint, τ raises
+  `ConstraintViolation` rather than returning it — a grammar that died
+  mid-generation produces fabricated data, and fabricated data is a fault, not
+  a near miss.
+
+The second and third are the same rule at two moments: a constraint nobody can
+check is indistinguishable from no constraint at all.
+
+## Supervise a fleet from inside a session
+
+The sanctioned isolated-child invocation is:
+
+```bash
+tau -p --mode json --no-session --no-extensions
+```
+
+— fully ephemeral, unhookable, machine-readable. `examples/51_delegate_fleet.py`
+builds a `/fleet` command on it: read-only children fan out over
+subtasks while the parent session paints a live dashboard with
+`ctx.ui.panel` — and because panel `actions` dispatch registered commands
+back into the extension, the dashboard is a control surface, not a report:
+you can steer a running child from the panel mid-flight.
+
+Panels are not TUI-only. In headless `--mode json` they serialize onto the
+event stream as `{"type": "extension", "kind": "panel", ...}`, so a parent
+process reading a child's stream sees the child's dashboard and its declared
+actions. A τ supervising τs that supervise their own children is the same
+recipe applied twice; `ext_kit/spawn.py` and `ext_kit/stream.py` provide the
+pool, limits, and stuck-detection so the outer layer notices when an inner
+one stalls.
+
+## Wrap a built-in tool without forking it
+
+Extension tools resolve *after* built-ins, so registering a tool named
+`bash` shadows the built-in `bash` for the model. `ext_kit/steer.py` ships
+`wrap_tool` on exactly this mechanism: keep the original schema, delegate to
+the original implementation, and add before/after hooks with a
+short-circuit veto.
+
+This is a different altitude than the `tool_call` hook. The hook sees every
+tool call and can block or patch arguments before execution; a wrapper owns
+one tool's whole call — it can rewrite the input, run the real tool,
+transform the result, or answer without running it at all. Audit logs,
+dry-run modes, per-directory sandboxes, and result redaction all land here,
+with no changes to the harness and no fork of the tool.
+
+## Let the outside world join the conversation
+
+`examples/36_file_trigger.py` starts a background watcher on
+`session_start`; when the watched file changes, the extension calls
+`api.send_user_message(content)` and the change becomes a conversational
+turn. The same shape works for anything that can wake a coroutine — a timer,
+a webhook, an MQTT topic, a mailbox.
+
+`deliver_as` picks the urgency: `"followUp"` runs after the current turn,
+`"nextTurn"` parks until the next submission, and `"steer"` delivers into
+the *already running* turn, after its current tool calls and before its next
+model call. And provenance is unforgeable by construction: the runtime
+stamps `source="extension"` and the extension's own name as `submitter`,
+and neither is a parameter — the transcript can never claim a machine-made
+message came from the human.
+
+## Hand the model the scissors
+
+`examples/23_context_surgeon.py` registers session-control tools — compact
+now, fork from here, summarize that branch — built on `ctx.compact()`,
+`ctx.fork()`, and `ctx.summarize_branch()` with `defer=True`. The deferral
+is the recipe: a tool that restructured the context *mid-turn* would saw off
+the branch the model is standing on, so the intent is recorded when the tool
+runs and applied exactly once at the tail of the submission.
+
+The result is an agent that manages its own context window as a matter of
+policy — noticing via `ctx.get_context_usage()` that it is running long and
+compacting itself, or forking a clean continuation when the task changes
+shape — instead of waiting for a human to notice on its behalf.
+`examples/39_trigger_compact.py` is the fully automatic edge-triggered
+variant; `examples/40_handoff.py` is the same idea aimed forward: summarize,
+fork, and hand the work to a focused successor session.
+
+## Remove the middle without deleting anything
+
+Compaction replaces a span with an LLM-written summary. Its blunter cousin
+is **elide**: a summary-less splice anchor that simply cuts a span out of
+the model's context. Nothing is erased — the span stays on disk and on the
+tree, and navigation can walk back into it — but the fold skips it, so the
+model no longer pays for it.
+
+In the TUI this is the fourth mode of the `Ctrl+G` tree browser: pick "elide
+a span ending here", pick the two endpoints, done. It is the honest tool for
+the case where a summary would add nothing: a hundred turns of test-and-fix
+noise whose only useful residue is the final green run, or a pasted log the
+agent has finished mining. You chose the cut; no model invented a summary
+of what was cut.
 
 ## Point the TUI at a different session backend
 

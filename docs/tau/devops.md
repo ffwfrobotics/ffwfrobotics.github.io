@@ -15,7 +15,7 @@ How Tau is deployed and operated: where sessions live, how model credentials are
     `docs/NATS-BUS-EXTENSION.md`, and `docs/REMOTE-CONTROL.md`. Not yet
     checked against a deployment outside the maintainer's own.
 
-## Four ways to run τ
+## Five ways to run τ
 
 | Mode | Entry point | Shape |
 |---|---|---|
@@ -87,7 +87,10 @@ real integration writeup, not a design doc) for the full porting notes.
 
 Extensions that touch a message bus declare `TOUCHES_BUS = True` and are
 refused at load time unless the run explicitly opts in with `--bus` (CLI) or
-`bus_available=True` (SDK) — a capability grant, not a default. The shipped
+`bus_available=True` (SDK) — a capability grant, not a default. The
+declaration has a second half: such an extension must also declare a non-empty
+`SUBJECTS`, naming the subjects it touches. "Leave it unset" is refused even
+with `--bus` given, because the grant is per-subject rather than blanket. The shipped
 example is `nats_bus.py` (tau-006/tau-007): τ speaking NATS directly as a
 bus-native agent node, bridging to Tectum's effector nodes and to a
 simulation engine's world verbs. See `docs/NATS-BUS-EXTENSION.md` in the

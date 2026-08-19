@@ -612,6 +612,91 @@
   color: var(--ffwf-ash);
 }
 
+/* --- Diagrams ----------------------------------------------------------- */
+
+/* Figures are inline <svg>, never <img>. An <img> cannot see these custom
+   properties, so it cannot follow the scheme toggle; an inlined <svg> inherits
+   the whole cascade and repaints for free. The SVG therefore carries geometry
+   and class names only — no color, no font, no scheme knowledge.
+
+   The classes below are drawing utilities, not BEM blocks: stroke and fill are
+   orthogonal axes and an element usually needs one of each. They are scoped to
+   .dia so names this short cannot leak into the page.
+
+   One hard rule, learned the hard way: a stroke class never declares fill, and
+   a fill class never declares stroke. Both beat the SVG presentation attribute
+   they collide with, so a class that sets `fill: none` silently erases a
+   `fill="url(#hatch)"` on the same element. */
+
+.md-typeset .dia {
+  margin: 1.8rem 0 2rem;
+  /* Material centres figures and caps captions at 24rem. A schematic is not a
+     photograph — it aligns with the prose it explains. */
+  text-align: left;
+  /* Below ~34rem the labels would shrink past reading size, so the figure
+     scrolls sideways rather than becoming an illegible thumbnail. */
+  overflow-x: auto;
+}
+
+.md-typeset .dia svg {
+  display: block;
+  width: 100%;
+  min-width: 34rem;
+  height: auto;
+}
+
+.md-typeset .dia figcaption {
+  max-width: none;
+  margin: 0.8rem 0 0;
+  padding-left: 0.8rem;
+  border-left: var(--ffwf-rule) solid var(--ffwf-hairline);
+  font-size: 0.66rem;
+  line-height: 1.6;
+  color: var(--ffwf-ash);
+}
+
+/* Strokes — weight is hierarchy: 1.5 is structure, 1 is detail or aside. */
+.md-typeset .dia .stroke        { stroke: var(--ffwf-ink); stroke-width: 1.5; }
+.md-typeset .dia .stroke-hair   { stroke: var(--ffwf-ink); stroke-width: 1; }
+.md-typeset .dia .stroke-soft   { stroke: var(--ffwf-ash); stroke-width: 1; }
+.md-typeset .dia .stroke-red    { stroke: var(--ffwf-red); stroke-width: 1.5; }
+/* Modifier: dash pattern only, so it composes with any stroke above. */
+.md-typeset .dia .stroke-dashed { stroke-dasharray: 5 4; }
+
+/* Fills */
+.md-typeset .dia .fill-none    { fill: none; }
+.md-typeset .dia .fill-ground  { fill: var(--ffwf-ground); }
+.md-typeset .dia .fill-surface { fill: var(--ffwf-surface); }
+.md-typeset .dia .fill-ink     { fill: var(--ffwf-ink); }
+.md-typeset .dia .fill-ash     { fill: var(--ffwf-ash); }
+.md-typeset .dia .fill-red     { fill: var(--ffwf-red); }
+
+/* The one texture in the system. Held down in opacity so it reads as a
+   surface treatment rather than a fourth line weight. */
+.md-typeset .dia .hatch { stroke: var(--ffwf-ash); stroke-width: 1; opacity: 0.42; }
+
+/* Text. Courier throughout — a diagram is machine voice by definition. */
+.md-typeset .dia text { font-family: var(--ffwf-mono); }
+
+/* Identifiers are quoted verbatim from the docs, so this one never gets a
+   text-transform. `TectumEvent` is not `TECTUMEVENT`. */
+.md-typeset .dia .label { font-size: 12px; font-weight: 700; fill: var(--ffwf-ink); }
+
+.md-typeset .dia .label-soft { font-size: 10.5px; fill: var(--ffwf-ash); }
+
+/* Role and mark are the diagram's own words, not the system's, so they take
+   the uppercase tracking the rest of the site gives its labels. */
+.md-typeset .dia .label-role,
+.md-typeset .dia .label-mark {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.md-typeset .dia .label-role { fill: var(--ffwf-ash); }
+.md-typeset .dia .label-mark { fill: var(--ffwf-ink-red); }
+
 /* --- Quality floor ------------------------------------------------------ */
 
 :focus-visible {

@@ -1,3 +1,9 @@
+---
+title: "Style guide"
+category: "reference"
+status: "stable"
+---
+
 # Style guide
 
 The visual system here is derived from the
@@ -223,6 +229,103 @@ repo: jmccardle/tau
 With a `repo`, the version links to that release tag. Without one it renders as
 plain text — projects hosted elsewhere get an honest unlinked version rather
 than a GitHub URL that does not resolve.
+
+## Diagrams
+
+Rule 1 makes the obvious approach illegal. A site with one accent cannot give
+Tectum a blue, Tau a green and JMFTS an orange, so the three projects are told
+apart by **form** instead — by the shape of a node and the way it is attached
+to its neighbours.
+
+That constraint turns out to be the accessible answer as well. A reader with
+any form of color vision, a printed page, or a screenshot run through a
+grayscale filter sees exactly the same distinctions, because color was never
+carrying them.
+
+### Three grammars
+
+Each grammar is derived from what the project actually is, not assigned
+arbitrarily, so the drawing and the architecture stay in sync.
+
+<figure class="dia"><svg viewBox="0 0 680 252" role="img" aria-labelledby="dia-key-t dia-key-d"><title id="dia-key-t">The three project grammars</title><desc id="dia-key-d">Tectum is drawn as square-cornered blocks hung off a horizontal subject rail: audio dot gateway arrows up into the rail because it publishes, and agent dot persona underscore reflection takes an arrow down from the rail because it subscribes. Tau is drawn as a rounded pill on a spine, which continues past the pill to a filled dot where it forks into a solid branch and a dashed abandoned one. JMFTS is drawn as a stack of slabs with doubled outlines, the durable one filled with a 45-degree hatch.</desc><defs><pattern id="dia-hatch-key" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="4" y1="0" x2="4" y2="8" class="hatch"/></pattern></defs><text x="0" y="58" class="label-role">tectum</text><text x="118" y="20" class="label-soft">events.sensation.audio.filtered</text><line x1="100" y1="32" x2="640" y2="32" class="stroke"/><path d="M640 32 L631 28 L631 36 Z" class="fill-ink"/><line x1="188" y1="64" x2="188" y2="40" class="stroke"/><path d="M188 32 L184 41 L192 41 Z" class="fill-ink"/><rect x="118" y="64" width="140" height="30" class="fill-ground stroke"/><text x="188" y="84" text-anchor="middle" class="label">audio.gateway</text><line x1="435" y1="32" x2="435" y2="56" class="stroke"/><path d="M435 64 L431 55 L439 55 Z" class="fill-ink"/><rect x="340" y="64" width="190" height="30" class="fill-ground stroke"/><text x="435" y="84" text-anchor="middle" class="label">agent.persona_reflection</text><text x="0" y="148" class="label-role">tau</text><line x1="100" y1="144" x2="118" y2="144" class="stroke"/><rect x="118" y="129" width="152" height="30" rx="15" class="fill-ground stroke"/><text x="194" y="149" text-anchor="middle" class="label">AgentSession</text><line x1="270" y1="144" x2="320" y2="144" class="stroke"/><circle cx="320" cy="144" r="4" class="fill-ink"/><path d="M320 144 L320 120 L372 120" class="stroke-hair fill-none"/><text x="378" y="124" class="label-soft">extends the leaf</text><path d="M320 144 L320 168 L372 168" class="stroke-hair stroke-dashed fill-none"/><text x="378" y="172" class="label-soft">abandoned sibling</text><text x="0" y="217" class="label-role">jmfts</text><rect x="118" y="186" width="220" height="22" class="fill-ground stroke-hair"/><text x="228" y="201" text-anchor="middle" class="label-soft">token_embeddings</text><rect x="118" y="208" width="220" height="32" fill="url(#dia-hatch-key)" class="stroke"/><rect x="122" y="212" width="212" height="24" class="fill-none stroke-soft"/><rect x="188" y="215" width="80" height="18" class="fill-ground"/><text x="228" y="228" text-anchor="middle" class="label">documents</text></svg><figcaption>The key. A subject is a rail and nodes hang off it, so Tectum is blocks on a line. A Tau session is one door onto a tree that branches, so Tau is a pill on a forking spine. JMFTS is tables in Postgres, so JMFTS is stacked slabs — and the hatched one is the durable one.</figcaption></figure>
+
+Put all three on one page — which the [integration pages](integrations/index.md)
+do — and the seams are obvious without a legend.
+
+### Connectors carry direction
+
+On a Tectum rail the arrowhead says which way the event moves, and it is the
+only thing that says so. A node with an arrow pointing *at the rail* publishes;
+an arrow pointing *at the node* subscribes.
+
+<figure class="dia"><svg viewBox="0 0 680 180" role="img" aria-labelledby="dia-dir-t dia-dir-d"><title id="dia-dir-t">Arrowhead direction on a subject rail</title><desc id="dia-dir-d">Two panels. On the left, a node named audio dot gateway connects up to the subject it emits, with the arrowhead landing on the rail: this node publishes. On the right, a node named effector dot speech takes a connector down from the subject it handles, with the arrowhead landing on the node: this node subscribes.</desc><text x="40" y="38" class="label-soft">events.sensation.audio.filtered</text><line x1="40" y1="50" x2="310" y2="50" class="stroke"/><rect x="99" y="96" width="152" height="30" class="fill-ground stroke"/><text x="175" y="116" text-anchor="middle" class="label">audio.gateway</text><line x1="175" y1="96" x2="175" y2="58" class="stroke"/><path d="M175 50 L171 59 L179 59 Z" class="fill-ink"/><text x="175" y="150" text-anchor="middle" class="label-mark">publishes</text><text x="175" y="166" text-anchor="middle" class="label-soft">arrowhead at the rail</text><line x1="340" y1="20" x2="340" y2="172" class="stroke-soft"/><text x="368" y="38" class="label-soft">events.workspace.persona_reflection.out.speak</text><line x1="368" y1="50" x2="648" y2="50" class="stroke"/><rect x="432" y="96" width="152" height="30" class="fill-ground stroke"/><text x="508" y="116" text-anchor="middle" class="label">effector.speech</text><line x1="508" y1="50" x2="508" y2="88" class="stroke"/><path d="M508 96 L504 87 L512 87 Z" class="fill-ink"/><text x="508" y="150" text-anchor="middle" class="label-mark">subscribes</text><text x="508" y="166" text-anchor="middle" class="label-soft">arrowhead at the node</text></svg><figcaption>Direction is information, so it is drawn rather than captioned. The same convention applies to a Tau spine, where the dashed limb marks an abandoned sibling branch rather than a deletion.</figcaption></figure>
+
+### Red marks the load-bearing idea
+
+Rule 1 applies inside a figure too. Red is not a project color and never
+outlines a node — it marks the one element the figure exists to explain, and a
+figure gets at most one. On a project page that is the idea the page is about;
+on an integration page it is the seam between the two systems.
+
+<figure class="dia"><svg viewBox="0 0 680 176" role="img" aria-labelledby="dia-red-t dia-red-d"><title id="dia-red-t">A Praxis binding, drawn in red</title><desc id="dia-red-d">Three nodes from the listening underscore mode schema sit below one subject rail. Only agent dot persona underscore reflection is attached to it, by a red connector with a small red square where it taps the rail and an arrowhead entering the node. The other two, effector dot speech and effector dot journal underscore append, are required by the same schema but bound to different subjects, so they float unattached.</desc><text x="20" y="26" class="label-soft">events.sensation.audio.filtered</text><line x1="20" y1="42" x2="660" y2="42" class="stroke"/><path d="M660 42 L651 38 L651 46 Z" class="fill-ink"/><rect x="20" y="90" width="140" height="32" class="fill-ground stroke"/><text x="90" y="111" text-anchor="middle" class="label">effector.speech</text><text x="20" y="140" class="label-soft">bound elsewhere</text><rect x="245" y="90" width="190" height="32" class="fill-ground stroke"/><text x="340" y="111" text-anchor="middle" class="label">agent.persona_reflection</text><rect x="335" y="37" width="10" height="10" class="fill-red"/><line x1="340" y1="42" x2="340" y2="79" class="stroke-red"/><path d="M340 90 L334 79 L346 79 Z" class="fill-red"/><text x="340" y="146" text-anchor="middle" class="label-mark">binding</text><text x="340" y="165" text-anchor="middle" class="label-soft">declared in a praxis schema</text><rect x="484" y="90" width="190" height="32" class="fill-ground stroke"/><text x="579" y="111" text-anchor="middle" class="label">effector.journal_append</text><text x="484" y="140" class="label-soft">bound elsewhere</text></svg><figcaption>Red draws the thing it names rather than boxing it. A binding is a connector in the system, so it is a connector in the figure: a red tick from the rail into the node, squared off where it taps the rail. All three nodes are required by the same schema; only one is bound to this subject, and an unbound node is drawn unattached rather than annotated.</figcaption></figure>
+
+### Hatch means durable, and nothing else
+
+The 45° hatch is the only texture in the system, and reserving it to a single
+meaning is what keeps it from being decoration. It is also the fact the
+full-stack picture is built on.
+
+<figure class="dia"><svg viewBox="0 0 680 130" role="img" aria-labelledby="dia-dur-t dia-dur-d"><title id="dia-dur-t">What survives, drawn as hatch</title><desc id="dia-dur-d">Three boxes in a row joined by arrows. A square Tectum event box, captioned that ttl underscore ms may drop it. A rounded Tau session box, captioned that it compacts. A hatched JMFTS documents slab, marked as the thing that survives all three.</desc><defs><pattern id="dia-hatch-dur" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="4" y1="0" x2="4" y2="8" class="hatch"/></pattern></defs><rect x="20" y="30" width="170" height="40" class="fill-ground stroke"/><text x="105" y="55" text-anchor="middle" class="label">TectumEvent</text><text x="105" y="92" text-anchor="middle" class="label-soft">ttl_ms may drop it</text><line x1="190" y1="50" x2="232" y2="50" class="stroke-soft"/><path d="M240 50 L231 46 L231 54 Z" class="fill-ash"/><rect x="240" y="30" width="170" height="40" rx="15" class="fill-ground stroke"/><text x="325" y="55" text-anchor="middle" class="label">AgentSession</text><text x="325" y="92" text-anchor="middle" class="label-soft">compacts</text><line x1="410" y1="50" x2="452" y2="50" class="stroke-soft"/><path d="M460 50 L451 46 L451 54 Z" class="fill-ash"/><rect x="460" y="30" width="170" height="40" fill="url(#dia-hatch-dur)" class="stroke"/><rect x="464" y="34" width="162" height="32" class="fill-none stroke-soft"/><rect x="505" y="41" width="80" height="18" class="fill-ground"/><text x="545" y="55" text-anchor="middle" class="label">documents</text><text x="545" y="92" text-anchor="middle" class="label-mark">survives all three</text></svg><figcaption>A Tectum event is a transient with a producer's expiry hint; a Tau session compacts as it runs. JMFTS is the only durable thing in a full-stack deployment, so it is the only hatched thing in the drawings.</figcaption></figure>
+
+### The vocabulary
+
+Figures are inline `<svg>`, never `<img>`: an image element cannot see the
+theme tokens, so it cannot follow the skull toggle, while an inlined one
+inherits the whole cascade and repaints for free. The SVG therefore carries
+geometry and class names only — no color, no font, no knowledge of which
+scheme it is in.
+
+| Class | Draws |
+|---|---|
+| `stroke` | Structure: a rail, a node outline, a spine. |
+| `stroke-hair` | Detail at the same ink, one weight down. |
+| `stroke-soft` | An aside — an inner outline, a panel divider, a flow arrow between figures' subjects. |
+| `stroke-red` | The one marked element. See above. |
+| `stroke-dashed` | Modifier: dash pattern only, composes with any stroke. |
+| `fill-none` `fill-ground` `fill-surface` | Open shape, knocked-out shape, filled shape. |
+| `fill-ink` `fill-ash` `fill-red` | Solids: arrowheads, fork dots, the red tap square. |
+| `hatch` | The pattern's own line. Durable storage only. |
+| `label` | An identifier, quoted verbatim from the docs. |
+| `label-soft` | A subject name, a caption, a gloss. |
+| `label-role` | The project name in the gutter. |
+| `label-mark` | The red annotation naming what red is marking. |
+
+Stroke and fill are orthogonal, and an element usually needs one of each.
+**A stroke class never declares `fill`, and a fill class never declares
+`stroke`** — both would beat the SVG presentation attribute they collide with,
+so a class setting `fill: none` silently erases a `fill="url(#hatch)"` on the
+same element.
+
+`label` is the one text class with no `text-transform`. Identifiers are quoted
+from the reference pages and have to render exactly as they are written there;
+`TectumEvent` is not `TECTUMEVENT`.
+
+Where a label falls on hatch, it gets a `fill-ground` knockout behind it rather
+than a lighter texture — the same move a dimension figure makes when it breaks
+a hatched region on a real drawing.
+
+### The accessibility contract
+
+- `role="img"` plus `aria-labelledby` pointing at a `<title>` and a `<desc>`.
+  The title names the figure; the desc is the prose a reader gets *instead of*
+  the picture, so it describes the arrangement, not the file.
+- Shape and label always carry the meaning. Color is a second channel, never
+  the only one — which is the same rule the [state badges](#documentation-state)
+  and underlined links follow.
+- Every `<pattern>` needs a document-unique `id`, because two figures on one
+  page share one DOM.
+- Below `34rem` the figure scrolls sideways instead of scaling down. A diagram
+  shrunk to phone width is not a smaller diagram, it is an unreadable one.
 
 ## What was deliberately dropped
 
