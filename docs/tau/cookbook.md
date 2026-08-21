@@ -17,6 +17,73 @@ Recipes for specific Tau jobs — writing an extension, branching a session, sto
     against a fresh install, so this page stays `stub` until that pass
     happens.
 
+## Give the model a new tool
+
+Three pieces, and `api.register_tool` wants all of them in one dict. From
+`examples/05_custom_tool.py`, the smallest complete version:
+
+```python
+def greet_execute(tool_call_id, params, signal, on_update, ctx):
+    return {"content": [{"type": "text", "text": f"Hello, {params['name']}!"}]}
+
+GREET_TOOL = {
+    "name": "greet",
+    "label": "Greet",
+    "description": "Greet someone by name.",
+    "parameters": {
+        "type": "object",
+        "properties": {"name": {"type": "string", "description": "Who to greet."}},
+        "required": ["name"],
+    },
+    "execute": greet_execute,          # required — see below
+    "execution_mode": "sequential",
+}
+
+def register(api):
+    api.register_tool(GREET_TOOL)
+```
+
+The `parameters` JSON Schema is what the model reads to decide how to call
+the tool, and what τ validates every call against. `execute` takes **five**
+arguments and may be sync or async; τ awaits it either way. The result dict
+becomes the `toolResult` message the model reads on its next turn — add
+`"is_error": True` to tell it the call failed.
+
+Two things bite here, and both did in this repo's own examples until they
+were caught by a contract test. `execute` is a required key, so defining the
+function and forgetting to put it in the dict raises
+`ValueError: register_tool: missing required key 'execute'` at load. And
+`register` is the *only* name the file-path loader looks up — a
+conventionally-named `greet_tool_extension` is not a substitute, and
+`tau -e` will raise `AttributeError` on a module without it.
+
+`examples/03_dynamic_env_tool.py` is the same shape with the two things a
+real tool needs: it redacts values that look like credentials, and it bounds
+its own output so a large environment cannot flood the context window.
+
+## Know which handler signature you need
+
+τ has two event vocabularies and they take different handlers. Getting this
+wrong fails at dispatch time — which for `session_shutdown` means at the very
+end of a session, and for `tool_call` means in the fail-closed path, where a
+raising handler blocks the tool call.
+
+| Kind | Names | Handler | `event` is |
+|---|---|---|---|
+| **notify** | `all`, `agent_start`, `message_update`, `tool_execution_end`, … | `handler(event)` | an `AgentEvent` **object** — attributes |
+| **hook** | `tool_call`, `tool_result`, `input`, `before_agent_start`, `turn_end`, `user_turn_end`, `session_start`, `session_shutdown`, `session_before_switch` | `handler(event, ctx)` | a plain **dict** |
+
+`api.on(name, handler)` routes by name, so you do not choose — the name you
+subscribe to decides which contract you owe. Hooks can change the run
+(block a call, patch arguments, append a durable message); notify events
+cannot, and their return value is ignored.
+
+The turn-boundary pair is the other easy mistake: `turn_end` fires once per
+*agent-loop* turn, so one request resolved in six tool round-trips fires it
+six times. `user_turn_end` fires once per `prompt()` — once per thing the
+user actually asked for. `examples/02_git_checkpoint.py` uses the latter,
+because six commits for one request is not a checkpoint.
+
 ## Veto a dangerous tool call before it runs
 
 The `tool_call` hook is the one hook that can actually block execution — a

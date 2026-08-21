@@ -101,9 +101,29 @@ word_count = define_tool(
 ```
 
 It returns a `ToolDefinition`. A single mapping may be passed positionally
-instead of keywords. This is the provider-layer tool shape;
-`api.register_tool()` in the [Extension API](#extension-api) takes a different
-one, and the two are not interchangeable.
+instead of keywords.
+
+There is **one** tool hierarchy, three layers deep, each layer adding what
+that layer owns:
+
+| Class | Package | Adds |
+|---|---|---|
+| `ToolDefinition` | `tau_llm` | the wire-facing shape — `name`, `label`, `description`, `parameters`, `execute` |
+| `ToolDefinition` | `tau_agent_core` | identity by name, so the loop can dedupe and shadow tools |
+| `ExtensionToolDefinition` | `tau_agent_core` | `source`, recording which extension registered it |
+
+`AgentTool.definition` names the base, so any of the three fits. What is
+*not* interchangeable is `execute`: the `tau_llm` form is called with the
+tool's own arguments, and the extension form is called
+`execute(tool_call_id, params, signal, on_update, ctx)`. `AgentSession`
+adapts between them when it resolves an extension tool. Do not pass a
+`define_tool()` result to `api.register_tool()` — the shape validates and
+the call signature does not.
+
+`ToolSpec` is a `Protocol` in `tau_llm` naming the three members a provider
+actually reads (`name`, `description`, `parameters`). It is what the
+provider layer annotates against, so anything with those three may be sent
+regardless of which package built it.
 
 ## Agent loop & sessions (`tau_agent_core`)
 
@@ -182,7 +202,7 @@ manifest language. A module exposes `def register(api): ...`; `api` is an
 api.on(event: str, handler: Callable) -> Callable[[], None]
 
 # Tools
-api.register_tool(definition: dict) -> None       # plain dict, not a pydantic model
+api.register_tool(definition: dict | ExtensionToolDefinition) -> None
 api.get_all_tools() -> list[Any]
 api.set_active_tools(names: list[str]) -> None
 
