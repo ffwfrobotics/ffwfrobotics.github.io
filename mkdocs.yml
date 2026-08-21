@@ -65,6 +65,7 @@ nav:
       - Tutorials:
           - jmfts/tutorials/index.md
           - Quickstart: jmfts/tutorials/quickstart.md
+          - Ingest a document: jmfts/tutorials/ingest-a-document.md
       - Cookbook: jmfts/cookbook.md
       - DevOps Manual: jmfts/devops.md
       - Reference: jmfts/reference.md
