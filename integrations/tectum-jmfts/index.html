@@ -1,0 +1,2194 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for Tectum, Tau, and JMFTS">
+      
+      
+      
+        <link rel="canonical" href="https://ffwfrobotics.github.io/integrations/tectum-jmfts/">
+      
+      
+        <link rel="prev" href="../tectum-tau/">
+      
+      
+        <link rel="next" href="../tau-jmfts/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Tectum + JMFTS - FFWF Robotics Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/ffwf.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#tectum-jmfts" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="FFWF Robotics Docs" class="md-header__button md-logo" aria-label="FFWF Robotics Docs" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            FFWF Robotics Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Tectum + JMFTS
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9 8.99 8.99 0 0 0 4 7.47V22h2v-3h2v3h2v-3h2v3h2v-3.54c2.47-1.65 4-4.46 4-7.46a9 9 0 0 0-9-9m-4 9a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m8 0a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m-4 3 1.5 3h-3z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 15a2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2m2.5 2 1.5-3 1.5 3zm5.5-2a2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2m6-4A10 10 0 0 0 12 1 10 10 0 0 0 2 11c0 2.8 1.2 5.3 3 7.1V22h14v-3.9c1.8-1.8 3-4.3 3-7.1m-5 9h-2v-2h-2v2h-2v-2H9v2H7v-2.8c-1.8-1.5-3-3.7-3-6.2a8 8 0 0 1 8-8 8 8 0 0 1 8 8c0 2.5-1.2 4.8-3 6.2z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tectum/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tectum
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tau/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tau
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../jmfts/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  JMFTS
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Integrations
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../style-guide/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Style guide
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="FFWF Robotics Docs" class="md-nav__button md-logo" aria-label="FFWF Robotics Docs" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    FFWF Robotics Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tectum/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tectum
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tectum/tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tectum/tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tectum/cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tectum/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tectum/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tau/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tau
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tau/tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../jmfts/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JMFTS
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JMFTS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../jmfts/tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../jmfts/tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../jmfts/tutorials/ingest-a-document/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ingest a document
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../jmfts/cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../jmfts/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../jmfts/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integrations
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Integrations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tectum-tau/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum + Tau
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum + JMFTS
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum + JMFTS
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#writes-you-can-watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Writes you can watch
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Writes you can watch">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-ack-means-durably-written-and-only-that" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The ack means durably written, and only that
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coordination-without-a-lock-manager" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coordination without a lock manager
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keeping-the-index-current-from-an-event-log" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keeping the index current from an event log
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-tree-gets-its-own-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The tree gets its own agent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#timeouts-must-learn-retrievals-latency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Timeouts must learn retrieval's latency
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sensation-becomes-corpus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sensation becomes corpus
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#two-postures-on-retrieval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two postures on retrieval
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-demonstrated-and-what-is-only-claimed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is demonstrated, and what is only claimed
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tau-jmfts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau + JMFTS
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../full-stack-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The FFwF Full Stack Agent
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../style-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guide
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stable"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#writes-you-can-watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Writes you can watch
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Writes you can watch">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-ack-means-durably-written-and-only-that" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The ack means durably written, and only that
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coordination-without-a-lock-manager" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coordination without a lock manager
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keeping-the-index-current-from-an-event-log" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keeping the index current from an event log
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-tree-gets-its-own-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The tree gets its own agent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#timeouts-must-learn-retrievals-latency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Timeouts must learn retrieval's latency
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sensation-becomes-corpus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sensation becomes corpus
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#two-postures-on-retrieval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two postures on retrieval
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-demonstrated-and-what-is-only-claimed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is demonstrated, and what is only claimed
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="tectum-jmfts">Tectum + JMFTS<a class="headerlink" href="#tectum-jmfts" title="Permanent link">&para;</a></h1>
+<p>JMFTS holds the documents; Tectum decides how reads and writes reach it.
+The working principle, stated once and used everywhere: <strong>state lives in
+JMFTS, control flow lives on the bus.</strong> A read is an in-process call, off
+the DAG. A durable write rides the
+<a href="../../tectum/devops/#two-dags-one-namespace">command DAG</a> as an event. And
+"please handle this" is never a database row — it is a publish.</p>
+<figure class="dia"><svg viewBox="0 0 680 720" role="img" aria-labelledby="dia-tjm-t dia-tjm-d"><title id="dia-tjm-t">A write goes the long way round; a read goes straight in</title><desc id="dia-tjm-d">The figure has two paths from one pair of Tectum agents to one JMFTS store, and they are deliberately different shapes. Top left, a panel headed praxis slash loose underscore loop3 dot yaml marks the operator as experimental: one cohort, A slash B against loose underscore loop2, not a boot default, with a grounded ask taking 180 seconds and the operator's wall clock raised to 220 seconds. To its right, three subject rails descend in a staircase and every one of them ends in an arrowhead landing on the node agent dot jmfts underscore operator, which is how the drawing says the node subscribes: ellipsis out dot muse wakes it to curate, operator dot maintain wakes it to maintain, and events dot workspace dot responder dot out dot delegate wakes it to answer. That third rail is published from below by agent dot responder, whose arrowhead lands on the rail rather than on a node: please handle this is a publish, not a database row. From the operator's underside one thin hairline drops straight down the right margin, crosses no rail, taps nothing, and lands on the hatched documents slab. It is labelled a read is an in-process call, off the DAG, it taps no rail, slash search slash synthesize and slash search slash vector, and further down, no subject, no effector, no event to observe. The write path takes the opposite route. agent dot responder publishes down onto two command rails, events dot workspace dot angle bracket agent dot out dot journal underscore append and the generic events dot workspace dot angle bracket agent dot out dot angle bracket tool. Each rail hands down to an effector node: effector dot journal underscore append, which is the only code that knows the store's address, and effector dot jmfts underscore write, parameterized for any subtree. Each effector then runs a long dog-legged connector down and across into the same documents slab. Between the effectors and the store is the one red mark in the figure: the rail events dot journal dot angle bracket kind dot angle bracket binding underscore id, drawn in red, with effector dot journal underscore append publishing up onto it. It is annotated the ack is the fact, a tool wrapper waits on it, addressed by the binding underscore id. Bottom right, under the role label jmfts, two hatched doubled-outline slabs are stacked: documents and search underscore term underscore postings. Between them a panel names the two backfills, embed and index-document, dashed lines running up into documents and down into the postings, glossed eventually consistent backfill and a redelivered event re-indexes the same document, unchanged. Beneath it all: durably written is not findable. Bottom left, a panel lists the three things that fall out of routing writes through the substrate instead of around it: observability, enforceability, and substitution.</desc><defs><pattern id="dia-hatch-tjm" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="4" y1="0" x2="4" y2="8" class="hatch"/></pattern></defs><text x="250" y="32" class="label-role">tectum</text><rect x="0" y="16" width="230" height="108" class="fill-surface stroke-hair"/><text x="12" y="36" class="label">praxis/loose_loop3.yaml</text><line x1="0" y1="44" x2="230" y2="44" class="stroke-soft"/><text x="12" y="60" class="label-soft">experimental — one cohort,</text><text x="12" y="73" class="label-soft">A/B against loose_loop2</text><text x="12" y="86" class="label-soft">not a boot default</text><text x="12" y="102" class="label-soft">a grounded ask: 180 s</text><text x="12" y="115" class="label-soft">operator wall clock: 220 s</text><text x="250" y="54" class="label-soft">…out.muse</text><text x="316" y="54" class="label-soft">curate · records, stays silent</text><line x1="250" y1="64" x2="668" y2="64" class="stroke"/><path d="M668 64 L659 60 L659 68 Z" class="fill-ink"/><line x1="650" y1="64" x2="650" y2="177" class="stroke"/><path d="M650 186 L646 177 L654 177 Z" class="fill-ink"/><text x="250" y="94" class="label-soft">operator.maintain</text><text x="366" y="94" class="label-soft">maintain · supersedes, never deletes</text><line x1="250" y1="104" x2="630" y2="104" class="stroke"/><path d="M630 104 L621 100 L621 108 Z" class="fill-ink"/><line x1="545" y1="104" x2="545" y2="177" class="stroke"/><path d="M545 186 L541 177 L549 177 Z" class="fill-ink"/><text x="0" y="144" class="label-soft">events.workspace.responder.out.delegate</text><text x="256" y="144" class="label-soft">answer · posting it pushes a wake</text><line x1="0" y1="156" x2="500" y2="156" class="stroke"/><path d="M500 156 L491 152 L491 160 Z" class="fill-ink"/><line x1="430" y1="156" x2="430" y2="177" class="stroke"/><path d="M430 186 L426 177 L434 177 Z" class="fill-ink"/><rect x="0" y="186" width="230" height="46" class="fill-ground stroke"/><text x="115" y="206" text-anchor="middle" class="label">agent.responder</text><text x="115" y="222" text-anchor="middle" class="label-soft">no database connection</text><line x1="115" y1="186" x2="115" y2="165" class="stroke"/><path d="M115 156 L111 165 L119 165 Z" class="fill-ink"/><rect x="310" y="186" width="358" height="46" class="fill-ground stroke"/><text x="489" y="206" text-anchor="middle" class="label">agent.jmfts_operator</text><text x="489" y="222" text-anchor="middle" class="label-soft">ask → /search/synthesize · lint → /graph/lint</text><line x1="630" y1="232" x2="630" y2="449" class="stroke-hair"/><path d="M630 458 L626 449 L634 449 Z" class="fill-ink"/><text x="616" y="250" text-anchor="end" class="label-soft">a read is an in-process call</text><text x="616" y="264" text-anchor="end" class="label-soft">off the DAG — it taps no rail</text><text x="616" y="314" text-anchor="end" class="label">/search/synthesize</text><text x="616" y="332" text-anchor="end" class="label">/search/vector</text><text x="616" y="422" text-anchor="end" class="label-soft">no subject, no effector,</text><text x="616" y="436" text-anchor="end" class="label-soft">no event to observe</text><text x="0" y="272" class="label-role">tectum</text><text x="200" y="286" class="label-soft">events.workspace.&lt;agent&gt;.out.journal_append</text><line x1="150" y1="296" x2="560" y2="296" class="stroke"/><path d="M560 296 L551 292 L551 300 Z" class="fill-ink"/><line x1="170" y1="232" x2="170" y2="287" class="stroke"/><path d="M170 296 L166 287 L174 287 Z" class="fill-ink"/><line x1="360" y1="296" x2="360" y2="371" class="stroke"/><path d="M360 380 L356 371 L364 371 Z" class="fill-ink"/><text x="90" y="318" class="label-soft">events.workspace.&lt;agent&gt;.out.&lt;tool&gt;</text><line x1="0" y1="328" x2="330" y2="328" class="stroke"/><path d="M330 328 L321 324 L321 332 Z" class="fill-ink"/><line x1="60" y1="232" x2="60" y2="319" class="stroke"/><path d="M60 328 L56 319 L64 319 Z" class="fill-ink"/><line x1="120" y1="328" x2="120" y2="371" class="stroke"/><path d="M120 380 L116 371 L124 371 Z" class="fill-ink"/><text x="390" y="350" class="label-soft">events.journal.&lt;kind&gt;.&lt;binding_id&gt;</text><line x1="390" y1="360" x2="612" y2="360" class="stroke-red"/><path d="M612 360 L603 356 L603 364 Z" class="fill-red"/><line x1="415" y1="380" x2="415" y2="369" class="stroke-red"/><path d="M415 360 L411 369 L419 369 Z" class="fill-red"/><text x="448" y="374" class="label-mark">the ack is the fact</text><text x="448" y="390" class="label-soft">a tool wrapper waits on it</text><text x="448" y="404" class="label-soft">addressed by the binding_id</text><rect x="20" y="380" width="190" height="42" class="fill-ground stroke"/><text x="115" y="400" text-anchor="middle" class="label">effector.jmfts_write</text><text x="115" y="415" text-anchor="middle" class="label-soft">parameterized · any subtree</text><rect x="240" y="380" width="200" height="42" class="fill-ground stroke"/><text x="340" y="400" text-anchor="middle" class="label">effector.journal_append</text><text x="340" y="415" text-anchor="middle" class="label-soft">knows the store’s address</text><path d="M390 422 L390 470 L452 470" class="stroke fill-none"/><path d="M460 470 L451 466 L451 474 Z" class="fill-ink"/><path d="M180 422 L180 498 L452 498" class="stroke fill-none"/><path d="M460 498 L451 494 L451 502 Z" class="fill-ink"/><text x="452" y="450" class="label-role">jmfts</text><rect x="460" y="458" width="208" height="52" fill="url(#dia-hatch-tjm)" class="stroke"/><rect x="464" y="462" width="200" height="44" class="fill-none stroke-soft"/><rect x="510" y="472" width="110" height="24" class="fill-ground"/><text x="564" y="489" text-anchor="middle" class="label">documents</text><line x1="620" y1="510" x2="620" y2="523" class="stroke-soft stroke-dashed"/><path d="M620 532 L616 523 L624 523 Z" class="fill-ash"/><line x1="500" y1="532" x2="500" y2="519" class="stroke-soft stroke-dashed"/><path d="M500 510 L496 519 L504 519 Z" class="fill-ash"/><rect x="452" y="532" width="216" height="76" class="fill-surface stroke-hair"/><text x="462" y="554" class="label">embed</text><text x="530" y="554" class="label">index-document</text><text x="462" y="572" class="label-soft">eventually consistent backfill</text><text x="462" y="586" class="label-soft">a redelivered event re-indexes</text><text x="462" y="600" class="label-soft">the same document, unchanged</text><line x1="560" y1="608" x2="560" y2="621" class="stroke-soft stroke-dashed"/><path d="M560 630 L556 621 L564 621 Z" class="fill-ash"/><rect x="460" y="630" width="208" height="52" fill="url(#dia-hatch-tjm)" class="stroke"/><rect x="464" y="634" width="200" height="44" class="fill-none stroke-soft"/><rect x="486" y="644" width="156" height="24" class="fill-ground"/><text x="564" y="661" text-anchor="middle" class="label">search_term_postings</text><text x="452" y="704" class="label-soft">durably written is not findable</text><rect x="0" y="532" width="400" height="158" class="fill-surface stroke-hair"/><text x="12" y="554" class="label-soft">three things fall out of routing writes</text><text x="12" y="568" class="label-soft">through the substrate instead of around it</text><line x1="0" y1="578" x2="400" y2="578" class="stroke-soft"/><text x="12" y="596" class="label-soft">observability · a source, a schema</text><text x="12" y="610" class="label-soft">attribution, a correlation id</text><text x="12" y="628" class="label-soft">enforceability · a closeout prompt when</text><text x="12" y="642" class="label-soft">a required tool call has not happened</text><text x="12" y="660" class="label-soft">substitution · the contract is a subject,</text><text x="12" y="674" class="label-soft">not a client library</text></svg><figcaption>Two routes to one store, and the difference is the interface. A durable write is not a database call: the agent publishes a verb, an effector subscribes it, and the write comes back as an event on events.journal.&lt;kind&gt;.&lt;binding_id&gt; — the red rail, and the only thing that turns a publish into a fact. That long way round is what buys observability, enforceability and substitution; the effector is the only code in the picture holding the store’s address. A read buys none of those and needs none of them, so it takes the hairline: straight down the margin, across no rail, no subject and no effector between the caller and the tree. The third rule is drawn on the delegate rail — asking another agent to act is a publish, never a row someone has to poll. What the ack does not promise is findability: the effectors write with auto_embed=False and commit, so the embedding and the BM25 postings arrive afterwards. That backfill is safe to redeliver only because index-document subtracts a document’s prior contribution before re-adding it.</figcaption></figure>
+
+<div class="admonition note">
+<p class="admonition-title">Draft</p>
+<p>Written from the Tectum repo's effector nodes (<code>effector.journal_append</code>,
+<code>effector.jmfts_write</code>), <code>agent.jmfts_operator</code>,
+<code>praxis/loose_loop3.yaml</code>, the workspace projection, and the roadmap.
+The effectors and the projection are covered by offline
+suites; the one live end-to-end run is scoped in
+<a href="#what-is-demonstrated-and-what-is-only-claimed">What is demonstrated</a>
+at the end.</p>
+</div>
+<h2 id="writes-you-can-watch">Writes you can watch<a class="headerlink" href="#writes-you-can-watch" title="Permanent link">&para;</a></h2>
+<p>An agent that wants something remembered does not hold a database
+connection. Its tool wrapper publishes
+<code>events.workspace.&lt;agent&gt;.out.journal_append</code>; an effector node —
+<code>effector.journal_append</code> for the journal, or the parameterized
+<code>effector.jmfts_write</code> for any subtree — performs the write; and the write
+acknowledges on <code>events.journal.&lt;kind&gt;.&lt;binding_id&gt;</code>, addressed by the same
+correlation id the originating utterance carried. Both halves are ordinary
+<a href="../../tectum/reference/#the-event-envelope">events</a> on ordinary
+<a href="../../tectum/reference/#subject-namespace">subjects</a>.</p>
+<p>Three things fall out of routing memory writes through the substrate
+instead of around it:</p>
+<ul>
+<li><strong>Observability.</strong> Every durable write is an event with a source, a
+  schema attribution, and a correlation id. "What did the agent record, and
+  why" is answered from the event log — the same trace the Tectum Cookbook
+  follows in
+  <a href="../../tectum/cookbook/#trace-one-turn-across-the-fleet">Trace one turn across the fleet</a>.</li>
+<li><strong>Enforceability.</strong> Closeout discipline can require the write: the
+  dispatcher injects a closeout prompt when a required tool call has not
+  happened, so a turn is not allowed to end with remembering quietly
+  skipped.</li>
+<li><strong>Substitution.</strong> The agent's contract is a subject, not a client
+  library. The effector is the only code that knows the store's address,
+  which is how the same cognition ran against a keyboard harness and a
+  WAN-bridged room without changing an agent.</li>
+</ul>
+<p>The ack is what makes the write a fact rather than a hope. A <code>jmfts_write</code>
+whose ack never arrives is a tool error the model sees, not a message lost
+in transit — the same publish-and-wait contract the τ node uses on
+<a href="../tectum-tau/#two-postures-one-wire-contract">Tectum + Tau</a>.</p>
+<h3 id="the-ack-means-durably-written-and-only-that">The ack means durably written, and only that<a class="headerlink" href="#the-ack-means-durably-written-and-only-that" title="Permanent link">&para;</a></h3>
+<p>The effectors write with <code>auto_embed=False</code> and commit synchronously, so the
+acknowledgement is a statement about durability, not about search. Embedding
+is a slower, eventually-consistent backfill. The seam property to respect:
+<strong>durably written is not findable.</strong> A vector search fired immediately after
+an ack may miss the entry until its embedding lands. A consumer that needs
+read-after-write recall has to design for that gap rather than assume it
+away.</p>
+<p>The ack also carries the <code>binding_id</code>, so the durable record threads into the
+same logical flow — perceive, plan, act — as every other event in the turn
+that caused it. "What did this exchange leave behind" is answerable from the
+subject name alone.</p>
+<h2 id="coordination-without-a-lock-manager">Coordination without a lock manager<a class="headerlink" href="#coordination-without-a-lock-manager" title="Permanent link">&para;</a></h2>
+<p>The moment a second agent shares the workspace, coordination becomes a real
+question. The Tectum answer is assembled from the bus, append-only writes,
+and JMFTS's own timestamps — no lock manager anywhere:</p>
+<table>
+<thead>
+<tr>
+<th>Hazard</th>
+<th>Pattern</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Two writers clobber one subtree</td>
+<td><strong>Append-only, multi-writer.</strong> Nobody overwrites; a consolidator folds appended records later, asynchronously, and never gates a write.</td>
+</tr>
+<tr>
+<td>Two agents act on the same thing</td>
+<td><strong>In-force-bounded claims.</strong> Write a claim with <code>in_force_to = now + budget + grace</code>; others read claims first and skip. A crashed claimant's claim expires on its own.</td>
+</tr>
+<tr>
+<td>Read, then act on a since-changed view</td>
+<td><strong>As-of reads.</strong> A dispatch reads the workspace as of its own start timestamp; JMFTS's historical projection makes the snapshot free.</td>
+</tr>
+<tr>
+<td>Agent A wants agent B to act</td>
+<td><strong>Publish to B's inbound subject.</strong> The bus is the queue; a handoff is never a database flag someone must remember to poll.</td>
+</tr>
+</tbody>
+</table>
+<p>The division of labor is exact. JMFTS provides the timestamps, the append
+semantics, and the projection — its
+<a href="../../jmfts/cookbook/#record-facts-that-can-be-corrected-without-being-erased">bitemporal fact model</a>
+is the same shape one layer down. Tectum provides the event rails and the
+discipline about which primitive answers which hazard.</p>
+<p>Honestly scoped: append-only multi-writer and inbound-publish handoff are
+how the shipped experiments already coordinate; in-force claims and as-of
+reads are the corrected design of record for the next agent that needs
+them, not yet a shipped convention. The fast/slow schema pair that uses the
+first two is in the Tectum Cookbook:
+<a href="../../tectum/cookbook/#split-an-agent-into-a-fast-responder-and-a-slow-curator">Split an agent into a fast responder and a slow curator</a>.</p>
+<h2 id="keeping-the-index-current-from-an-event-log">Keeping the index current from an event log<a class="headerlink" href="#keeping-the-index-current-from-an-event-log" title="Permanent link">&para;</a></h2>
+<p>Event delivery is at-least-once, so index maintenance has to survive
+redelivery. JMFTS's incremental <code>index-document</code> endpoint is idempotent — it
+subtracts a document's previous contribution to the BM25 collection
+statistics before re-adding it — so an event-driven indexer needs no
+deduplication infrastructure at all. A redelivered event re-indexes the same
+document and changes nothing.</p>
+<p>This was once false: the pre-fix server inflated <code>total_docs</code> and <code>doc_freq</code>
+on re-index, and every event-log consumer would have had to build its own
+exactly-once machinery on top. Server-side idempotence is what makes the
+naive consumer correct. The cost of those passes is the JMFTS
+<a href="../../jmfts/devops/#index-maintenance">DevOps Manual</a>'s side of the seam.</p>
+<h2 id="the-tree-gets-its-own-agent">The tree gets its own agent<a class="headerlink" href="#the-tree-gets-its-own-agent" title="Permanent link">&para;</a></h2>
+<p><strong>Status: experimental — the operator runs only under
+<code>praxis/loose_loop3.yaml</code>, an A/B against a cohort that does not use it.</strong></p>
+<p><code>agent.jmfts_operator</code> turns the document tree from a passive store into a
+tier of the cognition: a slow-tier agent whose tools are the tree's own
+verbs. Where a generic agent gets a search tool, this one wields the JMFTS
+surface as verbs:</p>
+<table>
+<thead>
+<tr>
+<th>Verb</th>
+<th>JMFTS surface it drives</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ask</code></td>
+<td><code>/search/synthesize</code> — a grounded answer, not a result list</td>
+</tr>
+<tr>
+<td><code>find</code></td>
+<td>auto-routed search for the documents that bear on something</td>
+</tr>
+<tr>
+<td><code>read</code></td>
+<td>a document <em>properly</em>: its prose, its place in the tree, its links, its facts</td>
+</tr>
+<tr>
+<td><code>facts</code></td>
+<td>the triple graph — what is known about a thing, or how two things connect</td>
+</tr>
+<tr>
+<td><code>explore</code></td>
+<td>children / ancestors / siblings / links</td>
+</tr>
+<tr>
+<td><code>link</code></td>
+<td>a typed <code>document_links</code> edge between two documents</td>
+</tr>
+<tr>
+<td><code>consolidate</code></td>
+<td>RAPTOR / portfolio summarization, fact extraction</td>
+</tr>
+<tr>
+<td><code>lint</code></td>
+<td><code>/graph/lint</code> — orphans, contradictions, staleness, coverage</td>
+</tr>
+</tbody>
+</table>
+<p>Several of those verbs are JMFTS features that only pay off when something
+tends them on a cadence, which is what
+<a href="../../jmfts/cookbook/#audit-a-corpus-the-way-you-lint-code">auditing a corpus the way you lint code</a>
+looks like with an agent holding the linter.</p>
+<p>The interesting part is not the verbs but the <em>wake modes</em>, selected by event
+suffix, which turn knowledge work into routed cognitive roles:</p>
+<ul>
+<li><strong>answer</strong> (<code>…out.delegate</code>) — the fast conversational layer handed up a
+  question. The operator queries the tree and posts an answer, and the posted
+  event pushes a wake so the answer is voiced promptly instead of waiting to
+  be polled.</li>
+<li><strong>curate</strong> (<code>…out.muse</code>) — the operator is overhearing. It records a fact or
+  a connection and stays silent. No reply is expected or produced.</li>
+<li><strong>maintain</strong> (<code>operator.maintain</code>) — a quiet pass to tidy the knowledge
+  base: lint, fix the cheap safe things, note what was done. It never deletes
+  or overwrites.</li>
+</ul>
+<p>Each mode leans on a JMFTS property the substrate could not supply itself.
+<code>answer</code> exists because <code>synthesize</code> returns a grounded answer rather than
+hits to re-read. <code>curate</code> exists because the triple store makes "record this
+connection" a first-class write. And <code>maintain</code> is only safe to run
+unattended because JMFTS <strong>supersedes instead of deleting</strong> — the worst an
+autonomous maintenance pass can do is add a correction, never destroy a
+record — while <code>/graph/lint</code> hands it a ready-made work queue of orphans,
+contradictions, and stale facts to walk.</p>
+<p>It was A/B'd against a generalist curator by swapping one node name in an
+otherwise identical schema (<code>loose_loop3</code> against <code>loose_loop2</code>), and that
+experiment is the one cognition loop in the tree with a dated, confirmed
+live end-to-end run: a two-way spoken conversation over a WAN bridge, with
+the operator working the corpus behind it.</p>
+<p>The substrate's contribution to that experiment is the experiment itself.
+When retrieval sits behind a subject and a node name, "what kind of mind
+should tend the memory" becomes a question you can answer empirically, one
+<a href="../../tectum/devops/#schema-activation">schema activation</a> at a time.</p>
+<h2 id="timeouts-must-learn-retrievals-latency">Timeouts must learn retrieval's latency<a class="headerlink" href="#timeouts-must-learn-retrievals-latency" title="Permanent link">&para;</a></h2>
+<p>A grounded <code>ask</code> against a local model can legitimately run close to 180
+seconds. <code>loose_loop3</code> raises the operator's wall-clock limit to 220 seconds
+specifically so a slow synthesize is not killed mid-call. The lesson travels:
+when a retrieval appliance sits behind an event substrate, the substrate's
+supervision defaults — tuned for reflex-speed nodes — silently execute honest
+slow answers unless the schema says otherwise.</p>
+<h2 id="sensation-becomes-corpus">Sensation becomes corpus<a class="headerlink" href="#sensation-becomes-corpus" title="Permanent link">&para;</a></h2>
+<p><code>memory.transcript</code> binds the cleaned utterance rail to a durable record:
+everything anyone says — after the echo gate has removed the agent's own
+voice — becomes a JMFTS document under the current session's sub-root, with
+the raw ASR text preserved beside the resolved version. The corpus of what
+has been said in the room is a side effect of routing. There is no batch
+importer, no export step, and nothing to fall behind, because the write
+path <em>is</em> the event path.</p>
+<p>What JMFTS adds to that record is time it can be asked about later: the
+transcript pipeline keeps domain time separate from ingestion time, so the
+room's history stays answerable on
+<a href="../../jmfts/cookbook/#archive-transcripts-on-the-time-they-happened">when things were said</a>
+rather than on when the writer got around to it.</p>
+<h2 id="two-postures-on-retrieval">Two postures on retrieval<a class="headerlink" href="#two-postures-on-retrieval" title="Permanent link">&para;</a></h2>
+<p>This page is the write side and the routing side. The read side has two
+shapes across the stack, and they are deliberately different:</p>
+<ul>
+<li><strong>Retrieval the agent elects.</strong> A tool call the model makes, recorded in
+  the session transcript — <a href="../tau-jmfts/#recall-is-a-tool-call-not-an-injection">Tau + JMFTS</a>.</li>
+<li><strong>Retrieval the agent cannot skip.</strong> A reflex that runs before every user
+  turn, threading hits ahead of the utterance —
+  <a href="../tectum-tau/#memory-the-model-does-not-elect">Tectum + Tau</a>.</li>
+</ul>
+<p>Both read the same store under the same
+<a href="../../jmfts/reference/#data-model">principal model</a>. The choice is about
+what you want auditable: what the agent asked for, or that it asked at all.</p>
+<h2 id="what-is-demonstrated-and-what-is-only-claimed">What is demonstrated, and what is only claimed<a class="headerlink" href="#what-is-demonstrated-and-what-is-only-claimed" title="Permanent link">&para;</a></h2>
+<p>The effectors, the ack rails, and the append-only workspace projection are
+shipped and offline-tested (<code>test_workspace_projection.py</code>,
+<code>test_closeout.py</code>). The coordination table reflects the 2026-08-09
+correction to the roadmap's protocol section, and half of it is design of
+record rather than shipped convention, marked above. <code>agent.jmfts_operator</code>
+is an experiment that ran, not a boot default: it is active only in the
+<code>loose_loop3</code> cohort. The live end-to-end claim is scoped to the
+<code>loose_loop3</code> WAN run and nothing broader.</p>
+<p>All three projects at once are on
+<a href="../full-stack-agent/">The FFwF Full Stack Agent</a>.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
