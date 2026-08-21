@@ -221,7 +221,7 @@ Project index pages carry `version`, and `repo` when the project is on GitHub:
 ---
 title: Tau
 kind: project
-version: v0.9.1
+version: v0.9.2
 repo: jmccardle/tau
 ---
 ```

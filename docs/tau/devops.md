@@ -15,6 +15,39 @@ How Tau is deployed and operated: where sessions live, how model credentials are
     `docs/NATS-BUS-EXTENSION.md`, and `docs/REMOTE-CONTROL.md`. Not yet
     checked against a deployment outside the maintainer's own.
 
+## Install
+
+```bash
+pip install 'ffwf-tau-coding-agent[tui]'      # interactive
+pip install ffwf-tau-coding-agent             # headless only
+```
+
+The base distribution pulls `ffwf-tau-agent-core` and `ffwf-tau-llm` behind it.
+`[tui]` adds Textual and Rich, and that extra is the only thing an interactive
+`tau` needs that a headless one does not — without it, `tau -p` and
+`tau --mode rpc` still run a full turn, extensions and all. Measured: 15
+packages and 13 MB against 27 packages and 31 MB. That gap is the argument for
+the split, because a container that only ever runs headless turns has no reason
+to ship a terminal interface.
+
+The other capabilities are extras on the same principle — `[jmfts]` for
+`--store jmfts`, `ffwf-tau-agent-core[bus]` for the `nats_bus` extension. Each
+reports its own absence with the install command rather than a traceback. The
+[Reference](reference.md#packages) page carries the full table.
+
+The `ffwf-` prefix is load-bearing rather than branding: `tau-ai` and `tau-llm`
+on PyPI are unrelated third-party projects, so an install command missing the
+prefix installs someone else's code.
+
+### Which command name to write
+
+The install puts **both** `tau` and `ffwf-tau` on PATH — one entry point, two
+wrappers pip owns and removes on uninstall. Type `tau` at a terminal; write
+`ffwf-tau` in a systemd unit, a Dockerfile, or a cron line. PyPI reserves
+distribution names but not command names, and an unrelated project ships its
+own `tau`: in an environment holding both, whichever installed last owns the
+name, and nothing tells you which one that was. `ffwf-tau` cannot be taken.
+
 ## Five ways to run τ
 
 | Mode | Entry point | Shape |
@@ -35,8 +68,9 @@ Default: `~/.tau/sessions` for the TUI and `tau -p`; a private
 `<tmp>/.tau-<uid>/sessions` for `--mode rpc` (a subprocess a host spawns and
 tears down shouldn't litter the shared directory by default).
 `--session-dir DIR` overrides this for the file store. `--store {file,jmfts}`
-picks the backend for the run — `tau-jmfts` is an optional package, loaded
-lazily only when selected, never a hard dependency of the TUI or CLI.
+picks the backend for the run — `ffwf-tau-jmfts` is an optional package
+(`pip install 'ffwf-tau-coding-agent[jmfts]'`), loaded lazily only when
+selected, never a hard dependency of the TUI or CLI.
 `--no-session` skips persistence entirely (ephemeral).
 
 Sessions are append-only JSONL, walked by `parent_id` to build model input —
@@ -45,7 +79,7 @@ operations rather than special cases: `AgentSession.submit()`'s
 `multitask_strategy="rollback"` navigates back to the pre-turn leaf without
 deleting anything (the abandoned turn becomes a sibling branch), and
 `multitask_strategy="fork"` branches instead of extending the active leaf.
-See the [Reference](reference.md#agent-loop-sessions-tau-agent-core) page
+See the [Reference](reference.md#agent-loop-sessions-tau_agent_core) page
 for the full submission-strategy table.
 
 ## Model credentials
@@ -91,7 +125,8 @@ refused at load time unless the run explicitly opts in with `--bus` (CLI) or
 declaration has a second half: such an extension must also declare a non-empty
 `SUBJECTS`, naming the subjects it touches. "Leave it unset" is refused even
 with `--bus` given, because the grant is per-subject rather than blanket. The shipped
-example is `nats_bus.py` (tau-006/tau-007): τ speaking NATS directly as a
+example is `nats_bus.py` (tau-006/tau-007), which needs
+`pip install 'ffwf-tau-agent-core[bus]'` for its NATS client: τ speaking NATS directly as a
 bus-native agent node, bridging to Tectum's effector nodes and to a
 simulation engine's world verbs. See `docs/NATS-BUS-EXTENSION.md` in the
 source repo for the full config surface and verb table.
@@ -112,14 +147,21 @@ project's own test setup, not just Tau's.
 
 ## Dev loop
 
+From a checkout of the [source repo](https://github.com/jmccardle/tau), rather
+than from PyPI:
+
 ```bash
 python -m venv venv && source venv/bin/activate
-pip install -e ./tau-ai -e ./tau-agent-core -e ./tau-coding-agent
-pip install -e ./tau-jmfts   # optional: JMFTS-backed session storage
+pip install -e ./tau-llm -e './tau-agent-core[dev]' -e './tau-coding-agent[dev]' -e ./tau-jmfts
 
 pytest                # whole suite (config lives in the repo root pyproject.toml)
-mypy tau-ai/src tau-agent-core/src tau-coding-agent/src
+mypy tau-llm/src tau-agent-core/src tau-coding-agent/src tau-jmfts/src
 ```
+
+The `[dev]` extras pull the TUI, JMFTS and bus extras transitively, so a plain
+editable install is not enough to run the suite. `mypy` takes all four source
+trees in one call — running it against a single package in isolation reports
+errors that are artefacts of the missing siblings.
 
 A pre-commit hook (`ruff check`, `ruff format --check`, `mypy`) hard-gates
 commits on the source repo — `git config core.hooksPath .githooks` to
@@ -132,9 +174,6 @@ enable it locally.
   `AgentSession` directly and never calls it. Real code, orphaned from the
   path that actually runs; worth knowing before assuming the SDK's own
   system-prompt-building helper is exercised in production.
-- `--no-builtin-tools`/`-nbt` currently behaves identically to `--no-tools`
-  — there are no extension-registered tools yet to make the distinction
-  matter.
 - The per-dispatch "thinking level" toggle some deployments want (switching
   a single running model between fast/slow per request) has no first-class
   field on `AgentLoopConfig` yet; the workaround is two model config entries

@@ -12,13 +12,47 @@ Extension API, session tree format, configuration keys, and CLI flags.
 
 !!! note "Draft"
     Built for lookup, not narrative reading. Written from the source repo's own
-    `docs/tau-ai.md`, `docs/tau-agent-core.md`, `docs/tau-coding-agent.md`,
+    `docs/tau-llm.md`, `docs/tau-agent-core.md`, `docs/tau-coding-agent.md`,
     `docs/extensions.md`, and `docs/REMOTE-CONTROL.md` — each of those is
     itself checked against running code, not aspirational. `tau --help` is the
     exact contract for the CLI table below; treat a disagreement as this page
     being stale.
 
-## Provider layer (`tau-ai`)
+## Packages
+
+Four distributions, each installable on its own. The `ffwf-` prefix is not
+decoration: `tau-ai` and `tau-llm` on PyPI are unrelated third-party projects,
+so `pip install tau-llm` fetches someone else's code.
+
+| Distribution | Imports as | What it is |
+|---|---|---|
+| `ffwf-tau-llm` | `tau_llm` | Provider and streaming layer. |
+| `ffwf-tau-agent-core` | `tau_agent_core` | Agent loop, tools, sessions, extensions. Headless. |
+| `ffwf-tau-coding-agent` | `tau_coding_agent` | The `tau` command and the Textual TUI. |
+| `ffwf-tau-jmfts` | `tau_jmfts` | JMFTS-backed session store. |
+
+Installing the top of the stack pulls the rest:
+
+```bash
+pip install 'ffwf-tau-coding-agent[tui]'
+```
+
+Everything past the headless core is an extra, and each one reports its own
+absence with the install command rather than a traceback:
+
+| Extra | Adds | Needed for |
+|---|---|---|
+| `ffwf-tau-coding-agent[tui]` | `textual`, `rich` | the interactive TUI. `tau -p` and `tau --mode rpc` run a full turn without it. |
+| `ffwf-tau-coding-agent[jmfts]` | `ffwf-tau-jmfts` | `--store jmfts`. |
+| `ffwf-tau-agent-core[bus]` | `nats-py` | the built-in `nats_bus` extension. |
+| `ffwf-tau-agent-core[testing]` | `pytest` | importing `tau_agent_core.testing`. |
+
+The install puts **two** console scripts on PATH — `tau` and `ffwf-tau`, the
+same entry point behind each. Type `tau`; write `ffwf-tau` in scripts, systemd
+units and Dockerfiles. See the
+[DevOps Manual](devops.md#which-command-name-to-write) for why.
+
+## Provider layer (`tau_llm`)
 
 τ speaks the OpenAI-compatible chat-completions API. `Model` carries the
 usual fields (`id`, `provider`, `base_url`, `context_window`, `max_tokens`)
@@ -39,17 +73,39 @@ selects it.
 **Providers are pooled, not registered.** An earlier registry design was
 built, found to construct a fresh empty registry on every call (so it never
 actually cached anything) and measured at 42ms of overhead per call, then
-deleted outright. `tau_ai.client`'s connection pool (keyed on
+deleted outright. `tau_llm.client`'s connection pool (keyed on
 provider+base_url+api_key) replaced it.
 
 **Tool argument validation is hand-rolled**, not `jsonschema`/pydantic —
 `validate_tool_arguments` checks `type` and `required` from a plain-dict
 schema and nothing else: no `minLength`, no `minimum`, no `enum`. Writing one
 of those into a tool schema looks enforced and is silently ignored.
-`define_tool()` does not exist anywhere in the package — build a tool
-definition as a plain dict.
 
-## Agent loop & sessions (`tau-agent-core`)
+`define_tool()` builds the definition and validates it, raising on a malformed
+one rather than handing back a tool that fails later:
+
+```python
+from tau_llm import define_tool
+
+word_count = define_tool(
+    name="word_count",
+    label="Word count",
+    description="Count the words in a string.",
+    parameters={
+        "type": "object",
+        "properties": {"text": {"type": "string"}},
+        "required": ["text"],
+    },
+    execute=lambda text: {"words": len(text.split())},
+)
+```
+
+It returns a `ToolDefinition`. A single mapping may be passed positionally
+instead of keywords. This is the provider-layer tool shape;
+`api.register_tool()` in the [Extension API](#extension-api) takes a different
+one, and the two are not interchangeable.
+
+## Agent loop & sessions (`tau_agent_core`)
 
 `AgentLoop.__init__(self, config: AgentLoopConfig, emit=None, tools=None,
 model=None, abort_signal=None, hook_dispatcher=None, steer_queue=None)` —
@@ -227,9 +283,9 @@ replacement.
 | `--mode {text,json,rpc}` | | headless output format; `rpc` doesn't combine with `--print` |
 | `--model` | `-m` | config key or `provider/id` shorthand |
 | `--provider` | | long-only |
-| `--tools`/`--no-tools` | `-t`/`-nt` | allowlist / disable all |
+| `--tools`/`--no-tools` | `-t`/`-nt` | allowlist / offer the model no tools at all, built-in or extension-registered |
 | `--exclude-tools` | `-xt` | denylist |
-| `--no-builtin-tools` | `-nbt` | currently degenerates to `--no-tools` — no extension-registered tools yet to make the distinction matter |
+| `--no-builtin-tools` | `-nbt` | drops the built-in set only; extension-registered tools survive and are still offered |
 | `--extension PATH` (repeatable) | `-e` | explicit load, always runs even under `--no-extensions` |
 | `--no-extensions` | `-ne` | disables discovery only |
 | `--bus` | | declare this run may reach a message bus, so `TOUCHES_BUS` extensions (e.g. `nats_bus`) are allowed to load |

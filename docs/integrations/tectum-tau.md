@@ -46,7 +46,10 @@ There are two ways to put τ on a substrate, and they share the same
   one inbound subject and registers one tool per outbound verb. No schema is
   written, no supervisor is involved — τ takes the same posture as a
   monitoring TUI. This is the right shape for driving experiments against a
-  live substrate from outside it. The Tau Cookbook carries the wiring:
+  live substrate from outside it. Tectum is not a Python package and never
+  appears in a τ dependency list; the seam is a NATS client, so what an
+  integrator installs is `pip install 'ffwf-tau-agent-core[bus]'`. The Tau
+  Cookbook carries the wiring:
   [Bridge a session onto a NATS bus](../tau/cookbook.md#bridge-a-session-onto-a-nats-bus-tectum-integration).
 - **As a Tectum node.** Tectum's `TauAgentNode` supervises the subprocess,
   restamps its bindings per turn, and gives the agent a workspace identity.

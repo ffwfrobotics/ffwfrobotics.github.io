@@ -65,8 +65,10 @@ block) is `examples/30_permission_gate.py`; a config-driven path denylist is
 `nats_bus.py` (tau-006/tau-007) lets τ speak NATS directly — subscribing an
 inbound subject to drive turns, and registering one tool per outbound verb
 (`speak`, `journal_append`, `jmfts_write`, `delegate`, plus world verbs for a
-simulation engine: `move_to`, `wait`, `note`). It requires an explicit
-capability grant, because it declares `TOUCHES_BUS = True`:
+simulation engine: `move_to`, `wait`, `note`). Its NATS client is an extra
+rather than a base dependency — `pip install 'ffwf-tau-agent-core[bus]'` — and
+it requires an explicit capability grant on top of that, because it declares
+`TOUCHES_BUS = True`:
 
 ```python
 from tau_agent_core.sdk import create_agent_session
@@ -158,7 +160,7 @@ becomes N concurrent calls, each pinned to a label set so tightly that on a
 llama.cpp/llguidance backend a verdict costs about one forward pass:
 
 ```python
-from tau_ai.constraints import DecodeConstraints
+from tau_llm.constraints import DecodeConstraints
 
 constraints = DecodeConstraints(choices=["supported", "contradicted", "unrelated"])
 ```
@@ -171,7 +173,7 @@ contract details matter, all enforced at construction or at the boundary:
 - A hand-written `grammar=` string must also carry `verify=` — a callable that
   checks the output actually conforms. τ will not reimplement a grammar engine
   to check a grammar it did not build, and it will not report a constraint held
-  when it cannot tell. Build the grammar with `tau_ai.grammar`
+  when it cannot tell. Build the grammar with `tau_llm.grammar`
   (`choice`/`fixed`/`regex`/`sequence`, each of which carries its own checker)
   and the verifier comes with it; `choices=[...]` needs nothing extra.
 - If the server's output somehow escapes the declared constraint, τ raises
@@ -270,7 +272,7 @@ of what was cut.
 
 ## Point the TUI at a different session backend
 
-`--store jmfts` swaps the file-backed session store for a `tau-jmfts`-backed
+`--store jmfts` swaps the file-backed session store for a JMFTS-backed
 one — useful when a deployment wants sessions to be searchable the same way
 a JMFTS-indexed document corpus is, rather than plain files on disk:
 
@@ -279,7 +281,8 @@ tau --store jmfts
 tau -p --store jmfts "..."
 ```
 
-`tau-jmfts` is an optional package (`pip install -e ./tau-jmfts`), loaded
+`ffwf-tau-jmfts` is an optional package
+(`pip install 'ffwf-tau-coding-agent[jmfts]'`), loaded
 lazily only when `--store jmfts` (or the equivalent config key) selects it —
 never a hard dependency of the TUI or CLI. See the [Tau + JMFTS integration
 page](../integrations/tau-jmfts.md) for what that buys an agent beyond
