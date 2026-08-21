@@ -74,7 +74,261 @@ If a caller needs to *decide* something from a search score — inject retrieved
 
 ---
 
-The recipes above tune the retrieval stack. The rest of the page is corpus shapes — jobs the data model already supports that do not follow obviously from "hybrid search over PostgreSQL."
+The recipes above tune the retrieval stack. The next block is the write side — getting a corpus in, and changing what happens to it on the way.
+
+!!! warning "Ingestion is ahead of the release"
+    Every recipe in this block needs the `feat/ingest-lifecycle` branch. None of it is in 0.1.0. See the [Reference](reference.md#ingest-task-queue) for the queue's shape and the [DevOps Manual](devops.md#ingestion-runs-on-a-queue) for how to run workers.
+
+## Ingest a directory and watch it finish
+
+`POST /ingest/file` returns as soon as the bytes are stored, so a naive loop over a directory reports success long before anything is searchable. `scripts/e2e_ingest_corpus.py` is the tool that does this correctly, and its phases are separate subcommands because the middle one takes hours:
+
+```bash
+python -m scripts.e2e_ingest_corpus upload --state run.json ~/corpus
+python -m scripts.e2e_ingest_corpus wait   --state run.json
+python -m scripts.e2e_ingest_corpus index  --state run.json
+python -m scripts.e2e_ingest_corpus report --state run.json
+```
+
+`report` answers four questions and keeps them apart: did every file finish (counts by lifecycle state, plus every failed task with its error type), what did the tree become (nodes by usetype and depth), is it retrievable (document vectors, token embeddings, BM25 entries, and the same query through each search method), and what did it cost (wall clock per task type).
+
+Nothing in it is a fixture — the corpus is whatever directory you name and the report says what happened rather than asserting it matched an expectation. That is the point: run it against your own awkward files before trusting a pipeline on them.
+
+For a single file, `POST /ingest/file` then poll:
+
+```bash
+curl -H "Authorization: Bearer $TOKEN" \
+     "$API/ingest/file/$DOC_ID/frontier"
+# {"document_id": 41, "settled": "in_flight", "nodes_total": 15,
+#  "nodes_settled": 12, "nodes_in_flight": 3, "nodes_failed": 0, "tasks_unfinished": 5}
+```
+
+Counts, never a percentage — the work below the current frontier does not exist yet, so any denominator would move backward as it is discovered.
+
+Poll on `tasks_unfinished` reaching zero, not on a timer. Zero unfinished tasks while `nodes_in_flight` is still above zero is the one reading that means *stuck*: nothing queued owes those nodes any work, so nothing is coming to finish them. A non-zero count says work is queued and says nothing about whether anything is running it — tasks that will sit `pending` forever look identical to tasks being drained right now, and only two readings apart in time tell them apart.
+
+## See what a pipeline would do before you run it
+
+Three ways to ask, along one axis: how much does the planner actually know about the file?
+
+**`POST /ingest/explain` with a format name** — no file, and usually a conditional answer:
+
+```json
+{"format": "pdf", "options": {"structure": {"max_tokens": 60}}}
+```
+
+!!! warning "`format` is a detector name, not a pipeline name"
+    Valid values are what `detect_format` produces: `text`, `pdf`, `docx`, `pptx`, `zip`.
+    **`markdown` is not one of them** — nothing in the bytes separates authored markdown
+    from a `.txt` opening with `#`, so both report as `text`. `markdown` *is* a valid
+    pipeline name on the older synchronous `POST /ingest`, which is exactly why the mistake
+    is easy. An unknown format is a legal question and answers 200, with every row
+    `impossible` or `not_applicable` — which reads like "unsupported" and means "no such
+    format".
+
+Rows whose scheduling depends on something only `probe` can measure come back `conditional`, naming the patterns that would decide them and what they would become. Nothing is assumed in either direction — a plan resting on a fabricated input is a wrong answer wearing a confident shape.
+
+**`POST /ingest/explain` with `patterns`** — still no file, but the conditions are now answerable:
+
+```json
+{"format": "pdf", "patterns": {"has_text_layer": true, "has_outline": false,
+                               "is_scanned": false}}
+```
+
+Every row is decided and `patterns_source` reads `supplied`, so nobody can mistake a hypothesis for a measurement. This is how you answer "what would happen to a scanned PDF" or "what changes if this one has no outline" without owning either file — and how you test a routing or options change against shapes your corpus does not contain yet. A key no condition consults is reported in `patterns_ignored` rather than rejected, which is what makes a misspelled pattern visible instead of silently planned as false.
+
+**`POST /ingest/analyze` with the actual file** — runs the two pure functions `probe` runs, hands the result to the same planner, and **stores nothing**:
+
+```bash
+curl -sX POST "$API/ingest/analyze" -H "Authorization: Bearer $TOKEN" -F "file=@paper.pdf"
+```
+
+`patterns_source` reads `probed`. Three fields wrap the plan that `explain` cannot produce: `file` (what the bytes are beside what your client claimed — a `.docx` that is really a bare ZIP shows up here rather than as an unexplained failure two tasks later), `probe_failed`, and `already_stored`.
+
+Check `probe_failed` **first**. Exactly one of it and `plan` is set, and a null plan means "these bytes have no schedule", not "nothing to do". `already_stored` means the appliance already holds these bytes, so an upload would deduplicate to the named node and run no plan at all — it also carries that node's recorded options, which is the only way to predict the 400 in the next recipe.
+
+All three reject an unknown option with a 400 naming it, from the same resolver the upload uses. Explaining a plan under options the run would refuse would be the exact wrong answer these endpoints exist to prevent.
+
+!!! note "The plan is the downward pass only"
+    `probe`, `extract:*`, `ocr` and the two `structure` rungs — the tasks that build the
+    tree going down. `summarize`, `summarize:llm` and `structure:semantic` are never in a
+    plan: they are scheduled by the settling walk after the children exist, and no function
+    of `(format, patterns, options)` could decide them, because the children are what they
+    depend on.
+
+## Change chunking for one request
+
+Options are namespaced by **group**, where a group names the parameters one kind of task takes. Pass overrides as a JSON object beside the upload:
+
+```bash
+curl -X POST -H "Authorization: Bearer $TOKEN" \
+     -F "file=@paper.pdf" \
+     -F 'options={"structure": {"max_tokens": 60, "chunk_strategy": "sentence_packed"}}' \
+     "$API/ingest/file"
+```
+
+The `structure` group is read by both structure rungs; `rollup` is read at the settling boundary. A parameter belongs to the **task** that reads it, not to the format that fed it — which is why chunking parameters are not a property of `pdf`. Formats get to say where they *deviate*, and today none do.
+
+!!! warning "A typo in an option is a 400, not a shrug"
+    Write `max_token` instead of `max_tokens` and the request fails naming the key. It is not silently ignored. A run that quietly does something other than what was asked, and reports success, is precisely the swallowed failure this project refuses to ship.
+
+### It works on a new file, not on one you already uploaded
+
+Uploads deduplicate on content hash. Send bytes the appliance already holds and it resolves to the existing node — which recorded the options it was ingested under. **An upload asking for different options is a 400**, naming both sets:
+
+```
+Document 41 already holds these exact bytes, ingested with {'structure': {'max_tokens': 120, …}};
+this upload asks for {'structure': {'max_tokens': 60, …}}. Uploading does not re-run work that
+has already been done …
+```
+
+That refusal is the honest answer, not an obstacle to work around. Two answers are available — do the work, or say it was not done — and returning the node as though your `max_tokens` had been applied is the third one.
+
+Reprocessing an already-ingested file under new options is specified (diff `(task_type, param_fingerprint)` against the node's attempt log, enqueue only the difference, no re-parse and no duplicate tree) and **is not built**. Until it is:
+
+1. Settle chunking with `POST /ingest/analyze`, which stores nothing and costs one probe.
+2. Upload once the options are what you want.
+3. To change them afterwards, delete the document and upload it again.
+
+For a corpus-wide sweep, that means deciding before the run — which is what makes `analyze` on a handful of representative files worth the ten minutes.
+
+## Place a file in a folder without copying it
+
+Pass `parent_id` on an upload and one of two things happens, and the response says which.
+
+For **new bytes**, `parent_id` is ordinary parentage. The file node is a tree child and everything works the way you expect.
+
+For **bytes already stored**, the existing node is attached to that parent by a `contains` **link** — a graph edge — and the response carries `linked_into_parent: true`. Its `parent_id` is unchanged. The consequence is the part to internalize:
+
+```bash
+curl -s -H "Authorization: Bearer $TOKEN" "$API/documents/$FOLDER/subtree"  # does NOT include it
+curl -s -H "Authorization: Bearer $TOKEN" "$API/documents/$FOLDER/links"    # does
+```
+
+A subtree walk is `path`/`parent_id` containment and this edge is in neither. Any UI that renders a folder from the subtree alone will show an empty folder for a file that is genuinely filed there. Read `linked_into_parent` and query links as well, or accept that a file lives in exactly one tree.
+
+The node is deliberately **not** reparented instead. It is a record someone else created for their own purpose; moving it as a side effect of a third party uploading the same bytes would change what their document sits under and invalidate the rollups above its new parent, silently, in a request that said nothing about moving anything. Adoption is a curator action with its own verb.
+
+## Keep an upload out of the shared knowledgebase
+
+The default is open, and that is the design: a JMFTS token means access to the shared corpus, and an upload lands readable by every principal. "Private until shared" would be the opposite assumption and would breed bugs of ignorance in every deployment that holds the stated one.
+
+The gap that default leaves is narrow and permanent. Subtree RBAC resolves strictly along the tree path — a principal's right on a document is the highest grant on any access-control root at or above it in `path`. So a file uploaded with **no `parent_id`** has no ancestor, therefore no access-control root above it, therefore nothing governs it. **A grant made later cannot reach back and cover it**, because there is no path for the grant to travel down.
+
+Both fixes exist only at upload time:
+
+```bash
+# Either: land it inside a subtree that is already governed.
+curl -sX POST "$API/ingest/file?parent_id=$GOVERNED" \
+     -H "Authorization: Bearer $TOKEN" -F "file=@salary-review.pdf"
+
+# Or: make the new node its own access-control root, with you as its only grantee.
+curl -sX POST "$API/ingest/file?private=true" \
+     -H "Authorization: Bearer $TOKEN" -F "file=@salary-review.pdf"
+```
+
+`private=true` grants you `write`, not `read` — you own what you uploaded and must be able to correct it.
+
+!!! warning "`private=true` narrows deduplication, and it has to"
+    The ordinary dedupe lookup matches any file node the caller can *read*, and an
+    ungoverned node is readable by everyone. Under `private=true` the lookup is restricted
+    to nodes you hold a grant on. Without that, a private upload of bytes already present
+    as a shared node would resolve to the shared node and you would not be private at all.
+    The cost is a second copy of the bytes when the same file exists in both forms.
+
+Note that `private` and `parent_id` are **query** parameters while `options` is a form field. The bytes make the body multipart, so scalars land in the query string and only the structured parameter becomes a part.
+
+## Use a different LLM for summaries than for everything else
+
+Summarization is the only ingest step that always costs a model call, and it is the one you are most likely to want a different model for — a cheap one for bulk backfill, a strong one for the documents people actually read.
+
+It is one option key:
+
+```json
+{"options": {"rollup": {"llm_model": "qwen2.5:7b-instruct"}}}
+```
+
+That value rides on the task row into `summarize:llm`, which prefers it over `JMFTS_LLM_MODEL`. Empty means "use the configured default". The **endpoint** is still global (`JMFTS_LLM_BASE_URL`) — this selects a model at that endpoint, not a different provider.
+
+Two knobs pair with it. `max_children` (default 16) decides when a node is segmented instead of summarized, so raising it means fewer, longer summaries and lowering it means more, shorter ones. `penalty` and `min_segment` tune the PELT segmentation that produces those groups.
+
+Remember what `summarize` actually does: it concatenates its children's text while that fits the embedding window and only calls a model when it does not. A concatenated span is a stronger record of what the document said than any paraphrase, and the deciding token count is recorded either way — so `structured_content.effective_content.method` tells you which happened without inferring it from the text.
+
+## Add your own ingest task
+
+A task type is a string, a handler, and a declaration of what it reserves.
+
+```python
+from jmfts_core.ingest_tasks import TaskOutcome, register_task_handler
+
+@register_task_handler("classify:sensitivity")
+def run_classify(session, task) -> TaskOutcome:
+    node = session.get(Document, task.scope_document_id)
+    label = my_classifier(node.content)
+    node.structured_content = {**(node.structured_content or {}), "sensitivity": label}
+    return TaskOutcome(detail={"label": label})
+```
+
+Four rules the contract enforces, all of them worth knowing before you write the handler:
+
+1. **The session is the worker's**, one per task. Write what the task writes and return; the worker commits, or rolls back and records the failure.
+2. **A handler that failed raises.** It does not return a status saying so. The worker has to classify the exception to decide about a retry, and a returned string carries no exception to classify.
+3. **`status="skipped"` is for work that was never attempted**, and it requires `detail["reason"]`. A missing result is never silent.
+4. **Registering two different functions under one name is an error**, not last-import-wins.
+
+Declare a `write_mode` when you enqueue: `self` if the task writes only its own node, `children` if it writes the node's children, `subtree` if it rewrites the region. The claim query uses it to refuse overlapping work, so a task that lies about its scope is how two workers end up writing the same node.
+
+If your task takes parameters, give it a group in `TASK_PARAM_DEFAULTS` rather than reading settings directly — that is what makes it visible to `explain`, overridable per request, and part of the re-run fingerprint.
+
+## Route expensive tasks to the hardware that suits them
+
+Two settings and one measurement.
+
+The measurement first, because the policy should follow it: on a real corpus, `structure:declared` and `summarize` are 54% and 46% of ingest wall clock, and `probe` + `extract:text` together are 0.07%. The expensive types are the ones whose handlers run the embedding model.
+
+```bash
+# On the appliance: which task types go to which pool.
+JMFTS_TASK_BADGES='{"structure:declared":"embed","structure:inferred":"embed","summarize":"embed","summarize:llm":"llm"}'
+
+# On a GPU host: claim the embedding work.
+jmfts-worker --badge embed
+
+# On a host with a local model, or a light runner forwarding to a metered API:
+jmfts-worker --badge llm
+```
+
+A worker takes a **list** of badges, because capability and routing are different things. A host with a local LLM on a GPU can answer both the expensive badge and the cheap one; a runner that only forwards to a web API can answer only the cheap one. Listing both is what lets an otherwise-idle expensive worker fill cycles with bulk work.
+
+!!! warning "Set a badge with no worker and ingestion stalls with no error"
+    Tasks sit `pending`, their nodes never leave `in_flight`, they stay out of the retrieval indexes, and nothing reports it. The policy is empty by default for exactly this reason. Turn it on only where every badge it names has a running pool — and give every worker in a fleet a badge, because an un-badged one claims everything including GPU work.
+
+## Halve the LLM bill on a backfill
+
+`summarize:llm` is the one task type that always costs a model call, which makes it the one worth batching. `batch_worker/` routes it through OpenAI's or Anthropic's batch API at roughly half price:
+
+```bash
+export OPENAI_API_KEY=...
+jmfts-batch-worker run --provider openai --badge llm --model gpt-4o-mini
+```
+
+Try it against your own model first — the `mock` provider speaks the same protocol against a local llama-server, and holds a batch open until you finalize it so you can see the parked state:
+
+```bash
+jmfts-batch-worker run --provider mock --badge llm \
+    --store /var/lib/jmfts/batches --llm-url http://localhost:8080 --once
+jmfts-batch-worker status                       # what is parked
+jmfts-batch-worker finalize mockbatch_… --store /var/lib/jmfts/batches
+jmfts-batch-worker run --provider mock --badge llm --store /var/lib/jmfts/batches --once
+```
+
+Two operational facts, both covered in the [DevOps Manual](devops.md#batch-processing-halves-the-llm-bill): a parked batch is invisible to the lease, so `jmfts-batch-worker stalled` is your only stall signal; and gather size is bounded by how much of the tree you are willing to freeze for a day, not by the provider's cap.
+
+!!! note "Set `JMFTS_SUMMARIZATION_DISABLE_THINKING=true` for a reasoning model"
+    Measured against llama-server with `Qwen3.8-27B-Q4_0`: without it the model spent its whole token budget on the reasoning trace and returned the fragment `The appliance` as the summary. That fragment is not an error at any layer — it embeds, it stores, and the node ends up advertising an `effective_content` that says nothing.
+
+---
+
+The rest of the page is corpus shapes — jobs the data model already supports that do not follow obviously from "hybrid search over PostgreSQL."
 
 !!! note "Shipped surface, unrehearsed walkthroughs"
     Every endpoint named below exists in the current API. None of these entries has been run end to end as a written walkthrough, so treat them as designs you can build today, not procedures that were rehearsed.
