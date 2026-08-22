@@ -107,9 +107,16 @@ applied in CSS, not baked into the asset.
 
 ### Axis eyebrow
 
-Every category page states its coordinates on the 2×2. The recipe — black
-fill, `2px` solid red border, `15px` radius — is lifted verbatim from the
-homepage's `ProjectTagLink` component.
+Every category page states its coordinates on the 2×2. The geometry — `2px`
+solid red border, `15px` radius — is lifted from the homepage's
+`ProjectTagLink` component. The colour is not: an inverted slab competed with
+the `h1` it sits under, so the stamp is red type on the surface tone and reads
+as a label rather than a badge.
+
+Both schemes clear the AA floor for body text, measured: `#CC0000` on
+`#F4F3F1` is 5.31:1, and `#FF0000` on `#151517` is 4.56:1. The dark pair has
+little headroom, so darkening the surface token is the safe direction to move
+and lightening it is not.
 
 <p class="axis">Action × Acquisition</p>
 

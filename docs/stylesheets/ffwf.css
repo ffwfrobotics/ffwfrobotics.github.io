@@ -305,8 +305,11 @@
 
 /* --- Axis eyebrow ------------------------------------------------------- */
 
-/* Every category page states its coordinates on the 2x2. Recipe is lifted
-   verbatim from ProjectTagLink.vue: black fill, 2px red border, 15px radius. */
+/* Every category page states its coordinates on the 2x2. Geometry is lifted
+   from ProjectTagLink.vue — 2px red border, 15px radius — but the colour is
+   not: an inverted slab clashed with the page it sits above, so the stamp is
+   red type on the surface tone instead. Reads as a label rather than a
+   badge, and it recedes far enough to stop competing with the H1. */
 .md-typeset .axis {
   display: inline-block;
   margin: 0 0 1.6em;
@@ -316,8 +319,8 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #ffffff;
-  background: #000000;
+  color: var(--ffwf-ink-red);
+  background: var(--ffwf-surface);
   border: var(--ffwf-rule) solid var(--ffwf-red);
   border-radius: var(--ffwf-pill);
 }
