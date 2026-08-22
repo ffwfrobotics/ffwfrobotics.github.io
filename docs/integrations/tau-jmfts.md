@@ -66,7 +66,7 @@ pass.
 ## Recall is a tool call, not an injection
 
 Load `tau_jmfts/ext/tools.py` — an ordinary Tau
-[extension](../tau/reference.md#extension-api) — and the agent gets three
+[extension](../tau/reference/extensions.md) — and the agent gets three
 tools:
 
 - `jmfts_search(query, scope=conversation|all|subtree, method, usetype, limit)`

@@ -33,7 +33,7 @@ to ship a terminal interface.
 The other capabilities are extras on the same principle — `[jmfts]` for
 `--store jmfts`, `ffwf-tau-agent-core[bus]` for the `nats_bus` extension. Each
 reports its own absence with the install command rather than a traceback. The
-[Reference](reference.md#packages) page carries the full table.
+[Reference](reference/index.md#packages) page carries the full table.
 
 The `ffwf-` prefix is load-bearing rather than branding: `tau-ai` and `tau-llm`
 on PyPI are unrelated third-party projects, so an install command missing the
@@ -55,11 +55,11 @@ name, and nothing tells you which one that was. `ffwf-tau` cannot be taken.
 | Interactive | `tau` | Textual TUI in a terminal. |
 | Headless print | `tau -p "..."` | One turn, prints a transcript, exits. |
 | Headless JSON | `tau -p --mode json "..."` | One turn, JSONL lifecycle events instead of text — the machine-readable equivalent of the TUI's stream. |
-| RPC subprocess | `tau --mode rpc` | A persistent JSON-RPC 2.0 server over stdio — τ as a process a host drives, not a library it imports. See the [Reference](reference.md#rpc) page for the verb table. |
+| RPC subprocess | `tau --mode rpc` | A persistent JSON-RPC 2.0 server over stdio — τ as a process a host drives, not a library it imports. See the [Reference](reference/rpc.md) page for the verb table. |
 | Embedded (SDK) | `create_agent_session(...)` in Python | In-process, no subprocess boundary. `tau_agent_core` never imports `tau_coding_agent`, so this path has no Textual dependency at all. |
 
 `tau -p` and `tau --mode rpc` both write and resume **real** sessions — a
-headless run shows up in the TUI's sidebar and can be picked up
+headless run shows up in the TUI's session picker and can be picked up
 interactively later. There is no separate "headless-only" session format.
 
 ## Where sessions live
@@ -79,7 +79,7 @@ operations rather than special cases: `AgentSession.submit()`'s
 `multitask_strategy="rollback"` navigates back to the pre-turn leaf without
 deleting anything (the abandoned turn becomes a sibling branch), and
 `multitask_strategy="fork"` branches instead of extending the active leaf.
-See the [Reference](reference.md#agent-loop-sessions-tau_agent_core) page
+See the [Reference](reference/tau-agent-core.md#sessions-are-a-tree) page
 for the full submission-strategy table.
 
 ## Model credentials
@@ -90,11 +90,80 @@ Ollama, or llama.cpp's server). A missing API key **raises** (`No API key
 for provider: …`) rather than running with a fabricated placeholder key —
 there is no silent fallback to try to guess a credential.
 
+A model entry names its vendor with `backend` and, optionally, its wire
+protocol with `api`. τ registers one vendor per protocol it implements:
+
+| `backend` | `api` it implies | Key read from |
+|---|---|---|
+| `openai` (the default) | `openai-completions` | `OPENAI_API_KEY` |
+| `anthropic` | `anthropic-messages` | `ANTHROPIC_API_KEY` |
+| `gemini` | `google-generative-ai` | `GEMINI_API_KEY`, then `GOOGLE_API_KEY` |
+
+Resolution order for the wire is: a stated `api` wins, then the registered
+vendor's own protocol, then the historical `openai-completions` default. So
+every config that worked before this release builds the same model. A stated
+`api` τ does not implement **raises** against the registry rather than falling
+through to the OpenAI wire — a model silently served over the wrong protocol
+is a failure that looks like a bad model rather than a bad config.
+
+The two vendor SDKs are extras (`ffwf-tau-llm[anthropic]`,
+`ffwf-tau-llm[google]`) and import on the first request rather than at module
+import, so a deployment that only talks to one vendor ships only that one.
+
+An OpenAI-compatible vendor of your own — a gateway, a hosted inference
+service — needs no τ change and no extra: register a `ProviderSpec` at import
+time and point a model at it. See the
+[Reference](reference/tau-llm.md#two-registries-and-a-pool) page.
+
+### Gateways that are not quite OpenAI-shaped
+
+Two knobs exist for this, both per model and both settable per call:
+
+* `stream: false` for a gateway that does not implement SSE. Until this
+  release, `"stream": true` was hardcoded *and* reserved, so such a backend
+  was unreachable through any config path.
+* `request_timeout` for one that is slow to first byte. The previous 300s
+  read timeout and 10s connect timeout were fixed at client construction with
+  no override anywhere.
+
+A tool call arriving with **no name** — a real defect on at least one hosted
+gateway, on some deployments behind it and not others — now raises at the
+wire, naming the call id, the model and the base URL. It used to become
+`Unknown tool: ` and repeat until `max_turns`, which read as the model
+misbehaving rather than the gateway.
+
 Per-extension credentials follow the same shape: `extensions.<name>` in
 `config.json`, overridable per-run with `--ext-config NAME.KEY=VALUE`
 (CLI wins over config.json). An extension that needs a bearer token for a
 downstream service (JMFTS, a bus) reads it from `api.config`, not from an
 environment variable the model's own shell could `printenv`.
+
+## Project context files reach the model now
+
+Before this release they did not — on either the TUI or the headless path. The
+backend passed a config key straight through to the session and never reached
+the loader behind it, so neither τ's own base prompt nor any `AGENTS.md` had
+ever been sent. This is a behaviour change in what a deployment puts in front
+of a model, so it is worth stating rather than filing under "fixed".
+
+Discovery walks from the working directory **to `/`**, taking at most one file
+per directory. On a build agent or a shared host that means a `CLAUDE.md` in
+`$HOME`, or in a parent of the checkout, is read on every run. `-nc`
+(`--no-context-files`) turns discovery off, and it is run-level, so a
+mid-session model switch cannot hand the files back.
+
+Two Fail-Early choices follow from τ's own rules rather than from pi's:
+
+* A file that is found but cannot be read or decoded **raises**, naming the
+  path. A prompt silently missing its project instructions is
+  indistinguishable from a model ignoring them.
+* Every block is wrapped in `<project_instructions path="…">`, so a prompt
+  cannot carry instructions whose origin it does not state. If you are auditing
+  what a run was told, the path is in the prompt.
+
+The shipped default config no longer carries a `system_prompt` key. Setting
+one now replaces τ's base text and leaves context-file discovery alone —
+previously it switched discovery off, with nothing saying so.
 
 ## Running as a subprocess (RPC)
 
@@ -169,16 +238,18 @@ enable it locally.
 
 ## Known gaps
 
-- `create_agent_session` (the documented SDK entry point) is not on the live
-  TUI/headless path today — `tau_coding_agent`'s backend constructs
-  `AgentSession` directly and never calls it. Real code, orphaned from the
-  path that actually runs; worth knowing before assuming the SDK's own
-  system-prompt-building helper is exercised in production.
+- `create_agent_session` (the documented SDK entry point) is still not on the
+  live TUI/headless path — `tau_coding_agent`'s backend constructs
+  `AgentSession` directly. The consequence that used to matter is gone: the
+  backend now calls the same prompt builder rather than copying a config key
+  past it, so τ's base prompt and its context files reach the model on every
+  path. What remains is that the factory's *other* defaults are exercised only
+  by SDK callers.
 - The per-dispatch "thinking level" toggle some deployments want (switching
   a single running model between fast/slow per request) has no first-class
   field on `AgentLoopConfig` yet; the workaround is two model config entries
   plus `set_model` over RPC, not a true per-request toggle.
 
-See the [Reference](reference.md) page for exact signatures and the
+See the [Reference](reference/index.md) page for exact signatures and the
 [Cookbook](cookbook.md) for worked examples built from real code in the
 source tree.

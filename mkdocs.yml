@@ -59,7 +59,13 @@ nav:
           - Quickstart: tau/tutorials/quickstart.md
       - Cookbook: tau/cookbook.md
       - DevOps Manual: tau/devops.md
-      - Reference: tau/reference.md
+      - Reference:
+          - tau/reference/index.md
+          - tau_llm: tau/reference/tau-llm.md
+          - tau_agent_core: tau/reference/tau-agent-core.md
+          - Extensions: tau/reference/extensions.md
+          - RPC: tau/reference/rpc.md
+          - tau_coding_agent: tau/reference/tau-coding-agent.md
   - JMFTS:
       - jmfts/index.md
       - Tutorials:

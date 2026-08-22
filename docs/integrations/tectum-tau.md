@@ -64,7 +64,7 @@ waits on before returning a tool result. Publish-and-hope is not in the
 vocabulary — a `speak` whose completion ack never arrives is a tool error
 the model sees, not a message lost in transit.
 
-The subprocess itself is Tau's [RPC mode](../tau/reference.md#rpc): one
+The subprocess itself is Tau's [RPC mode](../tau/reference/rpc.md): one
 JSON-RPC 2.0 server over stdio, persistent across turns, writing real
 sessions the TUI can open later.
 

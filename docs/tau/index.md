@@ -1,7 +1,7 @@
 ---
 title: "Tau"
 kind: "project"
-version: "v0.9.2"
+version: "v0.9.3"
 repo: "jmccardle/tau"
 ---
 
@@ -22,6 +22,11 @@ and `tau --mode rpc` without any interface libraries. The `ffwf-` prefix is
 required: `tau-ai` and `tau-llm` on PyPI are unrelated projects. The
 [DevOps Manual](devops.md#install) covers the extras and the second command
 name.
+
+Out of the box τ talks to any OpenAI-compatible endpoint, local or hosted.
+Anthropic and Google are two more extras — `ffwf-tau-llm[anthropic]` and
+`ffwf-tau-llm[google]` — and both import only when a model actually names
+them.
 
 ## Where to start
 
