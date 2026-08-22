@@ -10,16 +10,16 @@ Upload a real file and watch a queue turn it into a tree.
 
 The [quickstart](quickstart.md) had you write documents by hand, one JSON body at a time. That is not how a corpus arrives. This tutorial uploads a file and follows what happens to it — which is the part that surprises people, because almost none of it happens while you wait.
 
-!!! warning "This needs the branch, not the release"
-    The queued ingestion path is on `feat/ingest-lifecycle` and is not in 0.1.0:
+!!! note "Needs 0.1.1 or later"
+    The queued ingestion path shipped in 0.1.1. If you are on 0.1.0, upgrade:
 
     ```bash
     git clone https://github.com/jmccardle/jmfts.git
-    cd jmfts && git checkout feat/ingest-lifecycle
+    cd jmfts && git checkout 0.2.0
     docker compose up --build -d
     ```
 
-    If you already have a 0.1.0 database, apply `migrations/010`, `011` and `012` in order.
+    If you already have a 0.1.0 database, apply `migrations/008` through `012` in order.
 
 As before:
 
@@ -49,6 +49,11 @@ curl -sX POST "$API/ingest/explain" \
     unknown format is a legal question. The answer is a plan in which every row is
     `impossible` or `not_applicable`, which reads like "markdown is unsupported" and is
     really "no such format".
+
+    A second trap runs the other way: a real detector name does not promise the text gets
+    read. `xlsx` is detected and probed, and no task extracts its text, so a plan asked
+    without bytes still says `conditional` — see
+    [Office formats](../reference.md#office-formats) for which formats are actually read.
 
 The response is the task plan, read out of the same declaration the scheduler works from — so the plan cannot drift from the run without the run changing too:
 

@@ -11,21 +11,30 @@ status: "draft"
 How JMFTS runs in production: sizing PostgreSQL and pgvector, which container holds the embedding model and which ones deliberately do not, and what an index rebuild costs you.
 
 !!! note "Draft"
-    Written against the public [0.1.0 release](https://github.com/jmccardle/jmfts/releases/tag/0.1.0) — its `Dockerfile`, `docker-compose.yml`, and setup scripts — plus benchmark and defect write-ups that are not in that release yet (see [Documents not in this release](#documents-not-in-this-release)). Not yet checked against a deployment outside the maintainer's own.
+    Written against **0.2.0** — its `Dockerfile`, `Dockerfile.worker`, `docker-compose.yml`, `deploy/` manifests and entry points — plus benchmark and defect write-ups that are not in the public tree (see [Documents not in this release](#documents-not-in-this-release)). Not yet checked against a deployment outside the maintainer's own.
 
-!!! warning "Half of this page runs on a branch, not on the release"
-    [Ingestion](#ingestion-runs-on-a-queue), [the containers and worker types](#containers-and-worker-types), and [running a fleet](#running-a-fleet) are all `feat/ingest-lifecycle`. 0.1.0 has no queue, no `jmfts-worker`, no `Dockerfile.worker`, no `deploy/` directory, and no `/runner` surface — and its `pip install -e .` still installs torch, which is the fact the whole container split turns on. Everything before those sections applies to the release as published.
+!!! note "All of this page is released"
+    [Ingestion](#ingestion-runs-on-a-queue), [the containers and worker types](#containers-and-worker-types), and [running a fleet](#running-a-fleet) shipped in **0.1.1**, along with `jmfts-worker`, `Dockerfile.worker`, `deploy/`, the `/runner` surface, and the `embed` extra that took torch out of the base install. 0.1.0 had none of it, and the notes that said "branch only" have been removed.
 
 ## Getting it
 
-JMFTS is public as of `0.1.0`:
+JMFTS is public, and `0.2.0` is the current release:
 
 ```bash
 git clone https://github.com/jmccardle/jmfts.git
-cd jmfts && git checkout 0.1.0    # or stay on the branch tip
+cd jmfts && git checkout 0.2.0    # or stay on master
 ```
 
-Everything below runs from that checkout. `0.1.0` is a first public cut of a system that has been running as a personal appliance — it works, and it is not a product; the release notes are explicit that reranked ordering in particular is unvalidated.
+The public repository is a squash, not a mirror: each release replaces the whole tree in one commit, so `git log` there is short by design.
+
+Everything below runs from that checkout. This is a system that has been running as a personal appliance — it works, and it is not a product; reranked ordering in particular is unvalidated.
+
+From a checkout, install the client distribution first. `jmfts` depends on `jmfts-client`, and until both are on PyPI the server does not resolve on its own:
+
+```bash
+pip install -e ./jmfts-client
+pip install -e ".[dev]"
+```
 
 ## Two ways to run it
 
@@ -41,13 +50,14 @@ docker compose down -v            # stop and WIPE the DB + the downloaded embedd
 **Native** — your own PostgreSQL with the `pgvector` extension, plus a Python 3.11+ environment:
 
 ```bash
+pip install -e ./jmfts-client     # first; jmfts depends on it
 pip install -e ".[dev]"           # dev adds pytest/black/ruff; plain -e . is enough to run
-python -m scripts.setup_db        # creates the DB (if missing) and applies schema.sql
-uvicorn api.main:app --host 0.0.0.0 --port 8100 --reload
+jmfts-init-db                     # creates the DB (if missing) and applies schema.sql
+jmfts-server --host 0.0.0.0 --port 8100
 ```
 
-!!! warning "Those last two commands are release-only"
-    On the branch the top-level `api` package is gone — it claimed a very common name in every consumer's `site-packages` — and the setup script became an entry point. The branch equivalents are `jmfts-init-db` and `uvicorn jmfts_core.rest.main:app`. Running the release commands against the branch tip is an `ImportError`, not a subtle failure.
+!!! warning "0.1.0 spelled these differently"
+    On 0.1.0 these were `python -m scripts.setup_db` and `uvicorn api.main:app`. The top-level `api` package is gone as of 0.1.1 — it claimed a very common name in every consumer's `site-packages` — and the setup script became an entry point. Running the 0.1.0 commands against a current checkout is an `ImportError`, not a subtle failure. `uvicorn jmfts_core.rest.main:app --reload` is still the way to get autoreload.
 
 Either way, the API listens on port 8100 and every setting reads from the environment with a `JMFTS_` prefix. `.env.example` is the annotated list of those settings; the [Reference](reference.md) gives the built-in default behind each one, which is not always what `.env.example` shows.
 
@@ -64,7 +74,9 @@ Both publications are bound to loopback, not `0.0.0.0` — the dev stack is not 
 
 `schema.sql` is the complete canonical DDL — extensions, every table, every index. It is what bootstraps a fresh database. The numbered files in `migrations/` are upgrade deltas for a database that already exists; you do not need them to stand up a new instance, only to carry an existing one forward.
 
-`002` through `009` are in 0.1.0. The ingestion branch adds three more: `010_task_queue.sql` creates the queue, `011_task_queue_heartbeat.sql` adds `heartbeat_at` and the lease index, and `012_task_queue_batched.sql` adds the `batched` status with `batch_id`/`batched_at`. Apply them in order against an existing database, or take `schema.sql` from the branch for a fresh one.
+`002` through `007` were in 0.1.0. 0.1.1 added five: `008_document_settled_lifecycle.sql` and `009_document_blobs.sql` for the lifecycle flag and the uploaded bytes, then `010_task_queue.sql` creating the queue, `011_task_queue_heartbeat.sql` adding `heartbeat_at` and the lease index, and `012_task_queue_batched.sql` adding the `batched` status with `batch_id`/`batched_at`. 0.2.0 adds none — office extraction needed no schema change.
+
+Apply them in order against an existing database, or take `schema.sql` for a fresh one. Both live inside the installed package at `jmfts_core/sql/`, so `jmfts-init-db` finds them without a source checkout.
 
 The Compose image is deliberately **not** a production build: embedding runs on CPU there, which is fine for development and wrong for bulk ingestion (see [Sizing the write path](#sizing-the-write-path-and-why-it-is-cpu-bound) below). It is also not the image the worker pools run — that one is [`Dockerfile.worker`](#four-images-two-dockerfiles), and the difference is deliberate rather than incidental.
 
@@ -77,14 +89,14 @@ Every request needs `Authorization: Bearer <token>`. Two modes, both controlled 
 
 `JMFTS_CORS_ORIGINS` is a JSON list of allowed browser origins and defaults to empty — server-to-server only, no `Origin` header accepted. `"*"` is rejected outright when credentials are in play; there is no wildcard escape hatch.
 
-There is a **second, unrelated credential** on the branch — `JMFTS_RUNNER_KEY`, which gates the embedding surface and resolves to no principal at all. It is described with [the runner container](#the-runner-container); the two are deliberately disjoint, and an API token cannot embed.
+There is a **second, unrelated credential** — `JMFTS_RUNNER_KEY`, which gates the embedding surface and resolves to no principal at all. It is described with [the runner container](#the-runner-container); the two are deliberately disjoint, and an API token cannot embed.
 
 ## The model stack is an extra, not a dependency
 
-!!! warning "Branch only"
-    On 0.1.0, `torch` and `sentence-transformers` are ordinary dependencies and every install has them.
+!!! note "Since 0.1.1"
+    On 0.1.0, `torch` and `sentence-transformers` were ordinary dependencies and every install had them.
 
-On the branch, **`pip install jmfts` does not install torch.** Base JMFTS is storage, retrieval, the tree, BM25, the queue and the whole ingest pipeline. The only step in any of that which needs an accelerator is producing vectors, and since [`embed` became its own task type](#worker-types) that step is one HTTP call away from being another process's problem.
+**`pip install jmfts` does not install torch.** Base JMFTS is storage, retrieval, the tree, BM25, the queue and the whole ingest pipeline. The only step in any of that which needs an accelerator is producing vectors, and since [`embed` became its own task type](#worker-types) that step is one HTTP call away from being another process's problem.
 
 ```bash
 pip install jmfts                 # storage side: no torch, cannot embed
@@ -113,6 +125,58 @@ Three operational consequences worth stating before you build an image:
 - **`ImportError` classifies PERMANENT.** A package that is not installed is not installed on the third attempt, so the task fails the node immediately with a readable reason instead of arriving three backoffs later.
 - **There is no `[cpu]` extra.** The wheel index is an install-time choice pip cannot take from a dependency specifier, so a `cpu` extra would be a name that installed the CUDA build anyway. CPU torch is two commands, and `Dockerfile.worker` takes them as one build argument.
 
+## Office files: three tiers, two extras
+
+!!! info "Tier 2 has a caller"
+    `.docx` and `.pptx` extraction is live. A worker that ingests either **needs `jmfts[office]`**, and one that does not is correctly installed without it. `.xlsx` and the legacy binary formats are still detected and probed but not read — the [Reference](reference.md#office-formats) has the per-format table.
+
+Office support splits the same way the model stack does, and for the same reason, but into three tiers rather than two — because one of the dependencies is not a wheel at all.
+
+| Tier | What | Weight | Where it goes |
+|---|---|---|---|
+| 1 | `zipfile`, `xml.etree`, `olefile` | stdlib plus one pure-Python module | base install |
+| 2 | `python-docx`, `python-pptx`, `openpyxl` | ~10 MB, pure Python | `jmfts[office]` |
+| 3 | LibreOffice, driven by `unoserver` | ~500 MB system package | a badged worker image; `jmfts[convert]` is the client only |
+
+```bash
+pip install jmfts                 # detects and probes .docx/.pptx/.xlsx; cannot open one
+pip install 'jmfts[office]'       # + the readers; .docx and .pptx now extract
+pip install 'jmfts[convert]'      # + the unoserver client — useless without LibreOffice
+```
+
+**Which workers need tier 2 is now an operational decision, not a hypothetical one.** A fleet that ingests office documents needs `jmfts[office]` on the workers that drain `extract:text`. A storage-side worker that only settles nodes and writes rows does not. Getting it wrong is loud rather than quiet: the task fails PERMANENT with `OfficeStackNotInstalled` naming the extra, on the first attempt.
+
+**Tier 1 must stay in the base install, and that is a hard constraint.** Probe depends on nothing, calls no model, and always runs. If probing a `.docx` needed the `office` extra, a base install would accept the upload, run probe, and report an empty pattern set — which is indistinguishable from a `.docx` that genuinely declares no structure. Reading `word/styles.xml` out of a ZIP needs no library, so honouring the constraint costs nothing.
+
+**Tier 2 is separate even though it is small.** Ten megabytes is nothing like torch's five gigabytes, and the split is not about weight. The alternative is putting three readers into every install to serve the one worker in a fleet that ingests office files. A storage-side worker that never touches a `.docx` is correctly installed and correctly has no `python-docx`.
+
+That claim is what the error message has to carry, so it names the extra rather than the module:
+
+```
+OfficeStackNotInstalled: No module named 'docx'
+
+This JMFTS was installed without the office readers, so it can detect and probe
+office files but cannot open one. Install them:
+    pip install 'jmfts[office]'
+A worker that does not ingest office files does not need them; see
+jmfts_core/office/__init__.py.
+```
+
+There is no remote equivalent of `JMFTS_RUNNER_URL` here. An office reader is ten megabytes of pure Python, so "install it" is the whole answer, where for the model stack it is one of two. `OfficeStackNotInstalled` subclasses `ImportError` and therefore classifies **PERMANENT**, the same as `ModelStackNotInstalled`: a package that is not installed does not appear on the third attempt.
+
+**Tier 3 is a worker, not an extra, because `pip install libreoffice` is not a thing.** It follows the `JMFTS_RUNNER_URL` shape instead — a task type, a worker badge, and an optional URL that makes it another process's problem. It earns a whole image by doing two jobs, which is why the extra is named `convert` rather than `render`:
+
+1. **Legacy formats.** `.doc`, `.xls` and `.ppt` convert to OOXML so the tier-2 readers can open the result. The alternative was three more binary-format readers, each worse at its format than LibreOffice is.
+2. **Renditions.** Any document converts to PDF once, at ingest, so serving a citation image is `pymupdf` over a stored PDF — and `pymupdf` is already a base dependency, so the query path needs no tier-3 dependency at all.
+
+`unoserver` and not `unoconv`, which is unmaintained, and not `soffice --headless --convert-to` per file: that pays a cold start per document, and two concurrent invocations fight over the same user profile directory.
+
+Three consequences for how you build images and place work:
+
+- **`office` is implied by `dev`, `convert` is not.** The office tests open real packages. The `unoserver` pip package installs cleanly with no LibreOffice present and is useless without it, so a suite that installed it would be testing a configuration nobody runs.
+- **A legacy file is read-only.** For `.doc`/`.xls`/`.ppt` the converted OOXML is what gets read, so the source of truth for any future edit is the conversion, not the upload. Editing one would hand back a `.docx` where the user supplied a `.doc`.
+- **Renditions roughly double blob storage** for office documents. Off by default is the proposal; whether the policy is per-ingest, per-usetype or global is not decided.
+
 ## The embedding model
 
 Document and token embeddings both come from `nomic-ai/modernbert-embed-base` (configurable via `JMFTS_EMBEDDING_MODEL`). First boot downloads it — a few hundred MB — into a cache volume (`hf_cache` in Compose, `~/.cache/huggingface` natively), and it persists across restarts. The worker images skip that download entirely by baking the model in at build time.
@@ -129,11 +193,11 @@ Document and token embeddings both come from `nomic-ai/modernbert-embed-base` (c
 
 Nothing loads until a request actually asks for reranking, so a deployment that never passes `rerank=true` pays nothing. When a request does ask and the model cannot load, the request fails — it does not quietly return the unreranked ranking.
 
-A cross-encoder is the same `sentence-transformers` stack, so on the branch it belongs to the same `[embed]` extra and is absent from a base install for the same reason. **Reranking has no `/runner` equivalent**: `JMFTS_RUNNER_URL` does not help here, and a container that must rerank must carry the model.
+A cross-encoder is the same `sentence-transformers` stack, so it belongs to the same `[embed]` extra and is absent from a base install for the same reason. **Reranking has no `/runner` equivalent**: `JMFTS_RUNNER_URL` does not help here, and a container that must rerank must carry the model.
 
 ## Sizing the write path — and why it is CPU-bound
 
-A 2026-07-23 baseline (`scripts/benchmark_write.py`, CPU embedding, empty pgvector DB) measured each write op in isolation. The 0.1.0 release keeps only the product CLI in `scripts/`, so the harness that produced these numbers is not in the tarball you can clone today — it ships with the evaluation work described [below](#documents-not-in-this-release):
+A 2026-07-23 baseline (`scripts/benchmark_write.py`, CPU embedding, empty pgvector DB) measured each write op in isolation. The public tree keeps only the product CLI in `scripts/`, so the harness that produced these numbers is not in the tarball you can clone today — it ships with the evaluation work described [below](#documents-not-in-this-release):
 
 | op | ops/s | p50 latency |
 |---|---|---|
@@ -154,9 +218,6 @@ The vector side (`documents.embed`, `token_embeddings.embed_256/384/512`) is mai
 The BM25 side is different: `POST /indexes/{index_name}/index-document/{document_id}` (backed by `index_document`) is idempotent as of a since-fixed defect (it now subtracts a document's old contribution before re-adding, short-circuiting on an unchanged content hash), so indexing a document you've already indexed no longer inflates the corpus statistics BM25's IDF is derived from. You can index incrementally, document by document, as content arrives. `POST /indexes/{name}/refresh` remains available and rebuilds an index's statistics from scratch — correct by construction, but its cost is proportional to the whole indexed corpus, so reach for it as a repair tool, not a routine one.
 
 ## Ingestion runs on a queue
-
-!!! warning "Branch only"
-    This section and everything after it, up to [Documents not in this release](#documents-not-in-this-release), is `feat/ingest-lifecycle`.
 
 `POST /ingest/file` stores the uploaded bytes, enqueues one `probe` task, and **returns before any work is done**. Everything after that — detecting the format, pulling text out, building the tree, embedding it, rolling summaries back up — is a worker draining `task_queue`. The operational consequences are worth stating plainly:
 
@@ -452,7 +513,7 @@ A pod requesting `nvidia.com/gpu: 1` stays Pending forever if that comes back em
 
 ## Documents not in this release
 
-`0.1.0` ships code, `README.md`, and `CLAUDE.md`. The design and evaluation documents this manual and the [Cookbook](cookbook.md) cite are being refined for publication and land separately — the release notes say the same about the BEIR harness that produces the retrieval-quality numbers. Source comments citing `INGEST_SPEC.md`, `KNOWN-DEFECTS.md` and `ROADMAP.md` point at those pending documents.
+The public repository ships code, `README.md`, and `CLAUDE.md`. The design and evaluation documents this manual and the [Cookbook](cookbook.md) cite are being refined for publication and land separately, as does the BEIR harness that produces the retrieval-quality numbers. Source comments citing `INGEST_SPEC.md`, `OFFICE_SPEC.md`, `CORPUS.md`, `KNOWN-DEFECTS.md` and `ROADMAP.md` point at those pending documents.
 
 Until they land, the summaries on these pages are the available version of them. Nothing here is retracted by their absence; you just cannot read the long form yet.
 

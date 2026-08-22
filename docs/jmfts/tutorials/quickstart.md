@@ -10,7 +10,7 @@ Index a small corpus and run your first hybrid query.
 
 You will stand up the appliance, put three documents in it, search them by meaning, add a BM25 index, and then run the hybrid query that uses both. Most of the time is the embedding model downloading.
 
-Everything here is in the public [0.1.0 release](https://github.com/jmccardle/jmfts/releases/tag/0.1.0). Nothing on this page needs a branch.
+Everything here has been in JMFTS since [0.1.0](https://github.com/jmccardle/jmfts/releases/tag/0.1.0), and runs unchanged on 0.2.0.
 
 ## 1. Start it
 
@@ -123,7 +123,7 @@ Three documents, two ways to search them, and one fused query. The tree is what 
 
 ## Next
 
-- **Get a real corpus in.** [Ingest a directory](../cookbook.md#ingest-a-directory-and-watch-it-finish) — files rather than hand-written JSON, with a queue doing the tree-building. That path is on a branch, not in 0.1.0.
+- **Get a real corpus in.** [Ingest a directory](../cookbook.md#ingest-a-directory-and-watch-it-finish) — files rather than hand-written JSON, with a queue doing the tree-building. Needs 0.1.1 or later.
 - **Tune what you just ran.** The [Cookbook](../cookbook.md#tune-the-hybrid-weight-to-the-corpus-dont-assume-one-number) has measured hybrid weightings per dataset, and why one global number does not hold.
 - **Add reranking.** `?rerank=true` adds a second stage; the [Cookbook](../cookbook.md#pick-a-rerank-method-by-what-your-corpus-already-stores) explains why the choice is about prerequisites rather than quality.
 - **Run it properly.** The [DevOps Manual](../devops.md) covers auth, the embedding device, and why bulk loading stays CPU-bound until you move it to CUDA.

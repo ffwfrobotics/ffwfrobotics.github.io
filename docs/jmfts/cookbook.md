@@ -13,8 +13,8 @@ Recipes for specific JMFTS jobs — tuning matryoshka dimensions, reweighting BM
 !!! note "Marked stub on purpose"
     The recipes below are real, drawn from JMFTS's own benchmark runs and defect write-ups — but they have not been organized into full step-by-step walkthroughs or checked against a fresh deployment, so this page stays `stub` until that pass happens.
 
-!!! note "The measurements are ahead of the release"
-    Every endpoint and setting named here is in the public [0.1.0 release](https://github.com/jmccardle/jmfts/releases/tag/0.1.0). The evaluation harness that produced the numbers is not — it follows separately, along with the write-ups behind the defect recipes (see [Documents not in this release](devops.md#documents-not-in-this-release)). So the figures below are reported, not yet reproducible from a clone.
+!!! note "The measurements are not reproducible from a clone"
+    Every endpoint and setting named here is in **0.2.0**. The evaluation harness that produced the numbers is not in the public tree — it follows separately, along with the write-ups behind the defect recipes (see [Documents not in this release](devops.md#documents-not-in-this-release)). So the figures below are reported, not yet reproducible from a clone.
 
 ## Pick a rerank method by what your corpus already stores
 
@@ -26,7 +26,7 @@ The catch is the storage. Token embeddings are one row per selected token per do
 
 **`cross_encoder`** (the default) reads nothing from the database. It scores each (query, document) pair with a cross-encoder model set by `JMFTS_RERANKER_MODEL`, so it ranks any document the first stage can return, whether or not it has been tokenized. The cost is one forward pass per candidate and a second model in memory.
 
-An honest caveat, and the 0.1.0 release notes lead with it: the shipped default, `cross-encoder/ms-marco-MiniLM-L-6-v2`, is standard and trained on relevance judgments, but it was chosen for size and CPU viability, and nobody has yet benchmarked it against `maxsim` on JMFTS's own datasets. The harness accepts `vector→crossenc@100` alongside `vector→maxsim@200` for exactly that comparison; the sweep has not been run, and the harness itself ships after the release. Until then, treat the choice as a prerequisites question, not a quality claim, and treat reranked ordering as unvalidated.
+An honest caveat, and the release notes lead with it: the shipped default, `cross-encoder/ms-marco-MiniLM-L-6-v2`, is standard and trained on relevance judgments, but it was chosen for size and CPU viability, and nobody has yet benchmarked it against `maxsim` on JMFTS's own datasets. The harness accepts `vector→crossenc@100` alongside `vector→maxsim@200` for exactly that comparison; the sweep has not been run, and the harness is not in the public tree. Until then, treat the choice as a prerequisites question, not a quality claim, and treat reranked ordering as unvalidated.
 
 Neither method degrades quietly. If the stage you asked for cannot run, the request fails rather than returning the first-stage ranking under a `+rerank` label.
 
@@ -52,7 +52,7 @@ Token embeddings can be stored at different compression levels. Internal TurboQu
 - `halfvec` (FP16): 2× compression, **no measured recall loss** — this is what production uses.
 - A 4-bit quantized type (`tqvec`, used only in one benchmark database): 5.8× compression, but only **0.260 recall@10** on point queries — a real quality cliff, not a rounding error.
 
-If you're evaluating storage tradeoffs, `halfvec` is the one with evidence behind it. The 0.1.0 schema declares no 4-bit column at all — `tqvec` lived in a benchmark database, and what survives in the release is a cast in the query path written to tolerate such a column if one existed. Nothing here suggests it is safe to run against real traffic.
+If you're evaluating storage tradeoffs, `halfvec` is the one with evidence behind it. The shipped schema declares no 4-bit column at all — `tqvec` lived in a benchmark database, and what survives in the release is a cast in the query path written to tolerate such a column if one existed. Nothing here suggests it is safe to run against real traffic.
 
 ## Over-window text is refused, so success needs no truncation field
 
@@ -76,8 +76,8 @@ If a caller needs to *decide* something from a search score — inject retrieved
 
 The recipes above tune the retrieval stack. The next block is the write side — getting a corpus in, and changing what happens to it on the way.
 
-!!! warning "Ingestion is ahead of the release"
-    Every recipe in this block needs the `feat/ingest-lifecycle` branch. None of it is in 0.1.0. See the [Reference](reference.md#ingest-task-queue) for the queue's shape and the [DevOps Manual](devops.md#ingestion-runs-on-a-queue) for how to run workers.
+!!! note "The queue shipped in 0.1.1"
+    Every recipe in this block runs on the released appliance. See the [Reference](reference.md#ingest-task-queue) for the queue's shape and the [DevOps Manual](devops.md#ingestion-runs-on-a-queue) for how to run workers.
 
 ## Ingest a directory and watch it finish
 
@@ -155,6 +155,64 @@ All three reject an unknown option with a 400 naming it, from the same resolver 
     plan: they are scheduled by the settling walk after the children exist, and no function
     of `(format, patterns, options)` could decide them, because the children are what they
     depend on.
+
+## Check whether a format is actually read before you load a corpus of it
+
+`detect_format` naming your format is not the same as JMFTS reading it. `xlsx` is the live example: it is detected, it has a prober that measures its sheets, and no task extracts its text. Ask before you upload ten thousand of them.
+
+**Asking by format name alone will not answer this.** With no bytes, the appliance has no patterns, so every row that a measurement would decide comes back `conditional` — for `xlsx` exactly as for `docx`:
+
+```bash
+curl -sX POST "$API/ingest/explain" -H "Authorization: Bearer $TOKEN" \
+     -H 'Content-Type: application/json' -d '{"format": "xlsx"}'
+```
+
+```json
+{"format": "xlsx", "prober_available": true,
+ "patterns_source": "unknown", "patterns_known": false,
+ "tasks": [{"task": "extract:text", "outcome": "conditional",
+            "if_condition_holds": "enqueued", "requires": ["has_text_layer"]}]}
+```
+
+That is an honest answer to a question you did not quite ask. `conditional` means "decided once probe runs", and it is not the same as "yes".
+
+### Supply the patterns a probe would report
+
+Ask the question with a pattern set instead. `patterns_source` comes back `supplied` and every row is decided:
+
+```bash
+curl -sX POST "$API/ingest/explain" -H "Authorization: Bearer $TOKEN" \
+     -H 'Content-Type: application/json' \
+     -d '{"format": "xlsx", "patterns": {"has_sheets": true, "sheet_count": 3}}'
+```
+
+```json
+{"format": "xlsx", "patterns_source": "supplied", "patterns_known": true,
+ "tasks": [
+   {"task": "probe", "outcome": "enqueued"},
+   {"task": "extract:text", "outcome": "not_applicable",
+    "reason": "patterns.has_text_layer was not measured"},
+   {"task": "structure:declared", "outcome": "not_applicable",
+    "reason": "extract:text is not eligible, and structure:declared depends on it"}]}
+```
+
+**`patterns.has_text_layer was not measured`** is the answer, and the wording is precise. It does not say the pattern is false. It says nothing on this appliance reports it for an `xlsx` — the prober measures `has_sheets`, `sheet_count` and `has_comments`, and stops there. So no row after `probe` can become eligible. Uploading one stores the bytes and settles a file node with no children: the pipeline succeeds and produces nothing to search.
+
+Run the same call for `docx` and the contrast is immediate:
+
+```bash
+curl -sX POST "$API/ingest/explain" -H "Authorization: Bearer $TOKEN" \
+     -H 'Content-Type: application/json' \
+     -d '{"format": "docx", "patterns": {"has_text_layer": true, "has_heading_styles": true}}'
+```
+
+`extract:text` is `enqueued` and so is `structure:declared`. That is a format this appliance reads.
+
+### Or upload one and look
+
+The cheapest check on a real corpus is one file. Upload it, wait for the node to settle, and count its children. Zero children on a text-bearing document means the format was detected and never read — and the node's attempt log names the row that stopped, with the same reason string `explain` gives.
+
+The [Reference](reference.md#office-formats) has the per-format table and the order the remaining formats are planned in.
 
 ## Change chunking for one request
 
