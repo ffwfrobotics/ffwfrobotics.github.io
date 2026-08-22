@@ -135,7 +135,7 @@ Office support splits the same way the model stack does, and for the same reason
 | Tier | What | Weight | Where it goes |
 |---|---|---|---|
 | 1 | `zipfile`, `xml.etree`, `olefile` | stdlib plus one pure-Python module | base install |
-| 2 | `python-docx`, `python-pptx`, `openpyxl` | ~10 MB, pure Python | `jmfts[office]` |
+| 2 | `python-docx`, `python-pptx`, `openpyxl` | +44 MB, **not** pure Python | `jmfts[office]` |
 | 3 | LibreOffice, driven by `unoserver` | ~500 MB system package | a badged worker image; `jmfts[convert]` is the client only |
 
 ```bash
@@ -148,7 +148,14 @@ pip install 'jmfts[convert]'      # + the unoserver client — useless without L
 
 **Tier 1 must stay in the base install, and that is a hard constraint.** Probe depends on nothing, calls no model, and always runs. If probing a `.docx` needed the `office` extra, a base install would accept the upload, run probe, and report an empty pattern set — which is indistinguishable from a `.docx` that genuinely declares no structure. Reading `word/styles.xml` out of a ZIP needs no library, so honouring the constraint costs nothing.
 
-**Tier 2 is separate even though it is small.** Ten megabytes is nothing like torch's five gigabytes, and the split is not about weight. The alternative is putting three readers into every install to serve the one worker in a fleet that ingests office files. A storage-side worker that never touches a `.docx` is correctly installed and correctly has no `python-docx`.
+**Tier 2 is separate even though it is small.** 44 MB is nothing like torch's 4.6 GB, and the split is not about weight.
+
+!!! warning "Tier 2 is not pure Python, and the three names hide that"
+    Measured 2026-08-22 in empty venvs against the 0.2.0 wheels: base is **585 MB**, `jmfts[office]` is **629 MB**. The three named packages are only 9 MB of that gap (docx 2.9, pptx 3.1, openpyxl 3.0). The rest is transitive: `python-docx` and `python-pptx` both require `lxml` (12 MB), and `python-pptx` also requires `Pillow` (7.1 MB) and `XlsxWriter` (1.9 MB).
+
+    **`lxml` and `Pillow` are C extensions.** On a platform with a wheel for both — every platform this project targets — that is invisible. On one without, tier 2 needs a build toolchain in the image, which is exactly the possibility a "pure Python" label tells you not to plan for.
+
+The split is about who pays, not about the number. The alternative is putting three readers into every install to serve the one worker in a fleet that ingests office files. A storage-side worker that never touches a `.docx` is correctly installed and correctly has no `python-docx`.
 
 That claim is what the error message has to carry, so it names the extra rather than the module:
 
@@ -162,7 +169,7 @@ A worker that does not ingest office files does not need them; see
 jmfts_core/office/__init__.py.
 ```
 
-There is no remote equivalent of `JMFTS_RUNNER_URL` here. An office reader is ten megabytes of pure Python, so "install it" is the whole answer, where for the model stack it is one of two. `OfficeStackNotInstalled` subclasses `ImportError` and therefore classifies **PERMANENT**, the same as `ModelStackNotInstalled`: a package that is not installed does not appear on the third attempt.
+There is no remote equivalent of `JMFTS_RUNNER_URL` here. The office readers are 44 MB, so "install it" is the whole answer, where for the model stack's 4.6 GB it is one of two. `OfficeStackNotInstalled` subclasses `ImportError` and therefore classifies **PERMANENT**, the same as `ModelStackNotInstalled`: a package that is not installed does not appear on the third attempt.
 
 **Tier 3 is a worker, not an extra, because `pip install libreoffice` is not a thing.** It follows the `JMFTS_RUNNER_URL` shape instead — a task type, a worker badge, and an optional URL that makes it another process's problem. It earns a whole image by doing two jobs, which is why the extra is named `convert` rather than `render`:
 
