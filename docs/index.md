@@ -35,9 +35,8 @@ Documentation for the FFwF agentic software stack.
 
 ## Find your quadrant
 
-Two questions decide where you should be. Are you **acting** on the system or
-trying to **understand** it? And are you here to **study**, or do you have a job
-in front of you right now?
+Two axes, four quadrants. **Action** or **Cognition** — what to do, or why to
+do it. **Application** or **Acquisition** — how to do it, or what's possible.
 
 <div class="crosswalk">
   <div class="crosswalk__corner"></div>
@@ -48,8 +47,7 @@ in front of you right now?
   <div class="crosswalk__cell">
     <h3>Tutorials</h3>
     <span class="crosswalk__coord">Action × Acquisition</span>
-    <p>A guided build that teaches the concepts as you go. Start at the
-    quickstart and keep going.</p>
+    <p>Guided builds. Concepts as you go, quickstart first.</p>
     <div class="crosswalk__links">
       <a href="tectum/tutorials/">Tectum</a>
       <a href="tau/tutorials/">Tau</a>
@@ -59,8 +57,7 @@ in front of you right now?
   <div class="crosswalk__cell">
     <h3>Cookbook</h3>
     <span class="crosswalk__coord">Action × Application</span>
-    <p>Recipes for one specific job, for someone who already knows the basics
-    and wants the steps without the narration.</p>
+    <p>Recipes for one job. Step by step.</p>
     <div class="crosswalk__links">
       <a href="tectum/cookbook/">Tectum</a>
       <a href="tau/cookbook/">Tau</a>
@@ -72,8 +69,7 @@ in front of you right now?
   <div class="crosswalk__cell">
     <h3>DevOps Manual</h3>
     <span class="crosswalk__coord">Cognition × Acquisition</span>
-    <p>How the system is deployed and operated, and why it is shaped that way.
-    Read this before you run it in anger.</p>
+    <p>Deployment, operation, and why it's like that.</p>
     <div class="crosswalk__links">
       <a href="tectum/devops/">Tectum</a>
       <a href="tau/devops/">Tau</a>
@@ -83,8 +79,7 @@ in front of you right now?
   <div class="crosswalk__cell">
     <h3>Reference</h3>
     <span class="crosswalk__coord">Cognition × Application</span>
-    <p>API surface, config, schemas, invariants. Built for search and lookup,
-    not for reading start to finish.</p>
+    <p>API, config, schemas. Unfiltered lookup by module or endpoint.</p>
     <div class="crosswalk__links">
       <a href="tectum/reference/">Tectum</a>
       <a href="tau/reference/">Tau</a>
@@ -93,8 +88,7 @@ in front of you right now?
   </div>
 </div>
 
-The split is [Diátaxis](https://diataxis.fr/). It is a crosswalk, not a
-sequence — there is no order you are supposed to read the four in.
+Inspired by [Diátaxis](https://diataxis.fr/).
 
 ## Documentation state
 
