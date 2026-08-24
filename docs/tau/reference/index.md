@@ -8,8 +8,8 @@ status: "draft"
 
 <p class="axis">Cognition × Application</p>
 
-Four distributions, three wire protocols, one extension API. This page is the
-map; each package has its own page below it.
+Four packages, five distributions, three wire protocols, one extension API.
+This page is the map; each package has its own page below it.
 
 !!! note "Draft"
     Built for lookup, not narrative reading. Written against the running code
@@ -29,16 +29,27 @@ Each is installable on its own. The `ffwf-` prefix is not decoration:
 
 | Distribution | Imports as | What it is |
 |---|---|---|
+| `ffwf-tau` | — | The guessable name. A meta package: depends on `ffwf-tau-coding-agent[tui]` at the same version and nothing else. |
 | [`ffwf-tau-llm`](tau-llm.md) | `tau_llm` | Wire protocols, message and tool types, streaming events. |
 | [`ffwf-tau-agent-core`](tau-agent-core.md) | `tau_agent_core` | Agent loop, tools, sessions, [extensions](extensions.md), [RPC](rpc.md). Headless. |
 | [`ffwf-tau-coding-agent`](tau-coding-agent.md) | `tau_coding_agent` | The `tau` command and the Textual TUI. |
 | `ffwf-tau-jmfts` | `tau_jmfts` | JMFTS-backed session store. See [Tau + JMFTS](../../integrations/tau-jmfts.md). |
 
-Installing the top of the stack pulls the rest:
+The meta package is the front door — the guessable name, and it pins the top
+of the stack at the same version:
+
+```bash
+pip install ffwf-tau
+```
+
+Installing the top of the stack directly pulls the rest:
 
 ```bash
 pip install 'ffwf-tau-coding-agent[tui]'
 ```
+
+The meta deliberately does not pull `[jmfts]` — that store needs a running
+server, so it stays an opt-in extra.
 
 Everything past the headless core is an extra, and each one reports its own
 absence with the install command rather than a traceback:

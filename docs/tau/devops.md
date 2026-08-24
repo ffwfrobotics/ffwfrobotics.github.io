@@ -18,17 +18,19 @@ How Tau is deployed and operated: where sessions live, how model credentials are
 ## Install
 
 ```bash
-pip install 'ffwf-tau-coding-agent[tui]'      # interactive
-pip install ffwf-tau-coding-agent             # headless only
+pip install ffwf-tau                          # the meta package: CLI, RPC, TUI
+pip install ffwf-tau-coding-agent             # headless only: CLI and RPC
 ```
 
-The base distribution pulls `ffwf-tau-agent-core` and `ffwf-tau-llm` behind it.
-`[tui]` adds Textual and Rich, and that extra is the only thing an interactive
-`tau` needs that a headless one does not — without it, `tau -p` and
-`tau --mode rpc` still run a full turn, extensions and all. Measured: 15
-packages and 13 MB against 27 packages and 31 MB. That gap is the argument for
-the split, because a container that only ever runs headless turns has no reason
-to ship a terminal interface.
+The meta package is the guessable name: it depends on
+`ffwf-tau-coding-agent[tui]` at the same version and nothing else, and it
+deliberately does not pull `[jmfts]`. The base distribution pulls
+`ffwf-tau-agent-core` and `ffwf-tau-llm` behind it. `[tui]` adds Textual
+and Rich, and that extra is the only thing an interactive `tau` needs that a
+headless one does not — without it, `tau -p` and `tau --mode rpc` still run a
+full turn, extensions and all. Measured: 15 packages and 13 MB against 27
+packages and 31 MB. That gap is the argument for the split, because a container
+that only ever runs headless turns has no reason to ship a terminal interface.
 
 The other capabilities are extras on the same principle — `[jmfts]` for
 `--store jmfts`, `ffwf-tau-agent-core[bus]` for the `nats_bus` extension. Each
@@ -100,9 +102,8 @@ protocol with `api`. τ registers one vendor per protocol it implements:
 | `gemini` | `google-generative-ai` | `GEMINI_API_KEY`, then `GOOGLE_API_KEY` |
 
 Resolution order for the wire is: a stated `api` wins, then the registered
-vendor's own protocol, then the historical `openai-completions` default. So
-every config that worked before this release builds the same model. A stated
-`api` τ does not implement **raises** against the registry rather than falling
+vendor's own protocol, then the `openai-completions` default. A stated `api`
+τ does not implement **raises** against the registry rather than falling
 through to the OpenAI wire — a model silently served over the wrong protocol
 is a failure that looks like a bad model rather than a bad config.
 
@@ -117,20 +118,17 @@ time and point a model at it. See the
 
 ### Gateways that are not quite OpenAI-shaped
 
-Two knobs exist for this, both per model and both settable per call:
+Two knobs cover this, both per model and both settable per call:
 
-* `stream: false` for a gateway that does not implement SSE. Until this
-  release, `"stream": true` was hardcoded *and* reserved, so such a backend
-  was unreachable through any config path.
-* `request_timeout` for one that is slow to first byte. The previous 300s
-  read timeout and 10s connect timeout were fixed at client construction with
-  no override anywhere.
+* `stream: false` for a gateway that does not implement SSE.
+* `request_timeout` for one that is slow to first byte — it overrides the
+  300s read timeout and 10s connect timeout, which are otherwise fixed at
+  client construction.
 
 A tool call arriving with **no name** — a real defect on at least one hosted
-gateway, on some deployments behind it and not others — now raises at the
-wire, naming the call id, the model and the base URL. It used to become
-`Unknown tool: ` and repeat until `max_turns`, which read as the model
-misbehaving rather than the gateway.
+gateway, on some deployments behind it and not others — raises at the wire,
+naming the call id, the model and the base URL. The fault is the gateway's,
+and the raise says so instead of surfacing as a model that misbehaves.
 
 Per-extension credentials follow the same shape: `extensions.<name>` in
 `config.json`, overridable per-run with `--ext-config NAME.KEY=VALUE`
@@ -138,13 +136,7 @@ Per-extension credentials follow the same shape: `extensions.<name>` in
 downstream service (JMFTS, a bus) reads it from `api.config`, not from an
 environment variable the model's own shell could `printenv`.
 
-## Project context files reach the model now
-
-Before this release they did not — on either the TUI or the headless path. The
-backend passed a config key straight through to the session and never reached
-the loader behind it, so neither τ's own base prompt nor any `AGENTS.md` had
-ever been sent. This is a behaviour change in what a deployment puts in front
-of a model, so it is worth stating rather than filing under "fixed".
+## Project context files
 
 Discovery walks from the working directory **to `/`**, taking at most one file
 per directory. On a build agent or a shared host that means a `CLAUDE.md` in
@@ -161,9 +153,10 @@ Two Fail-Early choices follow from τ's own rules rather than from pi's:
   cannot carry instructions whose origin it does not state. If you are auditing
   what a run was told, the path is in the prompt.
 
-The shipped default config no longer carries a `system_prompt` key. Setting
-one now replaces τ's base text and leaves context-file discovery alone —
-previously it switched discovery off, with nothing saying so.
+The shipped default config carries no `system_prompt` key. Setting one
+replaces τ's base text and leaves context-file discovery alone — the two are
+independent, and a deployment that sets a prompt does not silently lose its
+`AGENTS.md`.
 
 ## Running as a subprocess (RPC)
 
