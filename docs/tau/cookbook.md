@@ -1,7 +1,7 @@
 ---
 title: "Cookbook"
 category: "cookbook"
-status: "stub"
+status: "draft"
 ---
 
 # Tau — Cookbook
@@ -9,13 +9,6 @@ status: "stub"
 <p class="axis">Action × Application</p>
 
 Recipes for specific Tau jobs — writing an extension, branching a session, storing state in the tree, supervising a fleet, pointing the TUI at a different backend. Each one is drawn from an example or script that ships in the source tree; the cited file is always the working version.
-
-!!! note "Marked stub on purpose"
-    The recipes below are real, drawn from extensions and scripts that ship
-    in the source tree and are exercised by its own test suite — but they
-    have not been organized into full step-by-step walkthroughs or checked
-    against a fresh install, so this page stays `stub` until that pass
-    happens.
 
 ## Give the model a new tool
 
