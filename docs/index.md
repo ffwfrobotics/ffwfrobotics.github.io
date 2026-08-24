@@ -1,32 +1,32 @@
 # FFWF Robotics
 
-Documentation for three projects, each organized the same way.
+*Loyal automatons for the inevitable machine uprising.*
+
+Documentation for the FFwF agentic software stack.
 
 ## The projects
 
 <div class="roster">
   <div class="roster__item">
     <h3><a href="tectum/">Tectum</a></h3>
-    <p>A schema-driven event substrate. Nodes on substrates exchange immutable
-    events over NATS subjects, and orchestration lives in declarative schema
-    documents rather than Python wiring.</p>
+    <p>Schema-driven event substrate. Nodes exchange immutable events over NATS
+    subjects. Orchestration is a schema document, not Python wiring.</p>
     <div class="roster__badges">
       <a class="chip" href="tectum/tutorials/quickstart/">Quickstart</a>
     </div>
   </div>
   <div class="roster__item">
     <h3><a href="tau/">Tau</a></h3>
-    <p>A programmable coding agent harness. Headless-first agent library with an
-    optional TUI, Python-native extensions, and sessions stored as a tree rather
-    than a flat chat log.</p>
+    <p>Programmable coding agent harness. Headless-first with an optional TUI.
+    Extensions are Python. Sessions are a tree, not a chat log.</p>
     <div class="roster__badges">
       <a class="chip" href="tau/tutorials/quickstart/">Quickstart</a>
     </div>
   </div>
   <div class="roster__item">
     <h3><a href="jmfts/">JMFTS</a></h3>
-    <p>A retrieval appliance combining matryoshka embeddings, ColBERT-style late
-    interaction, and BM25 hybrid search over PostgreSQL with pgvector.</p>
+    <p>Retrieval appliance. Matryoshka embeddings, ColBERT late interaction, and
+    BM25, fused into one hybrid search on Postgres. The only durable store.</p>
     <div class="roster__badges">
       <a class="chip" href="jmfts/tutorials/quickstart/">Quickstart</a>
     </div>
