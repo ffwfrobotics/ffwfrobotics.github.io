@@ -9,16 +9,16 @@ Documentation for the FFwF agentic software stack.
 <div class="roster">
   <div class="roster__item">
     <h3><a href="tectum/">Tectum</a></h3>
-    <p>Schema-driven event substrate. Nodes exchange immutable events over NATS
-    subjects. Orchestration is a schema document, not Python wiring.</p>
+    <p>Event substrate orchestrated with schema documents. Manage shared nodes
+    by activating a task definition.</p>
     <div class="roster__badges">
       <a class="chip" href="tectum/tutorials/quickstart/">Quickstart</a>
     </div>
   </div>
   <div class="roster__item">
     <h3><a href="tau/">Tau</a></h3>
-    <p>Programmable coding agent harness. Headless-first with an optional TUI.
-    Extensions are Python. Sessions are a tree, not a chat log.</p>
+    <p>Hackable coding agent harness for CLI, TUI, or RPC. Extensions are
+    Python. Sessions are a tree, context is a walk of it.</p>
     <div class="roster__badges">
       <a class="chip" href="tau/tutorials/quickstart/">Quickstart</a>
     </div>
