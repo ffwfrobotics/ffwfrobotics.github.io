@@ -1,7 +1,7 @@
 ---
 title: "JMFTS"
 kind: "project"
-version: "0.2.0"
+version: "v0.2.1"
 repo: "jmccardle/jmfts"
 ---
 
