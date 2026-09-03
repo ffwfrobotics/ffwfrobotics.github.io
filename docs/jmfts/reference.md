@@ -13,10 +13,10 @@ Table schema, query API, scoring parameters, and the pgvector index definitions.
 !!! note "Draft"
     Built for lookup, not narrative reading. Endpoint tables give verb, path, and purpose — not every parameter; a running instance's `/openapi.json` (or `/docs`) is the exact contract. Tables are checked against `schema.sql`, `jmfts_core/config.py`, and the `@expose` registry that generates the routes.
 
-!!! note "This page describes 0.2.0"
-    The queued ingestion system — `task_queue`, `document_blobs`, `documents.settled`, the `/ingest` family, ingest options, the worker fleet and `/runner` — shipped in **0.1.1**. It is no longer branch-only, and the notes that said so have been removed.
+!!! note "This page describes 0.2.0. The current release is 0.3.0."
+    Two releases have landed since this page was written, and it has not moved to either: 0.2.1 added the spreadsheet task types, the Turtle surface and two extras, and 0.3.0 replaced the ingest planner. The [Changelog](changelog.md) says what each one changed, and [0.3.0 — the job system](release-0-3-0.md) runs the changes rather than describing them.
 
-    0.2.0 adds `.docx` and `.pptx` extraction, PDF table extraction, the citation task types, and a second distribution, `jmfts-client`.
+    Two sections here have been corrected in place because they described designs that no longer exist: [One ingest path](#one-ingest-path) and the `.xlsx` row under [Office formats](#office-formats). Everything else is 0.2.0's surface, which 0.3.0 is a superset of except for the two breaks the changelog names.
 
 !!! note "Defaults come from the code, not from `.env.example`"
     Settings tables quote the built-in default in `jmfts_core/config.py`. `.env.example` ships a *filled-in* sample for the LLM block (an Ollama URL and a model name) rather than the blank built-in — copy it and you have configured an endpoint, not accepted a default.
@@ -52,7 +52,7 @@ All routes are generated from a service-layer `@expose` registry (`jmfts_core/se
 | Family | Prefix | Covers |
 |---|---|---|
 | Documents | `/documents` | CRUD, tree navigation (`roots`/`children`/`ancestors`/`siblings`/`subtree`), `embed`, `tokens`, `split`, `chunk`, `segment`, `raptor` (+ `raptor/portfolio`), `extract-facts`, `links`. |
-| Ingest | `/ingest` | Two paths under one prefix, from two different eras — see [Two ingest paths](#two-ingest-paths). `GET /ingest/pipelines` and `POST /ingest` are the synchronous named-pipeline path, and are being retired. The queue is `POST /ingest/file` (multipart upload; stores bytes, enqueues `probe`, **returns before the work is done**), `file/{id}/frontier`, `explain`, `analyze`. |
+| Ingest | `/ingest` | One path, two doors onto it — see [One ingest path](#one-ingest-path). `POST /ingest/file` is a multipart upload that stores bytes, enqueues `probe` and **returns before the work is done**; `POST /ingest` takes content plus a named entry point and drains that document's tasks before returning. `GET /ingest/pipelines` lists the entry points, `file/{id}/frontier` reports what is still queued, and `explain` / `analyze` answer what a document will run before it runs. |
 | Runner | `/runner` | Vectors for text, behind `JMFTS_RUNNER_KEY` rather than the API token. Owns no documents. This is what a worker set to `JMFTS_RUNNER_URL` calls instead of loading the model. |
 | Conversations | `/conversations` | `ingest` — a whole conversation into the tree in one call. |
 | Search | `/search` | `vector`, `fulltext`, `bm25`, `maxsim`, `hybrid`, `synthesize`, `auto`, plus a convenience `GET /search/?q=`. |
@@ -135,28 +135,35 @@ A caller-facing note: several `GET` endpoints across these families lost their F
 
 There is no separate extraction endpoint. Fact extraction shares the LLM settings above; `JMFTS_EXTRACTION_*` tunes the extraction *request* (`MAX_FACTS` `5`, `CONFIDENCE_THRESHOLD` `0.5`, `ENTITY_SIMILARITY_THRESHOLD` `0.8`, `TEMPERATURE` `0.1`, `MAX_TOKENS` `4096`), not where it is sent.
 
-## Two ingest paths
+## One ingest path
 
-`/ingest` carries two unrelated designs, and the names in them do not interchange.
+!!! note "Corrected for 0.3.0"
+    Through 0.2.1 this section described two unrelated designs under one prefix, and said `POST /ingest` was being retired. It was not retired — it was moved onto the queue, and the design it belonged to was deleted. `execute_pipeline` and the `PipelineDefinition` registry are gone.
 
-| | Synchronous pipelines | The queue |
+`/ingest` has one implementation and two doors onto it. Both create a file node with stored bytes and run queue tasks against it; they differ in who waits and in whether the format is named or measured.
+
+| | `POST /ingest` | `POST /ingest/file` |
 |---|---|---|
-| Endpoints | `GET /ingest/pipelines`, `POST /ingest` | `POST /ingest/file`, `file/{id}/frontier`, `explain`, `analyze` |
-| Takes | text plus a **pipeline name** | bytes; the format is **detected** |
-| Names | `markdown`, `raw`, `conversation`, `transcript`, `wiki:url`, `wiki:arxiv`, `wiki:pdf` | `text`, `pdf`, `docx`, `pptx`, `zip`, … from `detect_format` |
+| Takes | content plus a named **entry point** | bytes; the format is **detected** |
+| Names | `markdown`, `raw`, `conversation`, `transcript`, `wiki:url`, `wiki:arxiv`, `wiki:pdf` | `text`, `pdf`, `docx`, `pptx`, `xlsx`, `zip`, … from `detect_format` |
 | Returns | a finished tree, in the request | an `in_flight` node and a queued `probe` |
-| Since | 0.1.0 | 0.1.1 |
-| Direction | being retired | the target |
+| Who drains the queue | the request, for that document only | a `jmfts-worker` process |
+| Since | 0.1.0, on the queue since 0.3.0 | 0.1.1 |
 
-The name sets overlap in exactly the way that causes trouble: **`markdown` is a pipeline and is not a format.** Nothing in the bytes distinguishes authored markdown from a `.txt` file starting with `#`, so `detect_format` reports both as `text` and one Part 4 entry covers them. `POST /ingest/explain` accepts `{"format": "markdown"}` — an unknown format is a legal question — and answers with every row `impossible` or `not_applicable`, which reads like a verdict on markdown and is a verdict on the name.
+Same tasks, same handlers, same settling walk. **An entry point is not a stage list.** `GET /ingest/pipelines` names the seven and reports, for each, where its content comes from and which options it resolves to — two facts `probe` cannot supply. Which tasks a document actually runs is `POST /ingest/explain`'s answer, decided from what was measured.
 
-`POST /ingest` is being retired in favour of the queue; it keeps its synchronous behaviour unchanged in the meantime.
+`pipeline_config` was the deleted design's stage vocabulary and is now **refused** with a 400 naming `options` instead. There is no translation between the two: that design's `summarize` stage was RAPTOR clustering, and the queue's is what gives a container node its vectors.
+
+The two name sets overlap in exactly the way that causes trouble: **`markdown` is an entry point and is not a format.** Nothing in the bytes distinguishes authored markdown from a `.txt` file starting with `#`, so `detect_format` reports both as `text` and one Part 4 entry covers them. `POST /ingest/explain` accepts `{"format": "markdown"}` — an unknown format is a legal question — and answers with every row `impossible` or `not_applicable`, which reads like a verdict on markdown and is a verdict on the name.
 
 ## Office formats
 
-`.docx` and `.pptx` are read. `.xlsx` is detected and probed, and its text is not extracted.
+`.docx` and `.pptx` are read as text. `.xlsx` is read as records, by a different route.
 
 That difference is not a gap in the documentation — it is the state of the appliance, and `POST /ingest/explain` reports it per format. Ask before you load a corpus.
+
+!!! note "Corrected for 0.2.1: `.xlsx` is read"
+    The table below is 0.2.0's, where a workbook was detected and probed and nothing more. 0.2.1 added three task types that read one — `structure:sheets` makes a child node per worksheet, `profile:sheet` measures a worksheet, and `extract:sheet` turns each row into a record node. None of them is `extract:text`, and `TEXT_EXTRACTORS` is still `("pdf", "text", "docx", "pptx")`: a spreadsheet is not prose, and rendering one as a wall of markdown would index something nobody wrote. So the `xlsx` rows below stay correct about **text** and understate what the format does. See the [Changelog](changelog.md#spreadsheets-are-read).
 
 ### What is read, and what only measured
 
@@ -183,7 +190,7 @@ Nothing in the Part 4 table was changed to turn office ingestion on. `extract:te
 
 For `docx` and `pptx` that makes every downstream row `conditional` when you ask without bytes, and decided once probe has run — the same shape `pdf` has always had. For `xlsx` the pattern is never reported, so `extract:text` comes back `not_applicable` with the reason `patterns.has_text_layer was not measured`, and every row that depends on it follows.
 
-`DECLARED_STRUCTURE_PATTERN` already mapped all three. The `xlsx` entry is a decision waiting on a reader, not a decision that is missing.
+`DECLARED_STRUCTURE_PATTERN` already mapped all three. In 0.2.0 the `xlsx` entry was a decision waiting on a reader; 0.2.1 supplied one, and `has_sheets` now gates `structure:sheets` as well as `structure:declared`.
 
 ### What the markdown looks like
 

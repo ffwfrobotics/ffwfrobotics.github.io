@@ -15,11 +15,11 @@ The [quickstart](quickstart.md) had you write documents by hand, one JSON body a
 
     ```bash
     git clone https://github.com/jmccardle/jmfts.git
-    cd jmfts && git checkout 0.2.0
+    cd jmfts && git checkout v0.3.0
     docker compose up --build -d
     ```
 
-    If you already have a 0.1.0 database, apply `migrations/008` through `012` in order.
+    If you already have a 0.1.0 database, apply `migrations/008` through `016` in order.
 
 As before:
 
@@ -165,14 +165,25 @@ curl -s -H "Authorization: Bearer $TOKEN" "$API/documents/$DOC/subtree"
 
 The file became a tree: a `file` node at the top, section nodes under it following the document's own headings, and chunk nodes under those. That shape came from `structure:declared` — the rung that builds the tree the document *declares*. A document that declares no structure gets `structure:inferred` instead, which chunks it.
 
-Look at a container node's `structured_content`:
+Take a section node's id out of that subtree, and ask what the pipeline knows about it:
 
-```json
-{"effective_content": {"method": "concatenated", "source_children": 4,
-                       "tokens": 812, "window": 8192, "characters": 4103}}
+```bash
+NODE=<a section node id from the subtree above>
+curl -s -H "Authorization: Bearer $TOKEN" "$API/documents/$NODE/evidence"
 ```
 
-That is a container's answer to "what do you say?". It has no `content` of its own — the prose lives in its leaves, and putting it on the container too would enter the same text into the indexes twice. So instead it gets an embedding derived from its children, and a record of how.
+```json
+{"document_id": 42,
+ "evidence": {"effective_content": {"method": "concatenated", "source_children": 4,
+                                    "tokens": 812, "window": 8192, "characters": 4103}}}
+```
+
+!!! warning "Changed in 0.3.0. On 0.2.1 and earlier, read the node's `structured_content` instead."
+    Every name the pipeline writes about a node — `matched.patterns`, `effective_content`, the attempt log, twenty-nine in all — used to live in `documents.structured_content` beside whatever the caller had put there. 0.3.0 moved them to their own table and stitched nothing back into the document response, so that column is now exactly what a caller wrote and this route is where the pipeline's own facts are.
+
+    Read a `null` value and a missing key as different answers: a name present with `null` says a task ran and produced nothing, and a name absent says nothing has run.
+
+`effective_content` is a container's answer to "what do you say?". It has no `content` of its own — the prose lives in its leaves, and putting it on the container too would enter the same text into the indexes twice. So instead it gets an embedding derived from its children, and a record of how.
 
 `method` is the thing to read. `concatenated` means the children's text fit the embedding window and was used verbatim. `llm_summary` means it did not fit and a model paraphrased it. The first is a stronger record of what the document said; the deciding token count is recorded either way so you never have to infer which happened from the text.
 

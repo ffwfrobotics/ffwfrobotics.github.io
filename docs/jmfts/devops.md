@@ -10,26 +10,36 @@ status: "draft"
 
 How JMFTS runs in production: sizing PostgreSQL and pgvector, which container holds the embedding model and which ones deliberately do not, and what an index rebuild costs you.
 
-!!! note "Draft"
+!!! note "Draft. Written against 0.2.0; the current release is 0.3.0."
     Written against **0.2.0** — its `Dockerfile`, `Dockerfile.worker`, `docker-compose.yml`, `deploy/` manifests and entry points — plus benchmark and defect write-ups that are not in the public tree (see [Documents not in this release](#documents-not-in-this-release)). Not yet checked against a deployment outside the maintainer's own.
+
+    Three things an operator needs have been corrected in place for the two releases since: [Getting it](#getting-it), the migration list under [What the Compose stack actually runs](#what-the-compose-stack-actually-runs), and the tier-2 note under [Office files](#office-files-three-tiers-two-extras). The [Changelog](changelog.md) is the release record; nothing else on this page has moved past 0.2.0.
 
 !!! note "All of this page is released"
     [Ingestion](#ingestion-runs-on-a-queue), [the containers and worker types](#containers-and-worker-types), and [running a fleet](#running-a-fleet) shipped in **0.1.1**, along with `jmfts-worker`, `Dockerfile.worker`, `deploy/`, the `/runner` surface, and the `embed` extra that took torch out of the base install. 0.1.0 had none of it, and the notes that said "branch only" have been removed.
 
 ## Getting it
 
-JMFTS is public, and `0.2.0` is the current release:
+JMFTS is on PyPI, and `0.3.0` is the current release:
+
+```bash
+pip install jmfts                 # both wheels: jmfts, and the jmfts-client it depends on
+```
+
+`pip install jmfts==0.2.1` finds nothing. That release is tagged on GitHub and was never uploaded — the [Changelog](changelog.md) says why, and 0.3.0 contains everything it did.
+
+The source is public too:
 
 ```bash
 git clone https://github.com/jmccardle/jmfts.git
-cd jmfts && git checkout 0.2.0    # or stay on master
+cd jmfts && git checkout v0.3.0    # or stay on master
 ```
 
-The public repository is a squash, not a mirror: each release replaces the whole tree in one commit, so `git log` there is short by design.
+The public repository is a squash, not a mirror: each release replaces the whole tree in one commit, so `git log` there is short by design. Tags before 0.2.0 carry no `v` prefix — `0.1.0`, `0.1.1`, then `v0.2.0`, `v0.2.1`, `v0.3.0`.
 
 Everything below runs from that checkout. This is a system that has been running as a personal appliance — it works, and it is not a product; reranked ordering in particular is unvalidated.
 
-From a checkout, install the client distribution first. `jmfts` depends on `jmfts-client`, and until both are on PyPI the server does not resolve on its own:
+For an editable install from a checkout, install the client distribution **first**. `jmfts` depends on `jmfts-client` with `==`, so an editable server install resolves the pinned version from PyPI and shadows the tree you are working in:
 
 ```bash
 pip install -e ./jmfts-client
@@ -75,6 +85,12 @@ Both publications are bound to loopback, not `0.0.0.0` — the dev stack is not 
 `schema.sql` is the complete canonical DDL — extensions, every table, every index. It is what bootstraps a fresh database. The numbered files in `migrations/` are upgrade deltas for a database that already exists; you do not need them to stand up a new instance, only to carry an existing one forward.
 
 `002` through `007` were in 0.1.0. 0.1.1 added five: `008_document_settled_lifecycle.sql` and `009_document_blobs.sql` for the lifecycle flag and the uploaded bytes, then `010_task_queue.sql` creating the queue, `011_task_queue_heartbeat.sql` adding `heartbeat_at` and the lease index, and `012_task_queue_batched.sql` adding the `batched` status with `batch_id`/`batched_at`. 0.2.0 adds none — office extraction needed no schema change.
+
+0.2.1 adds two: `013_rdf_layer.sql` and `014_entity_roots.sql`. **`013` renames a column a running 0.2.0 process reads** — `predicates.domain` becomes `predicates.namespace`, and `TripleRepository.list_predicates` filters on it — so deploy the code together with that migration, not around it. Everything else in both files is additive, and entities that predate `014` are not backfilled.
+
+0.3.0 adds two more: `015_evidence_rows.sql`, which creates `document_evidence` and **moves** twenty-nine names out of `documents.structured_content`, and `016_document_produced_by.sql`, which adds `documents.produced_by` with an index on `(parent_id, produced_by)`. `015` moves data a running 0.2.1 process reads; same rule. `016` is additive and backfills nothing — nodes that predate it read as asserted, which is the honest answer rather than a guessed one.
+
+That is 15 migrations at 0.3.0, `002` through `016`.
 
 Apply them in order against an existing database, or take `schema.sql` for a fresh one. Both live inside the installed package at `jmfts_core/sql/`, so `jmfts-init-db` finds them without a source checkout.
 
@@ -127,8 +143,8 @@ Three operational consequences worth stating before you build an image:
 
 ## Office files: three tiers, two extras
 
-!!! info "Tier 2 has a caller"
-    `.docx` and `.pptx` extraction is live. A worker that ingests either **needs `jmfts[office]`**, and one that does not is correctly installed without it. `.xlsx` and the legacy binary formats are still detected and probed but not read — the [Reference](reference.md#office-formats) has the per-format table.
+!!! info "Tier 2 has three callers"
+    `.docx` and `.pptx` extraction went live in 0.2.0, and 0.2.1 gave `openpyxl` a caller too: `structure:sheets`, `profile:sheet` and `extract:sheet` read a workbook into worksheet and record nodes. A worker that ingests any of the three **needs `jmfts[office]`**, and one that does not is correctly installed without it. `profile:sheet` also sketches every column by default, which needs `jmfts[sketch]`. The legacy binary formats are still detected and probed but not read — the [Reference](reference.md#office-formats) has the per-format table.
 
 Office support splits the same way the model stack does, and for the same reason, but into three tiers rather than two — because one of the dependencies is not a wheel at all.
 

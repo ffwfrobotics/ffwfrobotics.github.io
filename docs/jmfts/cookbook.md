@@ -14,7 +14,7 @@ Recipes for specific JMFTS jobs — tuning matryoshka dimensions, reweighting BM
     The recipes below are real, drawn from JMFTS's own benchmark runs and defect write-ups — but they have not been organized into full step-by-step walkthroughs or checked against a fresh deployment, so this page stays `stub` until that pass happens.
 
 !!! note "The measurements are not reproducible from a clone"
-    Every endpoint and setting named here is in **0.2.0**. The evaluation harness that produced the numbers is not in the public tree — it follows separately, along with the write-ups behind the defect recipes (see [Documents not in this release](devops.md#documents-not-in-this-release)). So the figures below are reported, not yet reproducible from a clone.
+    Every endpoint and setting named here is in **0.2.0**, and still in 0.3.0 — the [Changelog](changelog.md)'s two breaks are the ingest planner and the evidence column, and only the second reaches a recipe below, where it is flagged in place. The evaluation harness that produced the numbers is not in the public tree — it follows separately, along with the write-ups behind the defect recipes (see [Documents not in this release](devops.md#documents-not-in-this-release)). So the figures below are reported, not yet reproducible from a clone.
 
 ## Pick a rerank method by what your corpus already stores
 
@@ -310,7 +310,9 @@ That value rides on the task row into `summarize:llm`, which prefers it over `JM
 
 Two knobs pair with it. `max_children` (default 16) decides when a node is segmented instead of summarized, so raising it means fewer, longer summaries and lowering it means more, shorter ones. `penalty` and `min_segment` tune the PELT segmentation that produces those groups.
 
-Remember what `summarize` actually does: it concatenates its children's text while that fits the embedding window and only calls a model when it does not. A concatenated span is a stronger record of what the document said than any paraphrase, and the deciding token count is recorded either way — so `structured_content.effective_content.method` tells you which happened without inferring it from the text.
+Remember what `summarize` actually does: it concatenates its children's text while that fits the embedding window and only calls a model when it does not. A concatenated span is a stronger record of what the document said than any paraphrase, and the deciding token count is recorded either way — so `effective_content.method` tells you which happened without inferring it from the text.
+
+Where to read it moved in 0.3.0: `GET /documents/{id}/evidence` on 0.3.0 and later, `structured_content.effective_content` on 0.2.1 and earlier.
 
 ## Add your own ingest task
 

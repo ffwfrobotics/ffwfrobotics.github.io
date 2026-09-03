@@ -76,7 +76,7 @@ nav:
       - DevOps Manual: jmfts/devops.md
       - Reference: jmfts/reference.md
       - Changelog: jmfts/changelog.md
-      - "0.3.0 (draft)": jmfts/release-0-3-0.md
+      - "0.3.0 — the job system": jmfts/release-0-3-0.md
   - Integrations:
       - integrations/index.md
       - Tectum + Tau: integrations/tectum-tau.md

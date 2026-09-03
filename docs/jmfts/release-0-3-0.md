@@ -4,14 +4,14 @@ title: "0.3.0 — the job system"
 
 # JMFTS 0.3.0 — the job system
 
-!!! warning "Draft. 0.3.0 has not been cut."
-    Everything on this page is on `master` and none of it is released. The current release is [0.2.1](changelog.md). Two of the seven planned phases have not landed and two more are still under consideration — see [What is not here](#what-is-not-here).
+!!! note "Released 2026-09-03"
+    0.3.0 is the current release: tag [`v0.3.0`](https://github.com/jmccardle/jmfts/releases/tag/v0.3.0), and both wheels on PyPI. One of the seven planned phases has not landed and two more are still under consideration — see [What is not here](#what-is-not-here).
 
     Every console block below is real output, captured by running `scripts/demo_release_0_3_0.py` against the tree. Regenerating that file is how this page is updated, so the page cannot describe a run the appliance no longer does.
 
 Ingestion used to be decided in three places that did not know about each other. A declarative table decided what the uploaded file would do, eight hand-written lists inside task handlers decided what each created node would do, and a third planner decided the summarization rungs. This release makes one table decide all of it.
 
-The consequence a user can see is small and specific: the spreadsheet options are settable, `EXPLAIN` reports work below a fan-out, and every node in the tree records which rule made it.
+The consequence a user can see is small and specific: the spreadsheet options are settable, a rule's threshold is an option rather than a literal, `EXPLAIN` reports work below a fan-out, and every node in the tree records which rule made it.
 
 ## Where this is specified
 
@@ -24,7 +24,7 @@ The consequence a user can see is small and specific: the spreadsheet options ar
 | 2a | The synchronous ingest path onto the queue, then deleted | landed |
 | 2b | Evidence leaves `documents.structured_content` for its own table | landed |
 | 3 | A rule names its scope; a node names its rule; one planner replaces the hand-written lists | landed |
-| 4 | Guards take operators, so a threshold is data | planned |
+| 4 | Guards take operators, so a threshold is data | landed |
 | 5 | Multiplicity and the cost fold, so `EXPLAIN` says how much | planned |
 | 6 | Rule sets, bindings, budgets | under consideration |
 | 7 | The settling walk generalised; the rollup special case deleted | under consideration |
@@ -203,7 +203,113 @@ Four mistakes the table refuses, at import time
 
 The appliance will not start with a bad table. That is the intended cost.
 
-## 7. Evidence is rows, and the column is the caller's
+## 7. A guard is a comparison, and the threshold is the caller's
+
+Until this release a rule's condition was a list of pattern names read for truthiness. Any question a rule wanted to ask had to reach it as a flag, which meant `probe` had to invent a name for the answer — a rule that wanted "more than one worksheet" needed a `has_several_sheets`, and the number that decided it lived in the prober rather than in the table.
+
+A condition is now a list of terms, and a term is `left op right`. Six operators, `=` `!=` `<` `<=` `>` `>=`, and no `and`, `or` or `not`. Dropping the connectives is deliberate: `requires` is already a conjunction and `forbids` already a list of exclusions, and one term is what lets a plan report one sentence per condition rather than one per expression.
+
+Either side may name an option instead of a value. That is what makes a threshold data — it resolves through the same three-layer stack every other option does, so a caller sets it per request and `EXPLAIN` reports both the name and the number it resolved to.
+
+**`requires` and `forbids` are not each other's negation, and the difference is what an unmeasured name means.** A required pattern that nobody measured blocks the rule: the precondition cannot be confirmed. A forbidden pattern that nobody measured does not: no evidence of a blocker is not a blocker. Fold the two into one expression and `structure:inferred`'s condition reads `not (has_heading_styles = true)`, which is false for every `.docx` — because no prober emits that name — and every `.docx` finishes ingestion with no children.
+
+```console
+$ python -m scripts.demo_release_0_3_0 run guards
+Every pattern a guard may read, and what it holds
+-------------------------------------------------
+  char_count           int
+      extract:facts
+  has_heading_styles   bool     (probe does not write it)
+      structure:declared, structure:inferred
+  has_headings         bool
+      structure:declared, structure:inferred
+  has_images           bool
+      extract:images
+  has_outline          bool
+      structure:declared, structure:inferred
+  has_sheets           bool
+      structure:declared, structure:inferred, structure:sheets, profile:sheet, extract:sheet
+  has_slides           bool
+      structure:declared, structure:inferred
+  has_text_layer       bool
+      extract:text, structure:declared, structure:inferred, structure:conversation, extract:tables, citation, index:bm25, extract:facts
+  is_conversation      bool
+      structure:declared, structure:inferred, structure:conversation
+  is_damaged           bool
+      extract:text
+  is_scanned           bool
+      ocr
+  pages_with_tables    list     (probe does not write it)
+      extract:tables
+
+  `matched.patterns` is an open namespace, and `evidence.pattern_type` answers
+  `bool` for a name it has never heard of. That is right for storage and wrong for
+  a guard: `has_hedings` would type-check, plan cleanly, and stand its row down on
+  every document forever.
+
+The two unknown policies, on a .docx
+------------------------------------
+  patterns supplied   has_text_layer=True
+  has_heading_styles  guardable, and no prober emits it
+
+  structure:declared     not_applicable
+      patterns.has_heading_styles was not measured
+  structure:inferred     enqueued
+      its condition holds
+
+  `structure:declared` requires that name and `structure:inferred` forbids it.
+  Flatten the two lists into one expression and the second reads
+  `not (has_heading_styles = true)`, which is false — and every .docx comes out of
+  ingestion with no children.
+
+A threshold the caller sets, on a file whose size was measured
+--------------------------------------------------------------
+  retrieval-notes.md probed as text: char_count=271
+  facts=(the defaults)
+      extract:facts   not_applicable
+      options.facts.enabled is false, and extract:facts runs only when it is true
+  facts=enabled=True
+      extract:facts   enqueued
+  facts=enabled=True, min_characters=400
+      extract:facts   not_applicable
+      patterns.char_count is 271, and extract:facts does not run when it is less than options.facts.min_characters (400)
+
+The same floor, on a format nothing measures the size of
+--------------------------------------------------------
+  patterns supplied   has_outline=True, has_text_layer=True
+  facts=enabled=True, min_characters=400
+      extract:facts   enqueued
+
+  probe emits `char_count` for `text` alone. Written as a `requires`, this floor
+  would have stopped fact extraction on every PDF, .docx and .pptx — not because
+  they are short, but because nobody measured. Written as a `forbids` it says what
+  a caller means by a minimum: do not spend the LLM call on a document measured as
+  too small, and do spend it where nobody measured a size.
+
+Four terms the table refuses, at import time
+--------------------------------------------
+  a pattern name the vocabulary does not have
+      ValueError: row 'a' guards on ['has_hedings'], which GUARDABLE_PATTERNS does not name; `matched.patterns` is an open namespace, so an unlisted name would read as a pattern nobody measures and stand the row down forever
+  a count compared with a flag
+      ValueError: row 'a' compares char_count (int) with True (bool); a guard's two sides have to be the same kind of thing
+  an ordering operator on a flag
+      ValueError: row 'a' orders has_text_layer with '>', and it holds a bool; ['<', '<=', '>', '>='] are for counts
+  an option nothing declares
+      ValueError: row 'a' guards on options.facts.min_chars, which is not a declared option; a guard's option reference is resolved by `resolve_options` and a name nothing declares would resolve to nothing
+
+  Same shape as the four row mistakes above: the check is stated over the term the
+  appliance runs, not over a checked-in list of names to compare it against.
+```
+
+**The names a guard may read are a closed list, and that is a departure.** Everything `probe` measures is stored in an open namespace: a new prober adds a name and nothing has to be told about it. A guard is the one reader for which an unknown name and a false one are indistinguishable, so `has_hedings` would be a well-typed comparison that plans without complaint and stands its rule down on every document forever. Twelve names are declared with their types, and a rule that reads anything else stops the appliance at import. Storage keeps its open namespace; only the guard vocabulary is closed.
+
+The types are declared rather than derived for a reason the list shows. `pages_with_tables` holds a list of page numbers, and the storage rule — everything is a flag unless named otherwise — calls it a boolean. Truthiness survived that mistake. `>` would not.
+
+`min_characters` is the first option that decides whether a task runs at all, rather than how it runs. It is written as an exclusion, and the measurement in the block above is why: `char_count` is emitted for plain text and nothing else, so the same floor written as a requirement would stop fact extraction on every PDF, `.docx` and `.pptx` — the `.docx` failure again, in a second costume.
+
+Nothing on the wire moved. `ExplainedTask.requires` still holds strings: a rule that reads a name for truthiness renders as that name, exactly as before, and a comparison renders as the comparison. `facts.min_characters` is a new option in an existing group and defaults to `0`, which excludes nothing.
+
+## 8. Evidence is rows, and the column is the caller's
 
 Everything ingestion learned about a node — what `probe` matched, what the extractor found, the attempt log — used to live in `documents.structured_content`, alongside whatever the caller put there. Two handlers writing two different names to one node was a read-modify-write race, and one of the two writes was lost with nothing raised.
 
@@ -211,7 +317,7 @@ Everything ingestion learned about a node — what `probe` matched, what the ext
 
 **This is a versioned break.** A client reading `matched.patterns` out of `structured_content` now reads nothing. `GET /documents/{id}/evidence` is where it went — a route rather than a field on `DocumentResponse`, because a field would join that table on every read including every search hit.
 
-## 8. A node names its rule
+## 9. A node names its rule
 
 `Document.produced_by` records which rule created a node. NULL means asserted: a person, an importer or an upload made it, not a rule. That is the same convention `Triple.derived_by` already used, and for the same reason — the first materialized thing must not be indistinguishable from something a document actually said.
 
@@ -278,7 +384,7 @@ There is no migration ledger. Choosing and applying deltas is still a deliberate
 
 ## What is not here
 
-**Planned for this release.** Phase 4 gives a rule's condition real operators, so `sheet_count > 1` and `rows > 10000` are data rather than boolean patterns `probe` has to invent a name for. Phase 5 folds cost over the plan, so `EXPLAIN` reports how much work as an interval instead of only which work.
+**Planned, and it slipped this release.** Phase 5 folds cost over the plan, so `EXPLAIN` reports how much work as an interval instead of only which work. It takes the next number rather than this one.
 
 **Under consideration, and not committed.** Phase 6 is rule sets, bindings and budgets — selecting a named set of rules and re-casting it at an existing subtree. Phase 7 generalises the settling walk and deletes the rollup planner as a special case. Both are specified; neither is scheduled, and this page will say so until that changes.
 

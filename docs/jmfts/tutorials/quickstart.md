@@ -10,7 +10,7 @@ Index a small corpus and run your first hybrid query.
 
 You will stand up the appliance, put three documents in it, search them by meaning, add a BM25 index, and then run the hybrid query that uses both. Most of the time is the embedding model downloading.
 
-Everything here has been in JMFTS since [0.1.0](https://github.com/jmccardle/jmfts/releases/tag/0.1.0), and runs unchanged on 0.2.0.
+Everything here has been in JMFTS since [0.1.0](https://github.com/jmccardle/jmfts/releases/tag/0.1.0), and runs unchanged on [0.3.0](https://github.com/jmccardle/jmfts/releases/tag/v0.3.0). Neither break in the [Changelog](../changelog.md) touches anything below.
 
 ## 1. Start it
 
