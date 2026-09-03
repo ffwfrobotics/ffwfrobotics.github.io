@@ -1,0 +1,3493 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for Tectum, Tau, and JMFTS">
+      
+      
+      
+        <link rel="canonical" href="https://ffwfrobotics.github.io/jmfts/devops/">
+      
+      
+        <link rel="prev" href="../cookbook/">
+      
+      
+        <link rel="next" href="../reference/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>DevOps Manual - FFWF Robotics Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/ffwf.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#jmfts-devops-manual" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="FFWF Robotics Docs" class="md-header__button md-logo" aria-label="FFWF Robotics Docs" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            FFWF Robotics Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              DevOps Manual
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9 8.99 8.99 0 0 0 4 7.47V22h2v-3h2v3h2v-3h2v3h2v-3.54c2.47-1.65 4-4.46 4-7.46a9 9 0 0 0-9-9m-4 9a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m8 0a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m-4 3 1.5 3h-3z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 15a2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2m2.5 2 1.5-3 1.5 3zm5.5-2a2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2m6-4A10 10 0 0 0 12 1 10 10 0 0 0 2 11c0 2.8 1.2 5.3 3 7.1V22h14v-3.9c1.8-1.8 3-4.3 3-7.1m-5 9h-2v-2h-2v2h-2v-2H9v2H7v-2.8c-1.8-1.5-3-3.7-3-6.2a8 8 0 0 1 8-8 8 8 0 0 1 8 8c0 2.5-1.2 4.8-3 6.2z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tectum/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tectum
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tau/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tau
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  JMFTS
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../integrations/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Integrations
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../style-guide/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Style guide
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="FFWF Robotics Docs" class="md-nav__button md-logo" aria-label="FFWF Robotics Docs" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    FFWF Robotics Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tectum/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tectum
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tectum/tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tectum/tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tectum/cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tectum/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tectum/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tau/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tau
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tau/tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tau/reference/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/tau-llm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_llm
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/tau-agent-core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_agent_core
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extensions
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/rpc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RPC
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/tau-coding-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_coding_agent
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JMFTS
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JMFTS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_2" id="__nav_4_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/ingest-a-document/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ingest a document
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#getting-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Getting it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#two-ways-to-run-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two ways to run it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-the-compose-stack-actually-runs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the Compose stack actually runs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#auth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auth
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-model-stack-is-an-extra-not-a-dependency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The model stack is an extra, not a dependency
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#office-files-three-tiers-two-extras" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Office files: three tiers, two extras
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-embedding-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The embedding model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-reranker-is-a-second-model-loaded-only-if-asked" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The reranker is a second model, loaded only if asked
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sizing-the-write-path-and-why-it-is-cpu-bound" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sizing the write path — and why it is CPU-bound
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#index-maintenance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Index maintenance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ingestion-runs-on-a-queue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ingestion runs on a queue
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ingestion runs on a queue">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-you-cannot-see-and-what-to-monitor-instead" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What you cannot see, and what to monitor instead
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uploads-with-no-parent-are-ungoverned-permanently" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Uploads with no parent are ungoverned, permanently
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#containers-and-worker-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Containers and worker types
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Containers and worker types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#four-images-two-dockerfiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Four images, two Dockerfiles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-api-container" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The API container
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-runner-container" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The runner container
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#worker-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Worker types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#batch-processing-halves-the-llm-bill" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Batch processing halves the LLM bill
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#embedding-as-a-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Embedding as a service
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#four-ways-to-arrange-them" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Four ways to arrange them
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-a-fleet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running a fleet
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Running a fleet">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-lease-measures-the-worker-not-the-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The lease measures the worker, not the task
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#badges-route-work-to-pools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Badges route work to pools
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#applying-the-manifests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Applying the manifests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#autoscaling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Autoscaling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#talking-to-a-metered-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Talking to a metered API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#two-hosts-no-kubernetes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two hosts, no Kubernetes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#k3s-on-the-gpu-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        k3s on the GPU host
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documents-not-in-this-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documents not in this release
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#known-gaps-and-hazards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Known gaps and hazards
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#llm-backed-features-are-optional-and-jmfts-does-not-host-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LLM-backed features are optional, and JMFTS does not host one
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-0-3-0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    0.3.0 — the job system
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../integrations/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integrations
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Integrations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integrations/tectum-tau/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum + Tau
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integrations/tectum-jmfts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum + JMFTS
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integrations/tau-jmfts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau + JMFTS
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integrations/full-stack-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The FFwF Full Stack Agent
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../style-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guide
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stable"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#getting-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Getting it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#two-ways-to-run-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two ways to run it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-the-compose-stack-actually-runs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the Compose stack actually runs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#auth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auth
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-model-stack-is-an-extra-not-a-dependency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The model stack is an extra, not a dependency
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#office-files-three-tiers-two-extras" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Office files: three tiers, two extras
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-embedding-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The embedding model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-reranker-is-a-second-model-loaded-only-if-asked" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The reranker is a second model, loaded only if asked
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sizing-the-write-path-and-why-it-is-cpu-bound" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sizing the write path — and why it is CPU-bound
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#index-maintenance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Index maintenance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ingestion-runs-on-a-queue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ingestion runs on a queue
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ingestion runs on a queue">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-you-cannot-see-and-what-to-monitor-instead" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What you cannot see, and what to monitor instead
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uploads-with-no-parent-are-ungoverned-permanently" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Uploads with no parent are ungoverned, permanently
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#containers-and-worker-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Containers and worker types
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Containers and worker types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#four-images-two-dockerfiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Four images, two Dockerfiles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-api-container" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The API container
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-runner-container" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The runner container
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#worker-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Worker types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#batch-processing-halves-the-llm-bill" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Batch processing halves the LLM bill
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#embedding-as-a-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Embedding as a service
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#four-ways-to-arrange-them" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Four ways to arrange them
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-a-fleet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running a fleet
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Running a fleet">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-lease-measures-the-worker-not-the-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The lease measures the worker, not the task
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#badges-route-work-to-pools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Badges route work to pools
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#applying-the-manifests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Applying the manifests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#autoscaling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Autoscaling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#talking-to-a-metered-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Talking to a metered API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#two-hosts-no-kubernetes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two hosts, no Kubernetes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#k3s-on-the-gpu-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        k3s on the GPU host
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documents-not-in-this-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documents not in this release
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#known-gaps-and-hazards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Known gaps and hazards
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#llm-backed-features-are-optional-and-jmfts-does-not-host-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LLM-backed features are optional, and JMFTS does not host one
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="jmfts-devops-manual">JMFTS — DevOps Manual<a class="headerlink" href="#jmfts-devops-manual" title="Permanent link">&para;</a></h1>
+<p class="axis">Cognition × Acquisition</p>
+
+<p>How JMFTS runs in production: sizing PostgreSQL and pgvector, which container holds the embedding model and which ones deliberately do not, and what an index rebuild costs you.</p>
+<div class="admonition note">
+<p class="admonition-title">Draft. Written against 0.2.0; the current release is 0.3.0.</p>
+<p>Written against <strong>0.2.0</strong> — its <code>Dockerfile</code>, <code>Dockerfile.worker</code>, <code>docker-compose.yml</code>, <code>deploy/</code> manifests and entry points — plus benchmark and defect write-ups that are not in the public tree (see <a href="#documents-not-in-this-release">Documents not in this release</a>). Not yet checked against a deployment outside the maintainer's own.</p>
+<p>Three things an operator needs have been corrected in place for the two releases since: <a href="#getting-it">Getting it</a>, the migration list under <a href="#what-the-compose-stack-actually-runs">What the Compose stack actually runs</a>, and the tier-2 note under <a href="#office-files-three-tiers-two-extras">Office files</a>. The <a href="../changelog/">Changelog</a> is the release record; nothing else on this page has moved past 0.2.0.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">All of this page is released</p>
+<p><a href="#ingestion-runs-on-a-queue">Ingestion</a>, <a href="#containers-and-worker-types">the containers and worker types</a>, and <a href="#running-a-fleet">running a fleet</a> shipped in <strong>0.1.1</strong>, along with <code>jmfts-worker</code>, <code>Dockerfile.worker</code>, <code>deploy/</code>, the <code>/runner</code> surface, and the <code>embed</code> extra that took torch out of the base install. 0.1.0 had none of it, and the notes that said "branch only" have been removed.</p>
+</div>
+<h2 id="getting-it">Getting it<a class="headerlink" href="#getting-it" title="Permanent link">&para;</a></h2>
+<p>JMFTS is on PyPI, and <code>0.3.0</code> is the current release:</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>jmfts<span class="w">                 </span><span class="c1"># both wheels: jmfts, and the jmfts-client it depends on</span>
+</code></pre></div>
+<p><code>pip install jmfts==0.2.1</code> finds nothing. That release is tagged on GitHub and was never uploaded — the <a href="../changelog/">Changelog</a> says why, and 0.3.0 contains everything it did.</p>
+<p>The source is public too:</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/jmccardle/jmfts.git
+<span class="nb">cd</span><span class="w"> </span>jmfts<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>checkout<span class="w"> </span>v0.3.0<span class="w">    </span><span class="c1"># or stay on master</span>
+</code></pre></div>
+<p>The public repository is a squash, not a mirror: each release replaces the whole tree in one commit, so <code>git log</code> there is short by design. Tags before 0.2.0 carry no <code>v</code> prefix — <code>0.1.0</code>, <code>0.1.1</code>, then <code>v0.2.0</code>, <code>v0.2.1</code>, <code>v0.3.0</code>.</p>
+<p>Everything below runs from that checkout. This is a system that has been running as a personal appliance — it works, and it is not a product; reranked ordering in particular is unvalidated.</p>
+<p>For an editable install from a checkout, install the client distribution <strong>first</strong>. <code>jmfts</code> depends on <code>jmfts-client</code> with <code>==</code>, so an editable server install resolves the pinned version from PyPI and shadows the tree you are working in:</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>./jmfts-client
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">".[dev]"</span>
+</code></pre></div>
+<h2 id="two-ways-to-run-it">Two ways to run it<a class="headerlink" href="#two-ways-to-run-it" title="Permanent link">&para;</a></h2>
+<p><strong>Docker Compose</strong> — a Postgres+pgvector container and the API container, both managed together. This is the fastest path to a working instance and the one the <a href="../tutorials/quickstart/">quickstart</a> uses.</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>--build<span class="w"> </span>-d<span class="w">      </span><span class="c1"># first run builds the image (CPU torch)</span>
+docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>-f<span class="w"> </span>api<span class="w">        </span><span class="c1"># watch startup — this is where the auth token line appears</span>
+docker<span class="w"> </span>compose<span class="w"> </span>down<span class="w">               </span><span class="c1"># stop (keeps the DB + model-cache volumes)</span>
+docker<span class="w"> </span>compose<span class="w"> </span>down<span class="w"> </span>-v<span class="w">            </span><span class="c1"># stop and WIPE the DB + the downloaded embedding model</span>
+</code></pre></div>
+<p><strong>Native</strong> — your own PostgreSQL with the <code>pgvector</code> extension, plus a Python 3.11+ environment:</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>./jmfts-client<span class="w">     </span><span class="c1"># first; jmfts depends on it</span>
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">".[dev]"</span><span class="w">           </span><span class="c1"># dev adds pytest/black/ruff; plain -e . is enough to run</span>
+jmfts-init-db<span class="w">                     </span><span class="c1"># creates the DB (if missing) and applies schema.sql</span>
+jmfts-server<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">8100</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">0.1.0 spelled these differently</p>
+<p>On 0.1.0 these were <code>python -m scripts.setup_db</code> and <code>uvicorn api.main:app</code>. The top-level <code>api</code> package is gone as of 0.1.1 — it claimed a very common name in every consumer's <code>site-packages</code> — and the setup script became an entry point. Running the 0.1.0 commands against a current checkout is an <code>ImportError</code>, not a subtle failure. <code>uvicorn jmfts_core.rest.main:app --reload</code> is still the way to get autoreload.</p>
+</div>
+<p>Either way, the API listens on port 8100 and every setting reads from the environment with a <code>JMFTS_</code> prefix. <code>.env.example</code> is the annotated list of those settings; the <a href="../reference/">Reference</a> gives the built-in default behind each one, which is not always what <code>.env.example</code> shows.</p>
+<p>The test suite runs against a throwaway database, never the appliance's: <code>./scripts/run_tests_docker.sh</code> stands up its own pgvector container and CPU embedder, and bare <code>pytest</code> needs the local role to hold <code>CREATEDB</code>.</p>
+<h2 id="what-the-compose-stack-actually-runs">What the Compose stack actually runs<a class="headerlink" href="#what-the-compose-stack-actually-runs" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Container</th>
+<th>Image</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>postgres</code></td>
+<td><code>pgvector/pgvector:pg16</code></td>
+<td><code>schema.sql</code> is mounted as <code>01_schema.sql</code> and runs once, on a fresh data volume. <code>127.0.0.1:5433</code> → container <code>5432</code>, chosen so it never collides with a host Postgres.</td>
+</tr>
+<tr>
+<td><code>api</code></td>
+<td>built from the repo's <code>Dockerfile</code></td>
+<td>CPU-only image — <code>uvicorn --reload</code> with <code>jmfts_core/</code> bind-mounted, so edits reload live without a rebuild. <code>127.0.0.1:8100</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Both publications are bound to loopback, not <code>0.0.0.0</code> — the dev stack is not reachable from the LAN unless you change that yourself.</p>
+<p><code>schema.sql</code> is the complete canonical DDL — extensions, every table, every index. It is what bootstraps a fresh database. The numbered files in <code>migrations/</code> are upgrade deltas for a database that already exists; you do not need them to stand up a new instance, only to carry an existing one forward.</p>
+<p><code>002</code> through <code>007</code> were in 0.1.0. 0.1.1 added five: <code>008_document_settled_lifecycle.sql</code> and <code>009_document_blobs.sql</code> for the lifecycle flag and the uploaded bytes, then <code>010_task_queue.sql</code> creating the queue, <code>011_task_queue_heartbeat.sql</code> adding <code>heartbeat_at</code> and the lease index, and <code>012_task_queue_batched.sql</code> adding the <code>batched</code> status with <code>batch_id</code>/<code>batched_at</code>. 0.2.0 adds none — office extraction needed no schema change.</p>
+<p>0.2.1 adds two: <code>013_rdf_layer.sql</code> and <code>014_entity_roots.sql</code>. <strong><code>013</code> renames a column a running 0.2.0 process reads</strong> — <code>predicates.domain</code> becomes <code>predicates.namespace</code>, and <code>TripleRepository.list_predicates</code> filters on it — so deploy the code together with that migration, not around it. Everything else in both files is additive, and entities that predate <code>014</code> are not backfilled.</p>
+<p>0.3.0 adds two more: <code>015_evidence_rows.sql</code>, which creates <code>document_evidence</code> and <strong>moves</strong> twenty-nine names out of <code>documents.structured_content</code>, and <code>016_document_produced_by.sql</code>, which adds <code>documents.produced_by</code> with an index on <code>(parent_id, produced_by)</code>. <code>015</code> moves data a running 0.2.1 process reads; same rule. <code>016</code> is additive and backfills nothing — nodes that predate it read as asserted, which is the honest answer rather than a guessed one.</p>
+<p>That is 15 migrations at 0.3.0, <code>002</code> through <code>016</code>.</p>
+<p>Apply them in order against an existing database, or take <code>schema.sql</code> for a fresh one. Both live inside the installed package at <code>jmfts_core/sql/</code>, so <code>jmfts-init-db</code> finds them without a source checkout.</p>
+<p>The Compose image is deliberately <strong>not</strong> a production build: embedding runs on CPU there, which is fine for development and wrong for bulk ingestion (see <a href="#sizing-the-write-path-and-why-it-is-cpu-bound">Sizing the write path</a> below). It is also not the image the worker pools run — that one is <a href="#four-images-two-dockerfiles"><code>Dockerfile.worker</code></a>, and the difference is deliberate rather than incidental.</p>
+<h2 id="auth">Auth<a class="headerlink" href="#auth" title="Permanent link">&para;</a></h2>
+<p>Every request needs <code>Authorization: Bearer &lt;token&gt;</code>. Two modes, both controlled by <code>JMFTS_API_TOKEN</code>:</p>
+<ul>
+<li><strong>Left blank</strong> — the server generates a token at startup and prints it to stdout, the same pattern Jupyter uses. There is no state where a blank token means "allow all."</li>
+<li><strong>Set to a value</strong> — that token is pinned, and the startup message is silenced. The Compose file pins <code>jmfts-dev-local</code> by default specifically so other local services (an agent harness, a test client) can point at a known value; override it by exporting <code>JMFTS_API_TOKEN</code> before <code>docker compose up</code>.</li>
+</ul>
+<p><code>JMFTS_CORS_ORIGINS</code> is a JSON list of allowed browser origins and defaults to empty — server-to-server only, no <code>Origin</code> header accepted. <code>"*"</code> is rejected outright when credentials are in play; there is no wildcard escape hatch.</p>
+<p>There is a <strong>second, unrelated credential</strong> — <code>JMFTS_RUNNER_KEY</code>, which gates the embedding surface and resolves to no principal at all. It is described with <a href="#the-runner-container">the runner container</a>; the two are deliberately disjoint, and an API token cannot embed.</p>
+<h2 id="the-model-stack-is-an-extra-not-a-dependency">The model stack is an extra, not a dependency<a class="headerlink" href="#the-model-stack-is-an-extra-not-a-dependency" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Since 0.1.1</p>
+<p>On 0.1.0, <code>torch</code> and <code>sentence-transformers</code> were ordinary dependencies and every install had them.</p>
+</div>
+<p><strong><code>pip install jmfts</code> does not install torch.</strong> Base JMFTS is storage, retrieval, the tree, BM25, the queue and the whole ingest pipeline. The only step in any of that which needs an accelerator is producing vectors, and since <a href="#worker-types"><code>embed</code> became its own task type</a> that step is one HTTP call away from being another process's problem.</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>jmfts<span class="w">                 </span><span class="c1"># storage side: no torch, cannot embed</span>
+pip<span class="w"> </span>install<span class="w"> </span><span class="s1">'jmfts[embed]'</span><span class="w">        </span><span class="c1"># + torch (CUDA build) and sentence-transformers</span>
+</code></pre></div>
+<p>Measured with a clean virtualenv by <code>scripts/check_base_install.sh</code>: <strong>583 MB installed, against 5.2 GB with <code>[embed]</code>.</strong> That gap is the whole reason the split exists, and it is paid on every cold start of every replica.</p>
+<p>A base install is not a crippled install. It still <strong>measures</strong> text — <code>check_fit</code>, the chunker, and matryoshka truncation are tokenizer and numpy work, and <code>transformers</code> stays in the base dependency list precisely so that a storage-side process measures with the same tokenizer the model would have used. What it cannot do is produce a vector, and it says so by name:</p>
+<div class="highlight"><pre><span></span><code>ModelStackNotInstalled: No module named 'torch'
+
+This JMFTS was installed without the embedding model stack, so it cannot produce
+vectors itself. Either give it the model:
+    pip install 'jmfts[embed]'                                  # CUDA build
+    pip install torch --index-url https://download.pytorch.org/whl/cpu
+    pip install 'jmfts[embed]'                                  # ...then CPU
+or point it at a JMFTS that has one:
+    JMFTS_RUNNER_URL=http://&lt;host&gt;:8100 JMFTS_RUNNER_KEY=&lt;the shared secret&gt;
+</code></pre></div>
+<p>Three operational consequences worth stating before you build an image:</p>
+<ul>
+<li><strong>An install with no model is a deployment, not a fault</strong>, which is why the message names both exits rather than just the <code>pip</code> one.</li>
+<li><strong><code>ImportError</code> classifies PERMANENT.</strong> A package that is not installed is not installed on the third attempt, so the task fails the node immediately with a readable reason instead of arriving three backoffs later.</li>
+<li><strong>There is no <code>[cpu]</code> extra.</strong> The wheel index is an install-time choice pip cannot take from a dependency specifier, so a <code>cpu</code> extra would be a name that installed the CUDA build anyway. CPU torch is two commands, and <code>Dockerfile.worker</code> takes them as one build argument.</li>
+</ul>
+<h2 id="office-files-three-tiers-two-extras">Office files: three tiers, two extras<a class="headerlink" href="#office-files-three-tiers-two-extras" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p class="admonition-title">Tier 2 has three callers</p>
+<p><code>.docx</code> and <code>.pptx</code> extraction went live in 0.2.0, and 0.2.1 gave <code>openpyxl</code> a caller too: <code>structure:sheets</code>, <code>profile:sheet</code> and <code>extract:sheet</code> read a workbook into worksheet and record nodes. A worker that ingests any of the three <strong>needs <code>jmfts[office]</code></strong>, and one that does not is correctly installed without it. <code>profile:sheet</code> also sketches every column by default, which needs <code>jmfts[sketch]</code>. The legacy binary formats are still detected and probed but not read — the <a href="../reference/#office-formats">Reference</a> has the per-format table.</p>
+</div>
+<p>Office support splits the same way the model stack does, and for the same reason, but into three tiers rather than two — because one of the dependencies is not a wheel at all.</p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>What</th>
+<th>Weight</th>
+<th>Where it goes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>zipfile</code>, <code>xml.etree</code>, <code>olefile</code></td>
+<td>stdlib plus one pure-Python module</td>
+<td>base install</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>python-docx</code>, <code>python-pptx</code>, <code>openpyxl</code></td>
+<td>+44 MB, <strong>not</strong> pure Python</td>
+<td><code>jmfts[office]</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>LibreOffice, driven by <code>unoserver</code></td>
+<td>~500 MB system package</td>
+<td>a badged worker image; <code>jmfts[convert]</code> is the client only</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>jmfts<span class="w">                 </span><span class="c1"># detects and probes .docx/.pptx/.xlsx; cannot open one</span>
+pip<span class="w"> </span>install<span class="w"> </span><span class="s1">'jmfts[office]'</span><span class="w">       </span><span class="c1"># + the readers; .docx and .pptx now extract</span>
+pip<span class="w"> </span>install<span class="w"> </span><span class="s1">'jmfts[convert]'</span><span class="w">      </span><span class="c1"># + the unoserver client — useless without LibreOffice</span>
+</code></pre></div>
+<p><strong>Which workers need tier 2 is now an operational decision, not a hypothetical one.</strong> A fleet that ingests office documents needs <code>jmfts[office]</code> on the workers that drain <code>extract:text</code>. A storage-side worker that only settles nodes and writes rows does not. Getting it wrong is loud rather than quiet: the task fails PERMANENT with <code>OfficeStackNotInstalled</code> naming the extra, on the first attempt.</p>
+<p><strong>Tier 1 must stay in the base install, and that is a hard constraint.</strong> Probe depends on nothing, calls no model, and always runs. If probing a <code>.docx</code> needed the <code>office</code> extra, a base install would accept the upload, run probe, and report an empty pattern set — which is indistinguishable from a <code>.docx</code> that genuinely declares no structure. Reading <code>word/styles.xml</code> out of a ZIP needs no library, so honouring the constraint costs nothing.</p>
+<p><strong>Tier 2 is separate even though it is small.</strong> 44 MB is nothing like torch's 4.6 GB, and the split is not about weight.</p>
+<div class="admonition warning">
+<p class="admonition-title">Tier 2 is not pure Python, and the three names hide that</p>
+<p>Measured 2026-08-22 in empty venvs against the 0.2.0 wheels: base is <strong>585 MB</strong>, <code>jmfts[office]</code> is <strong>629 MB</strong>. The three named packages are only 9 MB of that gap (docx 2.9, pptx 3.1, openpyxl 3.0). The rest is transitive: <code>python-docx</code> and <code>python-pptx</code> both require <code>lxml</code> (12 MB), and <code>python-pptx</code> also requires <code>Pillow</code> (7.1 MB) and <code>XlsxWriter</code> (1.9 MB).</p>
+<p><strong><code>lxml</code> and <code>Pillow</code> are C extensions.</strong> On a platform with a wheel for both — every platform this project targets — that is invisible. On one without, tier 2 needs a build toolchain in the image, which is exactly the possibility a "pure Python" label tells you not to plan for.</p>
+</div>
+<p>The split is about who pays, not about the number. The alternative is putting three readers into every install to serve the one worker in a fleet that ingests office files. A storage-side worker that never touches a <code>.docx</code> is correctly installed and correctly has no <code>python-docx</code>.</p>
+<p>That claim is what the error message has to carry, so it names the extra rather than the module:</p>
+<div class="highlight"><pre><span></span><code>OfficeStackNotInstalled: No module named 'docx'
+
+This JMFTS was installed without the office readers, so it can detect and probe
+office files but cannot open one. Install them:
+    pip install 'jmfts[office]'
+A worker that does not ingest office files does not need them; see
+jmfts_core/office/__init__.py.
+</code></pre></div>
+<p>There is no remote equivalent of <code>JMFTS_RUNNER_URL</code> here. The office readers are 44 MB, so "install it" is the whole answer, where for the model stack's 4.6 GB it is one of two. <code>OfficeStackNotInstalled</code> subclasses <code>ImportError</code> and therefore classifies <strong>PERMANENT</strong>, the same as <code>ModelStackNotInstalled</code>: a package that is not installed does not appear on the third attempt.</p>
+<p><strong>Tier 3 is a worker, not an extra, because <code>pip install libreoffice</code> is not a thing.</strong> It follows the <code>JMFTS_RUNNER_URL</code> shape instead — a task type, a worker badge, and an optional URL that makes it another process's problem. It earns a whole image by doing two jobs, which is why the extra is named <code>convert</code> rather than <code>render</code>:</p>
+<ol>
+<li><strong>Legacy formats.</strong> <code>.doc</code>, <code>.xls</code> and <code>.ppt</code> convert to OOXML so the tier-2 readers can open the result. The alternative was three more binary-format readers, each worse at its format than LibreOffice is.</li>
+<li><strong>Renditions.</strong> Any document converts to PDF once, at ingest, so serving a citation image is <code>pymupdf</code> over a stored PDF — and <code>pymupdf</code> is already a base dependency, so the query path needs no tier-3 dependency at all.</li>
+</ol>
+<p><code>unoserver</code> and not <code>unoconv</code>, which is unmaintained, and not <code>soffice --headless --convert-to</code> per file: that pays a cold start per document, and two concurrent invocations fight over the same user profile directory.</p>
+<p>Three consequences for how you build images and place work:</p>
+<ul>
+<li><strong><code>office</code> is implied by <code>dev</code>, <code>convert</code> is not.</strong> The office tests open real packages. The <code>unoserver</code> pip package installs cleanly with no LibreOffice present and is useless without it, so a suite that installed it would be testing a configuration nobody runs.</li>
+<li><strong>A legacy file is read-only.</strong> For <code>.doc</code>/<code>.xls</code>/<code>.ppt</code> the converted OOXML is what gets read, so the source of truth for any future edit is the conversion, not the upload. Editing one would hand back a <code>.docx</code> where the user supplied a <code>.doc</code>.</li>
+<li><strong>Renditions roughly double blob storage</strong> for office documents. Off by default is the proposal; whether the policy is per-ingest, per-usetype or global is not decided.</li>
+</ul>
+<h2 id="the-embedding-model">The embedding model<a class="headerlink" href="#the-embedding-model" title="Permanent link">&para;</a></h2>
+<p>Document and token embeddings both come from <code>nomic-ai/modernbert-embed-base</code> (configurable via <code>JMFTS_EMBEDDING_MODEL</code>). First boot downloads it — a few hundred MB — into a cache volume (<code>hf_cache</code> in Compose, <code>~/.cache/huggingface</code> natively), and it persists across restarts. The worker images skip that download entirely by baking the model in at build time.</p>
+<p><code>JMFTS_EMBEDDING_DEVICE</code> is <code>cpu</code> in the dev image on purpose (no CUDA in that container). Set it to <code>cuda</code> for anything that embeds at volume — see the next section for why this matters more than it sounds like it should.</p>
+<p><strong>Concurrency inside one process is one inference at a time.</strong> <code>EmbeddingService</code> holds a lock across the whole forward pass, so two worker threads in one process serialise on the model and the second one buys nothing. Concurrency on a host is processes, and each process holds its own copy of the weights plus its own attention peak.</p>
+<h2 id="the-reranker-is-a-second-model-loaded-only-if-asked">The reranker is a second model, loaded only if asked<a class="headerlink" href="#the-reranker-is-a-second-model-loaded-only-if-asked" title="Permanent link">&para;</a></h2>
+<p><code>?rerank=true&amp;rerank_method=cross_encoder</code> loads a second model, separate from the embedder. The default is <code>cross-encoder/ms-marco-MiniLM-L-6-v2</code> (~22M params), small enough to run on CPU, and it downloads into the same Hugging Face cache on first use. Change it with <code>JMFTS_RERANKER_MODEL</code> — any Hub cross-encoder works, but a larger one is a real GPU-memory decision on top of the embedder, not a free swap.</p>
+<p><code>JMFTS_RERANKER_DEVICE</code> defaults to blank, which means "follow <code>JMFTS_EMBEDDING_DEVICE</code>". A CPU-only deployment therefore stays CPU-only without setting a second variable. Pin it only when you want the reranker on a different device from the embedder.</p>
+<p>Nothing loads until a request actually asks for reranking, so a deployment that never passes <code>rerank=true</code> pays nothing. When a request does ask and the model cannot load, the request fails — it does not quietly return the unreranked ranking.</p>
+<p>A cross-encoder is the same <code>sentence-transformers</code> stack, so it belongs to the same <code>[embed]</code> extra and is absent from a base install for the same reason. <strong>Reranking has no <code>/runner</code> equivalent</strong>: <code>JMFTS_RUNNER_URL</code> does not help here, and a container that must rerank must carry the model.</p>
+<h2 id="sizing-the-write-path-and-why-it-is-cpu-bound">Sizing the write path — and why it is CPU-bound<a class="headerlink" href="#sizing-the-write-path-and-why-it-is-cpu-bound" title="Permanent link">&para;</a></h2>
+<p>A 2026-07-23 baseline (<code>scripts/benchmark_write.py</code>, CPU embedding, empty pgvector DB) measured each write op in isolation. The public tree keeps only the product CLI in <code>scripts/</code>, so the harness that produced these numbers is not in the tarball you can clone today — it ships with the evaluation work described <a href="#documents-not-in-this-release">below</a>:</p>
+<table>
+<thead>
+<tr>
+<th>op</th>
+<th>ops/s</th>
+<th>p50 latency</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>document create (no embed)</td>
+<td>~1,943</td>
+<td>0.50 ms</td>
+</tr>
+<tr>
+<td>document create <strong>+ embed</strong></td>
+<td>~13</td>
+<td>49 ms</td>
+</tr>
+<tr>
+<td>triple upsert</td>
+<td>~1,227</td>
+<td>0.82 ms</td>
+</tr>
+</tbody>
+</table>
+<p>The bare insert path — the <code>path</code> trigger, HNSW index maintenance — is sub-millisecond and was never the bottleneck. Embedding is roughly <strong>100× the cost</strong> of everything else in the write path combined, and it is the thing the CPU dev image is worst at. If you are sizing a deployment for bulk ingestion, treat <code>JMFTS_EMBEDDING_DEVICE=cuda</code> as the first lever, not a nice-to-have; batching embedding calls is the other one, though there is no batch document-create endpoint yet — see <a href="#known-gaps-and-hazards">Known gaps</a> below.</p>
+<p>This baseline did not include the final commit's durability flush, and CUDA throughput was not measured — both are open items on the benchmark backlog that lands with the harness, not settled numbers.</p>
+<p>That 100× ratio is the fact every deployment decision on this page descends from. It is why embedding is a badge, why it is its own task type, and why a fleet's worth of storage-side containers can go without the model entirely.</p>
+<h2 id="index-maintenance">Index maintenance<a class="headerlink" href="#index-maintenance" title="Permanent link">&para;</a></h2>
+<p>The vector side (<code>documents.embed</code>, <code>token_embeddings.embed_256/384/512</code>) is maintained automatically by pgvector's HNSW/IVFFlat indexes on every insert — no separate rebuild step.</p>
+<p>The BM25 side is different: <code>POST /indexes/{index_name}/index-document/{document_id}</code> (backed by <code>index_document</code>) is idempotent as of a since-fixed defect (it now subtracts a document's old contribution before re-adding, short-circuiting on an unchanged content hash), so indexing a document you've already indexed no longer inflates the corpus statistics BM25's IDF is derived from. You can index incrementally, document by document, as content arrives. <code>POST /indexes/{name}/refresh</code> remains available and rebuilds an index's statistics from scratch — correct by construction, but its cost is proportional to the whole indexed corpus, so reach for it as a repair tool, not a routine one.</p>
+<h2 id="ingestion-runs-on-a-queue">Ingestion runs on a queue<a class="headerlink" href="#ingestion-runs-on-a-queue" title="Permanent link">&para;</a></h2>
+<p><code>POST /ingest/file</code> stores the uploaded bytes, enqueues one <code>probe</code> task, and <strong>returns before any work is done</strong>. Everything after that — detecting the format, pulling text out, building the tree, embedding it, rolling summaries back up — is a worker draining <code>task_queue</code>. The operational consequences are worth stating plainly:</p>
+<ul>
+<li><strong>A 200 from the upload means "accepted", not "ingested".</strong> Poll <code>GET /ingest/file/{id}/frontier</code> for progress. It returns counts, never a percentage: the task set below the current frontier does not exist until the frontier reaches it, so any denominator would move backward as work is discovered.</li>
+<li><strong>An unfinished document is invisible to search.</strong> The retrieval indexes are partial on <code>documents.settled</code>, so an <code>in_flight</code> node is not returned by any search method. That is a feature — a half-built tree should not answer queries — but it means "my document is not in search results" and "my ingestion is still running" look the same from the outside. The frontier endpoint is how you tell them apart.</li>
+<li><strong>A permanently failed task settles its node <code>failed</code>.</strong> Without that, a node whose ingestion died would be indistinguishable from one still in progress, and the settle walk would wait on it forever.</li>
+<li><strong>Options are fixed at upload.</strong> Uploads deduplicate on content hash, and an upload of stored bytes asking for different options is a 400 rather than a re-run. Reprocessing under changed options is specified and not built, so the available path is delete and re-upload — decide chunking and model selection before a bulk run, not during one.</li>
+</ul>
+<h3 id="what-you-cannot-see-and-what-to-monitor-instead">What you cannot see, and what to monitor instead<a class="headerlink" href="#what-you-cannot-see-and-what-to-monitor-instead" title="Permanent link">&para;</a></h3>
+<p><code>task_queue</code> has <strong>no REST surface</strong>. No endpoint lists rows, names the task that failed, retries one, or cancels one. Plan monitoring around that rather than expecting to add a dashboard later:</p>
+<ul>
+<li><strong>Per document</strong>, the frontier's <code>tasks_unfinished</code> is the closest thing to a health signal. Zero unfinished tasks while <code>nodes_in_flight</code> is above zero means the frontier is waiting on something outside the queue — nothing is coming to finish those nodes. A non-zero value says work is queued and says nothing about whether anything is claiming it, so alert on the counts <strong>not moving</strong>, not on their value.</li>
+<li><strong>Per corpus</strong>, <code>scripts/e2e_ingest_corpus.py report</code> is the real instrument. It lists every failed task with its error type, the tree shape by usetype and depth, whether the result is retrievable through each search method, and wall clock per task type.</li>
+<li><strong>Per appliance</strong>, SQL against <code>task_queue</code> is the only way to answer "which tasks are stuck and since when". <code>heartbeat_at</code>, <code>claimed_by</code> and <code>status</code> are the columns worth a saved query.</li>
+<li><strong>For batches</strong>, <code>jmfts-batch-worker stalled</code> is separate and exits non-zero, because a <code>batched</code> row is invisible to everything above.</li>
+</ul>
+<h3 id="uploads-with-no-parent-are-ungoverned-permanently">Uploads with no parent are ungoverned, permanently<a class="headerlink" href="#uploads-with-no-parent-are-ungoverned-permanently" title="Permanent link">&para;</a></h3>
+<p>Worth stating here because it is a deployment property, not an API detail. Subtree RBAC resolves strictly along the tree path, so a file uploaded with no <code>parent_id</code> sits under no access-control root — and a grant made afterwards cannot reach it. The two fixes are both upload-time: a <code>parent_id</code> inside an already-governed subtree, or <code>private=true</code>. If your deployment relies on RBAC at all, make one of the two mandatory in the client rather than in a runbook. See the <a href="../cookbook/#keep-an-upload-out-of-the-shared-knowledgebase">Cookbook</a>.</p>
+<h2 id="containers-and-worker-types">Containers and worker types<a class="headerlink" href="#containers-and-worker-types" title="Permanent link">&para;</a></h2>
+<p>Everything that runs is one of five process roles over one of four JMFTS images, plus stock Postgres. The images differ in <strong>whether they carry the embedding model</strong>; the process roles differ in <strong>what they do with it</strong>. Those two axes are independent, which is the part worth internalizing: an image that holds the model can run a process that never uses it, and a process that answers for embedding work can run in an image that has no torch at all.</p>
+<h3 id="four-images-two-dockerfiles">Four images, two Dockerfiles<a class="headerlink" href="#four-images-two-dockerfiles" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Image</th>
+<th>Built by</th>
+<th>Torch</th>
+<th>Size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pgvector/pgvector:pg16</code></td>
+<td>upstream, unmodified</td>
+<td>—</td>
+<td>upstream</td>
+</tr>
+<tr>
+<td>the API image</td>
+<td><code>Dockerfile</code></td>
+<td>CPU wheel, <code>[embed]</code></td>
+<td>not measured</td>
+</tr>
+<tr>
+<td><code>jmfts-worker-cpu</code></td>
+<td><code>Dockerfile.worker</code>, defaults</td>
+<td>CPU wheel, <code>[embed]</code></td>
+<td><strong>3.98 GB</strong></td>
+</tr>
+<tr>
+<td><code>jmfts-worker-gpu</code></td>
+<td><code>Dockerfile.worker --build-arg TORCH_INDEX=…/cu126</code></td>
+<td>CUDA wheel, <code>[embed]</code></td>
+<td>larger; not measured</td>
+</tr>
+<tr>
+<td><code>jmfts-worker-thin</code></td>
+<td><code>Dockerfile.worker --build-arg EXTRAS=</code></td>
+<td><strong>none</strong></td>
+<td><strong>689 MB</strong></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>build<span class="w"> </span>-f<span class="w"> </span>Dockerfile.worker<span class="w"> </span>-t<span class="w"> </span>jmfts-worker-cpu:latest<span class="w"> </span>.
+docker<span class="w"> </span>build<span class="w"> </span>-f<span class="w"> </span>Dockerfile.worker<span class="w"> </span>-t<span class="w"> </span>jmfts-worker-gpu:latest<span class="w"> </span><span class="se">\</span>
+<span class="w">       </span>--build-arg<span class="w"> </span><span class="nv">TORCH_INDEX</span><span class="o">=</span>https://download.pytorch.org/whl/cu126<span class="w"> </span>.
+docker<span class="w"> </span>build<span class="w"> </span>-f<span class="w"> </span>Dockerfile.worker<span class="w"> </span>-t<span class="w"> </span>jmfts-worker-thin:latest<span class="w"> </span><span class="se">\</span>
+<span class="w">       </span>--build-arg<span class="w"> </span><span class="nv">EXTRAS</span><span class="o">=</span><span class="w"> </span>.
+</code></pre></div>
+<p>Sizes are <code>docker images</code> against the two builds that were made; the CUDA one was not built for a number, so this page does not carry one for it.</p>
+<p>Four notes on the recipes, each of which is a decision you can get wrong:</p>
+<ul>
+<li><strong>The images are named, not tagged.</strong> <code>kustomize</code> matches an image override by <em>name</em>, so one <code>jmfts-worker</code> name with three tags would make a single override rewrite every pool — and the GPU pool would silently run the CPU image, working correctly and slowly with the card idle and nothing reporting a problem.</li>
+<li><strong>There is no CUDA base image.</strong> The <code>cu126</code> wheels vendor the CUDA runtime as <code>nvidia-*</code> pip packages, so a slim Python base plus the right wheel index is a complete GPU install; the host contributes only the driver, through <code>nvidia-container-toolkit</code>. Using <code>nvidia/cuda</code> as the base would pin a second, redundant CUDA against the one torch already brings.</li>
+<li><strong>The model is baked in at build time.</strong> Without that, every cold pod downloads a few hundred MB before it can claim its first task — which is exactly the wrong shape for autoscaling, since scale-up latency would be dominated by the download and a queue spike would be answered by pods that spend their first minute idle. The alternative, a shared ReadWriteMany volume, needs storage a k3s cluster may not have. <code>HF_HUB_OFFLINE=1</code> at runtime makes a missing model fail immediately rather than quietly reaching for the network.</li>
+<li><strong>The thin image still bakes the tokenizer.</strong> It does not embed, but it does measure, and <code>check_fit</code> is called once per candidate piece by the chunker. A thin worker that fetched the tokenizer on first use would stall on precisely the cold start the bake exists to remove.</li>
+</ul>
+<p>The API image is <strong>not</strong> a variant of the worker image. It exists to serve HTTP with <code>--reload</code> over a bind-mounted source tree, which a pod that scales up cannot do; the worker image runs <code>jmfts-worker</code> over code baked in at build time.</p>
+<h3 id="the-api-container">The API container<a class="headerlink" href="#the-api-container" title="Permanent link">&para;</a></h3>
+<p>Serves the REST surface, and always holds the model. <code>JMFTS_RUNNER_URL</code> does not empty it out, and the reason is worth being precise about: <strong>that setting covers the ingest write path only</strong> — the <code>embed</code> task and the vector <code>summarize</code> writes. Search embeds its query in the request path, and routing that over HTTP would put a network hop inside every search. A process that serves <code>/search</code> needs the model locally, whatever else is configured.</p>
+<p>One setting decides whether an API container is also a worker:</p>
+<div class="highlight"><pre><span></span><code>JMFTS_INGEST_WORKER_ENABLED=true    # default: a worker thread inside the API process
+JMFTS_INGEST_WORKER_ENABLED=false   # what deploy/k8s/10-config.yaml sets
+</code></pre></div>
+<p>The default is right for a single appliance, which would otherwise accept uploads and never process them. It is wrong for a fleet, where it would make total ingest capacity depend on how many API replicas happened to be running.</p>
+<h3 id="the-runner-container">The runner container<a class="headerlink" href="#the-runner-container" title="Permanent link">&para;</a></h3>
+<p>The same image and the same application, configured to sell embedding rather than to store anything. <code>GET /runner/info</code>, <code>POST /runner/embed</code>, and <code>POST /runner/embed/tokens</code> answer "embed this text" for a caller that keeps the documents somewhere else — possibly in a database this process cannot reach. None of the three routes opens a database session and none of them resolves a principal.</p>
+<p>That is why the credential is separate:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>JMFTS_API_TOKEN</code></th>
+<th><code>JMFTS_RUNNER_KEY</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>resolves to</td>
+<td>a principal, whose grants filter which subtree the request sees</td>
+<td>nothing — there is no subtree to scope</td>
+</tr>
+<tr>
+<td>stored as</td>
+<td>a row in <code>api_tokens</code></td>
+<td>a shared secret in the environment</td>
+</tr>
+<tr>
+<td>blank means</td>
+<td>generate, print, and require an ephemeral token</td>
+<td>the surface answers <strong>503</strong></td>
+</tr>
+<tr>
+<td>can it read a document?</td>
+<td>yes</td>
+<td>no</td>
+</tr>
+<tr>
+<td>can it embed?</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<p>The two are disjoint in both directions, and the app-level bearer check steps aside for the <code>/runner</code> prefix rather than accepting either credential — making them alternatives inside one dependency would have produced exactly the coupling the split exists to avoid.</p>
+<p><strong>Blank is the off switch here, not a generator.</strong> <code>JMFTS_API_TOKEN</code> generates when blank because one appliance printing a token an operator reads is the case it serves. A fleet is the opposite case: two replicas would generate two different keys, and a worker would authenticate against whichever pod it happened to reach. So a blank runner key means "this deployment does not offer embedding", and it never means "come in."</p>
+<h3 id="worker-types">Worker types<a class="headerlink" href="#worker-types" title="Permanent link">&para;</a></h3>
+<p>The task type is what routes work; the container is what can do it. Five shapes exist, and they are not five programs — every one of them is <code>IngestWorker</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Shape</th>
+<th>Image</th>
+<th>Runs the model?</th>
+<th>Badge</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>thread inside the API process</td>
+<td>the API image</td>
+<td>yes, locally</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>jmfts-worker</code>, CPU pool</td>
+<td><code>jmfts-worker-cpu</code></td>
+<td>carries it, never uses it</td>
+<td><code>cpu</code></td>
+</tr>
+<tr>
+<td><code>jmfts-worker</code>, embed pool</td>
+<td><code>jmfts-worker-gpu</code></td>
+<td>yes, on a card</td>
+<td><code>embed</code></td>
+</tr>
+<tr>
+<td><code>jmfts-worker</code>, LLM pool</td>
+<td><code>jmfts-worker-gpu</code> or <code>-cpu</code></td>
+<td>yes, for the summary it stores</td>
+<td><code>llm</code></td>
+</tr>
+<tr>
+<td><code>jmfts-worker --runner-url …</code></td>
+<td><code>jmfts-worker-thin</code></td>
+<td><strong>no</strong> — posts to a runner</td>
+<td><code>embed</code></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code>jmfts-worker<span class="w">                                     </span><span class="c1"># claims everything; one appliance</span>
+jmfts-worker<span class="w"> </span>--badge<span class="w"> </span>cpu<span class="w"> </span>--worker-id<span class="w"> </span>cpu-0<span class="w">       </span><span class="c1"># a pool member</span>
+jmfts-worker<span class="w"> </span>--badge<span class="w"> </span>embed<span class="w"> </span>--badge<span class="w"> </span>llm<span class="w">           </span><span class="c1"># two badges, one worker</span>
+jmfts-worker<span class="w"> </span>--drain<span class="w">                             </span><span class="c1"># until the queue is empty, then exit</span>
+</code></pre></div>
+<p>Three of those rows deserve a note.</p>
+<p><strong>The CPU pool's badge names nothing.</strong> <code>JMFTS_TASK_BADGES</code> maps <code>embed</code> and <code>summarize</code> to <code>embed</code>, and <code>summarize:llm</code> to <code>llm</code>. Nothing maps to <code>cpu</code>. Since a badged worker claims its own badges <em>plus</em> everything un-badged, a worker badged <code>cpu</code> claims exactly the un-badged task types — <code>probe</code>, <code>extract:text</code>, and the three structure rungs. The badge is a name for "this pool is not the scarce one", and it works by matching no policy entry at all.</p>
+<p>So the CPU pool never runs the model, and still ships it: <code>jmfts-worker-cpu</code> is also the image the metered LLM pool runs, and <em>that</em> pool embeds the summary it stores. One image, two pools, one of which uses half of it. Building a third image to save the difference would be a third thing to keep in sync — but if a fleet grows enough CPU replicas for 3.98 GB each to matter, the thin build is already the answer, and it needs a runner rather than a new Dockerfile.</p>
+<p><strong>The LLM pool is two deployments for one badge, and that is the point.</strong> <code>llm</code> names a <em>resource</em> — "this worker can get a completion" — not a machine shape. <code>jmfts-worker-llm-local</code> runs a model on a card; <code>jmfts-worker-llm-api</code> forwards to a metered web API and needs no accelerator. Both answer the same badge, so adding a replica to either adds capacity for the same work, and an idle local GPU absorbs work the API would otherwise have been paid for. Both still carry the embedding model, because both embed the summary they store — which is why they are JMFTS workers and not scripts.</p>
+<p><strong>A thin worker is answering for embedding work; it just is not doing it.</strong> The badge and the location of the model are orthogonal, and confusing them is the easiest mistake on this page. A thin worker built with <code>EXTRAS=</code> <strong>must</strong> be given <code>--runner-url</code> — otherwise its first <code>embed</code> task raises <code>ModelStackNotInstalled</code> and fails the node permanently.</p>
+<h3 id="batch-processing-halves-the-llm-bill">Batch processing halves the LLM bill<a class="headerlink" href="#batch-processing-halves-the-llm-bill" title="Permanent link">&para;</a></h3>
+<p>A separate entry point (<code>jmfts-batch-worker</code>) for a separate concern: it consumes <code>summarize:llm</code> through an external batch provider at roughly half price. Nothing in <code>jmfts_core</code> depends on it, and it is not a badge.</p>
+<p>The operational shape is a handoff between two schedulers. A worker claims a set of tasks, submits them, and trades its claim for a <code>batched</code> status that outlives the worker — so the answer it has already paid for is not bought a second time by whoever claims next. Any worker that can reach the provider may then adopt the batch and finish it.</p>
+<p>Two things to know before running it:</p>
+<ul>
+<li><strong>A <code>batched</code> row is invisible to every other recovery mechanism.</strong> The claim query will not take it, and the lease will not reap it — nothing beats for a parked row, because the work is at the provider rather than in a worker. <code>jmfts-batch-worker stalled</code> is the only stall signal, and it exits non-zero so a cron or a probe can act on it. Both providers expire a batch at 24 hours; the default threshold is 26.</li>
+<li><strong>Gather size is bounded by the tree, not by the API.</strong> Both providers accept tens of thousands of requests per batch, but every gathered task holds its node's reservation for the batch's whole life. Gathering broadly freezes a large part of the tree for a day to save a few HTTP calls. The default is 32.</li>
+</ul>
+<p>Scheduling the batch window is a Kubernetes concern, not a queue concern — spin the direct LLM pool down and the batch pool up on a cron scaler. The queue never needs to know what time it is.</p>
+<h3 id="embedding-as-a-service">Embedding as a service<a class="headerlink" href="#embedding-as-a-service" title="Permanent link">&para;</a></h3>
+<p><code>--runner-url</code> is what makes the thin worker possible. It sends the <code>embed</code> task's text to another JMFTS's <code>/runner</code> surface instead of loading the model locally:</p>
+<div class="highlight"><pre><span></span><code>jmfts-worker<span class="w"> </span>--badge<span class="w"> </span>embed<span class="w"> </span>--runner-url<span class="w"> </span>http://jmfts-api:8100<span class="w"> </span>--worker-id<span class="w"> </span>thin-0
+</code></pre></div>
+<p>Both sides read one <code>JMFTS_RUNNER_KEY</code>, and a URL with no key is refused <strong>at startup</strong> rather than tried anonymously — a misconfiguration should be a pod that will not come up, not one failed task in a log. No network call is made at startup, though: a runner briefly unreachable is a transient the retry policy already handles, and refusing to boot over it would turn a blip into an outage.</p>
+<figure class="dia"><svg viewBox="0 0 680 250" role="img" aria-labelledby="dia-fleet-t dia-fleet-d"><title id="dia-fleet-t">A fleet whose workers do not hold the model</title><desc id="dia-fleet-d">Three square boxes across the top, named thin dash zero, thin dash one and thin dash two, each started with the runner dash url flag. Short stubs drop from all three onto one horizontal bracket that joins them. From the middle of the bracket a single arrow runs down into a stack of two slabs — a hairline token embeddings slab above a hatched, doubled-outline documents slab — captioned as the rows the workers write. From the right end of the same bracket, marked with a small red square, a red connector runs right and then up into a fourth box on the far right named jmfts dash server, labelled slash runner, and annotated as holding the model with no database and no principal. The red connector is the only red element and is captioned one HTTP call, POST slash runner slash embed slash tokens.</desc><defs><pattern id="dia-fleet-hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="4" y1="0" x2="4" y2="8" class="hatch"/></pattern></defs><text x="20" y="18" class="label-soft">jmfts-worker --runner-url … (no torch)</text><rect x="20" y="28" width="130" height="34" class="fill-ground stroke"/><text x="85" y="50" text-anchor="middle" class="label">thin-0</text><rect x="160" y="28" width="130" height="34" class="fill-ground stroke"/><text x="225" y="50" text-anchor="middle" class="label">thin-1</text><rect x="300" y="28" width="130" height="34" class="fill-ground stroke"/><text x="365" y="50" text-anchor="middle" class="label">thin-2</text><line x1="85" y1="62" x2="85" y2="86" class="stroke"/><line x1="225" y1="62" x2="225" y2="86" class="stroke"/><line x1="365" y1="62" x2="365" y2="86" class="stroke"/><line x1="85" y1="86" x2="365" y2="86" class="stroke"/><line x1="225" y1="86" x2="225" y2="139" class="stroke"/><path d="M225 148 L220 138 L230 138 Z" class="fill-ink"/><rect x="105" y="150" width="240" height="22" class="fill-ground stroke-hair"/><text x="225" y="165" text-anchor="middle" class="label-soft">token_embeddings</text><rect x="105" y="172" width="240" height="34" fill="url(#dia-fleet-hatch)" class="stroke"/><rect x="109" y="176" width="232" height="26" class="fill-none stroke-soft"/><rect x="175" y="180" width="100" height="18" class="fill-ground"/><text x="225" y="193" text-anchor="middle" class="label">documents</text><text x="225" y="226" text-anchor="middle" class="label-soft">the rows, written by the workers</text><rect x="360" y="81" width="10" height="10" class="fill-red"/><path d="M365 86 L470 86 L470 45 L491 45" class="stroke-red fill-none"/><path d="M500 45 L490 40 L490 50 Z" class="fill-red"/><text x="470" y="116" text-anchor="middle" class="label-mark">one HTTP call</text><text x="470" y="133" text-anchor="middle" class="label-soft">POST /runner/embed/tokens</text><text x="580" y="22" text-anchor="middle" class="label-soft">/runner</text><rect x="500" y="28" width="160" height="34" class="fill-ground stroke"/><text x="580" y="50" text-anchor="middle" class="label">jmfts-server</text><text x="580" y="80" text-anchor="middle" class="label-soft">holds the model</text><text x="580" y="96" text-anchor="middle" class="label-soft">no database, no principal</text></svg><figcaption>The workers write every row; the runner writes nothing. Red marks the seam the arrangement exists to create — the one place a vector crosses a network — and it is the only thing in the picture that is not a storage-side process.</figcaption></figure>
+
+<p><strong>What this changes about capacity.</strong> Without it, every worker that touches ingest owns weights, so the cards are allocated by which pool you started: an embedding pool with a card each and a summarization pool with a card each, sized before the corpus arrives. With it, the storage-side workers scale on CPU and the cards sit behind one runner that both kinds of work draw from — so a corpus that is mostly chunking and a corpus that is mostly summarizing get the same hardware without a redeploy.</p>
+<p><strong>Cost.</strong> Each <code>embed</code> becomes an HTTP round trip carrying a base64 float16 token matrix — measured at <strong>171 KB for a 256×256 matrix, against 1,398 KB for the same numbers as JSON.</strong> That is a LAN cost, not a WAN one. The tokenizer stays local, deliberately: forwarding <code>check_fit</code> would put a round trip inside every chunking decision.</p>
+<p><strong>What it does not cover.</strong> Search, as <a href="#the-api-container">above</a>. And reranking, which has no runner surface at all.</p>
+<p>There is <strong>no runner Deployment in <code>deploy/k8s/</code> yet.</strong> An embedding pool plus a thin pool needs a Service and a second ScaledObject, and that has not been written; the code side is complete and the manifests are not.</p>
+<h3 id="four-ways-to-arrange-them">Four ways to arrange them<a class="headerlink" href="#four-ways-to-arrange-them" title="Permanent link">&para;</a></h3>
+<p>Each shape is a superset of the one above it. Start at the top and move down when a specific thing hurts.</p>
+<table>
+<thead>
+<tr>
+<th>Shape</th>
+<th>Processes</th>
+<th>The model lives</th>
+<th>Move on when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Single appliance</strong></td>
+<td>Postgres + API (worker thread on)</td>
+<td>in the API process</td>
+<td>ingestion starves search of CPU</td>
+</tr>
+<tr>
+<td><strong>Two processes</strong></td>
+<td>Postgres + API + <code>jmfts-worker</code></td>
+<td>in both</td>
+<td>one worker cannot keep up, or you want it on another host</td>
+</tr>
+<tr>
+<td><strong>Pooled fleet</strong></td>
+<td>Postgres + API + CPU / embed / LLM pools</td>
+<td>in every worker image</td>
+<td>the cards are misallocated between embedding and summarizing</td>
+</tr>
+<tr>
+<td><strong>Runner-backed fleet</strong></td>
+<td>as above, but thin workers + a runner</td>
+<td>in one runner</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>The second row is the one most deployments should reach and stop at. The fourth is not a scale story so much as an allocation story: it exists because a fixed set of GPUs has to be shared between embedding and summarization, and the pooled shape decides that split at deploy time.</p>
+<h2 id="running-a-fleet">Running a fleet<a class="headerlink" href="#running-a-fleet" title="Permanent link">&para;</a></h2>
+<h3 id="the-lease-measures-the-worker-not-the-task">The lease measures the worker, not the task<a class="headerlink" href="#the-lease-measures-the-worker-not-the-task" title="Permanent link">&para;</a></h3>
+<p>A worker writes <code>heartbeat_at</code> on a fixed interval while it holds a task. Another worker requeues a task whose heartbeat has gone stale for longer than <code>JMFTS_WORKER_LEASE_SECONDS</code>.</p>
+<p>This is deliberately <strong>not</strong> a task timeout. Task durations here vary by orders of magnitude with input — a one-page text file and a 400-page PDF are the same task type — so a lease keyed on elapsed runtime would need a bound on legitimate task duration that nobody can supply. It would reap work that is still running and then run it a second time, concurrently, on another host. A bound on how long a live worker may go without reporting in is a property of the loop, and that is knowable.</p>
+<p>The lease must be at least 3× the heartbeat interval; the worker refuses to start otherwise. Below that ratio one missed beat costs a running task.</p>
+<p>There is a second, cheaper recovery path: a worker recovers <strong>its own</strong> claims at startup, which is provably safe with no clock at all — a process that is starting cannot also be running the task its previous incarnation claimed. That covers a restart, and it is why <code>JMFTS_WORKER_ID</code> is set from the pod name via the downward API: a restarted pod keeps its name and reclaims its own rows immediately, rather than waiting out the lease. The lease covers everything else: a pod rescheduled under a new name, or a host that never comes back.</p>
+<p>Two settings follow from this and are worth pairing in your head:</p>
+<ul>
+<li><strong>No CPU limit on a worker pod.</strong> Throttling a worker mid-task delays its heartbeat as readily as its work, and a throttled worker that misses beats is indistinguishable from a dead one. The memory limit stays — an OOM kill is a clean death the lease already handles.</li>
+<li><strong><code>terminationGracePeriodSeconds</code> must exceed the longest task.</strong> SIGTERM is handled: the worker stops the loop and lets the in-flight task commit. Too short a grace period and the runtime follows with SIGKILL, the task dies mid-flight, and the lease reaps it — correct, and a wasted run.</li>
+</ul>
+<p>There are <strong>no readiness or liveness probes</strong> on a worker, on purpose. A worker serves no traffic, so readiness has nothing to gate, and the honest liveness signal is <code>task_queue.heartbeat_at</code>, which another worker already acts on. An HTTP probe would only report that the process is up, which is the one failure mode the lease already covers.</p>
+<h3 id="badges-route-work-to-pools">Badges route work to pools<a class="headerlink" href="#badges-route-work-to-pools" title="Permanent link">&para;</a></h3>
+<p><code>JMFTS_TASK_BADGES</code> maps a <code>task_type</code> to a badge. A worker claims the badges it was given plus anything un-badged; an un-badged worker claims everything.</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="nt">"embed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"embed"</span><span class="p">,</span><span class="w"> </span><span class="nt">"summarize"</span><span class="p">:</span><span class="w"> </span><span class="s2">"embed"</span><span class="p">,</span><span class="w"> </span><span class="nt">"summarize:llm"</span><span class="p">:</span><span class="w"> </span><span class="s2">"llm"</span><span class="p">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Badge</th>
+<th>Scarce resource</th>
+<th>Task types</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>embed</code></td>
+<td>the embedding model</td>
+<td><code>embed</code>, <code>summarize</code></td>
+</tr>
+<tr>
+<td><code>llm</code></td>
+<td>a completion</td>
+<td><code>summarize:llm</code></td>
+</tr>
+<tr>
+<td><em>(none)</em></td>
+<td>neither</td>
+<td><code>probe</code>, <code>extract:text</code>, <code>structure:declared</code>, <code>structure:inferred</code>, <code>structure:semantic</code></td>
+</tr>
+</tbody>
+</table>
+<p>Measured end to end over a real directory with <code>scripts/e2e_ingest_corpus.py</code> (5 files, 559 nodes, CPU embedding):</p>
+<table>
+<thead>
+<tr>
+<th>task_type</th>
+<th>runs</th>
+<th>total_s</th>
+<th>mean_s</th>
+<th>share</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>structure:declared</code></td>
+<td>5</td>
+<td>153.6</td>
+<td>30.72</td>
+<td>54%</td>
+</tr>
+<tr>
+<td><code>summarize</code></td>
+<td>5</td>
+<td>128.5</td>
+<td>25.69</td>
+<td>46%</td>
+</tr>
+<tr>
+<td><code>extract:text</code></td>
+<td>5</td>
+<td>0.1</td>
+<td>0.01</td>
+<td>0.04%</td>
+</tr>
+<tr>
+<td><code>probe</code></td>
+<td>5</td>
+<td>0.02</td>
+<td>0.02</td>
+<td>0.03%</td>
+</tr>
+</tbody>
+</table>
+<p>The two task types that cost anything are the two that ran the embedding model, and the two that cost nothing are the two the code documents as not embedding. So the split is not a judgement about heavy and light work — it is about which scarce resource the handler needs. Re-measure before changing the policy rather than reasoning about which work looks heavy.</p>
+<p><strong>That table is also why <code>structure:declared</code> is no longer badged.</strong> It was not a slow text splitter; it created every chunk with <code>auto_embed=True</code>, so its 30 seconds were N transformer forward passes running in a loop inside one claimed task. That embedding is now its own task type, <code>embed</code>, scoped to the node it embeds — so a document's chunks embed concurrently instead of in sequence, and the 54% above is redistributed across as many tasks as the document has chunks. The rungs dropped out of the policy in the same change: badging string work for a GPU pool would pin it to the scarce resource for nothing. This is the policy map getting <strong>smaller</strong> as it gets sharper.</p>
+<p><strong>Why <code>summarize</code> and <code>summarize:llm</code> are separate task types.</strong> Every <code>summarize</code> embeds. Only the ones whose concatenated children overflow the embedding window need a completion, and which ones those are is decided by <code>check_fit</code> <em>inside</em> the handler, after the claim — the queue cannot know it at enqueue time. So <code>summarize</code> does the fit check and either stores the concatenation itself or enqueues <code>summarize:llm</code>, which carries the <code>llm</code> badge. Before the split there was one badge for a handler needing two scarce resources, and no way to name the expensive one without also claiming the cheap one.</p>
+<div class="admonition warning">
+<p class="admonition-title">Two ways to get badges wrong, and one is silent</p>
+<p><strong>A badge no worker answers to stalls forever.</strong> Tasks sit <code>pending</code>, their nodes never leave <code>in_flight</code>, they stay out of the retrieval indexes, and nothing reports it — because a worker that does not exist cannot fail to report in. Delete a Deployment, delete its badge from the map. Turn the policy on only where every badge it names has a running pool.</p>
+<p><strong>An un-badged worker claims everything</strong>, including GPU work. One un-badged worker anywhere in a fleet will run embedding on a CPU while the card idles, and will spend money on a metered API for work the local model would have done for free. In a fleet, every worker needs a badge.</p>
+</div>
+<p>Badges filter; they do not order. <code>claim_next</code> sorts by <code>priority DESC, created_at ASC</code> across the whole claimable set, so a worker listing two badges will start a bulk task a second before an urgent one arrives. <code>priority</code> on the row is the lever for that.</p>
+<p><strong>Routing by cost and urgency</strong> is a finer badge, not a new mechanism. Split <code>llm</code> into <code>llm-fast</code> and <code>llm-bulk</code> in the ConfigMap, give the local pool both and the metered pool only the cheap one. The exact names are yours; nothing in the code knows them.</p>
+<p>This is why the routing policy is <strong>empty by default</strong> in <code>jmfts_core/config.py</code> and set in <code>deploy/k8s/10-config.yaml</code>, next to the Deployments that define the pools it names.</p>
+<h3 id="applying-the-manifests">Applying the manifests<a class="headerlink" href="#applying-the-manifests" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>-n<span class="w"> </span>jmfts<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>jmfts-worker-db<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--from-literal<span class="o">=</span><span class="nv">JMFTS_DB_PASSWORD</span><span class="o">=</span><span class="s1">'…'</span>
+kubectl<span class="w"> </span>apply<span class="w"> </span>-k<span class="w"> </span>deploy/k8s/
+</code></pre></div>
+<p>The manifests carry no registry, no storage class and no node labels, so they apply to any cluster; <code>deploy/k8s/kustomization.yaml</code> is the single place to point them at your images. The database is assumed reachable at <code>postgres.jmfts.svc.cluster.local</code> — change it in <code>10-config.yaml</code> if yours lives elsewhere.</p>
+<p><code>11-secret.example.yaml</code> is <strong>not</strong> in the kustomization, and applying it would install the literal string <code>CHANGE-ME</code> as the database password. Create the real secret first.</p>
+<table>
+<thead>
+<tr>
+<th>Deployment</th>
+<th>Image</th>
+<th>Badge</th>
+<th>Device</th>
+<th>Replicas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>jmfts-worker-cpu</code></td>
+<td><code>jmfts-worker-cpu</code></td>
+<td><code>cpu</code></td>
+<td>cpu</td>
+<td>2 (KEDA 1–12)</td>
+</tr>
+<tr>
+<td><code>jmfts-worker-gpu</code></td>
+<td><code>jmfts-worker-gpu</code></td>
+<td><code>embed</code></td>
+<td>cuda</td>
+<td><strong>= your GPU count</strong></td>
+</tr>
+<tr>
+<td><code>jmfts-worker-llm-local</code></td>
+<td><code>jmfts-worker-gpu</code></td>
+<td><code>llm</code></td>
+<td>cuda</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>jmfts-worker-llm-api</code></td>
+<td><code>jmfts-worker-cpu</code></td>
+<td><code>llm</code></td>
+<td>cpu</td>
+<td>1 (KEDA 0–4)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>One pod per GPU, one inference per pod.</strong> The embed pool requests a whole <code>nvidia.com/gpu</code>, which gives the pod exclusive access and lets the scheduler — rather than luck — decide there is room. Raising <code>replicas</code> past the number of cards leaves pods Pending forever, because the device plugin has nothing to allocate.</p>
+<h3 id="autoscaling">Autoscaling<a class="headerlink" href="#autoscaling" title="Permanent link">&para;</a></h3>
+<p>Needs <a href="https://keda.sh">KEDA</a>, applied separately because the pools work without it:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/k8s/40-keda-scaledobject.yaml
+</code></pre></div>
+<p>Two pools scale, on separate queries, because a backlog of <code>summarize:llm</code> says nothing about how much <code>probe</code> work is waiting:</p>
+<table>
+<thead>
+<tr>
+<th>Pool</th>
+<th>Range</th>
+<th>Cooldown</th>
+<th>Bounded by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>jmfts-worker-cpu</code></td>
+<td>1–12</td>
+<td>300 s</td>
+<td>CPU and the database</td>
+</tr>
+<tr>
+<td><code>jmfts-worker-llm-api</code></td>
+<td>0–4</td>
+<td>600 s</td>
+<td><strong>cost</strong> — every replica is calls against a metered service</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>embed</code> and <code>llm-local</code> pools are <strong>not</strong> scaled, because they are bounded by physical devices; an autoscaler on either could only produce Pending pods.</p>
+<p>The scalers read queue depth rather than CPU percent. A worker blocked on the database or on an LLM looks idle by CPU, and scaling on that would shrink the pool exactly when the queue is deepest.</p>
+<h3 id="talking-to-a-metered-api">Talking to a metered API<a class="headerlink" href="#talking-to-a-metered-api" title="Permanent link">&para;</a></h3>
+<p><code>JMFTS_LLM_API_KEY</code> is sent as <code>Authorization: Bearer …</code> and <strong>only when non-empty</strong>, so one worker image serves both an unauthenticated llama-server on the LAN and a paid API.</p>
+<p>HTTP 429 classifies as retryable, so the existing exponential backoff absorbs rate limiting. A 4xx that is a statement about the request — a model name that does not exist, for instance — stays PERMANENT and fails the node, because it will not fix itself.</p>
+<h3 id="two-hosts-no-kubernetes">Two hosts, no Kubernetes<a class="headerlink" href="#two-hosts-no-kubernetes" title="Permanent link">&para;</a></h3>
+<p>Useful for checking that two machines really do share the queue before any of the Kubernetes machinery is involved. Both hosts need the database reachable.</p>
+<ol>
+<li>Apply the migration once, against the shared database: <code>psql -f migrations/011_task_queue_heartbeat.sql</code></li>
+<li>On the GPU host, start a worker that answers both pools: <code>JMFTS_EMBEDDING_DEVICE=cuda jmfts-worker --badge embed --badge llm --worker-id gpu-0</code></li>
+<li>On the second host, start a CPU worker: <code>JMFTS_DB_HOST=&lt;gpu-host&gt; jmfts-worker --badge cpu --worker-id cpu-0</code></li>
+<li>Export the routing policy to both, or leave it unset and let either claim anything: <code>JMFTS_TASK_BADGES='{"embed":"embed","summarize":"embed","summarize:llm":"llm"}'</code></li>
+<li>Upload a directory and watch both <code>claimed_by</code> values appear: <code>SELECT claimed_by, task_type, count(*) FROM task_queue GROUP BY 1, 2;</code></li>
+</ol>
+<p><code>jmfts-worker --drain</code> runs until the queue is empty and exits, which is the form to use for a one-shot batch or a smoke test.</p>
+<h3 id="k3s-on-the-gpu-host">k3s on the GPU host<a class="headerlink" href="#k3s-on-the-gpu-host" title="Permanent link">&para;</a></h3>
+<p>The image store lives under the k3s data directory, and a CUDA torch image is several GB. On a host whose root filesystem is nearly full, put it somewhere with room:</p>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-sfL<span class="w"> </span>https://get.k3s.io<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh<span class="w"> </span>-s<span class="w"> </span>-<span class="w"> </span>server<span class="w"> </span>--data-dir<span class="w"> </span>/storage/k3s
+</code></pre></div>
+<p>Then install the NVIDIA device plugin, which is what makes <code>nvidia.com/gpu</code> schedulable. k3s's containerd detects the nvidia runtime when <code>nvidia-container-toolkit</code> is already installed on the host. Verify before deploying the GPU pool:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>nodes<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.items[*].status.allocatable.nvidia\.com/gpu}'</span>
+</code></pre></div>
+<p>A pod requesting <code>nvidia.com/gpu: 1</code> stays Pending forever if that comes back empty.</p>
+<h2 id="documents-not-in-this-release">Documents not in this release<a class="headerlink" href="#documents-not-in-this-release" title="Permanent link">&para;</a></h2>
+<p>The public repository ships code, <code>README.md</code>, and <code>CLAUDE.md</code>. The design and evaluation documents this manual and the <a href="../cookbook/">Cookbook</a> cite are being refined for publication and land separately, as does the BEIR harness that produces the retrieval-quality numbers. Source comments citing <code>INGEST_SPEC.md</code>, <code>OFFICE_SPEC.md</code>, <code>CORPUS.md</code>, <code>KNOWN-DEFECTS.md</code> and <code>ROADMAP.md</code> point at those pending documents.</p>
+<p>Until they land, the summaries on these pages are the available version of them. Nothing here is retracted by their absence; you just cannot read the long form yet.</p>
+<table>
+<thead>
+<tr>
+<th>Document</th>
+<th>What it holds</th>
+<th>Cited by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>INGEST_SPEC.md</code></td>
+<td>The ingest pipeline's specification — the part numbers dozens of source comments cite, including the task queue's write-mode reservations.</td>
+<td><code>task_queue</code>, <code>document_blobs</code>, the ingest worker</td>
+</tr>
+<tr>
+<td><code>KNOWN-DEFECTS.md</code></td>
+<td>The silent-failure defects below, and the embedding-window reasoning.</td>
+<td>this page, the Cookbook</td>
+</tr>
+<tr>
+<td><code>RERANKER_CRITIQUE.md</code></td>
+<td>Why the original reranker backend was deleted.</td>
+<td>this page, the Cookbook</td>
+</tr>
+<tr>
+<td><code>API_UNIFICATION_CONTRACT_NOTES.md</code></td>
+<td>Conversion history and per-endpoint divergence for the <code>@expose</code> registry.</td>
+<td>the <a href="../reference/#endpoint-families">Reference</a></td>
+</tr>
+<tr>
+<td>BEIR harness + <code>scripts/benchmark_write.py</code></td>
+<td>The measurements behind the hybrid weighting table and the write-path baseline.</td>
+<td>the Cookbook, <a href="#sizing-the-write-path-and-why-it-is-cpu-bound">above</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="known-gaps-and-hazards">Known gaps and hazards<a class="headerlink" href="#known-gaps-and-hazards" title="Permanent link">&para;</a></h2>
+<p>Two of those write-ups are worth knowing about before running this in anger, whether or not you can read them yet:</p>
+<ul>
+<li><strong><code>docs/KNOWN-DEFECTS.md</code></strong> — a set of silent-failure defects (embedding truncation past 512 tokens, unbounded chunk merging, the BM25 double-count above) found and fixed against a live instance. All are resolved in the current codebase; the document is kept because the <em>pattern</em> — a system that loses text or corrupts a statistic and reports success — is the thing worth internalizing, not just the four fixes.</li>
+<li><strong><code>docs/RERANKER_CRITIQUE.md</code></strong> — the write-up that condemned the original reranker backend, which repurposed an NLI model's entailment probability as a relevance score. Resolved on 2026-08-11 by deleting that backend: <code>?rerank=true</code> now runs a standard cross-encoder. The document is kept as the reasoning trail, and because its closing caution still holds — the shipped default model was chosen for size and CPU viability, not for measured retrieval quality. See the <a href="../cookbook/">Cookbook</a> for choosing between the two rerank methods.</li>
+</ul>
+<p>Two gaps specific to the container story, stated so they are not discovered in a runbook:</p>
+<ul>
+<li><strong>No runner Deployment ships.</strong> The thin worker works and is covered by tests; the Kubernetes half of that arrangement is not written.</li>
+<li><strong>The CUDA worker image has no measured size.</strong> The CPU and thin variants were built and measured; the <code>cu126</code> one was not, and no number is guessed for it here.</li>
+</ul>
+<h2 id="llm-backed-features-are-optional-and-jmfts-does-not-host-one">LLM-backed features are optional, and JMFTS does not host one<a class="headerlink" href="#llm-backed-features-are-optional-and-jmfts-does-not-host-one" title="Permanent link">&para;</a></h2>
+<p>RAPTOR summarization, fact extraction, and read-side synthesis (<code>/search/synthesize</code>) all call out to one OpenAI-compatible endpoint — <code>JMFTS_LLM_BASE_URL</code> / <code>JMFTS_LLM_MODEL</code> — and there is no second endpoint for the extraction path; <code>JMFTS_EXTRACTION_*</code> tunes that request, not its destination. Without one configured, those endpoints report a degraded response rather than failing outright — documents, embeddings, chunking, indexing, and every search method work regardless.</p>
+<p>One sharp edge in the defaults: leaving <code>JMFTS_LLM_*</code> blank does not mean "no LLM". Each blank field falls through to its <code>JMFTS_ENSONET_*</code> counterpart, which points at <code>http://localhost:8853</code> — the maintainer's own model orchestrator. On any other host that address is simply not listening, which is why the degraded path is what you see; set <code>JMFTS_LLM_BASE_URL</code> explicitly rather than relying on the fallback to be absent.</p>
+<p>The deliberate design choice, as of a 2026-07-23 decision: <strong>JMFTS does not reserve a GPU or pin a local model of its own.</strong> It is a client of whatever LLM the calling agent is already using. If you are integrating JMFTS behind an agent that has its own model endpoint, point these settings at that endpoint rather than standing up a separate one for JMFTS.</p>
+<p>Note the asymmetry with embedding, which is the one place JMFTS <em>does</em> own a model: the embedding model is a JMFTS decision, so JMFTS ships a way to share it (<code>/runner</code>). The completion model is somebody else's, so JMFTS ships a way to point at it and nothing more.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

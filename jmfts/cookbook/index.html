@@ -1,0 +1,2942 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for Tectum, Tau, and JMFTS">
+      
+      
+      
+        <link rel="canonical" href="https://ffwfrobotics.github.io/jmfts/cookbook/">
+      
+      
+        <link rel="prev" href="../tutorials/ingest-a-document/">
+      
+      
+        <link rel="next" href="../devops/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Cookbook - FFWF Robotics Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/ffwf.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#jmfts-cookbook" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="FFWF Robotics Docs" class="md-header__button md-logo" aria-label="FFWF Robotics Docs" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            FFWF Robotics Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Cookbook
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9 8.99 8.99 0 0 0 4 7.47V22h2v-3h2v3h2v-3h2v3h2v-3.54c2.47-1.65 4-4.46 4-7.46a9 9 0 0 0-9-9m-4 9a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m8 0a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m-4 3 1.5 3h-3z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 15a2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2m2.5 2 1.5-3 1.5 3zm5.5-2a2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2m6-4A10 10 0 0 0 12 1 10 10 0 0 0 2 11c0 2.8 1.2 5.3 3 7.1V22h14v-3.9c1.8-1.8 3-4.3 3-7.1m-5 9h-2v-2h-2v2h-2v-2H9v2H7v-2.8c-1.8-1.5-3-3.7-3-6.2a8 8 0 0 1 8-8 8 8 0 0 1 8 8c0 2.5-1.2 4.8-3 6.2z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tectum/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tectum
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tau/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tau
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  JMFTS
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../integrations/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Integrations
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../style-guide/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Style guide
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="FFWF Robotics Docs" class="md-nav__button md-logo" aria-label="FFWF Robotics Docs" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    FFWF Robotics Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tectum/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tectum
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tectum/tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tectum/tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tectum/cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tectum/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tectum/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tau/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tau
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tau/tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tau/reference/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/tau-llm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_llm
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/tau-agent-core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_agent_core
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extensions
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/rpc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RPC
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/tau-coding-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_coding_agent
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JMFTS
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JMFTS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_2" id="__nav_4_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/ingest-a-document/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ingest a document
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pick-a-rerank-method-by-what-your-corpus-already-stores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pick a rerank method by what your corpus already stores
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tune-the-hybrid-weight-to-the-corpus-dont-assume-one-number" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tune the hybrid weight to the corpus, don't assume one number
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#halfvec-is-the-safe-compression-default-dont-reach-for-4-bit-quantization-for-production" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        halfvec is the safe compression default; don't reach for 4-bit quantization for production
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#over-window-text-is-refused-so-success-needs-no-truncation-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Over-window text is refused, so success needs no truncation field
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#batch-loads-are-embedding-bound-not-database-bound" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Batch loads are embedding-bound, not database-bound
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gate-on-a-score-only-when-the-method-returns-a-real-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gate on a score only when the method returns a real one
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ingest-a-directory-and-watch-it-finish" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ingest a directory and watch it finish
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-what-a-pipeline-would-do-before-you-run-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See what a pipeline would do before you run it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#check-whether-a-format-is-actually-read-before-you-load-a-corpus-of-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Check whether a format is actually read before you load a corpus of it
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Check whether a format is actually read before you load a corpus of it">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#supply-the-patterns-a-probe-would-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Supply the patterns a probe would report
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#or-upload-one-and-look" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Or upload one and look
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#change-chunking-for-one-request" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Change chunking for one request
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Change chunking for one request">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#it-works-on-a-new-file-not-on-one-you-already-uploaded" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        It works on a new file, not on one you already uploaded
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#place-a-file-in-a-folder-without-copying-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Place a file in a folder without copying it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keep-an-upload-out-of-the-shared-knowledgebase" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keep an upload out of the shared knowledgebase
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-a-different-llm-for-summaries-than-for-everything-else" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use a different LLM for summaries than for everything else
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#add-your-own-ingest-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Add your own ingest task
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#route-expensive-tasks-to-the-hardware-that-suits-them" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Route expensive tasks to the hardware that suits them
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#halve-the-llm-bill-on-a-backfill" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Halve the LLM bill on a backfill
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#turn-a-subtree-into-a-question-answering-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Turn a subtree into a question-answering service
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keep-a-reading-pile-that-files-itself" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keep a reading pile that files itself
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#archive-transcripts-on-the-time-they-happened" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Archive transcripts on the time they happened
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#record-facts-that-can-be-corrected-without-being-erased" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Record facts that can be corrected without being erased
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#audit-a-corpus-the-way-you-lint-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audit a corpus the way you lint code
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#serve-several-audiences-from-one-appliance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Serve several audiences from one appliance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#store-prompts-in-the-corpus-they-run-against" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Store prompts in the corpus they run against
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-0-3-0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    0.3.0 — the job system
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../integrations/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integrations
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Integrations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integrations/tectum-tau/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum + Tau
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integrations/tectum-jmfts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum + JMFTS
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integrations/tau-jmfts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau + JMFTS
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integrations/full-stack-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The FFwF Full Stack Agent
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../style-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guide
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stable"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pick-a-rerank-method-by-what-your-corpus-already-stores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pick a rerank method by what your corpus already stores
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tune-the-hybrid-weight-to-the-corpus-dont-assume-one-number" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tune the hybrid weight to the corpus, don't assume one number
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#halfvec-is-the-safe-compression-default-dont-reach-for-4-bit-quantization-for-production" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        halfvec is the safe compression default; don't reach for 4-bit quantization for production
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#over-window-text-is-refused-so-success-needs-no-truncation-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Over-window text is refused, so success needs no truncation field
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#batch-loads-are-embedding-bound-not-database-bound" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Batch loads are embedding-bound, not database-bound
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gate-on-a-score-only-when-the-method-returns-a-real-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gate on a score only when the method returns a real one
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ingest-a-directory-and-watch-it-finish" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ingest a directory and watch it finish
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-what-a-pipeline-would-do-before-you-run-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See what a pipeline would do before you run it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#check-whether-a-format-is-actually-read-before-you-load-a-corpus-of-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Check whether a format is actually read before you load a corpus of it
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Check whether a format is actually read before you load a corpus of it">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#supply-the-patterns-a-probe-would-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Supply the patterns a probe would report
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#or-upload-one-and-look" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Or upload one and look
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#change-chunking-for-one-request" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Change chunking for one request
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Change chunking for one request">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#it-works-on-a-new-file-not-on-one-you-already-uploaded" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        It works on a new file, not on one you already uploaded
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#place-a-file-in-a-folder-without-copying-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Place a file in a folder without copying it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keep-an-upload-out-of-the-shared-knowledgebase" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keep an upload out of the shared knowledgebase
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-a-different-llm-for-summaries-than-for-everything-else" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use a different LLM for summaries than for everything else
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#add-your-own-ingest-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Add your own ingest task
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#route-expensive-tasks-to-the-hardware-that-suits-them" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Route expensive tasks to the hardware that suits them
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#halve-the-llm-bill-on-a-backfill" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Halve the LLM bill on a backfill
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#turn-a-subtree-into-a-question-answering-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Turn a subtree into a question-answering service
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keep-a-reading-pile-that-files-itself" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keep a reading pile that files itself
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#archive-transcripts-on-the-time-they-happened" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Archive transcripts on the time they happened
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#record-facts-that-can-be-corrected-without-being-erased" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Record facts that can be corrected without being erased
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#audit-a-corpus-the-way-you-lint-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audit a corpus the way you lint code
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#serve-several-audiences-from-one-appliance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Serve several audiences from one appliance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#store-prompts-in-the-corpus-they-run-against" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Store prompts in the corpus they run against
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="jmfts-cookbook">JMFTS — Cookbook<a class="headerlink" href="#jmfts-cookbook" title="Permanent link">&para;</a></h1>
+<p class="axis">Action × Application</p>
+
+<p>Recipes for specific JMFTS jobs — tuning matryoshka dimensions, reweighting BM25 against the vector score, adding a reranking stage.</p>
+<div class="admonition note">
+<p class="admonition-title">Marked stub on purpose</p>
+<p>The recipes below are real, drawn from JMFTS's own benchmark runs and defect write-ups — but they have not been organized into full step-by-step walkthroughs or checked against a fresh deployment, so this page stays <code>stub</code> until that pass happens.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">The measurements are not reproducible from a clone</p>
+<p>Every endpoint and setting named here is in <strong>0.2.0</strong>, and still in 0.3.0 — the <a href="../changelog/">Changelog</a>'s two breaks are the ingest planner and the evidence column, and only the second reaches a recipe below, where it is flagged in place. The evaluation harness that produced the numbers is not in the public tree — it follows separately, along with the write-ups behind the defect recipes (see <a href="../devops/#documents-not-in-this-release">Documents not in this release</a>). So the figures below are reported, not yet reproducible from a clone.</p>
+</div>
+<h2 id="pick-a-rerank-method-by-what-your-corpus-already-stores">Pick a rerank method by what your corpus already stores<a class="headerlink" href="#pick-a-rerank-method-by-what-your-corpus-already-stores" title="Permanent link">&para;</a></h2>
+<p>Every search endpoint accepts <code>?rerank=true</code>, and <code>rerank_method</code> picks the second stage. The two are not ranked best-to-worst — they have different prerequisites, and the right one depends on your corpus.</p>
+<p><strong><code>maxsim</code></strong> reuses the per-token vectors already in <code>token_embeddings</code>, so it loads no model and adds no GPU memory. On the MultiHop-RAG benchmark (609 articles, 2,255 multi-hop queries — a case BEIR's single-hop datasets don't exercise), <code>vector→maxsim@200</code> measured <strong>72.2% Hits@4 against plain vector's 58.4%</strong>, a 13.8-point gain that BM25 alone (69.4%) and the tuned hybrid (63.8%) both fall short of.</p>
+<p>The catch is the storage. Token embeddings are one row per selected token per document, so the late-interaction index is far larger than the document vectors. A candidate with no stored tokens scores 0 and sinks to the bottom of the reranked list. On a corpus where only part of the tree has been through <code>/documents/{id}/tokens</code>, that silently demotes real hits — so use <code>maxsim</code> when token coverage is complete, not merely present.</p>
+<p><strong><code>cross_encoder</code></strong> (the default) reads nothing from the database. It scores each (query, document) pair with a cross-encoder model set by <code>JMFTS_RERANKER_MODEL</code>, so it ranks any document the first stage can return, whether or not it has been tokenized. The cost is one forward pass per candidate and a second model in memory.</p>
+<p>An honest caveat, and the release notes lead with it: the shipped default, <code>cross-encoder/ms-marco-MiniLM-L-6-v2</code>, is standard and trained on relevance judgments, but it was chosen for size and CPU viability, and nobody has yet benchmarked it against <code>maxsim</code> on JMFTS's own datasets. The harness accepts <code>vector→crossenc@100</code> alongside <code>vector→maxsim@200</code> for exactly that comparison; the sweep has not been run, and the harness is not in the public tree. Until then, treat the choice as a prerequisites question, not a quality claim, and treat reranked ordering as unvalidated.</p>
+<p>Neither method degrades quietly. If the stage you asked for cannot run, the request fails rather than returning the first-stage ranking under a <code>+rerank</code> label.</p>
+<h2 id="tune-the-hybrid-weight-to-the-corpus-dont-assume-one-number">Tune the hybrid weight to the corpus, don't assume one number<a class="headerlink" href="#tune-the-hybrid-weight-to-the-corpus-dont-assume-one-number" title="Permanent link">&para;</a></h2>
+<p>JMFTS's tuned hybrid default weights vector at 0.86 against BM25 at 0.14 (internally labelled <code>v86b14</code>). That number was tuned on the BEIR suite average — it is not universal:</p>
+<table>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>vector alone</th>
+<th>tuned hybrid</th>
+<th>equal-weight <code>rrf</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TREC-COVID</td>
+<td><strong>0.841</strong></td>
+<td>0.837</td>
+<td>0.783</td>
+</tr>
+<tr>
+<td>SciFact</td>
+<td>0.677</td>
+<td>0.709 (best: <code>v60b40</code>, 0.711)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>NFCorpus</td>
+<td>0.308</td>
+<td>0.326 (best: <code>v60b40</code>, 0.333)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>FiQA</td>
+<td>0.391</td>
+<td><strong>0.399</strong></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>TREC-COVID is vector-dominant enough that the tuned hybrid weighting is <em>worse</em> than plain vector search, and equal-weight <code>rrf</code> costs 5.4 points against the tuned hybrid — the clearest evidence that a fixed weighting only earns its keep when BM25 is actually a strong leg. SciFact and NFCorpus both prefer a heavier BM25 share (<code>v60b40</code>, 0.60/0.40) than the global default.</p>
+<p>The <code>v86b14</code>/<code>v60b40</code> labels are the benchmark harness's, not the API's. On the wire it is one field on <code>POST /search/hybrid</code>: omit <code>weights</code> and you get the tuned 0.86/0.14 default, pass <code>{"vector": 0.60, "bm25": 0.40}</code> to reweight, and pass an explicit <code>{}</code> for equal-weight RRF. If retrieval quality matters more than a quick default, sweep those three shapes against a held-out query set from your own corpus rather than trusting the shipped weighting.</p>
+<h2 id="halfvec-is-the-safe-compression-default-dont-reach-for-4-bit-quantization-for-production">halfvec is the safe compression default; don't reach for 4-bit quantization for production<a class="headerlink" href="#halfvec-is-the-safe-compression-default-dont-reach-for-4-bit-quantization-for-production" title="Permanent link">&para;</a></h2>
+<p>Token embeddings can be stored at different compression levels. Internal TurboQuant experiments measured:</p>
+<ul>
+<li><code>halfvec</code> (FP16): 2× compression, <strong>no measured recall loss</strong> — this is what production uses.</li>
+<li>A 4-bit quantized type (<code>tqvec</code>, used only in one benchmark database): 5.8× compression, but only <strong>0.260 recall@10</strong> on point queries — a real quality cliff, not a rounding error.</li>
+</ul>
+<p>If you're evaluating storage tradeoffs, <code>halfvec</code> is the one with evidence behind it. The shipped schema declares no 4-bit column at all — <code>tqvec</code> lived in a benchmark database, and what survives in the release is a cast in the query path written to tolerate such a column if one existed. Nothing here suggests it is safe to run against real traffic.</p>
+<h2 id="over-window-text-is-refused-so-success-needs-no-truncation-field">Over-window text is refused, so success needs no truncation field<a class="headerlink" href="#over-window-text-is-refused-so-success-needs-no-truncation-field" title="Permanent link">&para;</a></h2>
+<p>The embedder used to truncate anything past 512 tokens and report bare success. That is fixed, and the fix is a refusal rather than a report: the chunker caps every splitting strategy to a hard size and bounds its merge step so short pieces can't glue back together into one oversized chunk, and <code>POST /documents/{id}/embed</code> <strong>raises</strong> on content that does not fit — a <code>text_too_long</code> error carrying <code>token_count</code>, <code>limit</code>, <code>chars_total</code>, and the remedy (chunk first, or ask for a document vector only with <code>with_tokens=false</code>).</p>
+<p>A successful embed therefore still answers <code>{"document_id": …, "embedded": true, "with_tokens": …, "token_count": …}</code>, and that is now safe to trust: the only path to a partial embedding is the one that errors. <code>token_count</code> counts <em>selected</em> token embeddings and was never a truncation signal — do not read it as one.</p>
+<p>The practical rule is unchanged for anything near the window: chunk first. This matters most for a corpus of conversation transcripts or long-form documentation, where individual messages or sections routinely sit near that boundary.</p>
+<h2 id="batch-loads-are-embedding-bound-not-database-bound">Batch loads are embedding-bound, not database-bound<a class="headerlink" href="#batch-loads-are-embedding-bound-not-database-bound" title="Permanent link">&para;</a></h2>
+<p>A write-path baseline (CPU embedding) measured document creation at ~1,900 ops/s <em>without</em> an embed call, dropping to ~13 ops/s once embedding is included — embedding is roughly 100× the cost of the database write itself. If you're loading a corpus in bulk: put the embedding step on CUDA before optimizing anything else, and don't expect gains from database-side tuning to matter until you do. There is no batch document-create endpoint yet (each document is a separate round trip), so a client-side embedding pipeline ahead of individual creates is the current path to real throughput.</p>
+<h2 id="gate-on-a-score-only-when-the-method-returns-a-real-one">Gate on a score only when the method returns a real one<a class="headerlink" href="#gate-on-a-score-only-when-the-method-returns-a-real-one" title="Permanent link">&para;</a></h2>
+<p>If a caller needs to <em>decide</em> something from a search score — inject retrieved context or stay silent, keep a result or discard it — the method choice stops being a quality question and becomes a correctness question. <code>hybrid</code> fuses by <strong>rank</strong>: each leg contributes <code>weight/(60+rank)</code>, so the fused score carries no information about how similar anything actually was. Measured live against a real store, a relevant query and a nonsense query returned the same five score values. <code>auto</code> frequently routes to <code>hybrid</code>, so it inherits the same property.</p>
+<p><code>vector</code> returns a cosine similarity that separates: in the same live measurement, relevant hits scored 0.46–0.54 against 0.22–0.33 for irrelevant ones on the same subtree. So: rank with <code>hybrid</code>, threshold with <code>vector</code>. A downstream consumer that applies a similarity floor — an agent memory deciding whether a recalled document is worth injecting, say — has exactly one usable method. This surfaced in the <a href="../../integrations/tau-jmfts/">Tau integration</a>, where a retrieval reflex has to make that call with no human in the loop.</p>
+<hr />
+<p>The recipes above tune the retrieval stack. The next block is the write side — getting a corpus in, and changing what happens to it on the way.</p>
+<div class="admonition note">
+<p class="admonition-title">The queue shipped in 0.1.1</p>
+<p>Every recipe in this block runs on the released appliance. See the <a href="../reference/#ingest-task-queue">Reference</a> for the queue's shape and the <a href="../devops/#ingestion-runs-on-a-queue">DevOps Manual</a> for how to run workers.</p>
+</div>
+<h2 id="ingest-a-directory-and-watch-it-finish">Ingest a directory and watch it finish<a class="headerlink" href="#ingest-a-directory-and-watch-it-finish" title="Permanent link">&para;</a></h2>
+<p><code>POST /ingest/file</code> returns as soon as the bytes are stored, so a naive loop over a directory reports success long before anything is searchable. <code>scripts/e2e_ingest_corpus.py</code> is the tool that does this correctly, and its phases are separate subcommands because the middle one takes hours:</p>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>scripts.e2e_ingest_corpus<span class="w"> </span>upload<span class="w"> </span>--state<span class="w"> </span>run.json<span class="w"> </span>~/corpus
+python<span class="w"> </span>-m<span class="w"> </span>scripts.e2e_ingest_corpus<span class="w"> </span><span class="nb">wait</span><span class="w">   </span>--state<span class="w"> </span>run.json
+python<span class="w"> </span>-m<span class="w"> </span>scripts.e2e_ingest_corpus<span class="w"> </span>index<span class="w">  </span>--state<span class="w"> </span>run.json
+python<span class="w"> </span>-m<span class="w"> </span>scripts.e2e_ingest_corpus<span class="w"> </span>report<span class="w"> </span>--state<span class="w"> </span>run.json
+</code></pre></div>
+<p><code>report</code> answers four questions and keeps them apart: did every file finish (counts by lifecycle state, plus every failed task with its error type), what did the tree become (nodes by usetype and depth), is it retrievable (document vectors, token embeddings, BM25 entries, and the same query through each search method), and what did it cost (wall clock per task type).</p>
+<p>Nothing in it is a fixture — the corpus is whatever directory you name and the report says what happened rather than asserting it matched an expectation. That is the point: run it against your own awkward files before trusting a pipeline on them.</p>
+<p>For a single file, <code>POST /ingest/file</code> then poll:</p>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="s2">"</span><span class="nv">$API</span><span class="s2">/ingest/file/</span><span class="nv">$DOC_ID</span><span class="s2">/frontier"</span>
+<span class="c1"># {"document_id": 41, "settled": "in_flight", "nodes_total": 15,</span>
+<span class="c1">#  "nodes_settled": 12, "nodes_in_flight": 3, "nodes_failed": 0, "tasks_unfinished": 5}</span>
+</code></pre></div>
+<p>Counts, never a percentage — the work below the current frontier does not exist yet, so any denominator would move backward as it is discovered.</p>
+<p>Poll on <code>tasks_unfinished</code> reaching zero, not on a timer. Zero unfinished tasks while <code>nodes_in_flight</code> is still above zero is the one reading that means <em>stuck</em>: nothing queued owes those nodes any work, so nothing is coming to finish them. A non-zero count says work is queued and says nothing about whether anything is running it — tasks that will sit <code>pending</code> forever look identical to tasks being drained right now, and only two readings apart in time tell them apart.</p>
+<h2 id="see-what-a-pipeline-would-do-before-you-run-it">See what a pipeline would do before you run it<a class="headerlink" href="#see-what-a-pipeline-would-do-before-you-run-it" title="Permanent link">&para;</a></h2>
+<p>Three ways to ask, along one axis: how much does the planner actually know about the file?</p>
+<p><strong><code>POST /ingest/explain</code> with a format name</strong> — no file, and usually a conditional answer:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="nt">"format"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pdf"</span><span class="p">,</span><span class="w"> </span><span class="nt">"options"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"structure"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"max_tokens"</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="p">}}}</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title"><code>format</code> is a detector name, not a pipeline name</p>
+<p>Valid values are what <code>detect_format</code> produces: <code>text</code>, <code>pdf</code>, <code>docx</code>, <code>pptx</code>, <code>zip</code>.
+<strong><code>markdown</code> is not one of them</strong> — nothing in the bytes separates authored markdown
+from a <code>.txt</code> opening with <code>#</code>, so both report as <code>text</code>. <code>markdown</code> <em>is</em> a valid
+pipeline name on the older synchronous <code>POST /ingest</code>, which is exactly why the mistake
+is easy. An unknown format is a legal question and answers 200, with every row
+<code>impossible</code> or <code>not_applicable</code> — which reads like "unsupported" and means "no such
+format".</p>
+</div>
+<p>Rows whose scheduling depends on something only <code>probe</code> can measure come back <code>conditional</code>, naming the patterns that would decide them and what they would become. Nothing is assumed in either direction — a plan resting on a fabricated input is a wrong answer wearing a confident shape.</p>
+<p><strong><code>POST /ingest/explain</code> with <code>patterns</code></strong> — still no file, but the conditions are now answerable:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="nt">"format"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pdf"</span><span class="p">,</span><span class="w"> </span><span class="nt">"patterns"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"has_text_layer"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">"has_outline"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">                               </span><span class="nt">"is_scanned"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">}}</span>
+</code></pre></div>
+<p>Every row is decided and <code>patterns_source</code> reads <code>supplied</code>, so nobody can mistake a hypothesis for a measurement. This is how you answer "what would happen to a scanned PDF" or "what changes if this one has no outline" without owning either file — and how you test a routing or options change against shapes your corpus does not contain yet. A key no condition consults is reported in <code>patterns_ignored</code> rather than rejected, which is what makes a misspelled pattern visible instead of silently planned as false.</p>
+<p><strong><code>POST /ingest/analyze</code> with the actual file</strong> — runs the two pure functions <code>probe</code> runs, hands the result to the same planner, and <strong>stores nothing</strong>:</p>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-sX<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$API</span><span class="s2">/ingest/analyze"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span><span class="w"> </span>-F<span class="w"> </span><span class="s2">"file=@paper.pdf"</span>
+</code></pre></div>
+<p><code>patterns_source</code> reads <code>probed</code>. Three fields wrap the plan that <code>explain</code> cannot produce: <code>file</code> (what the bytes are beside what your client claimed — a <code>.docx</code> that is really a bare ZIP shows up here rather than as an unexplained failure two tasks later), <code>probe_failed</code>, and <code>already_stored</code>.</p>
+<p>Check <code>probe_failed</code> <strong>first</strong>. Exactly one of it and <code>plan</code> is set, and a null plan means "these bytes have no schedule", not "nothing to do". <code>already_stored</code> means the appliance already holds these bytes, so an upload would deduplicate to the named node and run no plan at all — it also carries that node's recorded options, which is the only way to predict the 400 in the next recipe.</p>
+<p>All three reject an unknown option with a 400 naming it, from the same resolver the upload uses. Explaining a plan under options the run would refuse would be the exact wrong answer these endpoints exist to prevent.</p>
+<div class="admonition note">
+<p class="admonition-title">The plan is the downward pass only</p>
+<p><code>probe</code>, <code>extract:*</code>, <code>ocr</code> and the two <code>structure</code> rungs — the tasks that build the
+tree going down. <code>summarize</code>, <code>summarize:llm</code> and <code>structure:semantic</code> are never in a
+plan: they are scheduled by the settling walk after the children exist, and no function
+of <code>(format, patterns, options)</code> could decide them, because the children are what they
+depend on.</p>
+</div>
+<h2 id="check-whether-a-format-is-actually-read-before-you-load-a-corpus-of-it">Check whether a format is actually read before you load a corpus of it<a class="headerlink" href="#check-whether-a-format-is-actually-read-before-you-load-a-corpus-of-it" title="Permanent link">&para;</a></h2>
+<p><code>detect_format</code> naming your format is not the same as JMFTS reading it. <code>xlsx</code> is the live example: it is detected, it has a prober that measures its sheets, and no task extracts its text. Ask before you upload ten thousand of them.</p>
+<p><strong>Asking by format name alone will not answer this.</strong> With no bytes, the appliance has no patterns, so every row that a measurement would decide comes back <code>conditional</code> — for <code>xlsx</code> exactly as for <code>docx</code>:</p>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-sX<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$API</span><span class="s2">/ingest/explain"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-H<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span>-d<span class="w"> </span><span class="s1">'{"format": "xlsx"}'</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="nt">"format"</span><span class="p">:</span><span class="w"> </span><span class="s2">"xlsx"</span><span class="p">,</span><span class="w"> </span><span class="nt">"prober_available"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w"> </span><span class="nt">"patterns_source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w"> </span><span class="nt">"patterns_known"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w"> </span><span class="nt">"tasks"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="nt">"task"</span><span class="p">:</span><span class="w"> </span><span class="s2">"extract:text"</span><span class="p">,</span><span class="w"> </span><span class="nt">"outcome"</span><span class="p">:</span><span class="w"> </span><span class="s2">"conditional"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"if_condition_holds"</span><span class="p">:</span><span class="w"> </span><span class="s2">"enqueued"</span><span class="p">,</span><span class="w"> </span><span class="nt">"requires"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"has_text_layer"</span><span class="p">]}]}</span>
+</code></pre></div>
+<p>That is an honest answer to a question you did not quite ask. <code>conditional</code> means "decided once probe runs", and it is not the same as "yes".</p>
+<h3 id="supply-the-patterns-a-probe-would-report">Supply the patterns a probe would report<a class="headerlink" href="#supply-the-patterns-a-probe-would-report" title="Permanent link">&para;</a></h3>
+<p>Ask the question with a pattern set instead. <code>patterns_source</code> comes back <code>supplied</code> and every row is decided:</p>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-sX<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$API</span><span class="s2">/ingest/explain"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-H<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-d<span class="w"> </span><span class="s1">'{"format": "xlsx", "patterns": {"has_sheets": true, "sheet_count": 3}}'</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="nt">"format"</span><span class="p">:</span><span class="w"> </span><span class="s2">"xlsx"</span><span class="p">,</span><span class="w"> </span><span class="nt">"patterns_source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"supplied"</span><span class="p">,</span><span class="w"> </span><span class="nt">"patterns_known"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w"> </span><span class="nt">"tasks"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">   </span><span class="p">{</span><span class="nt">"task"</span><span class="p">:</span><span class="w"> </span><span class="s2">"probe"</span><span class="p">,</span><span class="w"> </span><span class="nt">"outcome"</span><span class="p">:</span><span class="w"> </span><span class="s2">"enqueued"</span><span class="p">},</span>
+<span class="w">   </span><span class="p">{</span><span class="nt">"task"</span><span class="p">:</span><span class="w"> </span><span class="s2">"extract:text"</span><span class="p">,</span><span class="w"> </span><span class="nt">"outcome"</span><span class="p">:</span><span class="w"> </span><span class="s2">"not_applicable"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"patterns.has_text_layer was not measured"</span><span class="p">},</span>
+<span class="w">   </span><span class="p">{</span><span class="nt">"task"</span><span class="p">:</span><span class="w"> </span><span class="s2">"structure:declared"</span><span class="p">,</span><span class="w"> </span><span class="nt">"outcome"</span><span class="p">:</span><span class="w"> </span><span class="s2">"not_applicable"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"extract:text is not eligible, and structure:declared depends on it"</span><span class="p">}]}</span>
+</code></pre></div>
+<p><strong><code>patterns.has_text_layer was not measured</code></strong> is the answer, and the wording is precise. It does not say the pattern is false. It says nothing on this appliance reports it for an <code>xlsx</code> — the prober measures <code>has_sheets</code>, <code>sheet_count</code> and <code>has_comments</code>, and stops there. So no row after <code>probe</code> can become eligible. Uploading one stores the bytes and settles a file node with no children: the pipeline succeeds and produces nothing to search.</p>
+<p>Run the same call for <code>docx</code> and the contrast is immediate:</p>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-sX<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$API</span><span class="s2">/ingest/explain"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-H<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-d<span class="w"> </span><span class="s1">'{"format": "docx", "patterns": {"has_text_layer": true, "has_heading_styles": true}}'</span>
+</code></pre></div>
+<p><code>extract:text</code> is <code>enqueued</code> and so is <code>structure:declared</code>. That is a format this appliance reads.</p>
+<h3 id="or-upload-one-and-look">Or upload one and look<a class="headerlink" href="#or-upload-one-and-look" title="Permanent link">&para;</a></h3>
+<p>The cheapest check on a real corpus is one file. Upload it, wait for the node to settle, and count its children. Zero children on a text-bearing document means the format was detected and never read — and the node's attempt log names the row that stopped, with the same reason string <code>explain</code> gives.</p>
+<p>The <a href="../reference/#office-formats">Reference</a> has the per-format table and the order the remaining formats are planned in.</p>
+<h2 id="change-chunking-for-one-request">Change chunking for one request<a class="headerlink" href="#change-chunking-for-one-request" title="Permanent link">&para;</a></h2>
+<p>Options are namespaced by <strong>group</strong>, where a group names the parameters one kind of task takes. Pass overrides as a JSON object beside the upload:</p>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-F<span class="w"> </span><span class="s2">"file=@paper.pdf"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-F<span class="w"> </span><span class="s1">'options={"structure": {"max_tokens": 60, "chunk_strategy": "sentence_packed"}}'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="s2">"</span><span class="nv">$API</span><span class="s2">/ingest/file"</span>
+</code></pre></div>
+<p>The <code>structure</code> group is read by both structure rungs; <code>rollup</code> is read at the settling boundary. A parameter belongs to the <strong>task</strong> that reads it, not to the format that fed it — which is why chunking parameters are not a property of <code>pdf</code>. Formats get to say where they <em>deviate</em>, and today none do.</p>
+<div class="admonition warning">
+<p class="admonition-title">A typo in an option is a 400, not a shrug</p>
+<p>Write <code>max_token</code> instead of <code>max_tokens</code> and the request fails naming the key. It is not silently ignored. A run that quietly does something other than what was asked, and reports success, is precisely the swallowed failure this project refuses to ship.</p>
+</div>
+<h3 id="it-works-on-a-new-file-not-on-one-you-already-uploaded">It works on a new file, not on one you already uploaded<a class="headerlink" href="#it-works-on-a-new-file-not-on-one-you-already-uploaded" title="Permanent link">&para;</a></h3>
+<p>Uploads deduplicate on content hash. Send bytes the appliance already holds and it resolves to the existing node — which recorded the options it was ingested under. <strong>An upload asking for different options is a 400</strong>, naming both sets:</p>
+<div class="highlight"><pre><span></span><code>Document 41 already holds these exact bytes, ingested with {'structure': {'max_tokens': 120, …}};
+this upload asks for {'structure': {'max_tokens': 60, …}}. Uploading does not re-run work that
+has already been done …
+</code></pre></div>
+<p>That refusal is the honest answer, not an obstacle to work around. Two answers are available — do the work, or say it was not done — and returning the node as though your <code>max_tokens</code> had been applied is the third one.</p>
+<p>Reprocessing an already-ingested file under new options is specified (diff <code>(task_type, param_fingerprint)</code> against the node's attempt log, enqueue only the difference, no re-parse and no duplicate tree) and <strong>is not built</strong>. Until it is:</p>
+<ol>
+<li>Settle chunking with <code>POST /ingest/analyze</code>, which stores nothing and costs one probe.</li>
+<li>Upload once the options are what you want.</li>
+<li>To change them afterwards, delete the document and upload it again.</li>
+</ol>
+<p>For a corpus-wide sweep, that means deciding before the run — which is what makes <code>analyze</code> on a handful of representative files worth the ten minutes.</p>
+<h2 id="place-a-file-in-a-folder-without-copying-it">Place a file in a folder without copying it<a class="headerlink" href="#place-a-file-in-a-folder-without-copying-it" title="Permanent link">&para;</a></h2>
+<p>Pass <code>parent_id</code> on an upload and one of two things happens, and the response says which.</p>
+<p>For <strong>new bytes</strong>, <code>parent_id</code> is ordinary parentage. The file node is a tree child and everything works the way you expect.</p>
+<p>For <strong>bytes already stored</strong>, the existing node is attached to that parent by a <code>contains</code> <strong>link</strong> — a graph edge — and the response carries <code>linked_into_parent: true</code>. Its <code>parent_id</code> is unchanged. The consequence is the part to internalize:</p>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-s<span class="w"> </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$API</span><span class="s2">/documents/</span><span class="nv">$FOLDER</span><span class="s2">/subtree"</span><span class="w">  </span><span class="c1"># does NOT include it</span>
+curl<span class="w"> </span>-s<span class="w"> </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$API</span><span class="s2">/documents/</span><span class="nv">$FOLDER</span><span class="s2">/links"</span><span class="w">    </span><span class="c1"># does</span>
+</code></pre></div>
+<p>A subtree walk is <code>path</code>/<code>parent_id</code> containment and this edge is in neither. Any UI that renders a folder from the subtree alone will show an empty folder for a file that is genuinely filed there. Read <code>linked_into_parent</code> and query links as well, or accept that a file lives in exactly one tree.</p>
+<p>The node is deliberately <strong>not</strong> reparented instead. It is a record someone else created for their own purpose; moving it as a side effect of a third party uploading the same bytes would change what their document sits under and invalidate the rollups above its new parent, silently, in a request that said nothing about moving anything. Adoption is a curator action with its own verb.</p>
+<h2 id="keep-an-upload-out-of-the-shared-knowledgebase">Keep an upload out of the shared knowledgebase<a class="headerlink" href="#keep-an-upload-out-of-the-shared-knowledgebase" title="Permanent link">&para;</a></h2>
+<p>The default is open, and that is the design: a JMFTS token means access to the shared corpus, and an upload lands readable by every principal. "Private until shared" would be the opposite assumption and would breed bugs of ignorance in every deployment that holds the stated one.</p>
+<p>The gap that default leaves is narrow and permanent. Subtree RBAC resolves strictly along the tree path — a principal's right on a document is the highest grant on any access-control root at or above it in <code>path</code>. So a file uploaded with <strong>no <code>parent_id</code></strong> has no ancestor, therefore no access-control root above it, therefore nothing governs it. <strong>A grant made later cannot reach back and cover it</strong>, because there is no path for the grant to travel down.</p>
+<p>Both fixes exist only at upload time:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Either: land it inside a subtree that is already governed.</span>
+curl<span class="w"> </span>-sX<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$API</span><span class="s2">/ingest/file?parent_id=</span><span class="nv">$GOVERNED</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span><span class="w"> </span>-F<span class="w"> </span><span class="s2">"file=@salary-review.pdf"</span>
+
+<span class="c1"># Or: make the new node its own access-control root, with you as its only grantee.</span>
+curl<span class="w"> </span>-sX<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$API</span><span class="s2">/ingest/file?private=true"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span><span class="w"> </span>-F<span class="w"> </span><span class="s2">"file=@salary-review.pdf"</span>
+</code></pre></div>
+<p><code>private=true</code> grants you <code>write</code>, not <code>read</code> — you own what you uploaded and must be able to correct it.</p>
+<div class="admonition warning">
+<p class="admonition-title"><code>private=true</code> narrows deduplication, and it has to</p>
+<p>The ordinary dedupe lookup matches any file node the caller can <em>read</em>, and an
+ungoverned node is readable by everyone. Under <code>private=true</code> the lookup is restricted
+to nodes you hold a grant on. Without that, a private upload of bytes already present
+as a shared node would resolve to the shared node and you would not be private at all.
+The cost is a second copy of the bytes when the same file exists in both forms.</p>
+</div>
+<p>Note that <code>private</code> and <code>parent_id</code> are <strong>query</strong> parameters while <code>options</code> is a form field. The bytes make the body multipart, so scalars land in the query string and only the structured parameter becomes a part.</p>
+<h2 id="use-a-different-llm-for-summaries-than-for-everything-else">Use a different LLM for summaries than for everything else<a class="headerlink" href="#use-a-different-llm-for-summaries-than-for-everything-else" title="Permanent link">&para;</a></h2>
+<p>Summarization is the only ingest step that always costs a model call, and it is the one you are most likely to want a different model for — a cheap one for bulk backfill, a strong one for the documents people actually read.</p>
+<p>It is one option key:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="nt">"options"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"rollup"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"llm_model"</span><span class="p">:</span><span class="w"> </span><span class="s2">"qwen2.5:7b-instruct"</span><span class="p">}}}</span>
+</code></pre></div>
+<p>That value rides on the task row into <code>summarize:llm</code>, which prefers it over <code>JMFTS_LLM_MODEL</code>. Empty means "use the configured default". The <strong>endpoint</strong> is still global (<code>JMFTS_LLM_BASE_URL</code>) — this selects a model at that endpoint, not a different provider.</p>
+<p>Two knobs pair with it. <code>max_children</code> (default 16) decides when a node is segmented instead of summarized, so raising it means fewer, longer summaries and lowering it means more, shorter ones. <code>penalty</code> and <code>min_segment</code> tune the PELT segmentation that produces those groups.</p>
+<p>Remember what <code>summarize</code> actually does: it concatenates its children's text while that fits the embedding window and only calls a model when it does not. A concatenated span is a stronger record of what the document said than any paraphrase, and the deciding token count is recorded either way — so <code>effective_content.method</code> tells you which happened without inferring it from the text.</p>
+<p>Where to read it moved in 0.3.0: <code>GET /documents/{id}/evidence</code> on 0.3.0 and later, <code>structured_content.effective_content</code> on 0.2.1 and earlier.</p>
+<h2 id="add-your-own-ingest-task">Add your own ingest task<a class="headerlink" href="#add-your-own-ingest-task" title="Permanent link">&para;</a></h2>
+<p>A task type is a string, a handler, and a declaration of what it reserves.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">jmfts_core.ingest_tasks</span><span class="w"> </span><span class="kn">import</span> <span class="n">TaskOutcome</span><span class="p">,</span> <span class="n">register_task_handler</span>
+
+<span class="nd">@register_task_handler</span><span class="p">(</span><span class="s2">"classify:sensitivity"</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">run_classify</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">task</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TaskOutcome</span><span class="p">:</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Document</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">scope_document_id</span><span class="p">)</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">my_classifier</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+    <span class="n">node</span><span class="o">.</span><span class="n">structured_content</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">structured_content</span> <span class="ow">or</span> <span class="p">{}),</span> <span class="s2">"sensitivity"</span><span class="p">:</span> <span class="n">label</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">TaskOutcome</span><span class="p">(</span><span class="n">detail</span><span class="o">=</span><span class="p">{</span><span class="s2">"label"</span><span class="p">:</span> <span class="n">label</span><span class="p">})</span>
+</code></pre></div>
+<p>Four rules the contract enforces, all of them worth knowing before you write the handler:</p>
+<ol>
+<li><strong>The session is the worker's</strong>, one per task. Write what the task writes and return; the worker commits, or rolls back and records the failure.</li>
+<li><strong>A handler that failed raises.</strong> It does not return a status saying so. The worker has to classify the exception to decide about a retry, and a returned string carries no exception to classify.</li>
+<li><strong><code>status="skipped"</code> is for work that was never attempted</strong>, and it requires <code>detail["reason"]</code>. A missing result is never silent.</li>
+<li><strong>Registering two different functions under one name is an error</strong>, not last-import-wins.</li>
+</ol>
+<p>Declare a <code>write_mode</code> when you enqueue: <code>self</code> if the task writes only its own node, <code>children</code> if it writes the node's children, <code>subtree</code> if it rewrites the region. The claim query uses it to refuse overlapping work, so a task that lies about its scope is how two workers end up writing the same node.</p>
+<p>If your task takes parameters, give it a group in <code>TASK_PARAM_DEFAULTS</code> rather than reading settings directly — that is what makes it visible to <code>explain</code>, overridable per request, and part of the re-run fingerprint.</p>
+<h2 id="route-expensive-tasks-to-the-hardware-that-suits-them">Route expensive tasks to the hardware that suits them<a class="headerlink" href="#route-expensive-tasks-to-the-hardware-that-suits-them" title="Permanent link">&para;</a></h2>
+<p>Two settings and one measurement.</p>
+<p>The measurement first, because the policy should follow it: on a real corpus, <code>structure:declared</code> and <code>summarize</code> are 54% and 46% of ingest wall clock, and <code>probe</code> + <code>extract:text</code> together are 0.07%. The expensive types are the ones whose handlers run the embedding model.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># On the appliance: which task types go to which pool.</span>
+<span class="nv">JMFTS_TASK_BADGES</span><span class="o">=</span><span class="s1">'{"structure:declared":"embed","structure:inferred":"embed","summarize":"embed","summarize:llm":"llm"}'</span>
+
+<span class="c1"># On a GPU host: claim the embedding work.</span>
+jmfts-worker<span class="w"> </span>--badge<span class="w"> </span>embed
+
+<span class="c1"># On a host with a local model, or a light runner forwarding to a metered API:</span>
+jmfts-worker<span class="w"> </span>--badge<span class="w"> </span>llm
+</code></pre></div>
+<p>A worker takes a <strong>list</strong> of badges, because capability and routing are different things. A host with a local LLM on a GPU can answer both the expensive badge and the cheap one; a runner that only forwards to a web API can answer only the cheap one. Listing both is what lets an otherwise-idle expensive worker fill cycles with bulk work.</p>
+<div class="admonition warning">
+<p class="admonition-title">Set a badge with no worker and ingestion stalls with no error</p>
+<p>Tasks sit <code>pending</code>, their nodes never leave <code>in_flight</code>, they stay out of the retrieval indexes, and nothing reports it. The policy is empty by default for exactly this reason. Turn it on only where every badge it names has a running pool — and give every worker in a fleet a badge, because an un-badged one claims everything including GPU work.</p>
+</div>
+<h2 id="halve-the-llm-bill-on-a-backfill">Halve the LLM bill on a backfill<a class="headerlink" href="#halve-the-llm-bill-on-a-backfill" title="Permanent link">&para;</a></h2>
+<p><code>summarize:llm</code> is the one task type that always costs a model call, which makes it the one worth batching. <code>batch_worker/</code> routes it through OpenAI's or Anthropic's batch API at roughly half price:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">OPENAI_API_KEY</span><span class="o">=</span>...
+jmfts-batch-worker<span class="w"> </span>run<span class="w"> </span>--provider<span class="w"> </span>openai<span class="w"> </span>--badge<span class="w"> </span>llm<span class="w"> </span>--model<span class="w"> </span>gpt-4o-mini
+</code></pre></div>
+<p>Try it against your own model first — the <code>mock</code> provider speaks the same protocol against a local llama-server, and holds a batch open until you finalize it so you can see the parked state:</p>
+<div class="highlight"><pre><span></span><code>jmfts-batch-worker<span class="w"> </span>run<span class="w"> </span>--provider<span class="w"> </span>mock<span class="w"> </span>--badge<span class="w"> </span>llm<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--store<span class="w"> </span>/var/lib/jmfts/batches<span class="w"> </span>--llm-url<span class="w"> </span>http://localhost:8080<span class="w"> </span>--once
+jmfts-batch-worker<span class="w"> </span>status<span class="w">                       </span><span class="c1"># what is parked</span>
+jmfts-batch-worker<span class="w"> </span>finalize<span class="w"> </span>mockbatch_…<span class="w"> </span>--store<span class="w"> </span>/var/lib/jmfts/batches
+jmfts-batch-worker<span class="w"> </span>run<span class="w"> </span>--provider<span class="w"> </span>mock<span class="w"> </span>--badge<span class="w"> </span>llm<span class="w"> </span>--store<span class="w"> </span>/var/lib/jmfts/batches<span class="w"> </span>--once
+</code></pre></div>
+<p>Two operational facts, both covered in the <a href="../devops/#batch-processing-halves-the-llm-bill">DevOps Manual</a>: a parked batch is invisible to the lease, so <code>jmfts-batch-worker stalled</code> is your only stall signal; and gather size is bounded by how much of the tree you are willing to freeze for a day, not by the provider's cap.</p>
+<div class="admonition note">
+<p class="admonition-title">Set <code>JMFTS_SUMMARIZATION_DISABLE_THINKING=true</code> for a reasoning model</p>
+<p>Measured against llama-server with <code>Qwen3.8-27B-Q4_0</code>: without it the model spent its whole token budget on the reasoning trace and returned the fragment <code>The appliance</code> as the summary. That fragment is not an error at any layer — it embeds, it stores, and the node ends up advertising an <code>effective_content</code> that says nothing.</p>
+</div>
+<hr />
+<p>The rest of the page is corpus shapes — jobs the data model already supports that do not follow obviously from "hybrid search over PostgreSQL."</p>
+<div class="admonition note">
+<p class="admonition-title">Shipped surface, unrehearsed walkthroughs</p>
+<p>Every endpoint named below exists in the current API. None of these entries has been run end to end as a written walkthrough, so treat them as designs you can build today, not procedures that were rehearsed.</p>
+</div>
+<h2 id="turn-a-subtree-into-a-question-answering-service">Turn a subtree into a question-answering service<a class="headerlink" href="#turn-a-subtree-into-a-question-answering-service" title="Permanent link">&para;</a></h2>
+<p><code>POST /search/synthesize</code> runs retrieval and then a grounded answer pass over what came back, using the OpenAI-compatible endpoint configured by <code>JMFTS_LLM_BASE_URL</code> / <code>JMFTS_LLM_MODEL</code> — JMFTS hosts no model of its own. Scope it with <code>parent_id</code> and you have "ask the docs" over exactly that slice of the corpus, with no agent framework and no separate vector-database-plus-glue deployment: ingestion, retrieval, and synthesis are one service. The answer pass is one LLM call, so its latency is your model's, not the appliance's — on a slow local model it can dominate the request.</p>
+<h2 id="keep-a-reading-pile-that-files-itself">Keep a reading pile that files itself<a class="headerlink" href="#keep-a-reading-pile-that-files-itself" title="Permanent link">&para;</a></h2>
+<p>The <code>wiki:arxiv</code>, <code>wiki:url</code>, and <code>wiki:pdf</code> ingestion pipelines are idempotent on <code>(content_hash, parent_id)</code>, so a cron job feeding a "reading" root can be dumb and safe — re-running an ingest is a no-op. From there the appliance does the librarian work: <code>raptor</code> builds summary nodes above the papers so the pile is skimmable top-down, <code>maxsim</code> answers "which paper said this phrase" at token-level precision, and typed <code>document_links</code> (<code>cites</code>, <code>derived_from</code>, …) record <em>why</em> two papers are related rather than just that they are. The <code>wiki:*</code> usetypes ship with seeded <code>usetype_presentations</code>, so <code>/view/{id}</code> renders the pile as browsable pages instead of JSON.</p>
+<h2 id="archive-transcripts-on-the-time-they-happened">Archive transcripts on the time they happened<a class="headerlink" href="#archive-transcripts-on-the-time-they-happened" title="Permanent link">&para;</a></h2>
+<p><code>documents.event_time</code> is domain time, deliberately separate from <code>created_at</code> (system time). A meeting archive backfilled from two years of recordings gets <code>event_time</code> per document, so "what was discussed around the outage" is answerable even though everything was ingested last Tuesday. The <code>transcript</code> and <code>conversation</code> pipelines target exactly this shape, and idempotent ingestion means re-running a backfill fills gaps without duplicating what already landed.</p>
+<h2 id="record-facts-that-can-be-corrected-without-being-erased">Record facts that can be corrected without being erased<a class="headerlink" href="#record-facts-that-can-be-corrected-without-being-erased" title="Permanent link">&para;</a></h2>
+<p>The triple store is bitemporal: <code>valid_from</code>/<code>valid_until</code> say when a fact was true in the world; <code>recorded_at</code> says when this store learned it. Superseding a fact sets <code>invalidated_at</code>/<code>invalidated_by</code> and leaves the old row in place. That is the exact data model a postmortem or compliance question needs — "what did we believe on March 3rd" is a query, not an archaeology project. <code>fact_type</code> (<code>atemporal | static | dynamic</code>) marks which facts are even allowed to go stale, so a staleness audit knows what to skip.</p>
+<h2 id="audit-a-corpus-the-way-you-lint-code">Audit a corpus the way you lint code<a class="headerlink" href="#audit-a-corpus-the-way-you-lint-code" title="Permanent link">&para;</a></h2>
+<p><code>POST /graph/lint</code> runs orphan, contradiction, staleness, and coverage audits in one transaction, with the thresholds in the request body. The rest of <code>/graph</code> describes structure rather than defects: <code>centrality</code> and <code>subtree-authority</code> find the load-bearing documents, <code>communities</code> finds the topic clusters nobody drew on purpose. Wire lint into the same cron that ingests, and a documentation corpus gets a health report on the same cadence as its content — the report names the orphaned page and the contradicted fact instead of a reviewer having to notice them.</p>
+<h2 id="serve-several-audiences-from-one-appliance">Serve several audiences from one appliance<a class="headerlink" href="#serve-several-audiences-from-one-appliance" title="Permanent link">&para;</a></h2>
+<p>Two features compose here. <code>search_contexts</code> are named, server-stored search presets — method, weights, <code>usetype</code>/<code>parent_id</code> filters — referenced by name via any search endpoint's <code>context</code> param, so "support search" and "research search" become one-word choices instead of client-side parameter lore. Subtree RBAC scopes who sees what: a grant on a document makes it an access-control root, grants are additive down the <code>path</code>, and <code>write</code> implies <code>read</code>. One appliance holds several projects' corpora with per-principal visibility — with one sharp default to respect: a document under no access-control root is unprotected.</p>
+<h2 id="store-prompts-in-the-corpus-they-run-against">Store prompts in the corpus they run against<a class="headerlink" href="#store-prompts-in-the-corpus-they-run-against" title="Permanent link">&para;</a></h2>
+<p><code>/templates</code> is prompt-template CRUD plus <code>render</code> and <code>search</code>. The non-obvious half is the <code>search</code>: the prompt library is itself a corpus, so "which prompt do we have for summarizing incident timelines" is a retrieval query, not a grep through a <code>prompts/</code> directory. <code>render</code> produces the filled prompt server-side, so every caller shares one canonical copy instead of a locally drifted paste — and because templates are documents, they get the same tree placement and links as everything else.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

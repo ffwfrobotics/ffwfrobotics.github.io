@@ -1,0 +1,3900 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for Tectum, Tau, and JMFTS">
+      
+      
+      
+        <link rel="canonical" href="https://ffwfrobotics.github.io/jmfts/reference/">
+      
+      
+        <link rel="prev" href="../devops/">
+      
+      
+        <link rel="next" href="../changelog/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Reference - FFWF Robotics Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/ffwf.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#jmfts-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="FFWF Robotics Docs" class="md-header__button md-logo" aria-label="FFWF Robotics Docs" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            FFWF Robotics Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Reference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9 8.99 8.99 0 0 0 4 7.47V22h2v-3h2v3h2v-3h2v3h2v-3.54c2.47-1.65 4-4.46 4-7.46a9 9 0 0 0-9-9m-4 9a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m8 0a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m-4 3 1.5 3h-3z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 15a2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2m2.5 2 1.5-3 1.5 3zm5.5-2a2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2m6-4A10 10 0 0 0 12 1 10 10 0 0 0 2 11c0 2.8 1.2 5.3 3 7.1V22h14v-3.9c1.8-1.8 3-4.3 3-7.1m-5 9h-2v-2h-2v2h-2v-2H9v2H7v-2.8c-1.8-1.5-3-3.7-3-6.2a8 8 0 0 1 8-8 8 8 0 0 1 8 8c0 2.5-1.2 4.8-3 6.2z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tectum/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tectum
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tau/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tau
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  JMFTS
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../integrations/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Integrations
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../style-guide/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Style guide
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="FFWF Robotics Docs" class="md-nav__button md-logo" aria-label="FFWF Robotics Docs" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    FFWF Robotics Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tectum/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tectum
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tectum/tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tectum/tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tectum/cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tectum/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tectum/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tau/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tau
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tau/tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tau/reference/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/tau-llm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_llm
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/tau-agent-core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_agent_core
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extensions
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/rpc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RPC
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/tau-coding-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_coding_agent
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JMFTS
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JMFTS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_2" id="__nav_4_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/ingest-a-document/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ingest a document
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#data-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#auth-and-cors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auth and CORS
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#endpoint-families" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Endpoint families
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Endpoint families">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#calling-them-from-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Calling them from Python
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#response-envelope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response envelope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scoring-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scoring parameters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#embedding-and-llm-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Embedding and LLM configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#one-ingest-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One ingest path
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#office-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Office formats
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Office formats">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-read-and-what-only-measured" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is read, and what only measured
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-the-scheduler-decides-per-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How the scheduler decides, per format
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-the-markdown-looks-like" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the markdown looks like
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deliberately-not-covered" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deliberately not covered
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-corrupt-package-fails-once-not-three-times" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A corrupt package fails once, not three times
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-three-dependency-tiers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The three dependency tiers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is_encrypted-is-why-olefile-is-in-the-base-install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        is_encrypted is why olefile is in the base install
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-planned-and-in-what-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is planned, and in what order
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ingest-task-queue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ingest task queue
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ingest task queue">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#row-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Row lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#columns-beyond-the-obvious" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Columns beyond the obvious
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#no-endpoint-reads-the-queue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        No endpoint reads the queue
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#upload-semantics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upload semantics
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Upload semantics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#private-and-the-ungoverned-node-gap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        private and the ungoverned-node gap
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plan-inspection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plan inspection
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ingest-frontier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ingest frontier
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ingest-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ingest options
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workers-and-routing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workers and routing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Workers and routing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-lease-is-not-a-task-timeout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The lease is not a task timeout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#badges-filter-they-do-not-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Badges filter, they do not order
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#batch-processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Batch processing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vector-indexes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vector indexes
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-0-3-0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    0.3.0 — the job system
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../integrations/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integrations
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Integrations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integrations/tectum-tau/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum + Tau
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integrations/tectum-jmfts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum + JMFTS
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integrations/tau-jmfts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau + JMFTS
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integrations/full-stack-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The FFwF Full Stack Agent
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../style-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guide
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stable"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#data-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#auth-and-cors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auth and CORS
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#endpoint-families" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Endpoint families
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Endpoint families">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#calling-them-from-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Calling them from Python
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#response-envelope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response envelope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scoring-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scoring parameters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#embedding-and-llm-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Embedding and LLM configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#one-ingest-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One ingest path
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#office-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Office formats
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Office formats">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-read-and-what-only-measured" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is read, and what only measured
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-the-scheduler-decides-per-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How the scheduler decides, per format
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-the-markdown-looks-like" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the markdown looks like
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deliberately-not-covered" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deliberately not covered
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-corrupt-package-fails-once-not-three-times" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A corrupt package fails once, not three times
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-three-dependency-tiers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The three dependency tiers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is_encrypted-is-why-olefile-is-in-the-base-install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        is_encrypted is why olefile is in the base install
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-planned-and-in-what-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is planned, and in what order
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ingest-task-queue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ingest task queue
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ingest task queue">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#row-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Row lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#columns-beyond-the-obvious" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Columns beyond the obvious
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#no-endpoint-reads-the-queue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        No endpoint reads the queue
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#upload-semantics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upload semantics
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Upload semantics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#private-and-the-ungoverned-node-gap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        private and the ungoverned-node gap
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plan-inspection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plan inspection
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ingest-frontier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ingest frontier
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ingest-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ingest options
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workers-and-routing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workers and routing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Workers and routing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-lease-is-not-a-task-timeout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The lease is not a task timeout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#badges-filter-they-do-not-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Badges filter, they do not order
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#batch-processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Batch processing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vector-indexes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vector indexes
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="jmfts-reference">JMFTS — Reference<a class="headerlink" href="#jmfts-reference" title="Permanent link">&para;</a></h1>
+<p class="axis">Cognition × Application</p>
+
+<p>Table schema, query API, scoring parameters, and the pgvector index definitions.</p>
+<div class="admonition note">
+<p class="admonition-title">Draft</p>
+<p>Built for lookup, not narrative reading. Endpoint tables give verb, path, and purpose — not every parameter; a running instance's <code>/openapi.json</code> (or <code>/docs</code>) is the exact contract. Tables are checked against <code>schema.sql</code>, <code>jmfts_core/config.py</code>, and the <code>@expose</code> registry that generates the routes.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">This page describes 0.2.0. The current release is 0.3.0.</p>
+<p>Two releases have landed since this page was written, and it has not moved to either: 0.2.1 added the spreadsheet task types, the Turtle surface and two extras, and 0.3.0 replaced the ingest planner. The <a href="../changelog/">Changelog</a> says what each one changed, and <a href="../release-0-3-0/">0.3.0 — the job system</a> runs the changes rather than describing them.</p>
+<p>Two sections here have been corrected in place because they described designs that no longer exist: <a href="#one-ingest-path">One ingest path</a> and the <code>.xlsx</code> row under <a href="#office-formats">Office formats</a>. Everything else is 0.2.0's surface, which 0.3.0 is a superset of except for the two breaks the changelog names.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Defaults come from the code, not from <code>.env.example</code></p>
+<p>Settings tables quote the built-in default in <code>jmfts_core/config.py</code>. <code>.env.example</code> ships a <em>filled-in</em> sample for the LLM block (an Ollama URL and a model name) rather than the blank built-in — copy it and you have configured an endpoint, not accepted a default.</p>
+</div>
+<h2 id="data-model">Data model<a class="headerlink" href="#data-model" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Holds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>documents</code></td>
+<td>The tree. <code>parent_id</code> + a <code>path</code> JSONB array of ancestor ids for subtree queries; <code>content</code>; a 768-dim <code>embed</code> vector; <code>usetype</code> for classification; a nullable explicit sibling <code>position</code>; <code>created_at</code>/<code>updated_at</code> (system time) and a separate nullable <code>event_time</code> (domain time, for imported content whose ingest time means nothing — transcripts, backfills). 0.1.1 added <code>settled</code> (<code>in_flight</code>, <code>settled</code> or <code>failed</code>), the ingestion lifecycle flag the retrieval indexes are partial on — an <code>in_flight</code> node is invisible to search until its subtree finishes.</td>
+</tr>
+<tr>
+<td><code>token_embeddings</code></td>
+<td>Per-token late-interaction vectors — <code>embed_256</code>/<code>384</code>/<code>512</code> as <code>halfvec</code>, one row per selected token, <code>tier</code> marking which top-N% importance band it fell in. Only 256-dim is populated in a default deployment; 384/512 exist for benchmarking retention levels.</td>
+</tr>
+<tr>
+<td><code>document_blobs</code></td>
+<td>Uploaded bytes for <code>POST /ingest/file</code>. One row per document (<code>UNIQUE</code>), holding the <code>lob_oid</code> of a Postgres <strong>large object</strong> plus <code>mime_type</code>, <code>byte_size</code>, <code>content_hash</code>. The bytes are not in the table: <code>ON DELETE CASCADE</code> removes the row and orphans the object, so deletion goes through <code>BlobRepository</code> (<code>lo_unlink</code> first), and <code>pg_dump</code> in plain format needs <code>-b</code> or the restore points at bytes that no longer exist.</td>
+</tr>
+<tr>
+<td><code>task_queue</code></td>
+<td>The ingest scheduler's rows — see <a href="#ingest-task-queue">Ingest task queue</a> for the column set and the lifecycle. <code>scope_document_id</code> + <code>write_mode</code> (<code>self</code>, <code>children</code> or <code>subtree</code>) declare what region of the tree a task <strong>reserves</strong> while it runs, and the claim query refuses a task whose region overlaps one already <code>claimed</code>, <code>running</code> or <code>batched</code>. Retry policy lives in <code>TaskQueueRepository.fail()</code>, not in SQL.</td>
+</tr>
+<tr>
+<td><code>document_links</code></td>
+<td>Typed graph edges between documents (<code>link_type</code>, a <code>score</code>, JSONB <code>metadata</code>).</td>
+</tr>
+<tr>
+<td><code>predicates</code> / <code>triples</code></td>
+<td>The knowledge graph. A triple is <code>(subject_id, predicate_id, object_id)</code>, unique per combination, with a bitemporal split: <code>valid_from</code>/<code>valid_until</code> (when the fact was true) vs. <code>created_at</code>/<code>recorded_at</code> (when this store learned it). <code>fact_type</code> is <code>atemporal | static | dynamic</code> (Zep/Graphiti taxonomy). Superseding a fact sets <code>invalidated_at</code>/<code>invalidated_by</code> rather than deleting the row.</td>
+</tr>
+<tr>
+<td><code>search_indexes</code>, <code>search_index_members</code>, <code>search_index_entries</code>, <code>search_term_postings</code>, <code>search_term_stats</code></td>
+<td>The BM25 inverted index: which subtrees belong to an index, per-document length (for normalization), term→document postings, and per-term document frequency (for IDF). <code>search_indexes.config</code> carries <code>k1</code>/<code>b</code>; <code>capabilities</code> flags whether an index supports <code>bm25</code>/<code>maxsim</code>.</td>
+</tr>
+<tr>
+<td><code>search_contexts</code></td>
+<td>Named, reusable search-parameter presets (method, weights, <code>usetype</code>/<code>parent_id</code> filters) stored as JSONB <code>config</code>, referenced by name from any search endpoint's <code>context</code> param.</td>
+</tr>
+<tr>
+<td><code>usetype_presentations</code></td>
+<td>Per-<code>usetype</code> rendering rules for <code>/view/{id}</code> — which renderer, how children collapse, how links render. Seeded for the built-in <code>wiki:*</code> taxonomy and core usetypes (<code>markdown</code>, <code>chunk</code>, <code>conversation</code>, <code>raw</code>, <code>transcript</code>).</td>
+</tr>
+<tr>
+<td><code>principals</code>, <code>api_tokens</code>, <code>access_grants</code></td>
+<td>Subtree RBAC. The shared owner bearer token bypasses all checks and has no row. A grant on a document makes it an <strong>access-control root</strong>; a principal's effective right on any document is the highest grant on any ACR at or above it on its <code>path</code> (grants are additive; <code>write</code> implies <code>read</code>). A document under no ACR is unprotected — single-user default.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="auth-and-cors">Auth and CORS<a class="headerlink" href="#auth-and-cors" title="Permanent link">&para;</a></h2>
+<p>Every request needs <code>Authorization: Bearer &lt;token&gt;</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JMFTS_API_TOKEN</code></td>
+<td>blank → ephemeral, printed to stdout at boot</td>
+<td>Set a value to pin a fixed token. A blank token never means "allow all."</td>
+</tr>
+<tr>
+<td><code>JMFTS_CORS_ORIGINS</code></td>
+<td><code>[]</code></td>
+<td>JSON list of allowed browser origins. Empty = server-to-server only. <code>"*"</code> is rejected.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="endpoint-families">Endpoint families<a class="headerlink" href="#endpoint-families" title="Permanent link">&para;</a></h2>
+<p>All routes are generated from a service-layer <code>@expose</code> registry (<code>jmfts_core/services/</code>), not hand-written per-route: one decorated service method is both the in-process Python call and the REST route, and <code>tests/test_api_parity.py</code> asserts the registry and the mounted routes stay in bijection. <code>docs/API_UNIFICATION_CONTRACT_NOTES.md</code>, which carries the conversion history and the per-endpoint divergence notes, is one of the design documents held back from the public tree (see <a href="../devops/#documents-not-in-this-release">Documents not in this release</a>).</p>
+<table>
+<thead>
+<tr>
+<th>Family</th>
+<th>Prefix</th>
+<th>Covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Documents</td>
+<td><code>/documents</code></td>
+<td>CRUD, tree navigation (<code>roots</code>/<code>children</code>/<code>ancestors</code>/<code>siblings</code>/<code>subtree</code>), <code>embed</code>, <code>tokens</code>, <code>split</code>, <code>chunk</code>, <code>segment</code>, <code>raptor</code> (+ <code>raptor/portfolio</code>), <code>extract-facts</code>, <code>links</code>.</td>
+</tr>
+<tr>
+<td>Ingest</td>
+<td><code>/ingest</code></td>
+<td>One path, two doors onto it — see <a href="#one-ingest-path">One ingest path</a>. <code>POST /ingest/file</code> is a multipart upload that stores bytes, enqueues <code>probe</code> and <strong>returns before the work is done</strong>; <code>POST /ingest</code> takes content plus a named entry point and drains that document's tasks before returning. <code>GET /ingest/pipelines</code> lists the entry points, <code>file/{id}/frontier</code> reports what is still queued, and <code>explain</code> / <code>analyze</code> answer what a document will run before it runs.</td>
+</tr>
+<tr>
+<td>Runner</td>
+<td><code>/runner</code></td>
+<td>Vectors for text, behind <code>JMFTS_RUNNER_KEY</code> rather than the API token. Owns no documents. This is what a worker set to <code>JMFTS_RUNNER_URL</code> calls instead of loading the model.</td>
+</tr>
+<tr>
+<td>Conversations</td>
+<td><code>/conversations</code></td>
+<td><code>ingest</code> — a whole conversation into the tree in one call.</td>
+</tr>
+<tr>
+<td>Search</td>
+<td><code>/search</code></td>
+<td><code>vector</code>, <code>fulltext</code>, <code>bm25</code>, <code>maxsim</code>, <code>hybrid</code>, <code>synthesize</code>, <code>auto</code>, plus a convenience <code>GET /search/?q=</code>.</td>
+</tr>
+<tr>
+<td>Search contexts</td>
+<td><code>/search-contexts</code></td>
+<td>CRUD for the named parameter presets any search endpoint's <code>context</code> param resolves.</td>
+</tr>
+<tr>
+<td>Triples</td>
+<td><code>/triples</code></td>
+<td>Predicates CRUD, triple create/query/path-find, <code>invalidate</code>, <code>supersede</code>.</td>
+</tr>
+<tr>
+<td>Templates</td>
+<td><code>/templates</code></td>
+<td>Prompt-template CRUD, <code>render</code>, <code>search</code>.</td>
+</tr>
+<tr>
+<td>Graph</td>
+<td><code>/graph</code></td>
+<td><code>centrality</code>, <code>subtree-authority</code>, <code>spines</code>, <code>communities</code>, <code>neighbors</code>, <code>diff</code>, <code>stats</code>, <code>lint</code>.</td>
+</tr>
+<tr>
+<td>Indexes</td>
+<td><code>/indexes</code></td>
+<td>Index CRUD, root membership, <code>refresh</code>, <code>index-document/{id}</code>.</td>
+</tr>
+<tr>
+<td>View</td>
+<td><code>/view</code></td>
+<td>Rendered read side: <code>/view/{id}</code>, <code>expand-children</code>, <code>breadcrumbs</code>, <code>back-references</code>.</td>
+</tr>
+<tr>
+<td>Presentations</td>
+<td><code>/usetype-presentations</code></td>
+<td>CRUD for the per-<code>usetype</code> rendering rules <code>/view</code> applies.</td>
+</tr>
+<tr>
+<td>Access</td>
+<td><code>/access</code></td>
+<td>Principals, their tokens, and per-document grants — the subtree RBAC surface.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="calling-them-from-python">Calling them from Python<a class="headerlink" href="#calling-them-from-python" title="Permanent link">&para;</a></h3>
+<p>Do not write a client against <code>/openapi.json</code>. One already exists, and it is generated from the same route table.</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>jmfts-client
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">jmfts_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">RemoteJmftsClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmfts_client.contracts</span><span class="w"> </span><span class="kn">import</span> <span class="n">DocumentCreate</span><span class="p">,</span> <span class="n">HybridSearchRequest</span>
+
+<span class="k">with</span> <span class="n">RemoteJmftsClient</span><span class="p">(</span><span class="s2">"http://localhost:8100"</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="s2">"..."</span><span class="p">)</span> <span class="k">as</span> <span class="n">jmfts</span><span class="p">:</span>
+    <span class="n">jmfts</span><span class="o">.</span><span class="n">create_document</span><span class="p">(</span><span class="n">DocumentCreate</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Ada"</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="s2">"Ada Lovelace"</span><span class="p">))</span>
+    <span class="n">hits</span> <span class="o">=</span> <span class="n">jmfts</span><span class="o">.</span><span class="n">hybrid_search</span><span class="p">(</span><span class="n">HybridSearchRequest</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="s2">"Ada"</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span>
+</code></pre></div>
+<p><code>jmfts-client</code> is a <strong>second distribution</strong> shipped from the same repository. It carries <code>httpx</code> and <code>pydantic</code> and nothing else — no SQLAlchemy, no numpy, no torch — so calling an appliance does not mean installing one.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>jmfts</code></th>
+<th><code>jmfts-client</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Holds</td>
+<td>the appliance</td>
+<td>the wire contracts plus <code>RemoteJmftsClient</code></td>
+</tr>
+<tr>
+<td>Dependencies</td>
+<td>the full stack</td>
+<td><code>httpx</code>, <code>pydantic</code></td>
+</tr>
+<tr>
+<td>Depends on</td>
+<td><code>jmfts-client==&lt;same version&gt;</code></td>
+<td>nothing in this repository</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The two release in lockstep: one number, two wheels, one tag.</strong> <code>_verbs.py</code> is generated from the server's resolved route table, so a client built from a different release was generated from a different surface — and that mismatch does not fail at install time. It fails at call time, as a verb that is missing or whose parameters moved. The <code>==</code> pin is what makes the pair one product.</p>
+<p>The contracts are the single definition of every request and response shape. Both the in-process <code>LocalJmftsClient</code> and <code>RemoteJmftsClient</code> validate against the same classes, which matters when one process holds both — the <code>JMFTS_RUNNER_URL</code> case, where two copies equal by value and unequal by <code>isinstance</code> would bite.</p>
+<p>So one <code>@expose</code>-decorated service method becomes four things: a REST route, an entry in the OpenAPI document, a <code>LocalJmftsClient</code> method, and a <code>RemoteJmftsClient</code> method. Nobody hand-writes the last three.</p>
+<p>A caller-facing note: several <code>GET</code> endpoints across these families lost their FastAPI-level numeric/pattern query-param validation during the migration to the <code>@expose</code> registry (a raw scalar query param carries no <code>Query(ge=..., pattern=...)</code> without importing FastAPI into the core layer). Examples: <code>GET /search/</code>'s <code>limit</code> no longer enforces <code>1–100</code> server-side; several <code>/graph/*</code> <code>metric</code>/<code>scope</code> params no longer enforce their allowed-value pattern. <strong>Request-body</strong> (<code>BaseModel</code>) field constraints are unaffected — <code>SearchRequest.limit</code>, <code>ChunkRequest.max_tokens</code>, <code>LintRequest</code>'s thresholds, and similar all still validate. If you are calling a <code>GET</code> endpoint's scalar query params with untrusted values, validate them client-side rather than relying on a 422.</p>
+<h2 id="response-envelope">Response envelope<a class="headerlink" href="#response-envelope" title="Permanent link">&para;</a></h2>
+<p><code>DocumentResponse</code>: <code>id</code>, <code>parent_id</code>, <code>title</code>, <code>content</code>, <code>structured_content</code>, <code>path</code>, <code>usetype</code>, <code>position</code>, <code>event_time</code>, <code>created_at</code>, <code>updated_at</code>, <code>content_hash</code>. <code>embed</code> is opt-in (<code>?include_embed=true</code>) and omitted otherwise — every route that returns documents serializes through this one converter, so the field set is identical across <code>/documents</code>, <code>/search/*</code>, <code>/triples/*</code>, and <code>/templates/*</code>.</p>
+<p><code>SearchResponse</code>: <code>results[]</code> (each a scored <code>DocumentResponse</code>), <code>total</code>, <code>latency_ms</code>.</p>
+<h2 id="scoring-parameters">Scoring parameters<a class="headerlink" href="#scoring-parameters" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Default</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JMFTS_BM25_K1</code></td>
+<td><code>1.2</code></td>
+<td>Term-frequency saturation.</td>
+</tr>
+<tr>
+<td><code>JMFTS_BM25_B</code></td>
+<td><code>0.75</code></td>
+<td>Length normalization strength.</td>
+</tr>
+<tr>
+<td><code>JMFTS_TOKEN_TOP_PERCENT</code></td>
+<td><code>0.50</code></td>
+<td>Fraction of a document's tokens kept for late interaction, selected by MMR + attention variance + stopword penalties. Half is a deliberately generous default — it keeps the tiered <code>tier&lt;=X</code> bands usable for benchmarking rather than sizing the index for production.</td>
+</tr>
+<tr>
+<td><code>JMFTS_TOKEN_EMBED_DIMS</code></td>
+<td><code>[256]</code></td>
+<td>Matryoshka dims actually populated. The schema reserves <code>embed_384</code>/<code>embed_512</code> columns and indexes them, but nothing writes them unless a deployment opts in here.</td>
+</tr>
+<tr>
+<td><code>JMFTS_BM25_EXCLUDE_USETYPES</code></td>
+<td><code>["entity", "summary"]</code></td>
+<td>Usetypes held out of the BM25 index — derived nodes, not source text.</td>
+</tr>
+<tr>
+<td><code>JMFTS_SEARCH_EXCLUDE_USETYPES</code></td>
+<td><code>["entity", "summary"]</code></td>
+<td>Usetypes held out of search results.</td>
+</tr>
+<tr>
+<td>Hybrid vector/BM25 weight</td>
+<td>corpus-dependent</td>
+<td>Not a single global default — see the <a href="../cookbook/">Cookbook</a> for measured weightings and why the right one varies by dataset.</td>
+</tr>
+<tr>
+<td><code>JMFTS_RERANKER_MODEL</code></td>
+<td><code>cross-encoder/ms-marco-MiniLM-L-6-v2</code></td>
+<td>Second-stage model for <code>?rerank=true&amp;rerank_method=cross_encoder</code>. Any Hub cross-encoder.</td>
+</tr>
+<tr>
+<td><code>JMFTS_RERANKER_DEVICE</code></td>
+<td>blank</td>
+<td>Blank follows <code>JMFTS_EMBEDDING_DEVICE</code>. Pin only to split the two across devices.</td>
+</tr>
+<tr>
+<td><code>JMFTS_RERANKER_MAX_LENGTH</code></td>
+<td><code>512</code></td>
+<td>Tokens per (query, document) pair.</td>
+</tr>
+<tr>
+<td><code>JMFTS_RERANKER_BATCH_SIZE</code></td>
+<td><code>32</code></td>
+<td>Pairs scored per forward pass.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="embedding-and-llm-configuration">Embedding and LLM configuration<a class="headerlink" href="#embedding-and-llm-configuration" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Default</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JMFTS_EMBEDDING_MODEL</code></td>
+<td><code>nomic-ai/modernbert-embed-base</code></td>
+<td>Produces the 768-dim document vector and the token-level embeddings.</td>
+</tr>
+<tr>
+<td><code>JMFTS_EMBEDDING_DEVICE</code></td>
+<td><code>cpu</code></td>
+<td>Set <code>cuda</code> for GPU-accelerated bulk ingestion — see the <a href="../devops/">DevOps Manual</a> for why this matters.</td>
+</tr>
+<tr>
+<td><code>JMFTS_EMBEDDING_BATCH_SIZE</code></td>
+<td><code>32</code></td>
+<td>Texts per forward pass on the document path; <code>JMFTS_TOKEN_BATCH_SIZE</code> (also <code>32</code>) is the token path's.</td>
+</tr>
+<tr>
+<td><code>JMFTS_EMBEDDING_TOKEN_WINDOW</code></td>
+<td><code>512</code></td>
+<td>The token/MaxSim path's cap. It is a <strong>memory</strong> budget, not a model limit: token embedding runs the transformer with <code>output_attentions=True</code>, which materializes every layer's attention matrix (~277 MB at 512, ~4.4 GB at 2048). Text over the window is refused, not truncated.</td>
+</tr>
+<tr>
+<td><code>JMFTS_EMBEDDING_DOC_WINDOW</code></td>
+<td><code>8192</code></td>
+<td>The document-vector path's cap — the model's real limit.</td>
+</tr>
+<tr>
+<td><code>JMFTS_CHUNK_MAX_CHARS</code></td>
+<td><code>1800</code></td>
+<td>Hard cap every chunking strategy is held to, sized to land inside the token window (~5 chars per subword token, plus prefix headroom).</td>
+</tr>
+<tr>
+<td><code>JMFTS_LLM_BASE_URL</code> / <code>JMFTS_LLM_MODEL</code> / <code>JMFTS_LLM_TIMEOUT</code></td>
+<td>blank / blank / <code>0</code></td>
+<td>OpenAI-compatible endpoint for RAPTOR summarization, fact extraction, and read-side synthesis. Each blank field falls back to its <code>JMFTS_ENSONET_*</code> counterpart, so what a stock instance actually dials is the fallback, not nothing. JMFTS does not host its own model — see the <a href="../devops/">DevOps Manual</a>.</td>
+</tr>
+<tr>
+<td><code>JMFTS_ENSONET_URL</code> / <code>_MODEL</code> / <code>_TIMEOUT</code></td>
+<td><code>http://localhost:8853</code> / <code>THUDM_GLM4_32b</code> / <code>180.0</code></td>
+<td>The fallback the blanks above resolve to — the maintainer's own model orchestrator. Point <code>JMFTS_LLM_*</code> at your endpoint and these stop being reachable.</td>
+</tr>
+</tbody>
+</table>
+<p>There is no separate extraction endpoint. Fact extraction shares the LLM settings above; <code>JMFTS_EXTRACTION_*</code> tunes the extraction <em>request</em> (<code>MAX_FACTS</code> <code>5</code>, <code>CONFIDENCE_THRESHOLD</code> <code>0.5</code>, <code>ENTITY_SIMILARITY_THRESHOLD</code> <code>0.8</code>, <code>TEMPERATURE</code> <code>0.1</code>, <code>MAX_TOKENS</code> <code>4096</code>), not where it is sent.</p>
+<h2 id="one-ingest-path">One ingest path<a class="headerlink" href="#one-ingest-path" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Corrected for 0.3.0</p>
+<p>Through 0.2.1 this section described two unrelated designs under one prefix, and said <code>POST /ingest</code> was being retired. It was not retired — it was moved onto the queue, and the design it belonged to was deleted. <code>execute_pipeline</code> and the <code>PipelineDefinition</code> registry are gone.</p>
+</div>
+<p><code>/ingest</code> has one implementation and two doors onto it. Both create a file node with stored bytes and run queue tasks against it; they differ in who waits and in whether the format is named or measured.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>POST /ingest</code></th>
+<th><code>POST /ingest/file</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Takes</td>
+<td>content plus a named <strong>entry point</strong></td>
+<td>bytes; the format is <strong>detected</strong></td>
+</tr>
+<tr>
+<td>Names</td>
+<td><code>markdown</code>, <code>raw</code>, <code>conversation</code>, <code>transcript</code>, <code>wiki:url</code>, <code>wiki:arxiv</code>, <code>wiki:pdf</code></td>
+<td><code>text</code>, <code>pdf</code>, <code>docx</code>, <code>pptx</code>, <code>xlsx</code>, <code>zip</code>, … from <code>detect_format</code></td>
+</tr>
+<tr>
+<td>Returns</td>
+<td>a finished tree, in the request</td>
+<td>an <code>in_flight</code> node and a queued <code>probe</code></td>
+</tr>
+<tr>
+<td>Who drains the queue</td>
+<td>the request, for that document only</td>
+<td>a <code>jmfts-worker</code> process</td>
+</tr>
+<tr>
+<td>Since</td>
+<td>0.1.0, on the queue since 0.3.0</td>
+<td>0.1.1</td>
+</tr>
+</tbody>
+</table>
+<p>Same tasks, same handlers, same settling walk. <strong>An entry point is not a stage list.</strong> <code>GET /ingest/pipelines</code> names the seven and reports, for each, where its content comes from and which options it resolves to — two facts <code>probe</code> cannot supply. Which tasks a document actually runs is <code>POST /ingest/explain</code>'s answer, decided from what was measured.</p>
+<p><code>pipeline_config</code> was the deleted design's stage vocabulary and is now <strong>refused</strong> with a 400 naming <code>options</code> instead. There is no translation between the two: that design's <code>summarize</code> stage was RAPTOR clustering, and the queue's is what gives a container node its vectors.</p>
+<p>The two name sets overlap in exactly the way that causes trouble: <strong><code>markdown</code> is an entry point and is not a format.</strong> Nothing in the bytes distinguishes authored markdown from a <code>.txt</code> file starting with <code>#</code>, so <code>detect_format</code> reports both as <code>text</code> and one Part 4 entry covers them. <code>POST /ingest/explain</code> accepts <code>{"format": "markdown"}</code> — an unknown format is a legal question — and answers with every row <code>impossible</code> or <code>not_applicable</code>, which reads like a verdict on markdown and is a verdict on the name.</p>
+<h2 id="office-formats">Office formats<a class="headerlink" href="#office-formats" title="Permanent link">&para;</a></h2>
+<p><code>.docx</code> and <code>.pptx</code> are read as text. <code>.xlsx</code> is read as records, by a different route.</p>
+<p>That difference is not a gap in the documentation — it is the state of the appliance, and <code>POST /ingest/explain</code> reports it per format. Ask before you load a corpus.</p>
+<div class="admonition note">
+<p class="admonition-title">Corrected for 0.2.1: <code>.xlsx</code> is read</p>
+<p>The table below is 0.2.0's, where a workbook was detected and probed and nothing more. 0.2.1 added three task types that read one — <code>structure:sheets</code> makes a child node per worksheet, <code>profile:sheet</code> measures a worksheet, and <code>extract:sheet</code> turns each row into a record node. None of them is <code>extract:text</code>, and <code>TEXT_EXTRACTORS</code> is still <code>("pdf", "text", "docx", "pptx")</code>: a spreadsheet is not prose, and rendering one as a wall of markdown would index something nobody wrote. So the <code>xlsx</code> rows below stay correct about <strong>text</strong> and understate what the format does. See the <a href="../changelog/#spreadsheets-are-read">Changelog</a>.</p>
+</div>
+<h3 id="what-is-read-and-what-only-measured">What is read, and what only measured<a class="headerlink" href="#what-is-read-and-what-only-measured" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Detected</th>
+<th>Probed</th>
+<th>Text extracted</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docx</code></td>
+<td>yes</td>
+<td>yes</td>
+<td><strong>yes</strong>, with <code>jmfts[office]</code></td>
+</tr>
+<tr>
+<td><code>pptx</code></td>
+<td>yes</td>
+<td>yes</td>
+<td><strong>yes</strong>, with <code>jmfts[office]</code></td>
+</tr>
+<tr>
+<td><code>xlsx</code></td>
+<td>yes</td>
+<td>yes — <code>has_sheets</code>, <code>sheet_count</code>, <code>has_comments</code></td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>ole2</code></td>
+<td>yes</td>
+<td>yes — separates an encrypted package from a legacy binary</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<p><code>detect_format</code> identifies <code>docx</code>, <code>pptx</code> and <code>xlsx</code> from the ZIP member list — <code>word/document.xml</code>, <code>ppt/presentation.xml</code>, <code>xl/workbook.xml</code> — and reports <code>detected_by: "zip_manifest"</code>, so the evidence is in the record rather than inferred from the filename. That needs <code>zipfile</code> and nothing else, which is why it is in every install.</p>
+<p><code>PROBERS_AVAILABLE</code> is <code>("pdf", "text", "docx", "pptx", "xlsx", "ole2")</code>, and <code>TEXT_EXTRACTORS</code> is <code>("pdf", "text", "docx", "pptx")</code>. The two lists are not the same list, and the second is the one that decides whether an upload produces anything to search.</p>
+<h3 id="how-the-scheduler-decides-per-format">How the scheduler decides, per format<a class="headerlink" href="#how-the-scheduler-decides-per-format" title="Permanent link">&para;</a></h3>
+<p>Nothing in the Part 4 table was changed to turn office ingestion on. <code>extract:text</code> is gated on <code>has_text_layer</code>, and the work was to <strong>measure</strong> that pattern rather than to add a row:</p>
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th><code>has_text_layer</code></th>
+<th><code>structure:declared</code> gated on</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docx</code></td>
+<td>measured by the docx prober</td>
+<td><code>has_heading_styles</code></td>
+</tr>
+<tr>
+<td><code>pptx</code></td>
+<td>measured by the pptx prober</td>
+<td><code>has_slides</code></td>
+</tr>
+<tr>
+<td><code>xlsx</code></td>
+<td><strong>not measured</strong></td>
+<td><code>has_sheets</code></td>
+</tr>
+</tbody>
+</table>
+<p>For <code>docx</code> and <code>pptx</code> that makes every downstream row <code>conditional</code> when you ask without bytes, and decided once probe has run — the same shape <code>pdf</code> has always had. For <code>xlsx</code> the pattern is never reported, so <code>extract:text</code> comes back <code>not_applicable</code> with the reason <code>patterns.has_text_layer was not measured</code>, and every row that depends on it follows.</p>
+<p><code>DECLARED_STRUCTURE_PATTERN</code> already mapped all three. In 0.2.0 the <code>xlsx</code> entry was a decision waiting on a reader; 0.2.1 supplied one, and <code>has_sheets</code> now gates <code>structure:sheets</code> as well as <code>structure:declared</code>.</p>
+<h3 id="what-the-markdown-looks-like">What the markdown looks like<a class="headerlink" href="#what-the-markdown-looks-like" title="Permanent link">&para;</a></h3>
+<p>Both readers convert to markdown, because markdown is the intermediate format every text-bearing input converges on. Nothing downstream needed to learn what a <code>.docx</code> is.</p>
+<p><strong><code>.docx</code></strong> — a paragraph whose style resolves to <code>Heading 1</code>–<code>Heading 9</code> becomes the matching ATX heading, and <code>Title</code> becomes <code>#</code>. Body order is preserved by walking the body element rather than <code>Document.paragraphs</code>, which skips tables entirely. Lists become <code>-</code>. Tables become GFM.</p>
+<p>The heading styles the reader writes from are the same ones the prober counted for <code>has_heading_styles</code>, so the pattern that lets <code>structure:declared</code> run and the structure it splits on are two readings of one fact.</p>
+<p><strong><code>.pptx</code></strong> — one <code>#</code> section per slide, body text frames, tables, and speaker notes under a <code>## Notes</code> subheading. A chunk is a slide.</p>
+<p><strong>Slide titles are promoted when there is no title placeholder.</strong> Across 22 real decks (220 slides), 80 had no title placeholder because the deck was built from a blank layout with the title typed into an ordinary text box. Falling through to <code># Slide N</code> discarded the heading that becomes a search result's section title. The reader now promotes the slide's first line of text instead, and the attempt log carries <code>promoted_title_count</code> so you can see how many headings the reader chose rather than read.</p>
+<p>The promoted line is <strong>moved, not copied</strong> — the rest of that shape stays in the body.</p>
+<h3 id="deliberately-not-covered">Deliberately not covered<a class="headerlink" href="#deliberately-not-covered" title="Permanent link">&para;</a></h3>
+<p>A wrong rendering is worse than a missing one, so these are named rather than attempted:</p>
+<ul>
+<li><strong>Ordered vs unordered lists.</strong> A numbered list becomes <code>-</code> like any other. Telling them apart means resolving <code>w:numId</code> through <code>word/numbering.xml</code>, and a guess would renumber the author's list.</li>
+<li><strong>Images, charts, SmartArt.</strong> <code>probe</code> reports <code>has_images</code> and <code>has_smartart</code>; reading them is <code>extract:images</code>, a different task.</li>
+<li><strong>Comments, footnotes, tracked changes.</strong> <code>probe</code> reports each. Merging an unaccepted insertion into the prose would put text into the index that the document does not say. <code>w:delText</code> and <code>w:instrText</code> are excluded from <code>has_text_layer</code> for the same reason.</li>
+<li><strong>Legacy <code>.doc</code> / <code>.ppt</code> / <code>.xls</code>.</strong> Not a ZIP at all. Tier 3.</li>
+</ul>
+<h3 id="a-corrupt-package-fails-once-not-three-times">A corrupt package fails once, not three times<a class="headerlink" href="#a-corrupt-package-fails-once-not-three-times" title="Permanent link">&para;</a></h3>
+<p><code>_open_package</code> guards the <em>open</em> of a ZIP, but a member can still fail to inflate after the archive opens. The raw <code>zipfile.BadZipFile</code> derives straight from <code>Exception</code>, so <code>classify_exception</code> graded it RETRYABLE and probe attempted the same bytes three times. A local header does not repair itself between attempts.</p>
+<p><code>probe_patterns</code> now converts it to a <code>ValueError</code> naming the format and the member failure, which grades <strong>PERMANENT</strong>.</p>
+<h3 id="the-three-dependency-tiers">The three dependency tiers<a class="headerlink" href="#the-three-dependency-tiers" title="Permanent link">&para;</a></h3>
+<p>Office support splits by what the dependency actually is. The split is the operator's concern as much as the developer's, so it is described in full in the <a href="../devops/#office-files-three-tiers-two-extras">DevOps Manual</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>What</th>
+<th>Where it lives</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>zipfile</code>, <code>xml.etree</code>, <code>olefile</code></td>
+<td>base install</td>
+<td>detection and all four probers ship</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>python-docx</code>, <code>python-pptx</code>, <code>openpyxl</code></td>
+<td><code>jmfts[office]</code> extra</td>
+<td>the <code>docx</code> and <code>pptx</code> readers call it; <code>openpyxl</code> has no caller yet</td>
+</tr>
+<tr>
+<td>3</td>
+<td>LibreOffice, driven by <code>unoserver</code></td>
+<td>a badged worker image; <code>jmfts[convert]</code> is the client only</td>
+<td>nothing yet</td>
+</tr>
+</tbody>
+</table>
+<p><code>jmfts_core.office</code> is the only module permitted to import a tier-2 library, and only through its <code>require_docx()</code> / <code>require_pptx()</code> / <code>require_openpyxl()</code> guards, at the point of use and never at module scope. <code>tests/test_office_packaging.py</code> fails if one reaches the application's import path, and <code>scripts/check_base_install.sh</code> asserts the same thing against a real base virtualenv.</p>
+<p>A base install asked to read a <code>.docx</code> raises <code>OfficeStackNotInstalled</code>, which subclasses <code>ImportError</code> and therefore classifies PERMANENT.</p>
+<h3 id="is_encrypted-is-why-olefile-is-in-the-base-install"><code>is_encrypted</code> is why <code>olefile</code> is in the base install<a class="headerlink" href="#is_encrypted-is-why-olefile-is-in-the-base-install" title="Permanent link">&para;</a></h3>
+<p>An encrypted OOXML package is not a ZIP. It is an OLE2 compound file, so it carries the same eight magic bytes as a legacy <code>.doc</code>, and <code>detect_format</code> reports both as <code>ole2</code> with nothing to separate them. The two go opposite ways — a legacy binary gets converted, an encrypted package must fail with a named reason — so probe has to tell them apart, and one directory listing does it.</p>
+<p><code>msoffcrypto-tool</code> is deliberately not carried. It decrypts a password-protected package, and there is no path by which a caller could supply a password. Detecting encryption is the requirement; decrypting is not.</p>
+<h3 id="what-is-planned-and-in-what-order">What is planned, and in what order<a class="headerlink" href="#what-is-planned-and-in-what-order" title="Permanent link">&para;</a></h3>
+<p><code>docs/OFFICE_SPEC.md</code> in the repository is the plan, and it covers more than ingestion — rendering a page, addressing a region, editing a document in the tree, and generating one from a template.</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>What</th>
+<th>Tier</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>the extras, the <code>office</code> seam, the import guards</td>
+<td>—</td>
+<td>shipped</td>
+</tr>
+<tr>
+<td>1–3</td>
+<td>advisory task types and the PDF citation path</td>
+<td>—</td>
+<td>shipped</td>
+</tr>
+<tr>
+<td>4</td>
+<td>office probers; <code>is_encrypted</code> fails, <code>is_legacy_binary</code> schedules <code>convert:ooxml</code></td>
+<td>1</td>
+<td>probers shipped</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>extract:text</code> for <code>docx</code> and <code>pptx</code></td>
+<td>2</td>
+<td><strong>shipped</strong></td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>profile:sheet</code>, <code>extract:sheet</code>, <code>GET /documents/{id}/cells</code></td>
+<td>2</td>
+<td>open</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>render:pdf</code> and <code>convert:ooxml</code>; the LibreOffice worker</td>
+<td>3</td>
+<td>open</td>
+</tr>
+</tbody>
+</table>
+<p>Step 6 is what makes <code>.xlsx</code> readable, and it is a different job from steps 5: a spreadsheet is not prose, so extracting it as a wall of markdown would index something nobody wrote. <code>convert:ooxml</code> in step 7 is also what makes legacy <code>.doc</code> / <code>.ppt</code> / <code>.xls</code> reachable, by converting them to OOXML for the tier-2 readers.</p>
+<h2 id="ingest-task-queue">Ingest task queue<a class="headerlink" href="#ingest-task-queue" title="Permanent link">&para;</a></h2>
+<p><code>POST /ingest/file</code> stores the bytes, enqueues one <code>probe</code> task and returns. Everything after that is a worker draining <code>task_queue</code>. A task is one unit of work scoped to one node.</p>
+<h3 id="task-types">Task types<a class="headerlink" href="#task-types" title="Permanent link">&para;</a></h3>
+<p>Ten declared, seven with handlers today. A task type with no handler is enqueued only if something schedules it; nothing does.</p>
+<table>
+<thead>
+<tr>
+<th><code>task_type</code></th>
+<th>Handler in</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>probe</code></td>
+<td><code>ingest_tasks.py</code></td>
+<td>Reads the stored bytes, detects the format, measures patterns, and schedules the rest from Part 4's table.</td>
+</tr>
+<tr>
+<td><code>extract:text</code></td>
+<td><code>structure_tasks.py</code></td>
+<td>Pulls text out of the file — the entry point every format converges on.</td>
+</tr>
+<tr>
+<td><code>structure:declared</code></td>
+<td><code>structure_tasks.py</code></td>
+<td>Builds the tree the document itself declares (headings, outline, page breaks).</td>
+</tr>
+<tr>
+<td><code>structure:inferred</code></td>
+<td><code>structure_tasks.py</code></td>
+<td>Builds a tree for a document that declares none, by chunking.</td>
+</tr>
+<tr>
+<td><code>structure:semantic</code></td>
+<td><code>rollup_tasks.py</code></td>
+<td>PELT changepoint segmentation over a node's children. Runs on the way back up, once the children have embeddings.</td>
+</tr>
+<tr>
+<td><code>summarize</code></td>
+<td><code>rollup_tasks.py</code></td>
+<td>Gives a container node a text embedding from its children. Concatenates while that fits the window.</td>
+</tr>
+<tr>
+<td><code>summarize:llm</code></td>
+<td><code>rollup_tasks.py</code></td>
+<td>The same job when concatenation does not fit. Split out so it can carry its own badge and its own pool.</td>
+</tr>
+<tr>
+<td><code>ocr</code></td>
+<td>—</td>
+<td>Declared, no handler.</td>
+</tr>
+<tr>
+<td><code>extract:tables</code></td>
+<td>—</td>
+<td>Declared, no handler.</td>
+</tr>
+<tr>
+<td><code>extract:images</code></td>
+<td>—</td>
+<td>Declared, no handler.</td>
+</tr>
+</tbody>
+</table>
+<p><code>summarize</code> does not call an LLM. It measures, and if the concatenated children are over the embedding window it enqueues <code>summarize:llm</code> and completes. That deferral is deliberate: whether a node needs a model is a fact about its children right now, and the only way to learn it is to concatenate and tokenize.</p>
+<p>The ten split into two groups by <strong>who schedules them</strong>, which is why only seven ever appear in a plan:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Types</th>
+<th>Scheduled by</th>
+<th>In <code>explain</code>/<code>analyze</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Downward pass</td>
+<td><code>probe</code>, <code>extract:text</code>, <code>extract:tables</code>, <code>extract:images</code>, <code>ocr</code>, <code>structure:declared</code>, <code>structure:inferred</code></td>
+<td><code>plan_after_probe</code>, a pure function of <code>(format, patterns, options)</code></td>
+<td>yes, all seven, in table order</td>
+</tr>
+<tr>
+<td>Rollup</td>
+<td><code>structure:semantic</code>, <code>summarize</code>, <code>summarize:llm</code></td>
+<td>the settling walk, which re-reads the tree</td>
+<td><strong>no</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The rollup rungs cannot be forecast from a format name: they are decided by children that do not exist when <code>probe</code> runs. A plan that listed them would be describing work it cannot have evaluated.</p>
+<h3 id="row-lifecycle">Row lifecycle<a class="headerlink" href="#row-lifecycle" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th><code>status</code></th>
+<th>Meaning</th>
+<th>Claimable</th>
+<th>Holds a reservation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pending</code></td>
+<td>queued</td>
+<td>yes</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>claimed</code></td>
+<td>a worker took it, has not started</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>running</code></td>
+<td>a worker is executing it</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>batched</code></td>
+<td>submitted to an external batch provider</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>completed</code></td>
+<td>terminal</td>
+<td>no</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>failed</code></td>
+<td>terminal, or retryable with backoff</td>
+<td>if retryable and under cap</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<p><code>pending</code> reserves nothing, which is what lets thousands of pending tasks sit over one subtree without blocking each other. <code>claimed</code> and <code>running</code> are separate so a row stuck in <code>claimed</code> reads as "the worker died before it began" rather than "died halfway through".</p>
+<h3 id="columns-beyond-the-obvious">Columns beyond the obvious<a class="headerlink" href="#columns-beyond-the-obvious" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>write_mode</code></td>
+<td><code>self</code>, <code>children</code>, or <code>subtree</code>. What the task reserves, checked at claim time. A <code>self</code> task conflicts with another <code>self</code> on the same node; a <code>subtree</code> task conflicts with anything at or under its node, in either direction.</td>
+</tr>
+<tr>
+<td><code>dependencies</code></td>
+<td>Integer array of task ids that must be <code>completed</code> first. Ordering <strong>within</strong> one node only. Cross-level ordering is not expressed here — a planned list goes stale the moment a child is added, so the settling walk re-reads the tree instead.</td>
+</tr>
+<tr>
+<td><code>params</code> / <code>param_fingerprint</code></td>
+<td>What the task was asked to do, and a hash of it. The re-run diff is keyed on <code>(task_type, param_fingerprint)</code>, so a task is not offered twice with the same parameters.</td>
+</tr>
+<tr>
+<td><code>service_badge</code></td>
+<td>Which pool should run this. Set from the routing policy at enqueue. <code>NULL</code> means anyone.</td>
+</tr>
+<tr>
+<td><code>claimed_by</code></td>
+<td>Worker identity, from <code>--worker-id</code>.</td>
+</tr>
+<tr>
+<td><code>heartbeat_at</code></td>
+<td>Liveness while the task is held. Measures "the worker is still alive", <strong>not</strong> "the task has run this long".</td>
+</tr>
+<tr>
+<td><code>batch_id</code> / <code>batched_at</code></td>
+<td>Where a <code>batched</code> task is parked and since when. Kept after completion as part of the record of how the answer was obtained.</td>
+</tr>
+<tr>
+<td><code>retry_count</code> / <code>max_retries</code> / <code>retryable</code> / <code>retry_after</code></td>
+<td>Backoff is exponential with jitter. <code>retryable</code> is derived from <code>error_type</code> on failure.</td>
+</tr>
+</tbody>
+</table>
+<p><code>error_type</code> is one of <code>retryable</code>, <code>permanent</code>, <code>timeout</code>, <code>dependency</code>. <code>retryable</code> and <code>timeout</code> schedule another attempt; <code>permanent</code> and <code>dependency</code> do not, and a task that will not run again puts its node into <code>settled = 'failed'</code> so the settle walk stops waiting on it.</p>
+<h3 id="no-endpoint-reads-the-queue">No endpoint reads the queue<a class="headerlink" href="#no-endpoint-reads-the-queue" title="Permanent link">&para;</a></h3>
+<p><code>task_queue</code> has no REST surface. Nothing lists rows, shows which task failed, retries one, or cancels one — the frontier's counts are the whole API-level view of a running ingestion. Operationally that leaves SQL against the appliance, or <code>scripts/e2e_ingest_corpus.py report</code>, which lists every failed task with its error type alongside the tree shape and per-task-type wall clock.</p>
+<p>Re-ingest is in the same state. Reprocessing a document under changed options is specified — diff <code>(task_type, param_fingerprint)</code> against the node's attempt log and enqueue only the difference, no re-parse and no duplicate tree — and is not built. Delete and re-upload is the available path.</p>
+<h2 id="upload-semantics">Upload semantics<a class="headerlink" href="#upload-semantics" title="Permanent link">&para;</a></h2>
+<p><code>POST /ingest/file</code> takes the bytes as a multipart part; <code>parent_id</code> and <code>private</code> are <strong>query</strong> parameters and <code>options</code> is a form field. That split is FastAPI's inference rather than a choice: the bytes make the body a form, so scalars publish as query parameters and only the structured parameter becomes a part.</p>
+<p><strong>Uploads deduplicate on <code>sha256</code> of the bytes</strong>, restricted to file nodes this caller may read. Two principals in isolated access zones each get their own node, because neither one's lookup can see the other's.</p>
+<table>
+<thead>
+<tr>
+<th>Response field</th>
+<th>Says</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>document_id</code></td>
+<td>The <code>file</code> node — the root of the tree ingestion builds.</td>
+</tr>
+<tr>
+<td><code>settled</code></td>
+<td><code>in_flight</code> at creation.</td>
+</tr>
+<tr>
+<td><code>content_hash</code> / <code>blob_ref</code></td>
+<td><code>sha256:&lt;hex&gt;</code>, and <code>lob:&lt;oid&gt;</code> for the Postgres large object holding the bytes.</td>
+</tr>
+<tr>
+<td><code>detected_mime</code> / <code>detected_by</code> / <code>declared_mime</code></td>
+<td>What the bytes are, how that was decided (<code>magic_bytes</code>, <code>zip_manifest</code>, <code>content_sniff</code>), and what the client claimed. Nulls are recorded rather than guessed.</td>
+</tr>
+<tr>
+<td><code>attempts</code></td>
+<td>The node's attempt log as it stands, newest last.</td>
+</tr>
+<tr>
+<td><code>was_existing</code></td>
+<td>These bytes were already here; <code>document_id</code> names a node this request <strong>found</strong>. No document, no blob, nothing enqueued.</td>
+</tr>
+<tr>
+<td><code>linked_into_parent</code></td>
+<td>The found node was attached to <code>parent_id</code> by a <code>contains</code> link rather than by parentage.</td>
+</tr>
+</tbody>
+</table>
+<p>Three consequences of deduplication, each of which is a refusal or a surprise rather than a convenience:</p>
+<p><strong>Conflicting options are a 400.</strong> The existing node records the resolved options it was ingested under. An upload of the same bytes asking for anything else fails, naming both sets. The two honest answers are "do the work" and "it was not done"; returning the node as though the new options applied is neither, and the re-run diff that would make the first one possible is not built.</p>
+<p><strong>Placement is a link, not a copy and not a reparent.</strong> With a <code>parent_id</code>, an already-stored node gains a <code>contains</code> graph edge to that parent and keeps its own <code>parent_id</code>. So <code>GET /documents/{parent}/subtree</code> does <strong>not</strong> reach it and <code>GET /documents/{parent}/links</code> does — a subtree walk is <code>path</code>/<code>parent_id</code> containment and this edge is in neither. Reparenting instead was rejected: it would change what another principal's document sits under and invalidate the rollups above the new parent, silently, in a request that said nothing about moving anything.</p>
+<p><strong><code>private=True</code> narrows the lookup.</strong> It restricts matching to nodes the caller holds a grant on. Without that, a private upload of bytes already present as a shared node would resolve to the shared node and the caller would not be private at all.</p>
+<h3 id="private-and-the-ungoverned-node-gap"><code>private</code> and the ungoverned-node gap<a class="headerlink" href="#private-and-the-ungoverned-node-gap" title="Permanent link">&para;</a></h3>
+<p>Access is open by default: a token means the shared knowledgebase, and an upload lands readable by every principal. That is the design, not an oversight — "private until shared" is the opposite assumption and produces bugs of ignorance wherever the stated one holds.</p>
+<p>The gap it leaves is narrow and <strong>not repairable after the fact</strong>. Subtree RBAC resolves strictly along the tree path (<code>R = D.id OR R ∈ D.path</code>), so a file uploaded with no <code>parent_id</code> has no ancestor, no access-control root above it, and nothing governing it — and a grant made later has no path to travel down. The two fixes are both upload-time: a <code>parent_id</code> inside an already-governed subtree, or <code>private=true</code>, which makes the new node its own access-control root with the uploader as its only grantee at <code>write</code>.</p>
+<h2 id="plan-inspection">Plan inspection<a class="headerlink" href="#plan-inspection" title="Permanent link">&para;</a></h2>
+<p><code>POST /ingest/explain</code> and <code>POST /ingest/analyze</code> answer the same question from different amounts of evidence, and both store nothing. Both resolve options through the resolver the upload uses, so an unknown option is a 400 in all three places.</p>
+<table>
+<thead>
+<tr>
+<th>Call</th>
+<th><code>patterns_source</code></th>
+<th>Rows decided</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>explain</code> <code>{format}</code></td>
+<td><code>unknown</code> — nobody said</td>
+<td>mostly <code>conditional</code></td>
+</tr>
+<tr>
+<td><code>explain</code> <code>{format}</code> for a format with no prober</td>
+<td><code>no_prober</code> — the empty pattern set is a measured fact about this appliance</td>
+<td>all</td>
+</tr>
+<tr>
+<td><code>explain</code> <code>{format, patterns}</code></td>
+<td><code>supplied</code> — the caller's hypothesis</td>
+<td>all</td>
+</tr>
+<tr>
+<td><code>analyze</code> <code>{file}</code></td>
+<td><code>probed</code> — measured from the bytes</td>
+<td>all</td>
+</tr>
+</tbody>
+</table>
+<p><code>patterns_source</code> is load-bearing rather than metadata: an answer that did not say where its patterns came from would be indistinguishable from one that invented them. <code>patterns_known</code> is the boolean form of the right-hand column. <code>patterns_ignored</code> names supplied keys no condition consults for this format — reported, not rejected, so a real <code>matched.patterns</code> block can be pasted in whole and a misspelled pattern is visible instead of silently planned as false.</p>
+<p>Per-task rows carry <code>outcome</code>, and the vocabulary is finer than it looks:</p>
+<table>
+<thead>
+<tr>
+<th><code>outcome</code></th>
+<th>Means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enqueued</code></td>
+<td>The condition holds; a queue row would be written.</td>
+</tr>
+<tr>
+<td><code>skipped</code></td>
+<td>Recorded as never-attempted, with the reason.</td>
+</tr>
+<tr>
+<td><code>deferred</code></td>
+<td>The condition holds (or could) and <strong>no handler is registered</strong>, so nothing is queued.</td>
+</tr>
+<tr>
+<td><code>not_applicable</code></td>
+<td>The condition is false for these patterns.</td>
+</tr>
+<tr>
+<td><code>impossible</code></td>
+<td>The condition <strong>cannot</strong> hold for this format, whatever the bytes are.</td>
+</tr>
+<tr>
+<td><code>conditional</code></td>
+<td>Undecided; <code>if_condition_holds</code> says which of the first three it would become.</td>
+</tr>
+</tbody>
+</table>
+<p>Alongside: <code>requires</code> and <code>forbids</code> (patterns, resolved for this format — the declared-structure sentinel replaced by the pattern that format uses, or dropped, which is what makes a row <code>impossible</code>), <code>after</code>, <code>write_mode</code>, and <code>params</code> — the resolved options the queue row would carry.</p>
+<p><code>analyze</code> adds three blocks <code>explain</code> cannot produce. <strong>Check <code>probe_failed</code> first</strong>: exactly one of it and <code>plan</code> is set, and a null plan means these bytes have no schedule rather than no work. It carries the exception and the same <code>error_type</code> classification the real task would get. <code>file</code> reports what the bytes are beside what the client declared, with <code>mime_agrees</code> null — not false — when one side is unknown. <code>already_stored</code> reports that an upload would deduplicate to a named node and run no plan at all, and carries that node's recorded options, which is the only way to predict the conflicting-options 400 in advance.</p>
+<h2 id="ingest-frontier">Ingest frontier<a class="headerlink" href="#ingest-frontier" title="Permanent link">&para;</a></h2>
+<p><code>GET /ingest/file/{id}/frontier</code> counts the root node and everything under it by <code>path</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>settled</code></td>
+<td>The <strong>root node's own</strong> state: <code>in_flight</code>, <code>settled</code> or <code>failed</code>.</td>
+</tr>
+<tr>
+<td><code>nodes_total</code> / <code>nodes_settled</code> / <code>nodes_in_flight</code> / <code>nodes_failed</code></td>
+<td>Node counts across the subtree.</td>
+</tr>
+<tr>
+<td><code>tasks_unfinished</code></td>
+<td>Queued tasks under this root still owing work — <code>pending</code>, <code>claimed</code>, <code>running</code>, or failed-but-retryable.</td>
+</tr>
+</tbody>
+</table>
+<p>There is no percentage, deliberately: a node's children are only created when the node is processed, so the denominator is unknown while the run happens and any estimate of it moves backward as work is discovered.</p>
+<p><code>tasks_unfinished</code> at zero while <code>nodes_in_flight</code> is above zero is the one reading with a definite meaning — the frontier is waiting on something that is not in the queue, and nothing is coming to finish those nodes. A non-zero value says work is queued and nothing about whether a worker is claiming it: tasks stalled <code>pending</code> behind an unanswered badge are counted identically to tasks being drained. Two readings over time separate them; one reading cannot.</p>
+<h2 id="ingest-options">Ingest options<a class="headerlink" href="#ingest-options" title="Permanent link">&para;</a></h2>
+<p>Three layers, merged by <code>jmfts_core.ingest_options.resolve_options</code>:</p>
+<div class="highlight"><pre><span></span><code>TASK_PARAM_DEFAULTS[group]        the task's parameters — valid wherever it runs
+  &lt;- INGEST_PROFILES[fmt][group]  this format deviates  (empty today)
+    &lt;- caller overrides           this request deviates
+</code></pre></div>
+<p>Options are <strong>namespaced by group</strong>, where a group names the parameters one kind of task takes. A parameter belongs to the task that reads it, not to the format that fed it.</p>
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Key</th>
+<th>Default</th>
+<th>Read by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>structure</code></td>
+<td><code>chunk_strategy</code></td>
+<td><code>sentence_packed</code></td>
+<td><code>structure:declared</code>, <code>structure:inferred</code></td>
+</tr>
+<tr>
+<td><code>structure</code></td>
+<td><code>max_tokens</code></td>
+<td><code>120</code></td>
+<td>both structure rungs</td>
+</tr>
+<tr>
+<td><code>structure</code></td>
+<td><code>min_chunk_length</code></td>
+<td><code>20</code></td>
+<td>both structure rungs</td>
+</tr>
+<tr>
+<td><code>rollup</code></td>
+<td><code>max_children</code></td>
+<td><code>16</code></td>
+<td>the rollup planner — over this, segment instead of summarize</td>
+</tr>
+<tr>
+<td><code>rollup</code></td>
+<td><code>penalty</code></td>
+<td><code>1.0</code></td>
+<td>PELT changepoint penalty</td>
+</tr>
+<tr>
+<td><code>rollup</code></td>
+<td><code>min_segment</code></td>
+<td><code>3</code></td>
+<td>minimum children per segment</td>
+</tr>
+<tr>
+<td><code>rollup</code></td>
+<td><code>llm_model</code></td>
+<td><code>""</code></td>
+<td><code>summarize:llm</code> — <strong>per-request model selection</strong>, empty falls back to <code>JMFTS_LLM_MODEL</code></td>
+</tr>
+</tbody>
+</table>
+<p>Every group resolves for every format, so no document can reach a task whose parameters nobody set.</p>
+<div class="admonition warning">
+<p class="admonition-title">An unknown option is a 400, not a shrug</p>
+<p>Writing <code>max_token</code> instead of <code>max_tokens</code> fails the request naming the key. It is not ignored. A run that does something other than what was asked and reports success is the swallowed failure the project's Fail Early rule exists to prevent — and it is what <code>/ingest/explain</code> rests on, since a plan that reports options the run would reject is a wrong answer rather than a partial one.</p>
+</div>
+<h2 id="workers-and-routing">Workers and routing<a class="headerlink" href="#workers-and-routing" title="Permanent link">&para;</a></h2>
+<p>The same <code>IngestWorker</code> runs three ways: as a thread inside the API process, as <code>jmfts-worker</code> (its own process, possibly on another host), and as a k3s Deployment.</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Default</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JMFTS_INGEST_WORKER_ENABLED</code></td>
+<td><code>true</code></td>
+<td>Whether the API process runs a worker thread. An appliance that accepts uploads and never processes them is not a useful default.</td>
+</tr>
+<tr>
+<td><code>JMFTS_INGEST_WORKER_POLL_SECONDS</code></td>
+<td><code>1.0</code></td>
+<td>How long to wait after finding the queue empty.</td>
+</tr>
+<tr>
+<td><code>JMFTS_WORKER_HEARTBEAT_SECONDS</code></td>
+<td><code>10.0</code></td>
+<td>How often a worker reports liveness while holding a task.</td>
+</tr>
+<tr>
+<td><code>JMFTS_WORKER_LEASE_SECONDS</code></td>
+<td><code>90.0</code></td>
+<td>How long a worker may go <strong>without beating</strong> before another requeues its task. Must be at least 3× the heartbeat; below that a single missed beat costs a running task, and the constructor refuses.</td>
+</tr>
+<tr>
+<td><code>JMFTS_WORKER_REAP_SECONDS</code></td>
+<td><code>30.0</code></td>
+<td>How often to try the fleet-wide expired-claim sweep.</td>
+</tr>
+<tr>
+<td><code>JMFTS_TASK_BADGES</code></td>
+<td><code>{}</code></td>
+<td>JSON object mapping <code>task_type</code> → badge. <strong>Empty by default, deliberately</strong> — see the warning below.</td>
+</tr>
+<tr>
+<td><code>JMFTS_WORKER_BADGE</code></td>
+<td>unset</td>
+<td>Comma-separated badges for <code>jmfts-worker</code>. Equivalent to repeating <code>--badge</code>.</td>
+</tr>
+<tr>
+<td><code>JMFTS_WORKER_ID</code></td>
+<td>host-pid</td>
+<td>Written to <code>task_queue.claimed_by</code>.</td>
+</tr>
+<tr>
+<td><code>JMFTS_LLM_API_KEY</code></td>
+<td><code>""</code></td>
+<td>Bearer token for the LLM endpoint. Sent <strong>only</strong> when set, so one worker image serves both a LAN llama-server and a metered API.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-lease-is-not-a-task-timeout">The lease is not a task timeout<a class="headerlink" href="#the-lease-is-not-a-task-timeout" title="Permanent link">&para;</a></h3>
+<p>It bounds how long a live worker may go without reporting in — a property of the loop. It does not bound how long a task may run. Task durations here vary by orders of magnitude with input, so a lease keyed on elapsed runtime would reap work that is still running and then run it a second time, concurrently, on another host.</p>
+<h3 id="badges-filter-they-do-not-order">Badges filter, they do not order<a class="headerlink" href="#badges-filter-they-do-not-order" title="Permanent link">&para;</a></h3>
+<p><code>claim_next</code> orders by <code>priority DESC, created_at ASC</code>. Badges only decide what is in the candidate set. A worker listing <code>[urgent, bulk]</code> takes whatever is oldest and highest priority among <strong>both</strong> — so an idle expensive worker will start a bulk task a second before an urgent one arrives. <code>priority</code> on the row is the lever for that.</p>
+<p>An un-badged worker claims <strong>everything</strong>, and an un-badged task is claimable by <strong>anyone</strong>.</p>
+<div class="admonition warning">
+<p class="admonition-title">A badge with no worker stalls silently and permanently</p>
+<p><code>JMFTS_TASK_BADGES</code> is empty by default and that is deliberate. Tasks carrying a badge no running worker answers to sit <code>pending</code> forever, and nothing reports it. The <a href="../devops/#badges-route-work-to-pools">DevOps Manual</a> covers the failure shape and what to monitor.</p>
+</div>
+<p><code>jmfts-worker</code> flags: <code>--badge</code> (repeatable), <code>--worker-id</code>, <code>--poll-seconds</code>, <code>--heartbeat-seconds</code>, <code>--lease-seconds</code>, <code>--reap-seconds</code>, <code>--drain</code>, <code>--max-tasks</code>, <code>--log-level</code>.</p>
+<h2 id="batch-processing">Batch processing<a class="headerlink" href="#batch-processing" title="Permanent link">&para;</a></h2>
+<p><code>batch_worker/</code> is a <strong>reference implementation</strong>, shipped beside the appliance rather than inside it. It consumes <code>summarize:llm</code> through an external batch provider at roughly half the synchronous price. Nothing in <code>jmfts_core</code> imports it.</p>
+<table>
+<thead>
+<tr>
+<th>Provider</th>
+<th>Submit</th>
+<th>Status field</th>
+<th>Batch-level failure</th>
+<th>Cap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mock</code></td>
+<td>1 call, directory-backed</td>
+<td>—</td>
+<td>cancel only</td>
+<td>configurable</td>
+</tr>
+<tr>
+<td><code>openai</code></td>
+<td>2 calls (upload file, create batch)</td>
+<td><code>status</code></td>
+<td><code>failed</code> / <code>expired</code> / <code>cancelled</code></td>
+<td>50,000 / 200 MB</td>
+</tr>
+<tr>
+<td><code>anthropic</code></td>
+<td>1 call, requests inline</td>
+<td><code>processing_status</code></td>
+<td>none — always <code>ended</code></td>
+<td>100,000 / 256 MB</td>
+</tr>
+</tbody>
+</table>
+<p><code>custom_id</code> is the only mapping and is set to <code>task-{id}</code>, which satisfies Anthropic's <code>^[a-zA-Z0-9_-]{1,64}$</code>. A result whose <code>custom_id</code> this appliance did not write is skipped, never applied.</p>
+<p><code>jmfts-batch-worker</code> subcommands: <code>run</code>, <code>status</code>, <code>stalled</code>, <code>finalize</code> (mock only), <code>cancel</code>. <code>stalled</code> exits non-zero so a cron or probe can act on it.</p>
+<div class="admonition warning">
+<p class="admonition-title">A <code>batched</code> row is invisible to every other recovery mechanism</p>
+<p>The claim query will not take it, the lease will not reap it — nothing beats for a parked row, because the work is at the provider — and the conflict predicate counts it as a live reservation, so nothing else can work that node either. <code>batched_at</code> and <code>jmfts-batch-worker stalled</code> are the only stall signal there is. Both providers expire a batch at 24 hours; the default stall threshold is 26.</p>
+</div>
+<h2 id="vector-indexes">Vector indexes<a class="headerlink" href="#vector-indexes" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Index</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>documents.embed</code> (768-dim <code>vector</code>)</td>
+<td>HNSW, <code>m=16, ef_construction=64</code>, cosine</td>
+<td>Document-level similarity.</td>
+</tr>
+<tr>
+<td><code>token_embeddings.embed_256</code> (<code>halfvec</code>)</td>
+<td>IVFFlat, <code>lists=1024</code>, cosine</td>
+<td>The active late-interaction column in a default deployment.</td>
+</tr>
+<tr>
+<td><code>token_embeddings.embed_384</code> / <code>embed_512</code> (<code>halfvec</code>)</td>
+<td>HNSW, <code>m=16, ef_construction=64</code>, cosine</td>
+<td>Present in schema, unpopulated unless a deployment opts into a higher retention tier.</td>
+</tr>
+</tbody>
+</table>
+<p><code>pg_trgm</code> is also enabled, for fuzzy/trigram fallback in full-text search.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,2772 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for Tectum, Tau, and JMFTS">
+      
+      
+      
+        <link rel="canonical" href="https://ffwfrobotics.github.io/tau/reference/tau-llm/">
+      
+      
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../tau-agent-core/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>tau_llm - FFWF Robotics Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/ffwf.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#tau_llm-the-wire-layer" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="FFWF Robotics Docs" class="md-header__button md-logo" aria-label="FFWF Robotics Docs" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            FFWF Robotics Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              tau_llm
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9 8.99 8.99 0 0 0 4 7.47V22h2v-3h2v3h2v-3h2v3h2v-3.54c2.47-1.65 4-4.46 4-7.46a9 9 0 0 0-9-9m-4 9a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m8 0a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m-4 3 1.5 3h-3z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 15a2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2m2.5 2 1.5-3 1.5 3zm5.5-2a2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2m6-4A10 10 0 0 0 12 1 10 10 0 0 0 2 11c0 2.8 1.2 5.3 3 7.1V22h14v-3.9c1.8-1.8 3-4.3 3-7.1m-5 9h-2v-2h-2v2h-2v-2H9v2H7v-2.8c-1.8-1.5-3-3.7-3-6.2a8 8 0 0 1 8-8 8 8 0 0 1 8 8c0 2.5-1.2 4.8-3 6.2z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../tectum/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tectum
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tau
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../jmfts/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  JMFTS
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../integrations/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Integrations
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../style-guide/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Style guide
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="FFWF Robotics Docs" class="md-nav__button md-logo" aria-label="FFWF Robotics Docs" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    FFWF Robotics Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../tectum/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tectum
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../tectum/tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tectum/tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tectum/cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tectum/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tectum/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tau
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_2" id="__nav_3_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_5" id="__nav_3_5_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_llm
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_llm
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#three-wire-protocols" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three wire protocols
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#two-registries-and-a-pool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two registries and a pool
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-provider-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Provider interface
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#where-the-numbers-come-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where the numbers come from
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#two-capabilities-that-were-measured-not-assumed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two capabilities that were measured, not assumed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#messages-and-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Messages and content
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Messages and content">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reasoning-signatures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reasoning signatures
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#streaming-events" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Streaming events
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tools
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tools">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#three-tool-shapes-and-what-bridges-them" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three tool shapes, and what bridges them
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#constrained-decoding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constrained decoding
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tau-agent-core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_agent_core
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extensions
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rpc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RPC
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tau-coding-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_coding_agent
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../jmfts/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JMFTS
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JMFTS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../jmfts/tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../jmfts/tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../jmfts/tutorials/ingest-a-document/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ingest a document
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../jmfts/cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../jmfts/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../jmfts/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../jmfts/changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../jmfts/release-0-3-0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    0.3.0 — the job system
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../integrations/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integrations
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Integrations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../integrations/tectum-tau/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum + Tau
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../integrations/tectum-jmfts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum + JMFTS
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../integrations/tau-jmfts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau + JMFTS
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../integrations/full-stack-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The FFwF Full Stack Agent
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../style-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guide
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stable"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#three-wire-protocols" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three wire protocols
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#two-registries-and-a-pool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two registries and a pool
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-provider-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Provider interface
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#where-the-numbers-come-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where the numbers come from
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#two-capabilities-that-were-measured-not-assumed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two capabilities that were measured, not assumed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#messages-and-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Messages and content
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Messages and content">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reasoning-signatures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reasoning signatures
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#streaming-events" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Streaming events
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tools
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tools">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#three-tool-shapes-and-what-bridges-them" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three tool shapes, and what bridges them
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#constrained-decoding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constrained decoding
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="tau_llm-the-wire-layer"><code>tau_llm</code> — the wire layer<a class="headerlink" href="#tau_llm-the-wire-layer" title="Permanent link">&para;</a></h1>
+<p class="axis">Cognition × Application</p>
+
+<p>Wire protocols, the message and tool types they carry, and the streaming
+events they produce. Nothing in this package knows what an agent is.</p>
+<p>Distribution <code>ffwf-tau-llm</code>. Depends on <code>pydantic</code> and <code>httpx</code>, and nothing
+else — the two vendor SDKs are extras, imported on first request.</p>
+<h2 id="three-wire-protocols">Three wire protocols<a class="headerlink" href="#three-wire-protocols" title="Permanent link">&para;</a></h2>
+<p>A <code>Model</code> names the protocol it wants in <code>api</code> and the vendor it belongs to
+in <code>provider</code>.</p>
+<table>
+<thead>
+<tr>
+<th><code>api</code></th>
+<th>Client</th>
+<th>Vendor τ registers</th>
+<th>Extra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>openai-completions</code></td>
+<td><code>httpx</code> against the chat-completions wire</td>
+<td><code>openai</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>anthropic-messages</code></td>
+<td>the official <code>anthropic</code> SDK</td>
+<td><code>anthropic</code></td>
+<td><code>ffwf-tau-llm[anthropic]</code></td>
+</tr>
+<tr>
+<td><code>google-generative-ai</code></td>
+<td>the official <code>google-genai</code> SDK</td>
+<td><code>gemini</code></td>
+<td><code>ffwf-tau-llm[google]</code></td>
+</tr>
+</tbody>
+</table>
+<p>An <code>api</code> τ does not implement <strong>raises</strong>, naming what was asked for and what
+is registered. It does not fall back to the OpenAI client — that fallback was
+a real defect, and it is what got <code>openai-responses</code> unregistered rather than
+quietly mis-served.</p>
+<p>The Google vendor is registered as <strong><code>gemini</code></strong>, not <code>google</code>, because that is
+the <code>backend</code> value existing config entries carry, including the one in the
+shipped template.</p>
+<h2 id="two-registries-and-a-pool">Two registries and a pool<a class="headerlink" href="#two-registries-and-a-pool" title="Permanent link">&para;</a></h2>
+<p>Three separate questions. Confusing them is the usual way a request goes
+somewhere it was not meant to.</p>
+<figure class="dia"><svg viewBox="0 0 680 300" role="img" aria-labelledby="dia-resolve-t dia-resolve-d"><title id="dia-resolve-t">How one request resolves a provider</title><desc id="dia-resolve-d">On the left, a Model box lists two of its fields: api, holding google-generative-ai, and provider, holding gemini. Two arrows leave the box's right edge. The upper one, carrying api, enters a box named the api registry, glossed as answering which client class and noted beside it that an unknown api raises and never falls back. The lower one, carrying provider, enters a box named the vendor registry, glossed as holding the base URL and key environment variables, noted beside it as one vendor per protocol and that registering your own is six lines. Below both, a row of four small labels reads provider, api, base_url and sha256 of the api key. A red rule runs under that row, ends in a small red square, and turns down into a box named the provider pool, glossed as one client per destination per event loop. The red mark is annotated the pool key, with the gloss that two destinations never share a client.</desc><rect x="0" y="40" width="250" height="96" class="fill-ground stroke"/><text x="14" y="62" class="label">Model</text><line x1="0" y1="72" x2="250" y2="72" class="stroke-soft"/><text x="14" y="92" class="label-soft">api</text><text x="62" y="92" class="label">google-generative-ai</text><text x="14" y="116" class="label-soft">provider</text><text x="80" y="116" class="label">gemini</text><path d="M250 92 H276 V84 H296" class="stroke-hair fill-none"/><path d="M304 84 L295 80 L295 88 Z" class="fill-ink"/><path d="M250 116 H276 V148 H296" class="stroke-hair fill-none"/><path d="M304 148 L295 144 L295 152 Z" class="fill-ink"/><rect x="304" y="62" width="232" height="44" class="fill-ground stroke"/><text x="420" y="82" text-anchor="middle" class="label">api registry</text><text x="420" y="98" text-anchor="middle" class="label-soft">which client class</text><text x="546" y="84" class="label-soft">unknown api raises</text><text x="546" y="98" class="label-soft">never falls back</text><rect x="304" y="126" width="232" height="44" class="fill-ground stroke"/><text x="420" y="146" text-anchor="middle" class="label">vendor registry</text><text x="420" y="162" text-anchor="middle" class="label-soft">base URL and key env vars</text><text x="546" y="148" class="label-soft">one per protocol</text><text x="546" y="162" class="label-soft">yours: six lines</text><text x="0" y="200" class="label-soft">provider</text><text x="70" y="200" class="label-soft">api</text><text x="110" y="200" class="label-soft">base_url</text><text x="180" y="200" class="label-soft">sha256(api_key)</text><line x1="0" y1="210" x2="290" y2="210" class="stroke-red"/><rect x="285" y="205" width="10" height="10" class="fill-red"/><line x1="290" y1="215" x2="290" y2="232" class="stroke-red"/><path d="M290 240 L286 231 L294 231 Z" class="fill-red"/><rect x="180" y="240" width="280" height="46" class="fill-ground stroke"/><text x="320" y="262" text-anchor="middle" class="label">the provider pool</text><text x="320" y="278" text-anchor="middle" class="label-soft">one client per destination, per event loop</text><text x="474" y="258" class="label-mark">the pool key</text><text x="474" y="274" class="label-soft">two destinations never share</text></svg><figcaption>The registries answer <em>what to build</em>; the pool answers <em>which instance</em>. Red marks the key because it is the part that has already gone wrong once: every input that varies what gets constructed has to be in it, or two models pointing at different servers quietly share one client. <code>api</code> joined the key when it started selecting the client class, since two protocols are two classes. The credential is hashed and never held raw — including the absent case, which hashes to a fixed digest distinct from any real key's.</figcaption></figure>
+
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Answered by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Which client class serves this <code>Model.api</code>?</td>
+<td>the <strong>api registry</strong> — <code>register_api(api, factory)</code></td>
+</tr>
+<tr>
+<td>Where does this <code>Model.provider</code> point, and which environment variables hold its key?</td>
+<td>the <strong>vendor registry</strong> — <code>register_provider(ProviderSpec(...))</code></td>
+</tr>
+<tr>
+<td>Which client <em>instance</em> serves this call?</td>
+<td>the pool in <code>tau_llm.client</code>, keyed as drawn above</td>
+</tr>
+</tbody>
+</table>
+<p>τ ships one vendor per protocol it implements and <strong>no model catalogs</strong>. Every
+URL and environment-variable name in a vendor list is a claim τ would have to
+keep true as vendors move them. Adding your own is six lines at import time:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">tau_llm.providers</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProviderSpec</span><span class="p">,</span> <span class="n">register_provider</span>
+
+<span class="n">register_provider</span><span class="p">(</span><span class="n">ProviderSpec</span><span class="p">(</span>
+    <span class="nb">id</span><span class="o">=</span><span class="s2">"groq"</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"Groq"</span><span class="p">,</span>
+    <span class="n">api</span><span class="o">=</span><span class="s2">"openai-completions"</span><span class="p">,</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">"https://api.groq.com/openai/v1"</span><span class="p">,</span>
+    <span class="n">api_key_env</span><span class="o">=</span><span class="p">(</span><span class="s2">"GROQ_API_KEY"</span><span class="p">,),</span>
+<span class="p">))</span>
+</code></pre></div>
+<p>Then point a model at it with <code>provider="groq"</code>.</p>
+<p>A missing credential <strong>raises</strong> (<code>No API key for provider: …</code>) rather than
+running with a fabricated placeholder.</p>
+<p><code>aclose_providers()</code> tears the pool down; the TUI, headless and RPC entry
+points all call it on shutdown.</p>
+<h2 id="the-provider-interface">The <code>Provider</code> interface<a class="headerlink" href="#the-provider-interface" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Provider</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">stream_chat</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span> <span class="n">messages</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span>
+        <span class="n">tools</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ToolDefinition</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">options</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StreamEventStream</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">aclose</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+</code></pre></div>
+<p>One abstract method. There is <strong>no non-streaming entry point</strong> — a caller that
+does not want deltas ignores them and reads <code>DoneEvent.final</code>. <code>Model.stream =
+False</code> changes how τ talks to the server, not what the caller sees: the
+buffered path fills the same accumulator and yields the same event sequence.</p>
+<p><code>client.stream_simple()</code> is the thin wrapper everything above calls. It
+resolves a provider, calls <code>stream_chat</code>, and wraps the result once in
+<code>AssistantMessageEventStream</code>, which adds queue buffering and a terminal
+<code>async def result() -&gt; AssistantMessage</code>.</p>
+<h2 id="model"><code>Model</code><a class="headerlink" href="#model" title="Permanent link">&para;</a></h2>
+<p>Beyond <code>id</code>, <code>name</code>, <code>api</code>, <code>provider</code>, <code>base_url</code>, <code>context_window</code> and
+<code>max_tokens</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>stream</code></td>
+<td><code>True</code> by default. Set false for an OpenAI-shaped gateway with no SSE. Both paths share one final-message builder, so the buffered one inherits the same guards. What it cannot reproduce is granularity, and a request in flight cannot be interrupted.</td>
+</tr>
+<tr>
+<td><code>request_timeout</code></td>
+<td>Seconds, overriding the 300s default. Also settable per call. An unusable value raises rather than reverting — a silently ignored timeout is the failure the knob exists to fix.</td>
+</tr>
+<tr>
+<td><code>reasoning</code></td>
+<td>Whether this model reasons. Declared per model, because one endpoint serves both kinds.</td>
+</tr>
+<tr>
+<td><code>thinking_level_map</code></td>
+<td>How this server spells a thinking budget — the field name <em>and</em> its value, rather than a selection from an enum τ would have to keep current.</td>
+</tr>
+<tr>
+<td><code>reasoning_replay</code></td>
+<td><code>"turn"</code> (default), <code>"all"</code> or <code>"off"</code>. Whether a prior turn's chain-of-thought is resent. τ defaults away from pi's always-resend: measured 72%→28% of payload on a real transcript.</td>
+</tr>
+<tr>
+<td><code>strict_reasoning_formats</code></td>
+<td>Turns a provider quirk τ is willing to work around into an error. Chiefly a signature minted by another vendor.</td>
+</tr>
+<tr>
+<td><code>requires_tool_call_id</code></td>
+<td><code>True</code> by default, and measured rather than assumed. See below.</td>
+</tr>
+<tr>
+<td><code>supports_multimodal_function_response</code></td>
+<td><code>False</code> by default — an image goes in its own turn rather than nested in a tool result.</td>
+</tr>
+<tr>
+<td><code>grammar_dialect</code></td>
+<td><code>"llguidance"</code> or <code>"gbnf"</code>. Which constrained-decoding grammar the target server speaks.</td>
+</tr>
+<tr>
+<td><code>extra_body</code></td>
+<td>Per-model JSON merged into every request body. The escape hatch for a server-specific field with no first-class knob.</td>
+</tr>
+<tr>
+<td><code>server_features</code></td>
+<td>Which optional server behaviours this endpoint supports, declared rather than probed.</td>
+</tr>
+<tr>
+<td><code>compat</code></td>
+<td>Two fields auto-detected from the base URL. See below.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="where-the-numbers-come-from">Where the numbers come from<a class="headerlink" href="#where-the-numbers-come-from" title="Permanent link">&para;</a></h3>
+<p><code>python -m tau_llm.catalog</code> fills <code>context_window</code>, <code>max_tokens</code>, <code>reasoning</code>
+and <code>thinking_level_map</code> for a named model from
+<a href="https://models.dev">models.dev</a> and prints a config entry to stdout for you to
+inspect. Nothing is vendored, and <code>--base-url</code> is required rather than guessed
+— models.dev carries no base URL.</p>
+<p><code>tau_llm.compat</code> auto-detects the two keys <code>extra_body</code> cannot reach, one
+because it is reserved and one because it is written after the spreads:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Detected from</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>max_tokens_field</code></td>
+<td><code>api.openai.com</code> and <code>openai.azure.com</code> want <code>max_completion_tokens</code>; everyone else keeps <code>max_tokens</code>.</td>
+</tr>
+<tr>
+<td><code>supports_usage_in_streaming</code></td>
+<td>whether to send <code>stream_options.include_usage</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Detection is deliberately <strong>inverted from pi's</strong>. pi names the servers wanting
+<code>max_tokens</code> and gives everyone else the newer spelling, so an unrecognised
+endpoint — for τ, usually a local llama.cpp — gets a spelling it rejects. τ
+names only the two that want the new one. τ also ignores the provider <em>name</em>
+pi matches on, because an entry with no <code>backend</code> key defaults to
+<code>provider="openai"</code>, so in τ that string usually means "unstated".</p>
+<p>A stated value always wins over detection.</p>
+<h3 id="two-capabilities-that-were-measured-not-assumed">Two capabilities that were measured, not assumed<a class="headerlink" href="#two-capabilities-that-were-measured-not-assumed" title="Permanent link">&para;</a></h3>
+<p><code>requires_tool_call_id</code> defaults <strong>true</strong>. The question was whether sending a
+tool-call id to a model that does not expect one is itself rejected. It is
+not: every Google model tested accepted one on a tool result, including
+<code>gemma-4-26b-a4b-it</code>, which pi classifies as id-less. So the permissive branch
+is the safe one, and τ ships <strong>no per-model table</strong> — a table that can only
+ever be wrong is worse than no table.</p>
+<p><code>supports_multimodal_function_response</code> defaults <strong>false</strong>. Only one model was
+measured accepting a nested image, and one permissive data point does not earn
+a permissive default when the conservative branch always works.</p>
+<h2 id="messages-and-content">Messages and content<a class="headerlink" href="#messages-and-content" title="Permanent link">&para;</a></h2>
+<p>All pydantic models.</p>
+<div class="highlight"><pre><span></span><code>Message  = UserMessage | AssistantMessage | ToolResultMessage
+
+AssistantMessage.content   list[ TextContent | ThinkingContent | ToolCall ]
+ToolResultMessage.content  list[ TextContent | ImageContent ]
+</code></pre></div>
+<p><code>Usage</code> is frozen, and carries an <code>extra: dict[str, Any]</code> for server-reported
+telemetry that is not portable — llama.cpp's <code>timings</code> block, τ's own
+tool-argument repair count. On the Google path <code>thoughts_token_count</code> is added
+to output tokens, because Google reports <code>candidates_token_count</code> without it
+and a reasoning turn would otherwise under-report its cost.</p>
+<h3 id="reasoning-signatures">Reasoning signatures<a class="headerlink" href="#reasoning-signatures" title="Permanent link">&para;</a></h3>
+<p>Anthropic's thinking blocks and Gemini 3's function calls both carry a
+signature the vendor <strong>validates</strong> on replay. Sending one vendor's token to
+another is a request that fails, so both are namespaced by vendor:</p>
+<div class="highlight"><pre><span></span><code><span class="n">ThinkingContent</span><span class="o">.</span><span class="n">provider_signature</span>   <span class="c1"># {"anthropic": {...}}</span>
+<span class="n">ToolCall</span><span class="o">.</span><span class="n">provider_signature</span>          <span class="c1"># {"google": {"thought_signature": "..."}}</span>
+</code></pre></div>
+<p>The OpenAI writer <strong>refuses</strong> a foreign signature rather than forwarding it: it
+raises under <code>strict_reasoning_formats</code>, and otherwise warns once per payload
+shape and drops the token. The tool call still replays with its id, name and
+arguments intact — the transcript is not broken to avoid leaking a field.</p>
+<p>One rule is easy to get backwards:</p>
+<table>
+<thead>
+<tr>
+<th>Signature on</th>
+<th>Replayed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a <strong>function call</strong></td>
+<td>always, on every <code>reasoning_replay</code> setting including <code>"off"</code></td>
+</tr>
+<tr>
+<td><strong>text or thinking</strong> parts</td>
+<td>only as <code>reasoning_replay</code> allows</td>
+</tr>
+</tbody>
+</table>
+<p>A function-call signature is reasoning-<em>derived</em>, which is what makes it look
+like the knob's business. It is not chain-of-thought the model reads back — it
+is a token the API validates, and omitting it fails the request with a 400
+naming the offending call. Signatures persist to session storage as base64
+text, because a resumed session that lost one fails on its next turn.</p>
+<h2 id="streaming-events">Streaming events<a class="headerlink" href="#streaming-events" title="Permanent link">&para;</a></h2>
+<p><code>stream_chat</code> yields these. They are <code>tau_llm</code>'s vocabulary, not the agent
+loop's — see <a href="../tau-agent-core/#two-event-vocabularies"><code>tau_agent_core</code></a> for
+the other one.</p>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Carries</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TextDeltaEvent</code></td>
+<td>one fragment of assistant text</td>
+</tr>
+<tr>
+<td><code>ThinkingDeltaEvent</code></td>
+<td>one fragment of reasoning</td>
+</tr>
+<tr>
+<td><code>ToolCallDeltaEvent</code></td>
+<td>one fragment of a tool call</td>
+</tr>
+<tr>
+<td><code>DoneEvent</code></td>
+<td><code>final</code>, the authoritative <code>AssistantMessage</code></td>
+</tr>
+<tr>
+<td><code>ErrorEvent</code></td>
+<td>a failure, named</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>DoneEvent.final</code> is the authority, not the accumulated deltas.</strong> Its
+<code>ToolCall</code> blocks carry the parsed <code>arguments</code> that actually get executed.</p>
+<p>The single most common way to get this wrong: <strong>OpenAI streams tool-call
+arguments as incremental fragments</strong>, one piece per chunk, which must be
+concatenated. Logic that treats a chunk's <code>arguments</code> as the complete
+cumulative string corrupts the JSON. Local servers fragment aggressively, so
+they exercise the path that single-chunk cloud responses can mask.</p>
+<p>An argument buffer that does not decode to a dict <strong>raises</strong> rather than
+becoming <code>{"raw": "..."}</code>. So does a tool call that arrives with no <code>name</code> —
+a real defect on at least one hosted gateway. The raise names the call id, the
+model and the base URL, because the fault is the gateway's and an operator
+needs to know which deployment behind a shared endpoint is at fault.</p>
+<p>A keepalive frame that is valid JSON but not an object (<code>data: []</code>) is skipped
+rather than crashing the turn, and the skip logs at debug level. Skipping is
+not swallowing: that path also catches genuinely malformed gateway output.</p>
+<p>Errors always lead with the exception type and append HTTP status and body
+when present. <code>httpx.ReadTimeout</code>, <code>ConnectError</code> and <code>RemoteProtocolError</code>
+all stringify to the empty string, so a dropped connection used to surface as
+<code>Streaming error:</code> with nothing after the colon.</p>
+<h2 id="tools">Tools<a class="headerlink" href="#tools" title="Permanent link">&para;</a></h2>
+<p><code>define_tool(**fields)</code> constructs a <code>ToolDefinition</code>. It takes the model
+fields as keywords, or a single mapping positionally; both forms at once, or
+neither, is a <code>TypeError</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">tau_llm</span><span class="w"> </span><span class="kn">import</span> <span class="n">define_tool</span>
+
+<span class="n">word_count</span> <span class="o">=</span> <span class="n">define_tool</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"word_count"</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">"Word count"</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">"Count the words in a string."</span><span class="p">,</span>
+    <span class="n">parameters</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"object"</span><span class="p">,</span>
+        <span class="s2">"properties"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"text"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">}},</span>
+        <span class="s2">"required"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"text"</span><span class="p">],</span>
+    <span class="p">},</span>
+    <span class="n">execute</span><span class="o">=</span><span class="k">lambda</span> <span class="n">text</span><span class="p">:</span> <span class="p">{</span><span class="s2">"words"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">())},</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>It <strong>validates rather than normalises</strong> — nothing malformed is patched into
+something that works:</p>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>What it prevents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>the five required fields are present</td>
+<td>a pydantic error from a call site that reads fine</td>
+</tr>
+<tr>
+<td>unknown field names are rejected</td>
+<td><code>ToolDefinition</code> is <code>extra="ignore"</code>, so a typo'd <code>prompt_snipet</code> would be dropped in silence</td>
+</tr>
+<tr>
+<td><code>execute</code> is callable</td>
+<td>a failure the first time the <em>model</em> calls the tool, many turns after the mistake</td>
+</tr>
+<tr>
+<td><code>name</code> matches <code>[A-Za-z0-9_-]{1,64}</code></td>
+<td>OpenAI rejects the whole request for one bad tool name, with a 400 that does not say which tool</td>
+</tr>
+<tr>
+<td><code>parameters</code> is an object schema with <code>properties</code></td>
+<td>a non-object schema validates every call vacuously</td>
+</tr>
+<tr>
+<td>every <code>required</code> name appears in <code>properties</code></td>
+<td>the model is never told about the field, so every call fails forever</td>
+</tr>
+<tr>
+<td><code>label</code> and <code>description</code> are non-empty</td>
+<td>a blank chip in the TUI, and a tool the model is given no reason to call</td>
+</tr>
+</tbody>
+</table>
+<p><code>label</code> is <strong>required and never derived from <code>name</code></strong>. Inventing it would be a
+fabricated default, and the failure mode is invisible — the TUI would show a
+developer identifier as a human label and everything would appear to work.
+(<code>ExtensionAPI.register_tool()</code> <em>does</em> default <code>label</code> to <code>name</code>; that is a
+separate, pi-compatible contract, not an inconsistency to harmonise away.)</p>
+<p><strong><code>validate_tool_arguments</code> is hand-rolled</strong>, not <code>jsonschema</code> and not
+pydantic. It checks <code>required</code> and does ad-hoc per-type checking, raising
+<code>ValueError</code> with the collected errors. A keyword it does not know —
+<code>minLength</code>, <code>enum</code>, <code>pattern</code> — looks enforced and is silently ignored. That
+is a known limitation, and it is exactly why <code>define_tool</code> does not validate
+nested schemas either: checking them would advertise an enforcement that does
+not exist, and would reject <code>pydantic.model_json_schema()</code> output, which is
+the documented way to build <code>parameters</code>.</p>
+<h3 id="three-tool-shapes-and-what-bridges-them">Three tool shapes, and what bridges them<a class="headerlink" href="#three-tool-shapes-and-what-bridges-them" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Package</th>
+<th>Adds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ToolDefinition</code></td>
+<td><code>tau_llm</code></td>
+<td>the wire-facing shape — <code>name</code>, <code>label</code>, <code>description</code>, <code>parameters</code>, <code>execute</code></td>
+</tr>
+<tr>
+<td><code>ToolDefinition</code></td>
+<td><code>tau_agent_core</code></td>
+<td>identity by name, so the loop can dedupe and shadow</td>
+</tr>
+<tr>
+<td><code>ExtensionToolDefinition</code></td>
+<td><code>tau_agent_core</code></td>
+<td><code>source</code>, recording which extension registered it</td>
+</tr>
+</tbody>
+</table>
+<p>What is not interchangeable is <code>execute</code>. The <code>tau_llm</code> form is called with
+the tool's own arguments; the extension form is called
+<code>execute(tool_call_id, params, signal, on_update, ctx)</code>. <code>AgentSession</code> adapts
+between them. <strong>Do not pass a <code>define_tool()</code> result to
+<code>api.register_tool()</code></strong> — the shape validates and the call signature does not.</p>
+<p><code>ToolSpec</code> is a <code>Protocol</code> naming the three members a provider actually reads
+(<code>name</code>, <code>description</code>, <code>parameters</code>), so anything with those three may be
+sent regardless of which package built it.</p>
+<h2 id="constrained-decoding">Constrained decoding<a class="headerlink" href="#constrained-decoding" title="Permanent link">&para;</a></h2>
+<p><code>constraints.py</code> and <code>grammar.py</code> carry τ's own machinery for binding a
+model's output to a grammar; <code>Model.grammar_dialect</code> selects the flavour the
+server speaks. This has no pi equivalent.</p>
+<p>One consequence worth knowing before you combine it with reasoning: τ
+<strong>disables thinking on a constrained call</strong>, because the grammar binds the
+model's <em>first</em> token, which on a reasoning model is inside its thinking
+block. That is a workaround for an upstream limitation rather than a design
+position.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

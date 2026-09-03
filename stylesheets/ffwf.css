@@ -1,0 +1,745 @@
+/* ==========================================================================
+   FFWF Robotics — docs theme
+   Derived from the fast_ffwf_homepage Vue site. See docs/style-guide.md.
+
+   Two rules govern everything below:
+   1. One accent. Red is the only chromatic color on the site.
+   2. Courier is the machine voice — headings, code, labels, nav. Prose is not
+      machine output, so prose is not Courier.
+   ========================================================================== */
+
+/* --- Tokens ------------------------------------------------------------- */
+
+:root {
+  /* Structural red. Borders and rules carry no text, so this stays at full
+     intensity in both schemes and holds the identity constant. */
+  --ffwf-red: #ff0000;
+
+  /* Type faces */
+  --ffwf-mono: "Courier New", Courier, monospace;
+  --ffwf-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
+    sans-serif;
+
+  /* Geometry, lifted from the homepage components */
+  --ffwf-pill: 15px;   /* ProjectTagLink border-radius */
+  --ffwf-card: 8px;    /* ProjectCard border-radius */
+  --ffwf-rule: 2px;    /* CoreCompetency section divider */
+}
+
+/* Light scheme */
+[data-md-color-scheme="default"] {
+  --ffwf-ground: #ffffff;
+  --ffwf-surface: #f4f3f1;
+  --ffwf-ink: #141414;
+  --ffwf-ash: #5c5a57;
+  --ffwf-hairline: #d8d6d3;
+  /* One step deeper than #ff0000 so headings and links clear AA at every
+     size on white. #ff0000 on white is only 4.0:1. */
+  --ffwf-ink-red: #cc0000;
+
+  /* Documentation state. The one place the site is not monochrome-plus-red —
+     see the style guide for why status is data rather than emphasis. */
+  --ffwf-state-grey: #5c5a57;
+  --ffwf-state-red: #cc0000;
+  --ffwf-state-yellow: #8a6a00;
+  --ffwf-state-green: #1a7a45;
+}
+
+/* Dark scheme */
+[data-md-color-scheme="slate"] {
+  --ffwf-ground: #0b0b0c;
+  --ffwf-surface: #151517;
+  --ffwf-ink: #e8e6e3;      /* bone — the skull, not pure white */
+  --ffwf-ash: #8c8a87;
+  --ffwf-hairline: #2a2a2d;
+  --ffwf-ink-red: #ff0000;  /* 4.8:1 on the ground — full intensity earns its place here */
+  --ffwf-halo: rgba(255, 255, 255, 0.92);
+
+  --ffwf-state-grey: #8c8a87;
+  --ffwf-state-red: #ff0000;
+  --ffwf-state-yellow: #d9a400;
+  --ffwf-state-green: #3ec27a;
+}
+
+/* --- Map onto Material -------------------------------------------------- */
+
+[data-md-color-scheme="default"],
+[data-md-color-scheme="slate"] {
+  --md-default-bg-color: var(--ffwf-ground);
+  --md-default-fg-color: var(--ffwf-ink);
+  --md-default-fg-color--light: var(--ffwf-ash);
+  --md-default-fg-color--lighter: var(--ffwf-hairline);
+  --md-default-fg-color--lightest: var(--ffwf-hairline);
+
+  --md-primary-fg-color: var(--ffwf-ground);
+  --md-primary-bg-color: var(--ffwf-ink);
+  --md-accent-fg-color: var(--ffwf-ink-red);
+
+  --md-typeset-color: var(--ffwf-ink);
+  --md-typeset-a-color: var(--ffwf-ink-red);
+
+  --md-code-bg-color: var(--ffwf-surface);
+  --md-code-fg-color: var(--ffwf-ink);
+
+  /* Material's footer defaults assume a dark footer and hard-code near-white
+     text, which vanishes on the light scheme's surface. */
+  --md-footer-bg-color: var(--ffwf-surface);
+  --md-footer-bg-color--dark: var(--ffwf-surface);
+  --md-footer-fg-color: var(--ffwf-ink);
+  --md-footer-fg-color--light: var(--ffwf-ash);
+  --md-footer-fg-color--lighter: var(--ffwf-ash);
+
+  --md-text-font-family: var(--ffwf-sans);
+  --md-code-font-family: var(--ffwf-mono);
+}
+
+/* --- Typography --------------------------------------------------------- */
+
+.md-typeset {
+  font-size: 0.78rem;
+  line-height: 1.7;
+}
+
+/* Courier is the machine voice: headings, labels, nav, code. */
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4,
+.md-typeset h5,
+.md-typeset h6 {
+  font-family: var(--ffwf-mono);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.md-typeset h1 {
+  color: var(--ffwf-ink-red);
+  font-size: 1.9em;
+  line-height: 1.15;
+  margin: 0 0 0.4em;
+  text-transform: uppercase;
+}
+
+.md-typeset h2 {
+  color: var(--ffwf-ink-red);
+  font-size: 1.35em;
+  margin-top: 2.2em;
+  padding-bottom: 0.3em;
+  border-bottom: var(--ffwf-rule) solid var(--ffwf-hairline);
+}
+
+.md-typeset h3 {
+  color: var(--ffwf-ink);
+  font-size: 1.1em;
+  margin-top: 1.8em;
+}
+
+.md-typeset h4 {
+  color: var(--ffwf-ash);
+  font-size: 1em;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Inline links get an underline so color is never the only signal. */
+.md-typeset a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+
+.md-typeset a:hover,
+.md-typeset a:focus-visible {
+  text-decoration-thickness: 2px;
+}
+
+/* Nav, sidebar, and tabs are chrome, not prose — Courier. */
+.md-nav,
+.md-tabs__link,
+.md-header__title,
+.md-footer__title,
+.md-search__input {
+  font-family: var(--ffwf-mono);
+}
+
+.md-nav__title {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.62rem;
+}
+
+/* Active page in the sidebar: red, matching nav.router-link-exact-active. */
+.md-nav__link--active,
+.md-nav__link--active code {
+  color: var(--ffwf-ink-red);
+  font-weight: 700;
+}
+
+/* --- Header ------------------------------------------------------------- */
+
+.md-header {
+  border-bottom: var(--ffwf-rule) solid var(--ffwf-red);
+  box-shadow: none;
+}
+
+.md-header__button.md-logo img,
+.md-nav__button.md-logo img {
+  height: 1.5rem;
+  width: auto;
+}
+
+/* The mark is a black skull and crossed wrenches over a red flame on a
+   transparent ground, so its black features disappear into the dark scheme.
+   Stacked axis-aligned drop-shadows trace the alpha channel and give it a
+   silhouette to sit against; the last one is a soft glow to keep the edge
+   from reading as a hard sticker cutout. */
+[data-md-color-scheme="slate"] .md-header__button.md-logo img,
+[data-md-color-scheme="slate"] .md-nav__button.md-logo img {
+  filter:
+    drop-shadow(1px 0 0 var(--ffwf-halo))
+    drop-shadow(-1px 0 0 var(--ffwf-halo))
+    drop-shadow(0 1px 0 var(--ffwf-halo))
+    drop-shadow(0 -1px 0 var(--ffwf-halo))
+    drop-shadow(0 0 4px rgba(255, 255, 255, 0.3));
+}
+
+.md-tabs {
+  border-bottom: 1px solid var(--ffwf-hairline);
+}
+
+/* --- Code --------------------------------------------------------------- */
+
+/* Body is sans and code is Courier, so the typeface already carries the
+   distinction. The red left rule is the marker for "machine text", reused
+   from the homepage's red-bordered tag pills. */
+.md-typeset .highlight,
+.md-typeset pre > code {
+  border-radius: 0 var(--ffwf-card) var(--ffwf-card) 0;
+}
+
+.md-typeset pre > code {
+  border-left: var(--ffwf-rule) solid var(--ffwf-red);
+  padding: 0.9em 1em;
+}
+
+.md-typeset code {
+  font-size: 0.85em;
+  border-radius: 3px;
+}
+
+/* Inline code, distinct from code blocks — no left rule, subtle fill. */
+.md-typeset p code,
+.md-typeset li code,
+.md-typeset td code {
+  padding: 0.1em 0.35em;
+  background: var(--ffwf-surface);
+  border: 1px solid var(--ffwf-hairline);
+}
+
+/* --- Admonitions -------------------------------------------------------- */
+
+/* Material's default admonitions are a rainbow, and it colors each type at
+   specificity (0,3,0) — including the icon, which is a masked ::before whose
+   background-color carries the hue. Every override below matches that
+   specificity and relies on load order to win. */
+.md-typeset .admonition,
+.md-typeset details {
+  font-size: 0.72rem;
+  border: 1px solid var(--ffwf-hairline);
+  border-left: var(--ffwf-rule) solid var(--ffwf-ash);
+  border-radius: 0 var(--ffwf-card) var(--ffwf-card) 0;
+  box-shadow: none;
+  background: var(--ffwf-surface);
+}
+
+/* Neutral types */
+.md-typeset .admonition.note,
+.md-typeset .admonition.info,
+.md-typeset .admonition.tip,
+.md-typeset .admonition.abstract,
+.md-typeset .admonition.example,
+.md-typeset .admonition.quote,
+.md-typeset .admonition.success,
+.md-typeset .admonition.question {
+  border-color: var(--ffwf-hairline);
+  border-left-color: var(--ffwf-ash);
+}
+
+/* Attention types */
+.md-typeset .admonition.warning,
+.md-typeset .admonition.danger,
+.md-typeset .admonition.failure,
+.md-typeset .admonition.bug {
+  border-color: var(--ffwf-hairline);
+  border-left-color: var(--ffwf-red);
+}
+
+.md-typeset .admonition > .admonition-title,
+.md-typeset details > summary {
+  font-family: var(--ffwf-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ffwf-ink);
+  background-color: transparent;
+  border: none;
+}
+
+.md-typeset .admonition > .admonition-title::before,
+.md-typeset details > summary::before {
+  background-color: var(--ffwf-ash);
+}
+
+.md-typeset .warning > .admonition-title,
+.md-typeset .danger > .admonition-title,
+.md-typeset .failure > .admonition-title,
+.md-typeset .bug > .admonition-title {
+  color: var(--ffwf-ink-red);
+}
+
+.md-typeset .warning > .admonition-title::before,
+.md-typeset .danger > .admonition-title::before,
+.md-typeset .failure > .admonition-title::before,
+.md-typeset .bug > .admonition-title::before {
+  background-color: var(--ffwf-red);
+}
+
+/* --- Axis eyebrow ------------------------------------------------------- */
+
+/* Every category page states its coordinates on the 2x2. Geometry is lifted
+   from ProjectTagLink.vue — 2px red border, 15px radius — but the colour is
+   not: an inverted slab clashed with the page it sits above, so the stamp is
+   red type on the surface tone instead. Reads as a label rather than a
+   badge, and it recedes far enough to stop competing with the H1. */
+.md-typeset .axis {
+  display: inline-block;
+  margin: 0 0 1.6em;
+  padding: 5px 12px;
+  font-family: var(--ffwf-mono);
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ffwf-ink-red);
+  background: var(--ffwf-surface);
+  border: var(--ffwf-rule) solid var(--ffwf-red);
+  border-radius: var(--ffwf-pill);
+}
+
+/* --- Crosswalk ---------------------------------------------------------- */
+
+/* The four categories are a 2x2 of depth against intent, so the landing page
+   draws them as a grid with real axes rather than listing them. The axis
+   labels are the point; they are not decoration. */
+.md-typeset .crosswalk {
+  display: grid;
+  grid-template-columns: max-content 1fr 1fr;
+  gap: 0.5rem;
+  margin: 2rem 0 2.5rem;
+}
+
+.md-typeset .crosswalk__axis {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--ffwf-mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ffwf-ash);
+}
+
+.md-typeset .crosswalk__axis--col {
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--ffwf-red);
+}
+
+.md-typeset .crosswalk__axis--row {
+  padding-right: 0.6rem;
+  border-right: 1px solid var(--ffwf-red);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.md-typeset .crosswalk__corner {
+  border: none;
+}
+
+.md-typeset .crosswalk__cell {
+  padding: 1rem 1.1rem 1.1rem;
+  background: var(--ffwf-surface);
+  border: 1px solid var(--ffwf-hairline);
+  border-radius: var(--ffwf-card);
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.md-typeset .crosswalk__cell:hover,
+.md-typeset .crosswalk__cell:focus-within {
+  transform: translateY(-5px); /* ProjectCard hover lift */
+  border-color: var(--ffwf-red);
+}
+
+.md-typeset .crosswalk__cell h3 {
+  margin: 0 0 0.3em;
+  font-family: var(--ffwf-mono);
+  font-size: 1em;
+  color: var(--ffwf-ink-red);
+  text-transform: uppercase;
+}
+
+/* On a project page the whole quadrant is one destination, so the heading is
+   the link and there is no row of per-project shortcuts under it. */
+.md-typeset .crosswalk__cell h3 a,
+.md-typeset .roster__item h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.md-typeset .crosswalk__cell h3 a:hover,
+.md-typeset .crosswalk__cell h3 a:focus-visible,
+.md-typeset .roster__item h3 a:hover,
+.md-typeset .roster__item h3 a:focus-visible {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
+/* Redundant while the axis rails are visible, so it only appears once they
+   drop out at narrow widths. Without it the quadrants lose their coordinates,
+   which is the whole point of the grid. */
+.md-typeset .crosswalk__coord {
+  display: none;
+}
+
+.md-typeset .crosswalk__cell p {
+  margin: 0 0 0.9em;
+  font-size: 0.7rem;
+  line-height: 1.55;
+  color: var(--ffwf-ash);
+}
+
+/* Project shortcuts inside each quadrant. */
+.md-typeset .crosswalk__links,
+.md-typeset .roster__badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* The quiet pill: a link that is a destination, not a claim about state.
+   Same geometry as the axis eyebrow, without the filled red border. */
+.md-typeset .crosswalk__links a,
+.md-typeset .chip {
+  padding: 3px 10px;
+  font-family: var(--ffwf-mono);
+  font-size: 0.62rem;
+  color: var(--ffwf-ink);
+  background: transparent;
+  border: 1px solid var(--ffwf-hairline);
+  border-radius: var(--ffwf-pill);
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.md-typeset .crosswalk__links a:hover,
+.md-typeset .crosswalk__links a:focus-visible,
+.md-typeset .chip:hover,
+.md-typeset .chip:focus-visible {
+  color: var(--ffwf-ink-red);
+  border-color: var(--ffwf-red);
+}
+
+/* --- Project index ------------------------------------------------------ */
+
+.md-typeset .roster {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.md-typeset .roster__item {
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--ffwf-hairline);
+  border-left: var(--ffwf-rule) solid var(--ffwf-red);
+  border-radius: 0 var(--ffwf-card) var(--ffwf-card) 0;
+}
+
+.md-typeset .roster__item h3 {
+  margin: 0 0 0.2em;
+  font-size: 1.05em;
+  color: var(--ffwf-ink-red);
+}
+
+.md-typeset .roster__item p {
+  margin: 0 0 0.8em;
+  font-size: 0.7rem;
+  line-height: 1.55;
+  color: var(--ffwf-ash);
+}
+
+.md-typeset .roster__item p:last-child {
+  margin-bottom: 0;
+}
+
+/* --- Documentation state ------------------------------------------------ */
+
+/* Four states, four colors — the only chromatic exception on the site. Status
+   is data, not emphasis, and a reader scanning a table needs to sort it at a
+   glance. Outlined rather than filled so it stays in the pill vocabulary the
+   rest of the site already speaks, and the word is always spelled out so the
+   color is never the only signal. */
+.md-typeset .state {
+  display: inline-block;
+  padding: 2px 9px;
+  font-family: var(--ffwf-mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  border: 1px solid currentcolor;
+  border-radius: var(--ffwf-pill);
+  text-decoration: none;
+}
+
+.md-typeset a.state:hover,
+.md-typeset a.state:focus-visible {
+  border-width: var(--ffwf-rule);
+}
+
+.md-typeset .state--grey   { color: var(--ffwf-state-grey); }
+.md-typeset .state--red    { color: var(--ffwf-state-red); }
+.md-typeset .state--yellow { color: var(--ffwf-state-yellow); }
+.md-typeset .state--green  { color: var(--ffwf-state-green); }
+
+/* The table itself is unclassed so it inherits the base table styling; the
+   wrapper carries the scroll and the column sizing. */
+.md-typeset .docstate {
+  overflow-x: auto;
+  margin: 1.5rem 0 1rem;
+}
+
+.md-typeset .docstate table {
+  width: 100%;
+}
+
+.md-typeset .docstate th[scope="row"] {
+  font-family: var(--ffwf-mono);
+  background: transparent;
+  border-bottom: 1px solid var(--ffwf-hairline);
+  text-transform: none;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.md-typeset .docstate__version {
+  font-family: var(--ffwf-mono);
+  font-size: 0.65rem;
+  color: var(--ffwf-ash);
+}
+
+.md-typeset a.docstate__version {
+  color: var(--ffwf-ink-red);
+}
+
+.md-typeset .state-legend {
+  font-family: var(--ffwf-mono);
+  font-size: 0.62rem;
+  line-height: 2.2;
+  color: var(--ffwf-ash);
+}
+
+/* --- Tables ------------------------------------------------------------- */
+
+.md-typeset table:not([class]) {
+  font-size: 0.7rem;
+  border: 1px solid var(--ffwf-hairline);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.md-typeset table:not([class]) th {
+  font-family: var(--ffwf-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: var(--ffwf-surface);
+  color: var(--ffwf-ink);
+  border-bottom: var(--ffwf-rule) solid var(--ffwf-red);
+}
+
+/* --- Footer ------------------------------------------------------------- */
+
+.md-footer {
+  background: var(--ffwf-surface);
+  border-top: var(--ffwf-rule) solid var(--ffwf-red);
+}
+
+.md-footer-meta {
+  background: transparent;
+}
+
+/* --- Swatches (style guide only) ---------------------------------------- */
+
+.md-typeset .swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 0.75rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.md-typeset .swatch {
+  border: 1px solid var(--ffwf-hairline);
+  border-radius: var(--ffwf-card);
+  overflow: hidden;
+}
+
+.md-typeset .swatch__chip {
+  height: 3.5rem;
+}
+
+.md-typeset .swatch__meta {
+  padding: 0.5rem 0.7rem;
+  font-family: var(--ffwf-mono);
+  font-size: 0.62rem;
+  line-height: 1.5;
+}
+
+.md-typeset .swatch__meta b {
+  display: block;
+  color: var(--ffwf-ink);
+  font-weight: 700;
+}
+
+.md-typeset .swatch__meta span {
+  color: var(--ffwf-ash);
+}
+
+/* --- Diagrams ----------------------------------------------------------- */
+
+/* Figures are inline <svg>, never <img>. An <img> cannot see these custom
+   properties, so it cannot follow the scheme toggle; an inlined <svg> inherits
+   the whole cascade and repaints for free. The SVG therefore carries geometry
+   and class names only — no color, no font, no scheme knowledge.
+
+   The classes below are drawing utilities, not BEM blocks: stroke and fill are
+   orthogonal axes and an element usually needs one of each. They are scoped to
+   .dia so names this short cannot leak into the page.
+
+   One hard rule, learned the hard way: a stroke class never declares fill, and
+   a fill class never declares stroke. Both beat the SVG presentation attribute
+   they collide with, so a class that sets `fill: none` silently erases a
+   `fill="url(#hatch)"` on the same element. */
+
+.md-typeset .dia {
+  margin: 1.8rem 0 2rem;
+  /* Material centres figures and caps captions at 24rem. A schematic is not a
+     photograph — it aligns with the prose it explains. */
+  text-align: left;
+  /* Below ~34rem the labels would shrink past reading size, so the figure
+     scrolls sideways rather than becoming an illegible thumbnail. */
+  overflow-x: auto;
+}
+
+.md-typeset .dia svg {
+  display: block;
+  width: 100%;
+  min-width: 34rem;
+  height: auto;
+}
+
+.md-typeset .dia figcaption {
+  max-width: none;
+  margin: 0.8rem 0 0;
+  padding-left: 0.8rem;
+  border-left: var(--ffwf-rule) solid var(--ffwf-hairline);
+  font-size: 0.66rem;
+  line-height: 1.6;
+  color: var(--ffwf-ash);
+}
+
+/* Strokes — weight is hierarchy: 1.5 is structure, 1 is detail or aside. */
+.md-typeset .dia .stroke        { stroke: var(--ffwf-ink); stroke-width: 1.5; }
+.md-typeset .dia .stroke-hair   { stroke: var(--ffwf-ink); stroke-width: 1; }
+.md-typeset .dia .stroke-soft   { stroke: var(--ffwf-ash); stroke-width: 1; }
+.md-typeset .dia .stroke-red    { stroke: var(--ffwf-red); stroke-width: 1.5; }
+/* Modifier: dash pattern only, so it composes with any stroke above. */
+.md-typeset .dia .stroke-dashed { stroke-dasharray: 5 4; }
+
+/* Fills */
+.md-typeset .dia .fill-none    { fill: none; }
+.md-typeset .dia .fill-ground  { fill: var(--ffwf-ground); }
+.md-typeset .dia .fill-surface { fill: var(--ffwf-surface); }
+.md-typeset .dia .fill-ink     { fill: var(--ffwf-ink); }
+.md-typeset .dia .fill-ash     { fill: var(--ffwf-ash); }
+.md-typeset .dia .fill-red     { fill: var(--ffwf-red); }
+
+/* The one texture in the system. Held down in opacity so it reads as a
+   surface treatment rather than a fourth line weight. */
+.md-typeset .dia .hatch { stroke: var(--ffwf-ash); stroke-width: 1; opacity: 0.42; }
+
+/* Text. Courier throughout — a diagram is machine voice by definition. */
+.md-typeset .dia text { font-family: var(--ffwf-mono); }
+
+/* Identifiers are quoted verbatim from the docs, so this one never gets a
+   text-transform. `TectumEvent` is not `TECTUMEVENT`. */
+.md-typeset .dia .label { font-size: 12px; font-weight: 700; fill: var(--ffwf-ink); }
+
+.md-typeset .dia .label-soft { font-size: 10.5px; fill: var(--ffwf-ash); }
+
+/* Role and mark are the diagram's own words, not the system's, so they take
+   the uppercase tracking the rest of the site gives its labels. */
+.md-typeset .dia .label-role,
+.md-typeset .dia .label-mark {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.md-typeset .dia .label-role { fill: var(--ffwf-ash); }
+.md-typeset .dia .label-mark { fill: var(--ffwf-ink-red); }
+
+/* --- Quality floor ------------------------------------------------------ */
+
+:focus-visible {
+  outline: var(--ffwf-rule) solid var(--ffwf-red);
+  outline-offset: 2px;
+}
+
+@media screen and (max-width: 44.9375em) {
+  /* The axis rails stop earning their keep once the grid is one column, so
+     they come out and each cell stands alone. */
+  .md-typeset .crosswalk {
+    grid-template-columns: 1fr;
+  }
+
+  .md-typeset .crosswalk__axis,
+  .md-typeset .crosswalk__corner {
+    display: none;
+  }
+
+  /* The rails are gone, so each cell states its own coordinates. */
+  .md-typeset .crosswalk__coord {
+    display: block;
+    margin-bottom: 0.6em;
+    font-family: var(--ffwf-mono);
+    font-size: 0.58rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ffwf-ash);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .md-typeset .crosswalk__cell,
+  .md-typeset .crosswalk__links a {
+    transition: none;
+  }
+
+  .md-typeset .crosswalk__cell:hover,
+  .md-typeset .crosswalk__cell:focus-within {
+    transform: none;
+  }
+}

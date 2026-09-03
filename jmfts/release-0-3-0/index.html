@@ -1,0 +1,2737 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for Tectum, Tau, and JMFTS">
+      
+      
+      
+        <link rel="canonical" href="https://ffwfrobotics.github.io/jmfts/release-0-3-0/">
+      
+      
+        <link rel="prev" href="../changelog/">
+      
+      
+        <link rel="next" href="../../integrations/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>0.3.0 — the job system - FFWF Robotics Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/ffwf.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#jmfts-030-the-job-system" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="FFWF Robotics Docs" class="md-header__button md-logo" aria-label="FFWF Robotics Docs" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            FFWF Robotics Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              0.3.0 — the job system
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9 8.99 8.99 0 0 0 4 7.47V22h2v-3h2v3h2v-3h2v3h2v-3.54c2.47-1.65 4-4.46 4-7.46a9 9 0 0 0-9-9m-4 9a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m8 0a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m-4 3 1.5 3h-3z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 15a2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2m2.5 2 1.5-3 1.5 3zm5.5-2a2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2m6-4A10 10 0 0 0 12 1 10 10 0 0 0 2 11c0 2.8 1.2 5.3 3 7.1V22h14v-3.9c1.8-1.8 3-4.3 3-7.1m-5 9h-2v-2h-2v2h-2v-2H9v2H7v-2.8c-1.8-1.5-3-3.7-3-6.2a8 8 0 0 1 8-8 8 8 0 0 1 8 8c0 2.5-1.2 4.8-3 6.2z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tectum/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tectum
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tau/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tau
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  JMFTS
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../integrations/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Integrations
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../style-guide/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Style guide
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="FFWF Robotics Docs" class="md-nav__button md-logo" aria-label="FFWF Robotics Docs" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    FFWF Robotics Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tectum/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tectum
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tectum/tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tectum/tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tectum/cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tectum/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tectum/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tau/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tau
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tau/tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tau/reference/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/tau-llm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_llm
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/tau-agent-core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_agent_core
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extensions
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/rpc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RPC
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/tau-coding-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_coding_agent
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JMFTS
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JMFTS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_2" id="__nav_4_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/ingest-a-document/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ingest a document
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    0.3.0 — the job system
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    0.3.0 — the job system
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#where-this-is-specified" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where this is specified
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-one-ingest-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. One ingest path
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-a-rule-names-its-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. A rule names its scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-the-walk-goes-up-so-a-rule-that-fans-out-enqueues-down" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. The walk goes up, so a rule that fans out enqueues down
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-explain-reaches-the-sheet-tier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. EXPLAIN reaches the sheet tier
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-the-spreadsheet-options-are-settable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. The spreadsheet options are settable
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-the-table-audits-itself" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. The table audits itself
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-a-guard-is-a-comparison-and-the-threshold-is-the-callers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. A guard is a comparison, and the threshold is the caller's
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-evidence-is-rows-and-the-column-is-the-callers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Evidence is rows, and the column is the caller's
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-a-node-names-its-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. A node names its rule
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#two-breaks-a-client-can-see" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two breaks a client can see
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#upgrading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upgrading
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-not-here" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is not here
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-this-page-yourself" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running this page yourself
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../integrations/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integrations
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Integrations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integrations/tectum-tau/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum + Tau
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integrations/tectum-jmfts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum + JMFTS
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integrations/tau-jmfts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau + JMFTS
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integrations/full-stack-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The FFwF Full Stack Agent
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../style-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guide
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stable"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#where-this-is-specified" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where this is specified
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-one-ingest-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. One ingest path
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-a-rule-names-its-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. A rule names its scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-the-walk-goes-up-so-a-rule-that-fans-out-enqueues-down" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. The walk goes up, so a rule that fans out enqueues down
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-explain-reaches-the-sheet-tier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. EXPLAIN reaches the sheet tier
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-the-spreadsheet-options-are-settable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. The spreadsheet options are settable
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-the-table-audits-itself" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. The table audits itself
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-a-guard-is-a-comparison-and-the-threshold-is-the-callers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. A guard is a comparison, and the threshold is the caller's
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-evidence-is-rows-and-the-column-is-the-callers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Evidence is rows, and the column is the caller's
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-a-node-names-its-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. A node names its rule
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#two-breaks-a-client-can-see" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two breaks a client can see
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#upgrading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upgrading
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-not-here" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is not here
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-this-page-yourself" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running this page yourself
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="jmfts-030-the-job-system">JMFTS 0.3.0 — the job system<a class="headerlink" href="#jmfts-030-the-job-system" title="Permanent link">&para;</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Released 2026-09-03</p>
+<p>0.3.0 is the current release: tag <a href="https://github.com/jmccardle/jmfts/releases/tag/v0.3.0"><code>v0.3.0</code></a>, and both wheels on PyPI. One of the seven planned phases has not landed and two more are still under consideration — see <a href="#what-is-not-here">What is not here</a>.</p>
+<p>Every console block below is real output, captured by running <code>scripts/demo_release_0_3_0.py</code> against the tree. Regenerating that file is how this page is updated, so the page cannot describe a run the appliance no longer does.</p>
+</div>
+<p>Ingestion used to be decided in three places that did not know about each other. A declarative table decided what the uploaded file would do, eight hand-written lists inside task handlers decided what each created node would do, and a third planner decided the summarization rungs. This release makes one table decide all of it.</p>
+<p>The consequence a user can see is small and specific: the spreadsheet options are settable, a rule's threshold is an option rather than a literal, <code>EXPLAIN</code> reports work below a fan-out, and every node in the tree records which rule made it.</p>
+<h2 id="where-this-is-specified">Where this is specified<a class="headerlink" href="#where-this-is-specified" title="Permanent link">&para;</a></h2>
+<p><code>docs/SPRINT_JOBS.md</code> is the plan and <code>docs/INGEST_SPEC.md</code> is normative for the result. Neither ships in the public tree; the <a href="https://github.com/jmccardle/jmfts">README's note on documentation</a> says which documents are held back and why.</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>What</th>
+<th>State</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Every task handler declares what it reads, what it writes, and how many children it may create</td>
+<td>landed</td>
+</tr>
+<tr>
+<td>2</td>
+<td>The evidence registry: one door onto everything ingestion writes about a node</td>
+<td>landed</td>
+</tr>
+<tr>
+<td>2a</td>
+<td>The synchronous ingest path onto the queue, then deleted</td>
+<td>landed</td>
+</tr>
+<tr>
+<td>2b</td>
+<td>Evidence leaves <code>documents.structured_content</code> for its own table</td>
+<td>landed</td>
+</tr>
+<tr>
+<td>3</td>
+<td>A rule names its scope; a node names its rule; one planner replaces the hand-written lists</td>
+<td>landed</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Guards take operators, so a threshold is data</td>
+<td>landed</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Multiplicity and the cost fold, so <code>EXPLAIN</code> says how much</td>
+<td>planned</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Rule sets, bindings, budgets</td>
+<td>under consideration</td>
+</tr>
+<tr>
+<td>7</td>
+<td>The settling walk generalised; the rollup special case deleted</td>
+<td>under consideration</td>
+</tr>
+</tbody>
+</table>
+<h2 id="1-one-ingest-path">1. One ingest path<a class="headerlink" href="#1-one-ingest-path" title="Permanent link">&para;</a></h2>
+<p><code>jmfts_core/pipeline.py</code> is deleted. <code>execute_pipeline</code>, <code>PipelineDefinition</code> and <code>StageConfig</code> are gone, and with them the idea of a <em>stage</em>. There are tasks, and which of them a document runs is a pure function of the format, what <code>probe</code> measured, and the options the upload carried.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>scripts.demo_release_0_3_0<span class="w"> </span>run<span class="w"> </span>one-path
+<span class="go">probe measured 271 bytes of retrieval-notes.md</span>
+<span class="go">----------------------------------------------</span>
+<span class="go">  format    text</span>
+<span class="go">  patterns  has_headings, has_text_layer</span>
+
+<span class="go">What Part 4's table scheduled, at the file node</span>
+<span class="go">-----------------------------------------------</span>
+<span class="go">  extract:text           write self</span>
+<span class="go">  structure:declared     write children, after extract:text</span>
+<span class="go">                         params chunk_strategy='sentence_packed', max_tokens=120, min_chunk_length=20</span>
+<span class="go">  index:bm25             write self, after structure:declared</span>
+
+<span class="go">What it deliberately did not schedule, and why</span>
+<span class="go">----------------------------------------------</span>
+<span class="go">  ocr                    patterns.is_scanned was not measured</span>
+<span class="go">  structure:inferred     patterns.has_headings is true, and structure:inferred runs only when it is false</span>
+<span class="go">  structure:conversation patterns.is_conversation is false</span>
+<span class="go">  structure:sheets       format 'text' names no worksheet list a declared rung could read</span>
+<span class="go">  ... and 4 more rows, each with its own measured reason</span>
+
+<span class="go">  Every row of the table is decided. A task missing from a plan would be a</span>
+<span class="go">  wrong answer rather than a short one, so nothing is omitted for brevity here</span>
+<span class="go">  except by this script.</span>
+</code></pre></div>
+<p>A row that did not fire says which measurement was false. That is not logging — it is what <code>POST /ingest/explain</code> returns, and it is the same string the run records on the node.</p>
+<p><code>POST /ingest</code> did <strong>not</strong> become asynchronous. The request enqueues, drains its own document's tasks, and returns the same finished tree it always did. The wire did not move; the work did. A caller who wants the asynchronous shape has it unchanged at <code>POST /ingest/file</code>.</p>
+<h2 id="2-a-rule-names-its-scope">2. A rule names its scope<a class="headerlink" href="#2-a-rule-names-its-scope" title="Permanent link">&para;</a></h2>
+<p>Before this release a rule could only apply to the uploaded file node. Anything that had to run on a <em>created</em> node — each worksheet of a workbook, each chunk of a document — was a literal <code>TaskSpec</code> typed inside the handler that created the node. It had no name in the table, no declared parameters, and no way for a plan to report it.</p>
+<p>A <code>TaskRow</code> now carries a scope, and a scope has two forms: the file node, or the children another rule produced.</p>
+<figure class="dia"><svg viewBox="0 0 680 300" role="img" aria-labelledby="dia-scope-t dia-scope-d"><title id="dia-scope-t">One rule table, three scopes, over one document tree</title><desc id="dia-scope-d">On the left, a box labelled TASK ROWS is divided into three bands. The top band is labelled at root and lists extract colon text, structure colon sheets and index colon bm25. The middle band is labelled at children of structure colon sheets, sheet, and lists profile colon sheet and extract colon sheet. The bottom band is labelled at children of dot dot dot, chunk, record or summary, and lists embed. On the right is a document tree: a solid file node at the top, two dashed sheet nodes below it, and three dashed leaf nodes below those, typed record, summary and record. Three connectors run from the bands to the tree regions they apply to. The middle connector is red, squared off where it leaves the band, and lands on the first dashed sheet node. The dashed nodes are annotated as not existing when the plan is made.</desc><text x="0" y="14" class="label-role">jmfts</text><rect x="20" y="40" width="300" height="200" class="fill-surface stroke"/><text x="32" y="62" class="label">TASK_ROWS</text><line x1="20" y1="72" x2="320" y2="72" class="stroke-soft"/><text x="32" y="94" class="label">@root</text><text x="32" y="114" class="label-soft">extract:text · structure:sheets · index:bm25</text><line x1="20" y1="128" x2="320" y2="128" class="stroke-soft"/><text x="32" y="150" class="label">@children_of(structure:sheets):sheet</text><text x="32" y="170" class="label-soft">profile:sheet · extract:sheet</text><line x1="20" y1="184" x2="320" y2="184" class="stroke-soft"/><text x="32" y="206" class="label">@children_of(…):chunk|record|summary</text><text x="32" y="226" class="label-soft">embed</text><path d="M320 110 H358 V70 H482" class="stroke-hair fill-none"/><path d="M490 70 L481 66 L481 74 Z" class="fill-ink"/><rect x="316" y="165" width="10" height="10" class="fill-red"/><path d="M321 170 H358 V147 H392" class="stroke-red fill-none"/><path d="M400 147 L391 143 L391 151 Z" class="fill-red"/><path d="M320 226 H382" class="stroke-hair fill-none"/><path d="M390 226 L381 222 L381 230 Z" class="fill-ink"/><rect x="490" y="56" width="110" height="28" class="fill-ground stroke"/><text x="545" y="75" text-anchor="middle" class="label">file</text><line x1="545" y1="84" x2="545" y2="110" class="stroke-hair"/><line x1="450" y1="110" x2="610" y2="110" class="stroke-hair"/><line x1="450" y1="110" x2="450" y2="134" class="stroke-hair"/><line x1="610" y1="110" x2="610" y2="134" class="stroke-hair"/><rect x="400" y="134" width="100" height="26" class="fill-ground stroke stroke-dashed"/><text x="450" y="152" text-anchor="middle" class="label">sheet</text><rect x="560" y="134" width="100" height="26" class="fill-ground stroke stroke-dashed"/><text x="610" y="152" text-anchor="middle" class="label">sheet</text><line x1="450" y1="160" x2="450" y2="188" class="stroke-hair"/><line x1="423" y1="188" x2="497" y2="188" class="stroke-hair"/><line x1="423" y1="188" x2="423" y2="212" class="stroke-hair"/><line x1="497" y1="188" x2="497" y2="212" class="stroke-hair"/><line x1="610" y1="160" x2="610" y2="212" class="stroke-hair"/><rect x="390" y="212" width="66" height="24" class="fill-ground stroke-hair stroke-dashed"/><text x="423" y="229" text-anchor="middle" class="label-soft">record</text><rect x="464" y="212" width="66" height="24" class="fill-ground stroke-hair stroke-dashed"/><text x="497" y="229" text-anchor="middle" class="label-soft">summary</text><rect x="577" y="212" width="66" height="24" class="fill-ground stroke-hair stroke-dashed"/><text x="610" y="229" text-anchor="middle" class="label-soft">record</text><text x="390" y="262" class="label-soft">dashed: does not exist yet</text><text x="20" y="272" class="label-mark">scope form 2</text><text x="20" y="290" class="label-soft">a rule naming nodes no plan can point at yet</text></svg><figcaption>The full third scope reads <code>@children_of(structure:declared|structure:inferred|structure:conversation|profile:sheet|extract:sheet):chunk|record|summary</code>. A scope names several producing rules because one rule — <code>embed</code> — applies to the leaves of five of them, and it names a usetype because without one an <code>embed</code> would land on every empty section container as well as on the chunks inside it.</figcaption></figure>
+
+<p>Asking the table at a scope is the same call, with one more argument:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>scripts.demo_release_0_3_0<span class="w"> </span>run<span class="w"> </span>scope
+<span class="go">Every scope Part 4's table declares</span>
+<span class="go">-----------------------------------</span>
+<span class="go">  @root</span>
+<span class="go">      extract:text, ocr, structure:declared, structure:inferred, structure:conversation, structure:sheets, extract:tables, extract:images, citation, index:bm25, extract:facts</span>
+<span class="go">  @children_of(structure:sheets):sheet</span>
+<span class="go">      profile:sheet, extract:sheet</span>
+<span class="go">  @children_of(structure:declared|structure:inferred|structure:conversation|profile:sheet|extract:sheet):chunk|record|summary</span>
+<span class="go">      embed</span>
+
+<span class="go">The same table, asked at the file node and at a chunk</span>
+<span class="go">-----------------------------------------------------</span>
+<span class="go">  @root</span>
+<span class="go">      extract:text, structure:declared, index:bm25</span>
+<span class="go">  @children_of(structure:declared|structure:inferred|structure:conversation|profile:sheet|extract:sheet):chunk|record|summary</span>
+<span class="go">      embed</span>
+
+<span class="go">  The chunk does not exist yet. `structure:declared` has not run, so there is no</span>
+<span class="go">  node to name — and that is exactly why the row lives in the table rather than</span>
+<span class="go">  in the handler that creates the node. Before Phase 3 a plan could not report it.</span>
+</code></pre></div>
+<h2 id="3-the-walk-goes-up-so-a-rule-that-fans-out-enqueues-down">3. The walk goes up, so a rule that fans out enqueues down<a class="headerlink" href="#3-the-walk-goes-up-so-a-rule-that-fans-out-enqueues-down" title="Permanent link">&para;</a></h2>
+<p>The obvious reading of "one planner" is that the planner enqueues everything and the handlers stop enqueuing. That is wrong, and the reason is worth stating because an earlier draft of the design got it wrong twice.</p>
+<p>A node becomes searchable when the settling walk reaches it. The walk advances to a node's parent and never descends. So a node created with no work on it is never visited, never embedded, and nothing notices. A rule that creates children must therefore enqueue those children's work at the moment it creates them.</p>
+<figure class="dia"><svg viewBox="0 0 680 280" role="img" aria-labelledby="dia-walk-t dia-walk-d"><title id="dia-walk-t">The settling walk travels upward; a fan-out rule enqueues downward</title><desc id="dia-walk-d">A vertical tree of three nodes: file at the top, section in the middle, chunk at the bottom, joined by thin lines. On the left, a single long arrow runs upward alongside all three, from the chunk past the section to the file, labelled settle underscore walk, advances to parent id, never descends. On the right, a box labelled structure colon declared sits beside the file node and is joined to it by a short line captioned runs here. From that box a red connector runs down the right-hand side and turns left into the chunk node, with a red square where it leaves the box and a red arrowhead entering the chunk. It is annotated enqueue underscore frontier, the batch the new child gets.</desc><text x="0" y="14" class="label-role">jmfts</text><rect x="230" y="30" width="170" height="30" class="fill-ground stroke"/><text x="315" y="50" text-anchor="middle" class="label">file</text><line x1="315" y1="60" x2="315" y2="110" class="stroke-hair"/><rect x="230" y="110" width="170" height="30" class="fill-ground stroke"/><text x="315" y="130" text-anchor="middle" class="label">section</text><line x1="315" y1="140" x2="315" y2="190" class="stroke-hair"/><rect x="230" y="190" width="170" height="30" class="fill-ground stroke"/><text x="315" y="210" text-anchor="middle" class="label">chunk</text><path d="M230 205 H195 V72" class="stroke fill-none"/><path d="M195 62 L190 73 L200 73 Z" class="fill-ink"/><text x="10" y="120" class="label">settle_walk</text><text x="10" y="138" class="label-soft">advances to parent_id</text><text x="10" y="154" class="label-soft">never descends</text><rect x="450" y="30" width="200" height="30" class="fill-ground stroke"/><text x="550" y="50" text-anchor="middle" class="label">structure:declared</text><line x1="400" y1="45" x2="450" y2="45" class="stroke-hair"/><text x="404" y="24" class="label-soft">runs here</text><rect x="641" y="55" width="10" height="10" class="fill-red"/><path d="M646 60 V205 H408" class="stroke-red fill-none"/><path d="M400 205 L409 201 L409 209 Z" class="fill-red"/><text x="210" y="248" class="label-mark">enqueue_frontier</text><text x="210" y="266" class="label-soft">the batch a new child gets — planned once per fan-out, not per child</text></svg><figcaption>What this release removed is the hand-written list, not the call. Five handlers that carried a literal <code>TaskSpec</code> tuple now ask <code>plan_frontier</code> for one, and the rows it reads are declared beside every other scheduling decision. The frontier is planned once per fan-out and not once per child, because the answer is a function of the format, the patterns and the options, and every child of one run shares all three: a forty-sheet workbook is one evaluation and forty enqueues.</figcaption></figure>
+
+<h2 id="4-explain-reaches-the-sheet-tier">4. <code>EXPLAIN</code> reaches the sheet tier<a class="headerlink" href="#4-explain-reaches-the-sheet-tier" title="Permanent link">&para;</a></h2>
+<p><code>POST /ingest/explain</code> answers what a format with a given set of options would do, without storing any bytes. <code>POST /ingest/analyze</code> runs <code>probe</code> over real bytes and answers the same way. Both call the same planner, which is what stops a forecast and a run from describing different work.</p>
+<p>Until this release the forecast stopped at the worksheet list, because the per-sheet tasks were not rows. Each explained task now carries the scope it applies to.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>scripts.demo_release_0_3_0<span class="w"> </span>run<span class="w"> </span>explain
+<span class="go">POST /ingest/explain — format xlsx, patterns probed</span>
+<span class="go">---------------------------------------------------</span>
+<span class="go">  task                   outcome      scope</span>
+<span class="go">  probe                  enqueued     @root</span>
+<span class="go">  structure:conversation impossible   @root</span>
+<span class="go">  structure:sheets       enqueued     @root</span>
+<span class="go">  profile:sheet          enqueued     @children_of(structure:sheets):sheet</span>
+<span class="go">  extract:sheet          enqueued     @children_of(structure:sheets):sheet</span>
+<span class="go">  citation               impossible   @root</span>
+<span class="go">  embed                  enqueued     @children_of(structure:declared|structure:inferred|structure:conversation|profile:sheet|extract:sheet):chunk|record|summary</span>
+
+<span class="go">The 3 rows that used to be invisible</span>
+<span class="go">------------------------------------</span>
+<span class="go">  profile:sheet</span>
+<span class="go">      scope   @children_of(structure:sheets):sheet</span>
+<span class="go">      params  sketch_columns=True</span>
+<span class="go">  extract:sheet</span>
+<span class="go">      scope   @children_of(structure:sheets):sheet</span>
+<span class="go">      params  max_rows=10000, with_cell_notes=True</span>
+<span class="go">  embed</span>
+<span class="go">      scope   @children_of(structure:declared|structure:inferred|structure:conversation|profile:sheet|extract:sheet):chunk|record|summary</span>
+<span class="go">      params  with_tokens=True</span>
+
+<span class="go">  None of these three name a node that exists yet. `structure:sheets` has not</span>
+<span class="go">  run, so there are no worksheets — and `embed` is one scope further down again,</span>
+<span class="go">  on the records `extract:sheet` will write.</span>
+</code></pre></div>
+<p><code>scope</code> is a new field on <code>ExplainedTaskResponse</code>. It is additive: a client that ignores it reads the same plan it read before, one task longer.</p>
+<h2 id="5-the-spreadsheet-options-are-settable">5. The spreadsheet options are settable<a class="headerlink" href="#5-the-spreadsheet-options-are-settable" title="Permanent link">&para;</a></h2>
+<p><code>max_rows</code>, <code>with_cell_notes</code> and <code>sketch_columns</code> were documented, validated and unreachable. The option group existed and was checked; the handler read its own literal default and never looked at the value. A row's <code>params_key</code> is what closes that, because it is what puts the resolved group on the queue row the handler reads.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>scripts.demo_release_0_3_0<span class="w"> </span>run<span class="w"> </span>knobs
+<span class="go">Every option group, and which task reads it</span>
+<span class="go">-------------------------------------------</span>
+<span class="go">  embed            embed</span>
+<span class="go">  facts            extract:facts</span>
+<span class="go">  rollup           (no row names it)</span>
+<span class="go">  sheet_profile    profile:sheet</span>
+<span class="go">  sheet_records    extract:sheet</span>
+<span class="go">  structure        structure:declared, structure:inferred</span>
+
+<span class="go">Setting one, and watching it reach the row</span>
+<span class="go">------------------------------------------</span>
+<span class="go">  override   {'sheet_records': {'max_rows': 500}}</span>
+<span class="go">  resolved   max_rows=500, with_cell_notes=True</span>
+<span class="go">  on the row extract:sheet: max_rows=500, with_cell_notes=True</span>
+
+<span class="go">And refusing a bad one</span>
+<span class="go">----------------------</span>
+<span class="go">  {'sheet_records': {'max_rows': 0}}</span>
+<span class="go">      ValueError: option sheet_records.max_rows: expected a positive integer, got 0</span>
+<span class="go">  {'sheet_records': {'max_rows': True}}</span>
+<span class="go">      ValueError: option sheet_records.max_rows: expected an integer, got bool</span>
+
+<span class="go">  6 groups carry per-key checks, and `max_rows` reaching the</span>
+<span class="go">  handler is what Phase 3 closed. The group was validated before this release; the</span>
+<span class="go">  handler read its own literal default and never looked at the value.</span>
+</code></pre></div>
+<p><code>rollup</code> reporting <code>(no row names it)</code> is correct rather than a gap. Summarization belongs to the settling walk and not to the table, which is what phase 7 would change.</p>
+<p><code>max_rows: True</code> is refused because <code>bool</code> is a subclass of <code>int</code> in Python, and a workbook truncated at one row is not what anyone meant.</p>
+<h2 id="6-the-table-audits-itself">6. The table audits itself<a class="headerlink" href="#6-the-table-audits-itself" title="Permanent link">&para;</a></h2>
+<p>Adding a scope adds a way to write a rule table that is silently wrong: a row ordered after a row below it, or scoped to the children of a rule that has not been decided yet. The design forbids answering that with a second checked-in list, because a test over a list only proves the list equals itself. The check is stated over the table the appliance runs, and it runs at import.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>scripts.demo_release_0_3_0<span class="w"> </span>run<span class="w"> </span>audit
+<span class="go">Four mistakes the table refuses, at import time</span>
+<span class="go">-----------------------------------------------</span>
+<span class="go">  a duplicate task name</span>
+<span class="go">      ValueError: task 'structure:sheets' has two rows in TASK_ROWS; every outcome this table reports is keyed by task name, so one of the two would be invisible</span>
+<span class="go">  `after` naming a row that comes later</span>
+<span class="go">      ValueError: row 'a' is ordered after 'b', which is not above it in TASK_ROWS; within-node ordering can only name a task whose id the batch already has</span>
+<span class="go">  a child scope naming a producer below it</span>
+<span class="go">      ValueError: row 'a' is scoped to the children of 'structure:sheets', which is not above it in TASK_ROWS; a scope decides eligibility from the producing row's, which has to be decided first</span>
+<span class="go">  a `params_key` naming no group</span>
+<span class="go">      ValueError: row 'a' names option group 'not_a_group', which is not in TASK_PARAM_DEFAULTS; the declared groups are ['embed', 'facts', 'rollup', 'sheet_profile', 'sheet_records', 'structure']</span>
+
+<span class="go">  A test over a list only proves the list equals itself. These are stated over</span>
+<span class="go">  the table the appliance actually runs, so deleting a row moves the audit with it.</span>
+</code></pre></div>
+<p>The appliance will not start with a bad table. That is the intended cost.</p>
+<h2 id="7-a-guard-is-a-comparison-and-the-threshold-is-the-callers">7. A guard is a comparison, and the threshold is the caller's<a class="headerlink" href="#7-a-guard-is-a-comparison-and-the-threshold-is-the-callers" title="Permanent link">&para;</a></h2>
+<p>Until this release a rule's condition was a list of pattern names read for truthiness. Any question a rule wanted to ask had to reach it as a flag, which meant <code>probe</code> had to invent a name for the answer — a rule that wanted "more than one worksheet" needed a <code>has_several_sheets</code>, and the number that decided it lived in the prober rather than in the table.</p>
+<p>A condition is now a list of terms, and a term is <code>left op right</code>. Six operators, <code>=</code> <code>!=</code> <code>&lt;</code> <code>&lt;=</code> <code>&gt;</code> <code>&gt;=</code>, and no <code>and</code>, <code>or</code> or <code>not</code>. Dropping the connectives is deliberate: <code>requires</code> is already a conjunction and <code>forbids</code> already a list of exclusions, and one term is what lets a plan report one sentence per condition rather than one per expression.</p>
+<p>Either side may name an option instead of a value. That is what makes a threshold data — it resolves through the same three-layer stack every other option does, so a caller sets it per request and <code>EXPLAIN</code> reports both the name and the number it resolved to.</p>
+<p><strong><code>requires</code> and <code>forbids</code> are not each other's negation, and the difference is what an unmeasured name means.</strong> A required pattern that nobody measured blocks the rule: the precondition cannot be confirmed. A forbidden pattern that nobody measured does not: no evidence of a blocker is not a blocker. Fold the two into one expression and <code>structure:inferred</code>'s condition reads <code>not (has_heading_styles = true)</code>, which is false for every <code>.docx</code> — because no prober emits that name — and every <code>.docx</code> finishes ingestion with no children.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>scripts.demo_release_0_3_0<span class="w"> </span>run<span class="w"> </span>guards
+<span class="go">Every pattern a guard may read, and what it holds</span>
+<span class="go">-------------------------------------------------</span>
+<span class="go">  char_count           int</span>
+<span class="go">      extract:facts</span>
+<span class="go">  has_heading_styles   bool     (probe does not write it)</span>
+<span class="go">      structure:declared, structure:inferred</span>
+<span class="go">  has_headings         bool</span>
+<span class="go">      structure:declared, structure:inferred</span>
+<span class="go">  has_images           bool</span>
+<span class="go">      extract:images</span>
+<span class="go">  has_outline          bool</span>
+<span class="go">      structure:declared, structure:inferred</span>
+<span class="go">  has_sheets           bool</span>
+<span class="go">      structure:declared, structure:inferred, structure:sheets, profile:sheet, extract:sheet</span>
+<span class="go">  has_slides           bool</span>
+<span class="go">      structure:declared, structure:inferred</span>
+<span class="go">  has_text_layer       bool</span>
+<span class="go">      extract:text, structure:declared, structure:inferred, structure:conversation, extract:tables, citation, index:bm25, extract:facts</span>
+<span class="go">  is_conversation      bool</span>
+<span class="go">      structure:declared, structure:inferred, structure:conversation</span>
+<span class="go">  is_damaged           bool</span>
+<span class="go">      extract:text</span>
+<span class="go">  is_scanned           bool</span>
+<span class="go">      ocr</span>
+<span class="go">  pages_with_tables    list     (probe does not write it)</span>
+<span class="go">      extract:tables</span>
+
+<span class="go">  `matched.patterns` is an open namespace, and `evidence.pattern_type` answers</span>
+<span class="go">  `bool` for a name it has never heard of. That is right for storage and wrong for</span>
+<span class="go">  a guard: `has_hedings` would type-check, plan cleanly, and stand its row down on</span>
+<span class="go">  every document forever.</span>
+
+<span class="go">The two unknown policies, on a .docx</span>
+<span class="go">------------------------------------</span>
+<span class="go">  patterns supplied   has_text_layer=True</span>
+<span class="go">  has_heading_styles  guardable, and no prober emits it</span>
+
+<span class="go">  structure:declared     not_applicable</span>
+<span class="go">      patterns.has_heading_styles was not measured</span>
+<span class="go">  structure:inferred     enqueued</span>
+<span class="go">      its condition holds</span>
+
+<span class="go">  `structure:declared` requires that name and `structure:inferred` forbids it.</span>
+<span class="go">  Flatten the two lists into one expression and the second reads</span>
+<span class="go">  `not (has_heading_styles = true)`, which is false — and every .docx comes out of</span>
+<span class="go">  ingestion with no children.</span>
+
+<span class="go">A threshold the caller sets, on a file whose size was measured</span>
+<span class="go">--------------------------------------------------------------</span>
+<span class="go">  retrieval-notes.md probed as text: char_count=271</span>
+<span class="go">  facts=(the defaults)</span>
+<span class="go">      extract:facts   not_applicable</span>
+<span class="go">      options.facts.enabled is false, and extract:facts runs only when it is true</span>
+<span class="go">  facts=enabled=True</span>
+<span class="go">      extract:facts   enqueued</span>
+<span class="go">  facts=enabled=True, min_characters=400</span>
+<span class="go">      extract:facts   not_applicable</span>
+<span class="go">      patterns.char_count is 271, and extract:facts does not run when it is less than options.facts.min_characters (400)</span>
+
+<span class="go">The same floor, on a format nothing measures the size of</span>
+<span class="go">--------------------------------------------------------</span>
+<span class="go">  patterns supplied   has_outline=True, has_text_layer=True</span>
+<span class="go">  facts=enabled=True, min_characters=400</span>
+<span class="go">      extract:facts   enqueued</span>
+
+<span class="go">  probe emits `char_count` for `text` alone. Written as a `requires`, this floor</span>
+<span class="go">  would have stopped fact extraction on every PDF, .docx and .pptx — not because</span>
+<span class="go">  they are short, but because nobody measured. Written as a `forbids` it says what</span>
+<span class="go">  a caller means by a minimum: do not spend the LLM call on a document measured as</span>
+<span class="go">  too small, and do spend it where nobody measured a size.</span>
+
+<span class="go">Four terms the table refuses, at import time</span>
+<span class="go">--------------------------------------------</span>
+<span class="go">  a pattern name the vocabulary does not have</span>
+<span class="go">      ValueError: row 'a' guards on ['has_hedings'], which GUARDABLE_PATTERNS does not name; `matched.patterns` is an open namespace, so an unlisted name would read as a pattern nobody measures and stand the row down forever</span>
+<span class="go">  a count compared with a flag</span>
+<span class="go">      ValueError: row 'a' compares char_count (int) with True (bool); a guard's two sides have to be the same kind of thing</span>
+<span class="go">  an ordering operator on a flag</span>
+<span class="go">      ValueError: row 'a' orders has_text_layer with '&gt;', and it holds a bool; ['&lt;', '&lt;=', '&gt;', '&gt;='] are for counts</span>
+<span class="go">  an option nothing declares</span>
+<span class="go">      ValueError: row 'a' guards on options.facts.min_chars, which is not a declared option; a guard's option reference is resolved by `resolve_options` and a name nothing declares would resolve to nothing</span>
+
+<span class="go">  Same shape as the four row mistakes above: the check is stated over the term the</span>
+<span class="go">  appliance runs, not over a checked-in list of names to compare it against.</span>
+</code></pre></div>
+<p><strong>The names a guard may read are a closed list, and that is a departure.</strong> Everything <code>probe</code> measures is stored in an open namespace: a new prober adds a name and nothing has to be told about it. A guard is the one reader for which an unknown name and a false one are indistinguishable, so <code>has_hedings</code> would be a well-typed comparison that plans without complaint and stands its rule down on every document forever. Twelve names are declared with their types, and a rule that reads anything else stops the appliance at import. Storage keeps its open namespace; only the guard vocabulary is closed.</p>
+<p>The types are declared rather than derived for a reason the list shows. <code>pages_with_tables</code> holds a list of page numbers, and the storage rule — everything is a flag unless named otherwise — calls it a boolean. Truthiness survived that mistake. <code>&gt;</code> would not.</p>
+<p><code>min_characters</code> is the first option that decides whether a task runs at all, rather than how it runs. It is written as an exclusion, and the measurement in the block above is why: <code>char_count</code> is emitted for plain text and nothing else, so the same floor written as a requirement would stop fact extraction on every PDF, <code>.docx</code> and <code>.pptx</code> — the <code>.docx</code> failure again, in a second costume.</p>
+<p>Nothing on the wire moved. <code>ExplainedTask.requires</code> still holds strings: a rule that reads a name for truthiness renders as that name, exactly as before, and a comparison renders as the comparison. <code>facts.min_characters</code> is a new option in an existing group and defaults to <code>0</code>, which excludes nothing.</p>
+<h2 id="8-evidence-is-rows-and-the-column-is-the-callers">8. Evidence is rows, and the column is the caller's<a class="headerlink" href="#8-evidence-is-rows-and-the-column-is-the-callers" title="Permanent link">&para;</a></h2>
+<p>Everything ingestion learned about a node — what <code>probe</code> matched, what the extractor found, the attempt log — used to live in <code>documents.structured_content</code>, alongside whatever the caller put there. Two handlers writing two different names to one node was a read-modify-write race, and one of the two writes was lost with nothing raised.</p>
+<figure class="dia"><svg viewBox="0 0 680 280" role="img" aria-labelledby="dia-ev-t dia-ev-d"><title id="dia-ev-t">Evidence moves out of a JSONB column and into its own table</title><desc id="dia-ev-d">Two panels separated by a vertical divider. On the left, headed 0.2.1, one hatched documents slab holds a knocked-out band labelled structured content, listing matched, attempts and extraction alongside whatever the caller wrote; it is captioned one JSONB column, read modify write, two writers and one surviving write. On the right, headed 0.3.0, two hatched slabs are stacked: documents, whose structured content band is now glossed as wholly the caller's, and below it document evidence, holding one row per document id and name with a value and a state. A red connector runs down from the documents slab into the document evidence slab, squared off where it leaves documents, and is annotated one row per name.</desc><defs><pattern id="dia-hatch-ev-a" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="4" y1="0" x2="4" y2="8" class="hatch"/></pattern><pattern id="dia-hatch-ev-b" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="4" y1="0" x2="4" y2="8" class="hatch"/></pattern></defs><text x="0" y="14" class="label-role">jmfts</text><text x="20" y="38" class="label-soft">0.2.1</text><rect x="20" y="50" width="280" height="104" fill="url(#dia-hatch-ev-a)" class="stroke"/><rect x="24" y="54" width="272" height="96" class="fill-none stroke-soft"/><rect x="34" y="64" width="252" height="76" class="fill-ground"/><text x="160" y="86" text-anchor="middle" class="label">structured_content</text><text x="160" y="108" text-anchor="middle" class="label-soft">matched · attempts · extraction</text><text x="160" y="126" text-anchor="middle" class="label-soft">+ whatever the caller wrote</text><text x="20" y="238" class="label-soft">one JSONB column, read-modify-write</text><text x="20" y="256" class="label-soft">two writers, and one surviving write</text><line x1="330" y1="24" x2="330" y2="266" class="stroke-soft"/><text x="360" y="38" class="label-soft">0.3.0</text><rect x="360" y="50" width="290" height="62" fill="url(#dia-hatch-ev-b)" class="stroke"/><rect x="364" y="54" width="282" height="54" class="fill-none stroke-soft"/><rect x="372" y="58" width="266" height="46" class="fill-ground"/><text x="505" y="78" text-anchor="middle" class="label">documents</text><text x="505" y="97" text-anchor="middle" class="label-soft">structured_content — wholly the caller's</text><rect x="500" y="107" width="10" height="10" class="fill-red"/><line x1="505" y1="112" x2="505" y2="140" class="stroke-red"/><path d="M505 148 L501 139 L509 139 Z" class="fill-red"/><rect x="360" y="148" width="290" height="62" fill="url(#dia-hatch-ev-b)" class="stroke"/><rect x="364" y="152" width="282" height="54" class="fill-none stroke-soft"/><rect x="372" y="156" width="266" height="46" class="fill-ground"/><text x="505" y="176" text-anchor="middle" class="label">document_evidence</text><text x="505" y="195" text-anchor="middle" class="label-soft">(document_id, name) → value · state</text><text x="360" y="238" class="label-mark">one row per name</text><text x="360" y="256" class="label-soft">one statement to append; three states per name</text></svg><figcaption>Neither reason is performance. A read-modify-write lost writes under concurrency, and a name needs three states — written, written-and-known-empty, and never run — where a JSONB key has room for two, because staling a block means deleting it and a deleted key is indistinguishable from one that was never written.</figcaption></figure>
+
+<p><strong>This is a versioned break.</strong> A client reading <code>matched.patterns</code> out of <code>structured_content</code> now reads nothing. <code>GET /documents/{id}/evidence</code> is where it went — a route rather than a field on <code>DocumentResponse</code>, because a field would join that table on every read including every search hit.</p>
+<h2 id="9-a-node-names-its-rule">9. A node names its rule<a class="headerlink" href="#9-a-node-names-its-rule" title="Permanent link">&para;</a></h2>
+<p><code>Document.produced_by</code> records which rule created a node. NULL means asserted: a person, an importer or an upload made it, not a rule. That is the same convention <code>Triple.derived_by</code> already used, and for the same reason — the first materialized thing must not be indistinguishable from something a document actually said.</p>
+<p><code>usetype</code> does not answer this question. That says what a node <em>is</em>, and one structure rung writes both <code>section</code> and <code>chunk</code>.</p>
+<figure class="dia"><svg viewBox="0 0 680 280" role="img" aria-labelledby="dia-pb-t dia-pb-d"><title id="dia-pb-t">produced by, and the one edit that clears it</title><desc id="dia-pb-d">A file node at the top carries produced by null, glossed as asserted because the upload wrote it. Below it, three chunk nodes hang off a rail. The first two carry produced by structure colon declared. The third also carries structure colon declared, and a red connector rises into it from a box below reading PATCH slash documents slash id with a content body, annotated a content edit clears the stamp. A footnote records that a retitle and a metadata patch leave it alone.</desc><text x="0" y="14" class="label-role">jmfts</text><rect x="240" y="30" width="200" height="46" class="fill-ground stroke"/><text x="340" y="50" text-anchor="middle" class="label">file</text><text x="340" y="67" text-anchor="middle" class="label-soft">produced_by = NULL</text><text x="452" y="48" class="label">asserted</text><text x="452" y="66" class="label-soft">the upload wrote it</text><line x1="340" y1="76" x2="340" y2="100" class="stroke-hair"/><line x1="100" y1="100" x2="580" y2="100" class="stroke-hair"/><line x1="100" y1="100" x2="100" y2="130" class="stroke-hair"/><line x1="340" y1="100" x2="340" y2="130" class="stroke-hair"/><line x1="580" y1="100" x2="580" y2="130" class="stroke-hair"/><rect x="30" y="130" width="140" height="46" class="fill-ground stroke"/><text x="100" y="150" text-anchor="middle" class="label">chunk</text><text x="100" y="167" text-anchor="middle" class="label-soft">structure:declared</text><rect x="270" y="130" width="140" height="46" class="fill-ground stroke"/><text x="340" y="150" text-anchor="middle" class="label">chunk</text><text x="340" y="167" text-anchor="middle" class="label-soft">structure:declared</text><rect x="510" y="130" width="140" height="46" class="fill-ground stroke"/><text x="580" y="150" text-anchor="middle" class="label">chunk</text><text x="580" y="167" text-anchor="middle" class="label-soft">structure:declared</text><rect x="470" y="212" width="210" height="30" class="fill-ground stroke-hair"/><text x="575" y="232" text-anchor="middle" class="label">PATCH {"content": …}</text><rect x="570" y="207" width="10" height="10" class="fill-red"/><line x1="575" y1="212" x2="575" y2="186" class="stroke-red"/><path d="M575 176 L570 187 L580 187 Z" class="fill-red"/><text x="20" y="222" class="label-mark">a content edit clears the stamp</text><text x="20" y="240" class="label-soft">a retitle does not, and neither does a metadata patch —</text><text x="20" y="256" class="label-soft">neither makes the node stop being what the rule produced</text></svg><figcaption>The column backfills nothing. A node written before it existed cannot be distinguished from one a caller wrote, and stamping those retroactively would be a guess presented as a record.</figcaption></figure>
+
+<p>Both halves, run against a live appliance:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>scripts.demo_release_0_3_0<span class="w"> </span>run<span class="w"> </span>stamp
+<span class="go">retrieval-notes.md -&gt; node 1, 7 tasks drained</span>
+<span class="go">---------------------------------------------</span>
+<span class="go">     id  usetype    produced_by            title</span>
+<span class="go">      1  file       (asserted)             retrieval-notes.md</span>
+<span class="go">      2  section    structure:declared     Retrieval notes</span>
+<span class="go">      3  chunk      structure:declared     Retrieval notes</span>
+<span class="go">      4  section    structure:declared     Late interaction</span>
+<span class="go">      5  chunk      structure:declared     Late interaction</span>
+<span class="go">      6  section    structure:declared     Segmentation</span>
+<span class="go">      7  chunk      structure:declared     Segmentation</span>
+
+<span class="go">  `(asserted)` is a NULL column and it means a person, an importer or an</span>
+<span class="go">  upload made the node. The file node is asserted because the upload wrote it.</span>
+
+<span class="go">Evidence is rows, not a column</span>
+<span class="go">------------------------------</span>
+<span class="go">  node 1 carries 6 evidence names:</span>
+<span class="go">      attempts, extraction, file, matched, options, structure</span>
+<span class="go">  structured_content is the caller's: {}</span>
+
+<span class="go">A person edits a produced node</span>
+<span class="go">------------------------------</span>
+<span class="go">  node 2 before   produced_by='structure:declared'</span>
+<span class="go">  after a retitle           produced_by='structure:declared'</span>
+<span class="go">  after a content edit      produced_by=None</span>
+
+<span class="go">  Only `content` clears it. A retitle does not make the node stop being what</span>
+<span class="go">  the rule produced, and neither does a metadata patch.</span>
+</code></pre></div>
+<p><code>produced_by</code> is a new field on <code>DocumentResponse</code>, and it is additive.</p>
+<h2 id="two-breaks-a-client-can-see">Two breaks a client can see<a class="headerlink" href="#two-breaks-a-client-can-see" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Evidence left <code>structured_content</code>.</strong> Reading <code>matched.patterns</code> from that column returns nothing; read <code>GET /documents/{id}/evidence</code> instead.</li>
+<li><strong><code>PipelineStageInfo</code> and <code>PipelineInfo.stages</code> are gone from the contracts.</strong> There are no stages. <code>POST /ingest/explain</code> answers what a document will run, from a format and a set of options rather than from a pipeline name.</li>
+</ol>
+<p>Both are why this is a minor version and not a patch.</p>
+<h2 id="upgrading">Upgrading<a class="headerlink" href="#upgrading" title="Permanent link">&para;</a></h2>
+<p>Two migrations, applied in order:</p>
+<table>
+<thead>
+<tr>
+<th>Migration</th>
+<th>What</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>015_evidence_rows.sql</code></td>
+<td>Creates <code>document_evidence</code> and moves twenty-nine names out of <code>documents.structured_content</code>.</td>
+</tr>
+<tr>
+<td><code>016_document_produced_by.sql</code></td>
+<td>Adds <code>documents.produced_by</code> and an index on <code>(parent_id, produced_by)</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>There is no migration ledger. Choosing and applying deltas is still a deliberate act by an operator who knows the target's state.</p>
+<div class="admonition warning">
+<p class="admonition-title">015 moves data a running 0.2.1 process reads</p>
+<p>Deploy the code together with the migration, not around it. 016 is additive and backfills nothing: nodes that predate it read as asserted, which is the honest answer rather than a guessed one.</p>
+</div>
+<h2 id="what-is-not-here">What is not here<a class="headerlink" href="#what-is-not-here" title="Permanent link">&para;</a></h2>
+<p><strong>Planned, and it slipped this release.</strong> Phase 5 folds cost over the plan, so <code>EXPLAIN</code> reports how much work as an interval instead of only which work. It takes the next number rather than this one.</p>
+<p><strong>Under consideration, and not committed.</strong> Phase 6 is rule sets, bindings and budgets — selecting a named set of rules and re-casting it at an existing subtree. Phase 7 generalises the settling walk and deletes the rollup planner as a special case. Both are specified; neither is scheduled, and this page will say so until that changes.</p>
+<p><strong>Deliberately not built.</strong> A re-run of a fan-out rule would need to match existing children, keep them, and reserve the subtree for deletions. Nothing re-runs a fan-out rule yet, so building the reservation would reserve a region for a delete that cannot happen.</p>
+<p><strong>One finding, left open.</strong> The conversation rung creates child nodes and declares no bound on how many. Declaring one needs <code>probe</code> to count message lines, which is a design decision rather than a patch.</p>
+<h2 id="running-this-page-yourself">Running this page yourself<a class="headerlink" href="#running-this-page-yourself" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/jmccardle/jmfts<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>jmfts
+python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+./.venv/bin/pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>./jmfts-client
+./.venv/bin/pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">".[dev]"</span>
+
+./.venv/bin/python<span class="w"> </span>-m<span class="w"> </span>scripts.demo_release_0_3_0<span class="w"> </span>list
+./.venv/bin/python<span class="w"> </span>-m<span class="w"> </span>scripts.demo_release_0_3_0<span class="w"> </span>run
+</code></pre></div>
+<p>The last command runs every section except <code>stamp</code>, which needs a database:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>jmfts-demo-pg<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">POSTGRES_USER</span><span class="o">=</span>jmfts<span class="w"> </span>-e<span class="w"> </span><span class="nv">POSTGRES_PASSWORD</span><span class="o">=</span>jmfts<span class="w"> </span>-e<span class="w"> </span><span class="nv">POSTGRES_DB</span><span class="o">=</span>jmfts<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-p<span class="w"> </span><span class="m">127</span>.0.0.1:5434:5432<span class="w"> </span>pgvector/pgvector:pg16
+<span class="nb">export</span><span class="w"> </span><span class="nv">JMFTS_DB_PORT</span><span class="o">=</span><span class="m">5434</span><span class="w"> </span><span class="nv">JMFTS_EMBEDDING_DEVICE</span><span class="o">=</span>cpu
+./.venv/bin/jmfts-init-db
+./.venv/bin/python<span class="w"> </span>-m<span class="w"> </span>scripts.demo_release_0_3_0<span class="w"> </span>run<span class="w"> </span>stamp
+</code></pre></div>
+<p><code>markdown --out demo.md</code> writes the same output as the fenced blocks above. That is how this page is regenerated.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
