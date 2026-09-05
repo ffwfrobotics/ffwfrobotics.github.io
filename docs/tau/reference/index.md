@@ -81,6 +81,12 @@ units and Dockerfiles. See the
 | [Extensions](extensions.md) | The `ExtensionAPI` surface, the hook vocabulary, discovery and collision rules, the bus capability grant. |
 | [RPC](rpc.md) | The JSON-RPC verb tables, the two answers a submission gets, and the seven verbs τ declines. |
 | [`tau_coding_agent`](tau-coding-agent.md) | The four run modes, the full CLI flag table, `config.json`, and what the TUI is actually made of. |
+| [API](api/index.md) | Every name, its signature, its parameters — generated from the source's own docstrings rather than written here. |
+
+The five pages above are prose: they say how the pieces fit and which
+distinctions are easy to get backwards. [API](api/index.md) is the other kind
+of reference — one entry per marked object, exported from the τ repository by a
+script, so it says what the code says and no more.
 
 ## Three things that are easy to get backwards
 
