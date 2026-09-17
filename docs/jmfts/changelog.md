@@ -6,10 +6,131 @@ title: "Changelog"
 
 What each release changed, newest first.
 
-This page is the release record. The [Reference](reference.md), the [Cookbook](cookbook.md) and the [DevOps Manual](devops.md) were written against **0.2.0** and each says so at the top; where a later release moved something one of them describes, the entry below says what moved.
+This page is the release record. The [Reference](reference.md), the [Cookbook](cookbook.md) and the [DevOps Manual](devops.md) were written against **0.2.0** and have been corrected in place since; where a later release moved something one of them describes, the entry below says what moved. The three pages the appliance generates from its own registries are always current by construction, and are the better answer where they overlap — see [The three pages that cannot go stale](reference.md#the-three-pages-that-cannot-go-stale).
 
-!!! warning "PyPI has 0.2.0 and 0.3.0, and nothing in between"
-    Every release is tagged on GitHub. 0.2.1 is **not on PyPI**: its tag push ran the publish workflow and the upload step failed on a leftover configuration from the hand-built 0.2.0 bootstrap. `pip install jmfts` therefore resolves 0.3.0, and `pip install jmfts==0.2.1` finds nothing. The gap is recorded rather than repaired — republishing a superseded version under a new number would make the release record lie about what 0.2.1 was.
+!!! warning "Two numbers are missing from PyPI, for two different reasons"
+    Every release is tagged on GitHub. `pip install jmfts` resolves **0.6.0**.
+
+    **0.2.1 was never uploaded.** Its tag push ran the publish workflow and the upload step failed on a leftover configuration from the hand-built 0.2.0 bootstrap. `pip install jmfts==0.2.1` finds nothing. The gap is recorded rather than repaired — republishing a superseded version under a new number would make the release record lie about what 0.2.1 was.
+
+    **There is no 0.4.0 at all.** Most of what its sprint planned shipped inside 0.5.0 instead, because the two sprints ran together. Cutting a 0.4.0 tag after the fact would name a tree that never existed.
+
+## 0.6.0
+
+Released TAGDATE as tag [`v0.6.0`](https://github.com/jmccardle/jmfts/releases/tag/v0.6.0). **Three** wheels — `jmfts-web` is new.
+
+A web front end, and the things a web front end found. It has its own page — see **[0.6.0 — eyes and hands](release-0-6-0.md)**, which runs the changes rather than describing them.
+
+### Two breaks a client can see
+
+Both are access control, and both are why this is a minor version.
+
+1. **An edge takes write on its source and read on its target.** `create_link` flushed a `DocumentLink` with no principal check at all, and five `TripleService` write verbs gated neither endpoint. A principal with read-only access to a document could attach edges to it. A call that used to succeed now returns 403.
+2. **The four graph-analytics verbs compute over the caller's graph.** `/graph/centrality`, `/graph/subtree-authority`, `/graph/spines` and `/graph/communities` took no principal at all, and returned ids and titles of documents that are 404 for that caller everywhere else. The filter went into the vertex and title queries rather than onto the result, so **scores change** for a principal without full grants — a centrality number computed over rows you cannot see is a number about somebody else's corpus.
+
+A standing audit test now holds every `@expose`'d verb to being principal-scoped or explicitly listed. It found eleven more gaps on its first run.
+
+### A third wheel
+
+`jmfts-web` carries built static files and one module that says where they are. It has no dependencies of its own; everything the front end does it does in the browser, over the same REST API any other client calls.
+
+```bash
+pip install 'jmfts[web]'      # then open http://localhost:8100/app/
+```
+
+`jmfts`, `jmfts-client` and `jmfts-web` release in lockstep: one number, three wheels, one tag. A UI one release behind its server renders controls for operations that have moved.
+
+### Three routes that answer with bytes
+
+`ExposeSpec` grew a response media type, so an exposed operation can answer with something that is not JSON. `GET /documents/{id}/blob` serves the original upload as an attachment, `/image` serves one page as a PNG, and `/region` serves a rectangle of a page — from the node's own anchor, or from explicit bounds in PDF points. Naming both is a 400 rather than a precedence rule.
+
+### `.docx` and `.pptx` get rectangles
+
+LibreOffice paginates an office document into a stored PDF and a citation's rectangle is recovered off that, so a node can carry two anchors: `source_anchor` for its exact `ooxml` address, `render_anchor` for the approximate rectangle. `PdfAnchor.of` says which — `"source"` or `"rendition"` — and defaults to `"source"`, so every anchor written before this release still parses as what it is.
+
+Two new task types (`render:pdf`, `convert:ooxml`), a third dependency tier (`jmfts[convert]` is the client; `Dockerfile.libreoffice` builds the server), and `JMFTS_CONVERT_URL` to connect them. `render:pdf` is **advisory**: an appliance with no LibreOffice ingests office documents normally and gets no rectangles, rather than stalling them short of settling.
+
+### A workbook's rows reach BM25
+
+`index:bm25` named three prose rungs and did not name `structure:sheets`. On the reference corpus that read as zero `index:bm25` tasks anywhere in a 21-workbook subtree, while 4,601 `record` nodes under it carried text averaging 457 characters — so every spreadsheet was absent from its own index and from `universal`. It is now planned at the settling boundary.
+
+### `EXPLAIN` says how many
+
+The ingest plan folds a cost: tasks, child nodes, embeddings, LLM calls. Every accumulator returns an interval, because a fan-out atom declares a bound rather than a number, and the top is allowed to be open. `PlanCost.unmeasured` names what could not be counted — an unmeasurable count is reported, never guessed.
+
+### A collection configures what is ingested under it
+
+`GET` and `PUT /documents/{id}/ingest-options` write an options row onto a node, and upload walks up the ancestors to find one. No bindings table and no migration: a collection is a subtree, the tree is already there, and access control already answers "who may configure this collection" with "who may write to this node".
+
+### Upgrading
+
+One migration, `023_document_renditions.sql`, and it is additive. `jmfts-init-db --pending` names what a database has not applied.
+
+Nothing fails at deploy time. Calls that used to succeed start returning 403, which is the point of the two breaks above — read them before upgrading a multi-principal deployment.
+
+## 0.5.1
+
+Released 2026-09-13 as tag [`v0.5.1`](https://github.com/jmccardle/jmfts/releases/tag/v0.5.1). Both wheels.
+
+**Development moved into the public repository.** Up to 0.5.0 the public tree was a per-release squash — one commit per version, copied out of a private tree by a publish step, with the working record left behind. From this release there is one history on two remotes, and a commit reaches both as it is made. The commits are the ones that were actually written, the branches are real, and the release history stops being a thing you are told about.
+
+Nothing already published was rewritten; the squash chain is still there behind it.
+
+The rest of the release is test repairs, and they are worth reading as a group because none of them was a defect in the appliance:
+
+- **An ANN gate test was asserting a cost estimate rather than the `ORDER BY` it was written for.** It read the planner's unforced choice of plan, which on a 230-row fixture depends on whether `documents` carries statistics — and that is a property of the test database across the whole run, not of the fixture. It passed on a development machine running one file and failed on a runner running the whole suite. The test now makes its statistics rather than finding them, and forces out every route that produces distance order by *sorting*.
+- **Intermittent ANN failures were the fixtures, not the appliance.** Both files stored one vector in every document and queried with that same vector; a rolled-back row leaves its node in the HNSW graph until `VACUUM` runs, so repeating the fixture piles dead nodes onto the exact point the next query enters at. Reproduced standalone in about forty lines of SQL with no application code. This is a documented pgvector behaviour — removing a node means repairing its neighbours' adjacency lists, so it is deferred — and the fixtures were walking into it.
+- **A recall test could fail on a measurement that met its threshold.** It read `assert 0.8999999999999999 >= 0.9`. The measurement was exactly 0.90 and floating-point accumulation order lost it. The threshold is still 0.90; the comparison is against a floor about 13 ULP under it, which one genuinely missing neighbour clears by four hundred times the tolerance.
+
+## 0.5.0
+
+Released 2026-09-12 as tag [`v0.5.0`](https://github.com/jmccardle/jmfts/releases/tag/v0.5.0). Both wheels.
+
+The release with no 0.4.0 in front of it. Two sprints ran together and shipped as one number.
+
+### A database can be asked what it is missing
+
+`jmfts-init-db --pending` names the shipped deltas a database has not applied, and `schema_migrations` (migration `017`) is the row-per-delta it reads. Before this, choosing and applying deltas was entirely an operator's problem with nothing to check the answer against.
+
+### The token index is HNSW, and it was IVFFlat
+
+Migration `022`. The property that decided it: an HNSW graph is built by insertion, so a partial index over `settled` rows can be added to as documents settle. IVFFlat cannot do that — no `lists` value and no `probes` value makes it possible — so its lists were built once and drifted from the corpus underneath them.
+
+MaxSim also now returns the documents it ranked, rather than a ranking over a set it had already narrowed.
+
+### SHACL shapes run
+
+0.2.1 stored shapes and bound them to scopes. This release runs them: `POST /ontologies/{name}/validate` enqueues `validate:shape`, and `POST /ontologies/{name}/derive` enqueues `derive:rule` for `sh:rule` derivation. `JMFTS_SHACL_MAX_SCOPE_DOCUMENTS` (default 512) bounds a validation or derivation, and refuses rather than silently truncating.
+
+### `GET /capabilities`
+
+What this appliance accepts, asked without sending it anything: installed extras, whether it can produce a vector at all, the formats it identifies from the bytes, the ingest entry points, the retrieval methods and their weights, and the usetypes held out of every result set. Answered from the live registries; it makes no network call. `?corpus=true` adds the counts that say whether a method will return anything *here*.
+
+### `GET /access/audit`
+
+What is not protected by any access-control root. A document under no ACR is readable and writable by anyone with a token, which is the default; this is how to ask which documents are in that state. Owner-only.
+
+### `GET /health` became the cheap probe
+
+It ran up to two outbound HTTP calls at a 5 s timeout, which is not what a liveness probe should do. `/health` is now one `SELECT 1` and needs no token; the LLM reachability probe moved to `/health/llm`, which does.
+
+### Fixed
+
+- **`vector_search` ordered by the similarity label, so the HNSW index was never read.**
+- **A filtered vector search could return an empty page with thousands of matching readable rows.** The gate now goes inside the scored statement rather than after it: a post-filter trims the page after `LIMIT` and returns a short page instead of a wrong one.
+- **BM25's leaf scan returned in-flight documents the other three methods hid.**
+- **`query_triples` applied its endpoint access filter after aggregation.**
+- **A RAPTOR summary took its members' parent slot**, reparenting every document it summarized.
+- **A relative date in fact extraction resolved against the clock of the run** rather than of the document.
+- **A NUL byte in a PDF text layer cost a 900-page book every vector, three times over.**
+- **Three office defects in released code**, each with a deterministic corpus fixture.
+- **A summary gets a node in its own tree.** `summarize:tree` — the RAPTOR roll-up stops being a column on something else.
+- **A container's text reaches the wire**, and BM25 scores a container on the text it stands for without indexing that text twice.
+- **A spreadsheet row too long to embed is a container, not a dead node.**
+
+### Upgrading
+
+Migrations `017` through `022`. `022` rebuilds the token index, which costs time proportional to the number of token rows.
 
 ## 0.3.0
 

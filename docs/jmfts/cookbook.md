@@ -14,7 +14,71 @@ Recipes for specific JMFTS jobs — tuning matryoshka dimensions, reweighting BM
     The recipes below are real, drawn from JMFTS's own benchmark runs and defect write-ups — but they have not been organized into full step-by-step walkthroughs or checked against a fresh deployment, so this page stays `stub` until that pass happens.
 
 !!! note "The measurements are not reproducible from a clone"
-    Every endpoint and setting named here is in **0.2.0**, and still in 0.3.0 — the [Changelog](changelog.md)'s two breaks are the ingest planner and the evidence column, and only the second reaches a recipe below, where it is flagged in place. The evaluation harness that produced the numbers is not in the public tree — it follows separately, along with the write-ups behind the defect recipes (see [Documents not in this release](devops.md#documents-not-in-this-release)). So the figures below are reported, not yet reproducible from a clone.
+    Every endpoint and setting named here is in **0.2.0**, and still in 0.6.0 — where a later release moved something a recipe depends on, it is flagged in place. The evaluation harness that produced the numbers is not in the public tree — it follows separately, along with the write-ups behind the defect recipes (see [Documents not in this release](devops.md#documents-not-in-this-release)). So the figures below are reported, not yet reproducible from a clone.
+
+    Two of 0.6.0's breaks reach recipes rather than only the API: [asserting an edge](#assert-an-edge-as-a-restricted-principal) now takes write on its source, and the graph-analytics verbs compute over the caller's own graph. Both are in the [Changelog](changelog.md#060).
+
+## Show somebody the appliance instead of describing it
+
+`pip install 'jmfts[web]'` and open `/app`. **0.6.0.**
+
+This is the recipe for "what does this thing actually do", asked by somebody who is not going to read a reference page. The Search view runs one query through all seven retrieval methods side by side, which is the shortest demonstration there is — ask something in words the document does not use and watch `vector` and `maxsim` find it while `bm25` does not, then ask for an exact surname and watch that reverse.
+
+Two things to point at while you are there:
+
+- **The Ingest view analyses before it stores.** Drop a file and the page fills a panel headed *What would happen*, subtitled *Nothing below has been stored*: the format, what recognised it, the patterns probe measured, and the plan with a cost per rung. That answers "how do I know what it will do to my documents" without doing anything to them.
+- **The Call log is the proof.** Everything the page showed is a request in that log, replayable, and printable as `curl` with the token elided. A view that showed something the log has no call for would have computed it in the browser — you can check that rather than take it on trust.
+
+The walkthrough is [See a result on the page](tutorials/see-a-result-on-the-page.md).
+
+!!! warning "Not on the Compose stack"
+    `docker compose up` builds `jmfts[embed]`, which does not imply `[web]`. That appliance answers `/app` with a 404.
+
+## Assert an edge as a restricted principal
+
+**Changed in 0.6.0, and this one fails rather than misbehaving.** Creating a `DocumentLink` now requires **write** on the source document and **read** on the target. The same rule reached the triple store: asserting a triple takes write on its subject and read on its object, because a triple is an edge.
+
+Before 0.6.0 neither was checked at all, so a principal with read-only access to a document could attach edges to it. If a service account of yours writes links or triples, give it a `write` grant on the subtree it writes into — a `read` grant that used to work now returns 403.
+
+The read side is unchanged. It has been scoped since 0.5.0, and a triple is visible when both of its endpoints are.
+
+## Give a whole collection its own ingest settings
+
+**0.6.0.** Put the options on the folder rather than on every upload:
+
+```bash
+curl -sX PUT "$API/documents/$FOLDER/ingest-options" \
+  -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+  -d '{"options": {"chunk_strategy": "paragraph", "extract_facts": false}}'
+```
+
+Every file uploaded beneath that node picks them up: upload walks up the ancestors and takes the first options row it finds. `GET` the same path to read what a node carries.
+
+There is no collections table and no binding, which is the point — a collection is a subtree, the tree is already there, and "who may configure this collection" is already answered by "who may write to this node". A principal with write on the folder can set them; one without cannot.
+
+## Get a rectangle out of a `.docx`
+
+**0.6.0.** PDFs have carried citation rectangles since 0.2.0. Office formats have no pagination of their own, so getting one means letting LibreOffice paginate the document first:
+
+```bash
+docker run -d --name libreoffice -p 2003:2003 jmfts-libreoffice:latest
+export JMFTS_CONVERT_URL=http://127.0.0.1:2003
+export JMFTS_CONVERT_VERSION="LibreOffice 26.8.0"   # what that image reports
+jmfts-worker
+```
+
+Then a `.docx` hit carries two anchors, and they answer different questions:
+
+| Row | Question it answers | Trust |
+|---|---|---|
+| `source_anchor` | *Where in the document is this?* — an element of the uploaded package | Exact |
+| `render_anchor` | *Where on a page does it sit?* — a rectangle in our rendering | Approximate |
+
+**Cite the address; look at the rectangle.** The second is LibreOffice's pagination, and a different version of LibreOffice may put the passage on a different page — which is why `JMFTS_CONVERT_VERSION` is recorded on every rendition, and why a viewer should say which of the two it is drawing.
+
+Without a converter configured, office documents ingest normally and get no rectangles. `render:pdf` is advisory, so nothing stalls.
+
+Renditions are always on and cost about 4.8% of stored bytes at the measured upper bound. When you need the space, delete rendition rows rather than uploads: a rendition regenerates by re-running `render:pdf`, and nothing regenerates an upload.
 
 ## Pick a rerank method by what your corpus already stores
 

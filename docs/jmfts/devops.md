@@ -10,32 +10,35 @@ status: "draft"
 
 How JMFTS runs in production: sizing PostgreSQL and pgvector, which container holds the embedding model and which ones deliberately do not, and what an index rebuild costs you.
 
-!!! note "Draft. Written against 0.2.0; the current release is 0.3.0."
+!!! note "Draft. Written against 0.2.0; the current release is 0.6.0."
     Written against **0.2.0** — its `Dockerfile`, `Dockerfile.worker`, `docker-compose.yml`, `deploy/` manifests and entry points — plus benchmark and defect write-ups that are not in the public tree (see [Documents not in this release](#documents-not-in-this-release)). Not yet checked against a deployment outside the maintainer's own.
 
-    Three things an operator needs have been corrected in place for the two releases since: [Getting it](#getting-it), the migration list under [What the Compose stack actually runs](#what-the-compose-stack-actually-runs), and the tier-2 note under [Office files](#office-files-three-tiers-two-extras). The [Changelog](changelog.md) is the release record; nothing else on this page has moved past 0.2.0.
+    Four things an operator needs have been corrected in place for the releases since: [Getting it](#getting-it), the migration list under [What the Compose stack actually runs](#what-the-compose-stack-actually-runs), the tier-2 and tier-3 notes under [Office files](#office-files-three-tiers-two-extras), and [Serving the front end](#serving-the-front-end) is new for 0.6.0. The [Changelog](changelog.md) is the release record; nothing else on this page has moved past 0.2.0.
 
 !!! note "All of this page is released"
     [Ingestion](#ingestion-runs-on-a-queue), [the containers and worker types](#containers-and-worker-types), and [running a fleet](#running-a-fleet) shipped in **0.1.1**, along with `jmfts-worker`, `Dockerfile.worker`, `deploy/`, the `/runner` surface, and the `embed` extra that took torch out of the base install. 0.1.0 had none of it, and the notes that said "branch only" have been removed.
 
 ## Getting it
 
-JMFTS is on PyPI, and `0.3.0` is the current release:
+JMFTS is on PyPI, and `0.6.0` is the current release:
 
 ```bash
-pip install jmfts                 # both wheels: jmfts, and the jmfts-client it depends on
+pip install jmfts                 # the appliance, plus the jmfts-client it depends on
+pip install 'jmfts[web]'          # ...and the browser front end at /app
 ```
 
-`pip install jmfts==0.2.1` finds nothing. That release is tagged on GitHub and was never uploaded — the [Changelog](changelog.md) says why, and 0.3.0 contains everything it did.
+`pip install jmfts==0.2.1` finds nothing. That release is tagged on GitHub and was never uploaded — the [Changelog](changelog.md) says why, and 0.3.0 contains everything it did. There is also no 0.4.0: its sprint shipped inside 0.5.0.
 
 The source is public too:
 
 ```bash
 git clone https://github.com/jmccardle/jmfts.git
-cd jmfts && git checkout v0.3.0    # or stay on master
+cd jmfts && git checkout v0.6.0    # or stay on master
 ```
 
-The public repository is a squash, not a mirror: each release replaces the whole tree in one commit, so `git log` there is short by design. Tags before 0.2.0 carry no `v` prefix — `0.1.0`, `0.1.1`, then `v0.2.0`, `v0.2.1`, `v0.3.0`.
+**The repository is a real history from 0.5.1 on.** Up to 0.5.0 it was a squash — each release replaced the whole tree in one commit — because development happened in a private tree and a publish step copied it out. That step no longer runs: development happens in the public repository, one history on two remotes, and a commit reaches both as it is made. The squash chain is still there behind 0.5.1 and nothing published was rewritten, so `git log` is short for old releases and ordinary for new ones.
+
+Tags before 0.2.0 carry no `v` prefix — `0.1.0`, `0.1.1`, then `v0.2.0` onward.
 
 Everything below runs from that checkout. This is a system that has been running as a personal appliance — it works, and it is not a product; reranked ordering in particular is unvalidated.
 
@@ -90,11 +93,26 @@ Both publications are bound to loopback, not `0.0.0.0` — the dev stack is not 
 
 0.3.0 adds two more: `015_evidence_rows.sql`, which creates `document_evidence` and **moves** twenty-nine names out of `documents.structured_content`, and `016_document_produced_by.sql`, which adds `documents.produced_by` with an index on `(parent_id, produced_by)`. `015` moves data a running 0.2.1 process reads; same rule. `016` is additive and backfills nothing — nodes that predate it read as asserted, which is the honest answer rather than a guessed one.
 
-That is 15 migrations at 0.3.0, `002` through `016`.
+0.5.0 adds six, `017` through `022`. Two are worth knowing by name:
+
+- **`017_migration_ledger.sql` creates `schema_migrations`**, one row per applied delta. This is the first release where a database can be *asked* what it is missing rather than reasoned about, and `jmfts-init-db --pending` is the question.
+- **`022_token_embed_256_hnsw.sql` rebuilds the token index as HNSW.** It was IVFFlat. Budget for it: the rebuild costs time proportional to the number of token rows, which is roughly the number of documents times the retained token count. The reason for the swap is in the [Reference](reference.md#vector-indexes) — an HNSW graph is built by insertion, so a partial index over `settled` can be added to as documents settle, and IVFFlat's lists cannot.
+
+The other four are additive: `018_derived_roots.sql`, `019_link_derived_by.sql`, `020_container_lookup.sql`, `021_profile_usetype.sql`.
+
+0.6.0 adds one, `023_document_renditions.sql`, and it is additive. It creates the table derived bytes live in — see [Office files](#office-files-three-tiers-two-extras).
+
+That is 22 migrations at 0.6.0, `002` through `023`.
 
 Apply them in order against an existing database, or take `schema.sql` for a fresh one. Both live inside the installed package at `jmfts_core/sql/`, so `jmfts-init-db` finds them without a source checkout.
 
-The Compose image is deliberately **not** a production build: embedding runs on CPU there, which is fine for development and wrong for bulk ingestion (see [Sizing the write path](#sizing-the-write-path-and-why-it-is-cpu-bound) below). It is also not the image the worker pools run — that one is [`Dockerfile.worker`](#four-images-two-dockerfiles), and the difference is deliberate rather than incidental.
+**Since 0.5.0, ask rather than reason:**
+
+```bash
+jmfts-init-db --pending           # names the shipped deltas this database has not applied
+```
+
+The Compose image is deliberately **not** a production build: embedding runs on CPU there, which is fine for development and wrong for bulk ingestion (see [Sizing the write path](#sizing-the-write-path-and-why-it-is-cpu-bound) below). It is also not the image the worker pools run — that one is [`Dockerfile.worker`](#five-images-three-dockerfiles), and the difference is deliberate rather than incidental.
 
 ## Auth
 
@@ -194,11 +212,48 @@ There is no remote equivalent of `JMFTS_RUNNER_URL` here. The office readers are
 
 `unoserver` and not `unoconv`, which is unmaintained, and not `soffice --headless --convert-to` per file: that pays a cold start per document, and two concurrent invocations fight over the same user profile directory.
 
-Three consequences for how you build images and place work:
+!!! note "Shipped in 0.6.0"
+    Both jobs are now real task types — `convert:ooxml` and `render:pdf` — with `Dockerfile.libreoffice` building the server side and `JMFTS_CONVERT_URL` pointing an appliance at one. Everything below was written as a design and is now a deployment.
+
+```bash
+pip install 'jmfts[convert]'      # the unoserver CLIENT; useless without a server
+export JMFTS_CONVERT_URL=http://the-libreoffice-box:2003
+export JMFTS_CONVERT_VERSION="LibreOffice 24.8"   # optional, and recorded on every rendition
+```
+
+Four consequences for how you build images and place work:
 
 - **`office` is implied by `dev`, `convert` is not.** The office tests open real packages. The `unoserver` pip package installs cleanly with no LibreOffice present and is useless without it, so a suite that installed it would be testing a configuration nobody runs.
 - **A legacy file is read-only.** For `.doc`/`.xls`/`.ppt` the converted OOXML is what gets read, so the source of truth for any future edit is the conversion, not the upload. Editing one would hand back a `.docx` where the user supplied a `.doc`.
-- **Renditions roughly double blob storage** for office documents. Off by default is the proposal; whether the policy is per-ingest, per-usetype or global is not decided.
+- **With `JMFTS_CONVERT_URL` set, any worker can convert**, because converting becomes a network call rather than a system package. Without it, an appliance asked to convert fails PERMANENTLY with a message naming the setting and the image that serves one. It never degrades quietly, and it never retries its way to a different answer.
+- **`render:pdf` is advisory, so no LibreOffice is a supported deployment.** An office document ingests normally without one and simply gets no rectangles. The first design gated the office anchor on `after render:pdf`, which would have stalled every office document short of settling — silently, forever — on the default install. The anchor rung is offered at the settling boundary instead.
+
+!!! note "Renditions are on by default, and the earlier estimate was wrong"
+    This page previously said renditions "roughly double blob storage for office documents" and proposed them off by default. Measured on a 2988 MB reference database, the original bytes are **144 MB — 4.8% of it**. So the upper bound, if every stored byte were an office document with a same-sized rendition, is +4.8%.
+
+    Renditions are therefore **on, always**, and the policy is **cache eviction** rather than retention. Every row in `document_renditions` can be deleted and regenerated by re-running `render:pdf`; no row in `document_blobs` can be regenerated by anything. When you need space back, that asymmetry is the whole policy.
+
+## Serving the front end
+
+**0.6.0.** The browser front end is a third distribution, `jmfts-web`, and `jmfts[web]` is what pulls it in:
+
+```bash
+pip install 'jmfts[web]'
+uvicorn jmfts_core.rest.main:app --host 0.0.0.0 --port 8100
+# http://localhost:8100/app/
+```
+
+Four operational facts:
+
+- **It adds no Python package to the appliance.** The wheel carries built static files and one module that says where they are, and it has no dependencies of its own. Everything the front end does it does in the browser, over the same REST API any other client calls.
+- **The mount is conditional and goes last.** `jmfts_core.rest.main` mounts it at `/app` when the import succeeds, after every API route — so a future endpoint can never be shadowed by a static file. An appliance without it starts normally and serves no `/app`.
+- **Nothing loads from another origin.** No CDN, no font host, no analytics. A test holds the whole bundle to that, because an appliance is expected to run air-gapped and a page that renders blank without internet is worse than no page.
+- **Do not install it on a worker.** `Dockerfile.worker` builds something that drains the ingest queue and never serves a page.
+
+`JMFTS_CORS_ORIGINS` is **not** involved: the front end is served from the appliance's own origin, so it makes same-origin requests. That setting is for a page you host somewhere else.
+
+!!! warning "The Compose image does not carry it"
+    `docker compose up` builds an image installed as `jmfts[embed]`, and `[web]` is not implied by it. That stack serves the API and answers `/app` with a 404.
 
 ## The embedding model
 
@@ -236,7 +291,7 @@ That 100× ratio is the fact every deployment decision on this page descends fro
 
 ## Index maintenance
 
-The vector side (`documents.embed`, `token_embeddings.embed_256/384/512`) is maintained automatically by pgvector's HNSW/IVFFlat indexes on every insert — no separate rebuild step.
+The vector side (`documents.embed`, `token_embeddings.embed_256/384/512`) is maintained automatically by pgvector's HNSW indexes on every insert — no separate rebuild step. (The token index was IVFFlat until migration `022`; every vector index is HNSW now.)
 
 The BM25 side is different: `POST /indexes/{index_name}/index-document/{document_id}` (backed by `index_document`) is idempotent as of a since-fixed defect (it now subtracts a document's old contribution before re-adding, short-circuiting on an unchanged content hash), so indexing a document you've already indexed no longer inflates the corpus statistics BM25's IDF is derived from. You can index incrementally, document by document, as content arrives. `POST /indexes/{name}/refresh` remains available and rebuilds an index's statistics from scratch — correct by construction, but its cost is proportional to the whole indexed corpus, so reach for it as a repair tool, not a routine one.
 
@@ -266,7 +321,7 @@ Worth stating here because it is a deployment property, not an API detail. Subtr
 
 Everything that runs is one of five process roles over one of four JMFTS images, plus stock Postgres. The images differ in **whether they carry the embedding model**; the process roles differ in **what they do with it**. Those two axes are independent, which is the part worth internalizing: an image that holds the model can run a process that never uses it, and a process that answers for embedding work can run in an image that has no torch at all.
 
-### Four images, two Dockerfiles
+### Five images, three Dockerfiles
 
 | Image | Built by | Torch | Size |
 |---|---|---|---|
@@ -275,6 +330,7 @@ Everything that runs is one of five process roles over one of four JMFTS images,
 | `jmfts-worker-cpu` | `Dockerfile.worker`, defaults | CPU wheel, `[embed]` | **3.98 GB** |
 | `jmfts-worker-gpu` | `Dockerfile.worker --build-arg TORCH_INDEX=…/cu126` | CUDA wheel, `[embed]` | larger; not measured |
 | `jmfts-worker-thin` | `Dockerfile.worker --build-arg EXTRAS=` | **none** | **689 MB** |
+| the LibreOffice converter | `Dockerfile.libreoffice` (**0.6.0**) | none — it is not a JMFTS | not measured |
 
 ```bash
 docker build -f Dockerfile.worker -t jmfts-worker-cpu:latest .
@@ -282,7 +338,22 @@ docker build -f Dockerfile.worker -t jmfts-worker-gpu:latest \
        --build-arg TORCH_INDEX=https://download.pytorch.org/whl/cu126 .
 docker build -f Dockerfile.worker -t jmfts-worker-thin:latest \
        --build-arg EXTRAS= .
+docker build -f Dockerfile.libreoffice -t jmfts-libreoffice:latest .
+docker run -d --name libreoffice -p 2003:2003 jmfts-libreoffice:latest
 ```
+
+**The fifth holds no JMFTS at all.** It drains no queue and makes no database connection; it runs `unoserver` in front of LibreOffice, and workers reach it over `JMFTS_CONVERT_URL`. Three things follow from keeping them apart:
+
+- The 500 MB is paid by one pool rather than by every worker that might claim a `render:pdf`, and **any** worker with the URL can convert.
+- A conversion that wedges LibreOffice takes down a container holding no queue claim. `unoserver`'s `--conversion-timeout` makes the recovery automatic — it terminates LibreOffice and exits, the container restarts, and the worker sees a connection error, which grades RETRYABLE.
+- The LibreOffice version becomes a property of that image and moves on its own schedule, which is what re-rendering after an upgrade needs.
+
+Baking LibreOffice into a badged worker image is still supported: build `FROM` this image and `pip install jmfts`.
+
+!!! note "The build prints its LibreOffice version rather than claiming one"
+    The pin is 26.8.0 — Fresh rather than Still, because 26.2 reaches end of life on 2026-11-30 and pinning it would ship a component with no security updates on its first day. What lands is what the base image's apt repository carries, and `--build-arg EXPECT_VERSION=26.8.0` makes the build fail if that is not it.
+
+    Whatever the image reports is what the worker's `JMFTS_CONVERT_VERSION` must be set to. That value is recorded on every rendition row, which is the only way to know later which pagination a stored rectangle was measured against.
 
 Sizes are `docker images` against the two builds that were made; the CUDA one was not built for a number, so this page does not carry one for it.
 
@@ -536,9 +607,14 @@ A pod requesting `nvidia.com/gpu: 1` stays Pending forever if that comes back em
 
 ## Documents not in this release
 
-The public repository ships code, `README.md`, and `CLAUDE.md`. The design and evaluation documents this manual and the [Cookbook](cookbook.md) cite are being refined for publication and land separately, as does the BEIR harness that produces the retrieval-quality numbers. Source comments citing `INGEST_SPEC.md`, `OFFICE_SPEC.md`, `CORPUS.md`, `KNOWN-DEFECTS.md` and `ROADMAP.md` point at those pending documents.
+The public repository ships code, `README.md`, `CLAUDE.md`, `CHANGELOG.md`, `ROADMAP.md`, the current sprint plan, and the generated reference pages. The design and evaluation documents this manual and the [Cookbook](cookbook.md) cite are being refined for publication and land separately, as does the BEIR harness that produces the retrieval-quality numbers. Source comments citing `INGEST_SPEC.md`, `OFFICE_SPEC.md`, `SPRINT_JOBS.md` and `CORPUS.md` point at those pending documents.
 
 Until they land, the summaries on these pages are the available version of them. Nothing here is retracted by their absence; you just cannot read the long form yet.
+
+Two of these have since resolved, in opposite directions:
+
+- **`ROADMAP.md` was published on 2026-09-13**, along with the current sprint plan. What is open, deferred or gated is now readable from outside the project, and so is the rule that decides what counts as a defect — a numbered step with a failing test, never an argument that something could go wrong.
+- **The sprint plans and the archive are now permanently internal.** That was a decision taken in 0.6.0's own scope rather than a backlog item: everything still open out of the earlier plans is a numbered step in the published one, so a reader who could open them would find the same work, planned earlier and less well. The citations naming them will dangle forever, which is stated here rather than discovered later.
 
 | Document | What it holds | Cited by |
 |---|---|---|

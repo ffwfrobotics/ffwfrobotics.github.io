@@ -89,10 +89,12 @@ nav:
           - jmfts/tutorials/index.md
           - Quickstart: jmfts/tutorials/quickstart.md
           - Ingest a document: jmfts/tutorials/ingest-a-document.md
+          - See a result on the page: jmfts/tutorials/see-a-result-on-the-page.md
       - Cookbook: jmfts/cookbook.md
       - DevOps Manual: jmfts/devops.md
       - Reference: jmfts/reference.md
       - Changelog: jmfts/changelog.md
+      - "0.6.0 — eyes and hands": jmfts/release-0-6-0.md
       - "0.3.0 — the job system": jmfts/release-0-3-0.md
   - Integrations:
       - integrations/index.md

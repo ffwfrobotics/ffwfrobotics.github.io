@@ -15,11 +15,11 @@ The [quickstart](quickstart.md) had you write documents by hand, one JSON body a
 
     ```bash
     git clone https://github.com/jmccardle/jmfts.git
-    cd jmfts && git checkout v0.3.0
+    cd jmfts && git checkout v0.6.0
     docker compose up --build -d
     ```
 
-    If you already have a 0.1.0 database, apply `migrations/008` through `016` in order.
+    If you already have a 0.1.0 database, apply `migrations/008` through `023` in order. On 0.5.0 and later, `jmfts-init-db --pending` names exactly which of them yours is missing.
 
 As before:
 

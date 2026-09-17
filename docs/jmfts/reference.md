@@ -13,10 +13,12 @@ Table schema, query API, scoring parameters, and the pgvector index definitions.
 !!! note "Draft"
     Built for lookup, not narrative reading. Endpoint tables give verb, path, and purpose — not every parameter; a running instance's `/openapi.json` (or `/docs`) is the exact contract. Tables are checked against `schema.sql`, `jmfts_core/config.py`, and the `@expose` registry that generates the routes.
 
-!!! note "This page describes 0.2.0. The current release is 0.3.0."
-    Two releases have landed since this page was written, and it has not moved to either: 0.2.1 added the spreadsheet task types, the Turtle surface and two extras, and 0.3.0 replaced the ingest planner. The [Changelog](changelog.md) says what each one changed, and [0.3.0 — the job system](release-0-3-0.md) runs the changes rather than describing them.
+!!! note "This page was written against 0.2.0. The current release is 0.6.0."
+    Four releases have landed since, and this page has been corrected in place rather than rewritten: 0.2.1 added the spreadsheet task types, the Turtle surface and two extras; 0.3.0 replaced the ingest planner; 0.5.0 moved the token index and added the capability and audit surfaces; 0.6.0 added a front end, three byte routes and two access gates. The [Changelog](changelog.md) says what each one changed, and [0.3.0 — the job system](release-0-3-0.md) and [0.6.0 — eyes and hands](release-0-6-0.md) run their changes rather than describing them.
 
-    Two sections here have been corrected in place because they described designs that no longer exist: [One ingest path](#one-ingest-path) and the `.xlsx` row under [Office formats](#office-formats). Everything else is 0.2.0's surface, which 0.3.0 is a superset of except for the two breaks the changelog names.
+    Where a section describes a design that no longer exists it has been corrected and says so: [One ingest path](#one-ingest-path), the `.xlsx` row under [Office formats](#office-formats), and the index table under [Vector indexes](#vector-indexes). Everything else is 0.2.0's surface, which later releases are a superset of except for the breaks the changelog names.
+
+    For what this appliance *currently* ingests, indexes and retrieves, prefer the three generated pages — see [The three pages that cannot go stale](#the-three-pages-that-cannot-go-stale). They are rendered from the live registries and a stale one fails the test suite; this page is written by hand and can drift.
 
 !!! note "Defaults come from the code, not from `.env.example`"
     Settings tables quote the built-in default in `jmfts_core/config.py`. `.env.example` ships a *filled-in* sample for the LLM block (an Ollama URL and a model name) rather than the blank built-in — copy it and you have configured an endpoint, not accepted a default.
@@ -27,7 +29,9 @@ Table schema, query API, scoring parameters, and the pgvector index definitions.
 |---|---|
 | `documents` | The tree. `parent_id` + a `path` JSONB array of ancestor ids for subtree queries; `content`; a 768-dim `embed` vector; `usetype` for classification; a nullable explicit sibling `position`; `created_at`/`updated_at` (system time) and a separate nullable `event_time` (domain time, for imported content whose ingest time means nothing — transcripts, backfills). 0.1.1 added `settled` (`in_flight`, `settled` or `failed`), the ingestion lifecycle flag the retrieval indexes are partial on — an `in_flight` node is invisible to search until its subtree finishes. |
 | `token_embeddings` | Per-token late-interaction vectors — `embed_256`/`384`/`512` as `halfvec`, one row per selected token, `tier` marking which top-N% importance band it fell in. Only 256-dim is populated in a default deployment; 384/512 exist for benchmarking retention levels. |
-| `document_blobs` | Uploaded bytes for `POST /ingest/file`. One row per document (`UNIQUE`), holding the `lob_oid` of a Postgres **large object** plus `mime_type`, `byte_size`, `content_hash`. The bytes are not in the table: `ON DELETE CASCADE` removes the row and orphans the object, so deletion goes through `BlobRepository` (`lo_unlink` first), and `pg_dump` in plain format needs `-b` or the restore points at bytes that no longer exist. |
+| `document_blobs` | Uploaded bytes for `POST /ingest/file`. One row per document (`UNIQUE`), holding the `lob_oid` of a Postgres **large object** plus `mime_type`, `byte_size`, `content_hash`. The bytes are not in the table: `ON DELETE CASCADE` removes the row and orphans the object, so deletion goes through `BlobRepository` (`lo_unlink` first), and `pg_dump` in plain format needs `-b` or the restore points at bytes that no longer exist. Served by `GET /documents/{id}/blob` since 0.6.0. |
+| `document_renditions` | **0.6.0.** Bytes this appliance *derived*, kept apart from the ones it was given. One row per `(document_id, kind)` — `pdf` for a page rendering, `ooxml` for a converted legacy binary — with the same large-object discipline as `document_blobs`, plus `renderer_version` recording which LibreOffice produced it. The table is separate because `document_blobs.document_id` is `UNIQUE` on the argument that a second version of an upload is a new node; a rendition is not a second version, it is derived. The lifecycles differ too: a rendition can always be regenerated by re-running `render:pdf`, so the policy for it is **cache eviction**, while nothing can regenerate an upload. |
+| `schema_migrations` | **0.5.0.** One row per applied delta, which is what `jmfts-init-db --pending` reads to tell a database what it has not applied. Before it, choosing deltas was entirely an operator's problem with nothing to check the answer against. |
 | `task_queue` | The ingest scheduler's rows — see [Ingest task queue](#ingest-task-queue) for the column set and the lifecycle. `scope_document_id` + `write_mode` (`self`, `children` or `subtree`) declare what region of the tree a task **reserves** while it runs, and the claim query refuses a task whose region overlaps one already `claimed`, `running` or `batched`. Retry policy lives in `TaskQueueRepository.fail()`, not in SQL. |
 | `document_links` | Typed graph edges between documents (`link_type`, a `score`, JSONB `metadata`). |
 | `predicates` / `triples` | The knowledge graph. A triple is `(subject_id, predicate_id, object_id)`, unique per combination, with a bitemporal split: `valid_from`/`valid_until` (when the fact was true) vs. `created_at`/`recorded_at` (when this store learned it). `fact_type` is `atemporal | static | dynamic` (Zep/Graphiti taxonomy). Superseding a fact sets `invalidated_at`/`invalidated_by` rather than deleting the row. |
@@ -51,7 +55,7 @@ All routes are generated from a service-layer `@expose` registry (`jmfts_core/se
 
 | Family | Prefix | Covers |
 |---|---|---|
-| Documents | `/documents` | CRUD, tree navigation (`roots`/`children`/`ancestors`/`siblings`/`subtree`), `embed`, `tokens`, `split`, `chunk`, `segment`, `raptor` (+ `raptor/portfolio`), `extract-facts`, `links`. |
+| Documents | `/documents` | CRUD, tree navigation (`roots`/`children`/`ancestors`/`siblings`/`subtree`), `embed`, `tokens`, `split`, `chunk`, `segment`, `raptor` (+ `raptor/portfolio`), `extract-facts`, `links`, `evidence`, `cells`. Since 0.6.0 also the three byte routes — `blob`, `image`, `region` — and `ingest-options`, which configures a whole subtree. See [Routes that answer with bytes](#routes-that-answer-with-bytes). |
 | Ingest | `/ingest` | One path, two doors onto it — see [One ingest path](#one-ingest-path). `POST /ingest/file` is a multipart upload that stores bytes, enqueues `probe` and **returns before the work is done**; `POST /ingest` takes content plus a named entry point and drains that document's tasks before returning. `GET /ingest/pipelines` lists the entry points, `file/{id}/frontier` reports what is still queued, and `explain` / `analyze` answer what a document will run before it runs. |
 | Runner | `/runner` | Vectors for text, behind `JMFTS_RUNNER_KEY` rather than the API token. Owns no documents. This is what a worker set to `JMFTS_RUNNER_URL` calls instead of loading the model. |
 | Conversations | `/conversations` | `ingest` — a whole conversation into the tree in one call. |
@@ -59,7 +63,7 @@ All routes are generated from a service-layer `@expose` registry (`jmfts_core/se
 | Search contexts | `/search-contexts` | CRUD for the named parameter presets any search endpoint's `context` param resolves. |
 | Triples | `/triples` | Predicates CRUD, triple create/query/path-find, `invalidate`, `supersede`. |
 | Templates | `/templates` | Prompt-template CRUD, `render`, `search`. |
-| Graph | `/graph` | `centrality`, `subtree-authority`, `spines`, `communities`, `neighbors`, `diff`, `stats`, `lint`. |
+| Graph | `/graph` | `centrality`, `subtree-authority`, `spines`, `communities`, `neighbors`, `diff`, `stats`, `lint`. **Since 0.6.0 the first four compute over the caller's visible graph rather than the corpus** — see [Access control](#access-control-what-changed-in-060). |
 | Indexes | `/indexes` | Index CRUD, root membership, `refresh`, `index-document/{id}`. |
 | View | `/view` | Rendered read side: `/view/{id}`, `expand-children`, `breadcrumbs`, `back-references`. |
 | Presentations | `/usetype-presentations` | CRUD for the per-`usetype` rendering rules `/view` applies. |
@@ -84,13 +88,18 @@ with RemoteJmftsClient("http://localhost:8100", token="...") as jmfts:
 
 `jmfts-client` is a **second distribution** shipped from the same repository. It carries `httpx` and `pydantic` and nothing else — no SQLAlchemy, no numpy, no torch — so calling an appliance does not mean installing one.
 
-| | `jmfts` | `jmfts-client` |
-|---|---|---|
-| Holds | the appliance | the wire contracts plus `RemoteJmftsClient` |
-| Dependencies | the full stack | `httpx`, `pydantic` |
-| Depends on | `jmfts-client==<same version>` | nothing in this repository |
+Since 0.6.0 there is a third, and it holds even less:
 
-**The two release in lockstep: one number, two wheels, one tag.** `_verbs.py` is generated from the server's resolved route table, so a client built from a different release was generated from a different surface — and that mismatch does not fail at install time. It fails at call time, as a verb that is missing or whose parameters moved. The `==` pin is what makes the pair one product.
+| | `jmfts` | `jmfts-client` | `jmfts-web` |
+|---|---|---|---|
+| Holds | the appliance | the wire contracts plus `RemoteJmftsClient` | the browser front end, as built static files |
+| Dependencies | the full stack | `httpx`, `pydantic` | **none** |
+| Depends on | both of the others, pinned | nothing in this repository | nothing |
+| Installed by | `pip install jmfts` | `pip install jmfts-client` | `pip install 'jmfts[web]'` |
+
+**All three release in lockstep: one number, three wheels, one tag.** `_verbs.py` is generated from the server's resolved route table, so a client built from a different release was generated from a different surface — and that mismatch does not fail at install time. It fails at call time, as a verb that is missing or whose parameters moved. The `==` pin is what makes them one product.
+
+`jmfts-web` is not useful on its own: there is nothing to import and nothing to run. It carries built static files and one module that says where they are, and `jmfts_core.rest.main` mounts it at `/app` when the import succeeds — after every API route, so a later endpoint can never be shadowed by a file. An appliance without it starts normally and serves no `/app`. Its front end is written against the appliance's own route table, so a UI one release behind its server renders controls for operations that have moved.
 
 The contracts are the single definition of every request and response shape. Both the in-process `LocalJmftsClient` and `RemoteJmftsClient` validate against the same classes, which matters when one process holds both — the `JMFTS_RUNNER_URL` case, where two copies equal by value and unequal by `isinstance` would bite.
 
@@ -471,10 +480,80 @@ An un-badged worker claims **everything**, and an un-badged task is claimable by
 
 ## Vector indexes
 
+!!! note "Corrected for 0.5.0: the token index is HNSW"
+    Through 0.3.0 `embed_256` was IVFFlat with `lists=1024`. Migration `022` replaced it.
+
 | Column | Index | Notes |
 |---|---|---|
-| `documents.embed` (768-dim `vector`) | HNSW, `m=16, ef_construction=64`, cosine | Document-level similarity. |
-| `token_embeddings.embed_256` (`halfvec`) | IVFFlat, `lists=1024`, cosine | The active late-interaction column in a default deployment. |
+| `documents.embed` (768-dim `vector`) | HNSW, `m=16, ef_construction=64`, cosine | Document-level similarity. **Partial on `settled`** — a chunk that is written but still in flight is not in the graph, and enters it once it settles. |
+| `token_embeddings.embed_256` (`halfvec`) | HNSW, `m=16, ef_construction=64`, cosine | The active late-interaction column in a default deployment. IVFFlat until migration `022`. |
 | `token_embeddings.embed_384` / `embed_512` (`halfvec`) | HNSW, `m=16, ef_construction=64`, cosine | Present in schema, unpopulated unless a deployment opts into a higher retention tier. |
 
+**Why the token index moved, since it cost a rebuild.** An HNSW graph is built by insertion, so a partial index over `settled` rows can be added to as documents settle. IVFFlat cannot: its lists are built once over whatever was there at build time, and no `lists` value and no `probes` value makes a later insert join a list that was chosen before it existed. On a corpus that grows, the index drifts from the data underneath it.
+
 `pg_trgm` is also enabled, for fuzzy/trigram fallback in full-text search.
+
+## Routes that answer with bytes
+
+**0.6.0.** Until this release every exposed operation answered with JSON, because `ExposeSpec` had no way to say otherwise. It grew a response media type, and three routes followed.
+
+| Route | Answers with | Parameters |
+|---|---|---|
+| `GET /documents/{id}/blob` | The original upload, unchanged | none |
+| `GET /documents/{id}/image` | One page, PNG | `page` (**0-based**), `dpi` (default 150, bounded) |
+| `GET /documents/{id}/region` | A rectangle of a page, PNG | `anchor=true`, **or** `page` + `bbox=x0,y0,x1,y1`, plus `dpi` |
+
+Four behaviours worth knowing before you call them:
+
+- **`/blob` is served as an attachment, under the uploader's own filename.** That is the safe disposition and not a preference: the route serves uploaded bytes under the uploader's own content type from the appliance's own origin, so an ingested `.html` or `.svg` served `inline` would execute in it. A browser does not render an attachment.
+- **Omitting `page` on `/image` asks for the page this node is addressed at.** A file node is the whole document, so that is page 0. Anything else names its page through its own anchor, and a node with no anchor gets a 409 saying so — rather than page 0, because a picture of the wrong page is worse than no picture.
+- **`/region` takes one way of naming the rectangle, not two with a precedence rule.** Passing `anchor=true` together with `page`/`bbox` is a 400. There is no way to tell which was meant.
+- **A spreadsheet region is not a picture.** `GET /documents/{id}/cells` serves a rectangle of a workbook as JSON, and for a sheet that is the better answer.
+
+None of the three needs a new dependency: `pymupdf` has been a base dependency since before this release, and the bytes have been stored as large objects since 0.1.1. What was missing was a route — all three callers of `BlobRepository.read_bytes` were task handlers.
+
+### Anchors, and why a `.docx` has two
+
+An anchor is where a passage sits in its source, in the source's own coordinates — never the viewer's. Converting to screen pixels needs the rendered surface's scale, and putting a pixel value in the record would bake one viewer's zoom level into it.
+
+| Row | Written by | Shape | Exactness |
+|---|---|---|---|
+| `source_anchor` | `anchor:source` | `{"kind": "pdf", "page": 3, "bbox": [...]}`, or an `ooxml` element address, or an A1 range | Exact |
+| `render_anchor` | `anchor:render` | Always a `PdfAnchor`, with `of: "rendition"` | Approximate |
+
+`PdfAnchor.of` is `"source"` or `"rendition"` and **defaults to `"source"`**. Every anchor written before 0.6.0 is a source document's own geometry, and a default that says so is the only reading under which an old row and a new one parse alike.
+
+Each has an `.unresolved` partner row — `source_anchor.unresolved`, `render_anchor.unresolved` — present **exactly when** the anchor is not. So a client can tell "there is no highlight" from "the highlight could not be recovered, and here is why" without inventing either.
+
+`page` is 0-based throughout, matching `page_offsets` and `pages_with_tables`. A viewer that labels pages for a human adds one; nothing in the record does it for them.
+
+## Access control: what changed in 0.6.0
+
+Two gates that did not close, and both are behaviour breaks.
+
+**An edge takes write on its source and read on its target.** `create_link` constructed and flushed a `DocumentLink` with no principal check; the service checked only that the body's `source_id` matched the id in the URL. Five `TripleService` write verbs gated neither endpoint, while the read side has been gated since 0.5.0. A triple is an edge, so the same rule applies to it: write on the subject, read on the object.
+
+**The four graph-analytics verbs compute over the caller's graph.** `centrality`, `subtree-authority`, `spines` and `communities` took no principal at all.
+
+!!! warning "This changes numbers, not just which rows come back"
+    Filtering the returned ids would leak nothing and report numbers derived from rows the caller cannot see. A centrality score is a property of the graph it was computed on, so that answer would be a number about somebody else's corpus.
+
+    The filter is one layer down, in the vertex and title queries, so the graph itself is the caller's. A node dropping out also removes its descendants, so `subtree_size` and `spread` are computed over the visible part of the tree. **A principal without full grants will see different scores than 0.5.1 returned.**
+
+    `lint_orphans` and `lint_coverage` build through the same graph and inherit the filter. `lint_contradictions` and `lint_stale` read triples directly and do not.
+
+A standing test now holds every `@expose`'d verb to being principal-scoped or explicitly listed with a reason. It found eleven more gaps on its first run.
+
+## The three pages that cannot go stale
+
+This page is written by hand, so it can drift, and the banner at the top says how far it has. Three pages in the repository cannot: they are rendered from the registries the appliance reads at runtime, and `tests/test_reference_docs.py` fails if any is stale.
+
+| Page | Answers |
+|---|---|
+| [`docs/reference/INGEST.md`](https://github.com/jmccardle/jmfts/blob/master/docs/reference/INGEST.md) | What can be ingested — the entry points, their option defaults, the formats probe identifies |
+| [`docs/reference/INDEXING.md`](https://github.com/jmccardle/jmfts/blob/master/docs/reference/INDEXING.md) | What gets indexed by which rung, and what each one reads and writes |
+| [`docs/reference/RETRIEVAL.md`](https://github.com/jmccardle/jmfts/blob/master/docs/reference/RETRIEVAL.md) | What can be retrieved, by which method, under which filters, at which fusion weights |
+
+They are tables and nothing else — no history, no rationale. Where they overlap with this page, believe them.
+
+A running appliance answers a fourth version of the same question about *itself* rather than about the software: `GET /capabilities` reports the extras actually installed, whether this process can produce a vector at all, and which retrieval methods will return anything here. `?corpus=true` adds the counts behind that last one.
