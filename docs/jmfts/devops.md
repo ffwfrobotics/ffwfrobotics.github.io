@@ -81,7 +81,7 @@ The test suite runs against a throwaway database, never the appliance's: `./scri
 | Container | Image | Notes |
 |---|---|---|
 | `postgres` | `pgvector/pgvector:pg16` | `schema.sql` is mounted as `01_schema.sql` and runs once, on a fresh data volume. `127.0.0.1:5433` → container `5432`, chosen so it never collides with a host Postgres. |
-| `api` | built from the repo's `Dockerfile` | CPU-only image — `uvicorn --reload` with `jmfts_core/` bind-mounted, so edits reload live without a rebuild. `127.0.0.1:8100`. |
+| `api` | built from the repo's `Dockerfile` | CPU-only image — `uvicorn --reload` with `jmfts_core/` bind-mounted, so edits reload live without a rebuild. Since 0.6.0 it also carries the front end at [`/app`](#serving-the-front-end), with `jmfts-web/jmfts_web` bind-mounted for the same reason. `127.0.0.1:8100`. |
 
 Both publications are bound to loopback, not `0.0.0.0` — the dev stack is not reachable from the LAN unless you change that yourself.
 
@@ -252,8 +252,7 @@ Four operational facts:
 
 `JMFTS_CORS_ORIGINS` is **not** involved: the front end is served from the appliance's own origin, so it makes same-origin requests. That setting is for a page you host somewhere else.
 
-!!! warning "The Compose image does not carry it"
-    `docker compose up` builds an image installed as `jmfts[embed]`, and `[web]` is not implied by it. That stack serves the API and answers `/app` with a 404.
+**The Compose stack serves it.** The dev image is built as `jmfts[embed,web]` and `docker-compose.yml` bind-mounts `jmfts-web/jmfts_web` the way it already mounts `jmfts_core`. There is no build step for the bundle — it is ES modules the browser runs as they stand — so editing a file on the host and refreshing the page is the whole edit loop; nothing reloads and nothing recompiles.
 
 ## The embedding model
 

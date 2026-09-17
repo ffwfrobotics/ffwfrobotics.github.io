@@ -29,10 +29,7 @@ Two things to point at while you are there:
 - **The Ingest view analyses before it stores.** Drop a file and the page fills a panel headed *What would happen*, subtitled *Nothing below has been stored*: the format, what recognised it, the patterns probe measured, and the plan with a cost per rung. That answers "how do I know what it will do to my documents" without doing anything to them.
 - **The Call log is the proof.** Everything the page showed is a request in that log, replayable, and printable as `curl` with the token elided. A view that showed something the log has no call for would have computed it in the browser — you can check that rather than take it on trust.
 
-The walkthrough is [See a result on the page](tutorials/see-a-result-on-the-page.md).
-
-!!! warning "Not on the Compose stack"
-    `docker compose up` builds `jmfts[embed]`, which does not imply `[web]`. That appliance answers `/app` with a 404.
+The walkthrough is [See a result on the page](tutorials/see-a-result-on-the-page.md), and `docker compose up` is enough — the dev stack carries the front end.
 
 ## Assert an edge as a restricted principal
 

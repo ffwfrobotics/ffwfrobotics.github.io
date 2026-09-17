@@ -23,13 +23,21 @@ depends on the other.
 
 ## 1. Get an appliance with a face
 
-If you already have JMFTS running, add the front end to it:
+From a checkout, the dev stack carries the front end:
+
+```bash
+git clone https://github.com/jmccardle/jmfts.git
+cd jmfts && docker compose up --build -d
+docker compose logs -f api
+```
+
+If you already have JMFTS running some other way, add the front end to it:
 
 ```bash
 pip install 'jmfts[web]'
 ```
 
-From nothing, in a virtualenv:
+And from nothing, without Docker:
 
 ```bash
 python3 -m venv .venv && . .venv/bin/activate
@@ -38,14 +46,10 @@ jmfts-init-db
 uvicorn jmfts_core.rest.main:app --host 0.0.0.0 --port 8100
 ```
 
-`[embed]` is the model stack. Base JMFTS carries a tokenizer and no torch, because a storage
-worker can ask another appliance for vectors — but the machine serving `/search` embeds its
-queries locally whatever else is configured, so it needs the model.
-
-!!! warning "The Compose stack does not carry the front end yet"
-    `docker compose up` builds an image installed as `jmfts[embed]`, and `[web]` is not
-    implied by it. That appliance serves the API and answers `/app` with a 404. Install
-    `jmfts-web` into the container, or use the virtualenv above.
+`[embed]` is the model stack, and it is separate for a reason worth knowing: base JMFTS
+carries a tokenizer and no torch, because a storage worker can ask another appliance for
+vectors. The machine serving `/search` embeds its queries locally whatever else is
+configured, so it needs the model.
 
 Then open:
 
