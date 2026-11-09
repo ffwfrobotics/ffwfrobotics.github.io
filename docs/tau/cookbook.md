@@ -8,7 +8,7 @@ status: "draft"
 
 <p class="axis">Action × Application</p>
 
-Recipes for specific Tau jobs — writing an extension, branching a session, storing state in the tree, supervising a fleet, pointing the TUI at a different backend. Each one is drawn from an example or script that ships in the source tree; the cited file is always the working version.
+Recipes for specific Tau jobs — writing an extension, branching a session, storing state in the tree, supervising a fleet, pointing the TUI at a different backend. Each one is drawn from an example or script that ships in the source tree (checked against v0.15.0); the cited file is always the working version.
 
 ## Give the model a new tool
 
@@ -58,18 +58,27 @@ its own output so a large environment cannot flood the context window.
 
 τ has two event vocabularies and they take different handlers. Getting this
 wrong fails at dispatch time — which for `session_shutdown` means at the very
-end of a session, and for `tool_call` means in the fail-closed path, where a
-raising handler blocks the tool call.
+end of a session, and for `tool_call` means the handler raises, which as of
+0.15 ends the turn.
 
 | Kind | Names | Handler | `event` is |
 |---|---|---|---|
 | **notify** | `all`, `agent_start`, `message_update`, `tool_execution_end`, … | `handler(event)` | an `AgentEvent` **object** — attributes |
-| **hook** | `tool_call`, `tool_result`, `input`, `before_agent_start`, `turn_end`, `user_turn_end`, `session_start`, `session_shutdown`, `session_before_switch` | `handler(event, ctx)` | a plain **dict** |
+| **hook** | `tool_call`, `tool_result`, `input`, `before_agent_start`, `turn_end`, `user_turn_end`, `session_before_switch`, `annotate`, `entry_written`, `turn_setting_changed`, and the lifecycle pair `session_start` and `session_shutdown` | `handler(event, ctx)` | a plain **dict** |
 
 `api.on(name, handler)` routes by name, so you do not choose — the name you
 subscribe to decides which contract you owe. Hooks can change the run
 (block a call, patch arguments, append a durable message); notify events
 cannot, and their return value is ignored.
+
+A raising handler is not harmless any more. At `input`, `before_agent_start`,
+`tool_call`, `tool_result`, `turn_end`, `user_turn_end`, `session_before_switch`
+and `annotate`, an exception ends the turn: `agent_end` carries
+`end_reason: "error"` naming your extension and the hook, and `prompt()` raises
+`HookHandlerError`. At `entry_written`, `turn_setting_changed` and the
+lifecycle hooks the error is reported and the turn goes on. Catch what your
+handler can recover from; an extension that enforces a rule should stop
+enforcing it only on purpose.
 
 The turn-boundary pair is the other easy mistake: `turn_end` fires once per
 *agent-loop* turn, so one request resolved in six tool round-trips fires it
@@ -115,14 +124,18 @@ def register(api):
 
 Returning `{"block": True, "reason": ...}` from a `tool_call` handler turns
 into an error tool result the model reacts to — it does not silently
-swallow the call. Load it directly: `tau -e examples/01_permission_gate.py`.
-The human-in-the-loop variant (`ctx.ui.confirm`-gated instead of a hard
-block) is `examples/30_permission_gate.py`; a config-driven path denylist is
+swallow the call. Load it directly: `tau -e examples/01_permission_gate.py` (naming it with `-e`
+authorizes it; an extension merely found in `<τ home>/extensions` or in an
+installed package loads only once `tau ext authorize` has recorded it).
+The human-in-the-loop variant is `examples/30_permission_gate.py`: it asks with
+`api.request_user_action` rather than a modal, so the question is an entry on
+the session and every head can answer it. A config-driven path denylist is
 `examples/31_protected_paths.py`.
 
 ## Bridge a session onto a NATS bus (Tectum integration)
 
-`nats_bus.py` (tau-006/tau-007) lets τ speak NATS directly — subscribing an
+`nats_bus.py` (tau-006/tau-007; shipped as a built-in under
+`tau_agent_core.extensions_builtin`) lets τ speak NATS directly — subscribing an
 inbound subject to drive turns, and registering one tool per outbound verb
 (`speak`, `journal_append`, `jmfts_write`, `delegate`, plus world verbs for a
 simulation engine: `move_to`, `wait`, `note`). Its NATS client is an extra
@@ -182,6 +195,9 @@ file-backed store's own `fork` — useful for "try an alternative from here
 without touching the session someone is actively looking at." It raises on
 an in-memory (SDK) log, which cannot be exported to a file — there is no
 silent degrade to an in-place fork instead.
+
+A spawned child branch (`ctx.spawn_branch`) can start with messages already
+written on it (`seed=[…]`), and runs the extension hooks by default.
 
 For undoing a turn rather than branching from it, `AgentSession.submit()`'s
 `multitask_strategy="rollback"` navigates back to the pre-turn leaf; the
@@ -315,20 +331,30 @@ shape — instead of waiting for a human to notice on its behalf.
 variant; `examples/40_handoff.py` is the same idea aimed forward: summarize,
 fork, and hand the work to a focused successor session.
 
-## Remove the middle without deleting anything
+## Drop the old history without deleting it
 
 Compaction replaces a span with an LLM-written summary. Its blunter cousin
-is **elide**: a summary-less splice anchor that simply cuts a span out of
-the model's context. Nothing is erased — the span stays on disk and on the
+is **elide**: a summary-less splice anchor that folds the old history out of
+the model's context. Nothing is erased — everything stays on disk and in the
 tree, and navigation can walk back into it — but the fold skips it, so the
 model no longer pays for it.
 
-In the TUI this is the fourth mode of the `Ctrl+G` tree browser: pick "elide
-a span ending here", pick the two endpoints, done. It is the honest tool for
-the case where a summary would add nothing: a hundred turns of test-and-fix
-noise whose only useful residue is the final green run, or a pasted log the
-agent has finished mining. You chose the cut; no model invented a summary
-of what was cut.
+In the TUI this is `Ctrl+E` inside the `Ctrl+G` tree browser. Read the line
+under the tree before you press it, because the two ends bracket what is
+**kept**, not what is removed: over `[1, 2, 3, 4, 5, 6]`, pairing 2 with 4
+leaves `[2, 3, 4]`, and cutting a span out of the middle is not something the
+operation can express. The ordinary case is one keystroke: put the cursor on the
+oldest entry you want to keep and press `Ctrl+E`. To choose both ends, mark one
+with `Space`, move to the other, and press `Ctrl+E`; the tree decides which is
+which. If the deeper end is not the current tip, the conversation moves back to
+it and the newer entries leave the context too, which the line says first.
+
+It is the honest tool for the case where a summary would add nothing: a hundred
+turns of test-and-fix noise whose only useful residue is the final green run.
+You chose the cut; no model invented a summary of what was cut.
+`docs/TREE-EDITOR-MANUAL.md` in the source tree has the full manual, including
+`Ctrl+B` (branch from the marked rows, keeping a selection with gaps) and
+`c` / `v` (copy and paste a subtree).
 
 ## Point the TUI at a different session backend
 
@@ -340,6 +366,10 @@ a JMFTS-indexed document corpus is, rather than plain files on disk:
 tau --store jmfts
 tau -p --store jmfts "..."
 ```
+
+`--import-session x.jsonl` copies a file session into the JMFTS store and
+`--export-session REF x.jsonl` copies one back; `tau --export-html REF` renders
+either as a single HTML page.
 
 `ffwf-tau-jmfts` is an optional package
 (`pip install 'ffwf-tau-coding-agent[jmfts]'`), loaded

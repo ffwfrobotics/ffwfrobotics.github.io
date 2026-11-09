@@ -1,0 +1,814 @@
+---
+title: "Tau 0.16 preview API: The step machine"
+---
+
+!!! warning "Unreleased"
+    Generated from the docstrings of Tau 0.16.0-dev (commit `c439c401`) by `scripts/api_docs.py` in the Tau repository. Not the 0.15 API.
+
+# The step machine
+
+The sans-IO core: a `Session` hands out jobs and a program performs them. For a program that is its own driver.
+
+Names: `Answer`, `Ending`, `Hook`, `Job`, `Next`, `RunCall`, `SampleEnd`, `Session`
+
+## Answer
+
+```python
+class Answer
+```
+
+What the driver answers a `Job` with. `Session.answer` accepts one only while the job it
+answers is out; any other raises `WrongAnswer`.
+
+### Answer.Hooks
+
+```python
+class Hooks(Answer)
+```
+
+The hooks ran.
+
+#### Answer.Hooks.__new__
+
+```python
+def __new__(cls, stop: str | None = None, draft: Draft | None = None) -> Answer.Hooks
+```
+
+#### Answer.Hooks.stop
+
+```python
+property stop: str | None
+```
+
+A halt reason if a hook halted the step, else `None`.
+
+#### Answer.Hooks.draft
+
+```python
+property draft: Draft | None
+```
+
+The draft after the hooks edited it; `None` commits nothing. At `pre_sample`, a
+reply here stands in for the sample.
+
+### Answer.HookFailed
+
+```python
+class HookFailed(Answer)
+```
+
+A hook raised.
+
+#### Answer.HookFailed.__new__
+
+```python
+def __new__(cls, error: str) -> Answer.HookFailed
+```
+
+#### Answer.HookFailed.error
+
+```python
+property error: str
+```
+
+What went wrong.
+
+### Answer.Sampled
+
+```python
+class Sampled(Answer)
+```
+
+The sample ended.
+
+#### Answer.Sampled.__new__
+
+```python
+def __new__(cls, parts: Sequence[Part], end: SampleEnd) -> Answer.Sampled
+```
+
+#### Answer.Sampled.parts
+
+```python
+property parts: list[Part]
+```
+
+What streamed before it ended.
+
+#### Answer.Sampled.end
+
+```python
+property end: SampleEnd
+```
+
+How it ended.
+
+### Answer.CallDone
+
+```python
+class CallDone(Answer)
+```
+
+One call of the batch ended.
+
+#### Answer.CallDone.__new__
+
+```python
+def __new__(cls, call: str, outcome: Outcome, by: Author) -> Answer.CallDone
+```
+
+#### Answer.CallDone.call
+
+```python
+property call: str
+```
+
+The call's id.
+
+#### Answer.CallDone.outcome
+
+```python
+property outcome: Outcome
+```
+
+How it ended.
+
+#### Answer.CallDone.by
+
+```python
+property by: Author
+```
+
+`Tools` if the tool ran unedited, else the extension that answered or last edited it.
+
+## Ending
+
+```python
+class Ending
+```
+
+How a step ended; the subject of the `post_step` hook.
+
+### Ending.Done
+
+```python
+class Done(Ending)
+```
+
+The step ran to its end.
+
+#### Ending.Done.__new__
+
+```python
+def __new__(cls) -> Ending.Done
+```
+
+### Ending.Halted
+
+```python
+class Halted(Ending)
+```
+
+A cursor hook halted it.
+
+#### Ending.Halted.__new__
+
+```python
+def __new__(cls, reason: str) -> Ending.Halted
+```
+
+#### Ending.Halted.reason
+
+```python
+property reason: str
+```
+
+The reason the hook gave.
+
+### Ending.Failed
+
+```python
+class Failed(Ending)
+```
+
+A hook or the sample failed.
+
+#### Ending.Failed.__new__
+
+```python
+def __new__(cls, error: str) -> Ending.Failed
+```
+
+#### Ending.Failed.error
+
+```python
+property error: str
+```
+
+What went wrong.
+
+### Ending.Aborted
+
+```python
+class Aborted(Ending)
+```
+
+An abort ended it.
+
+#### Ending.Aborted.__new__
+
+```python
+def __new__(cls) -> Ending.Aborted
+```
+
+## Hook
+
+```python
+class Hook
+    PreStep: ClassVar[Hook]
+    PreInput: ClassVar[Hook]
+    PreSample: ClassVar[Hook]
+    PreReply: ClassVar[Hook]
+    PostReply: ClassVar[Hook]
+    PostResult: ClassVar[Hook]
+    PostStep: ClassVar[Hook]
+```
+
+The seven cursor hook points, in the order a step reaches them. It is not an integer.
+
+### Hook.name
+
+```python
+property name: str
+```
+
+The name an extension defines the hook by.
+
+## Job
+
+```python
+class Job
+```
+
+What a step asks the driver to do next, from `Session.next_job`. Answer it with `Session.answer`.
+
+### Job.Hooks
+
+```python
+class Hooks(Job)
+```
+
+Run the extensions' hooks for one hook point.
+
+#### Job.Hooks.__new__
+
+```python
+def __new__(
+    cls,
+    point: Hook,
+    draft: Draft | None,
+    node: int | None,
+    ending: Ending | None,
+) -> Job.Hooks
+```
+
+#### Job.Hooks.point
+
+```python
+property point: Hook
+```
+
+The hook point.
+
+#### Job.Hooks.draft
+
+```python
+property draft: Draft | None
+```
+
+The subject at `pre_input`, `pre_sample` and `pre_reply`; otherwise `None`.
+
+#### Job.Hooks.node
+
+```python
+property node: int | None
+```
+
+The subject at `post_reply` and `post_result`: the node just committed; otherwise `None`.
+
+#### Job.Hooks.ending
+
+```python
+property ending: Ending | None
+```
+
+The subject at `post_step`; otherwise `None`.
+
+### Job.Sample
+
+```python
+class Sample(Job)
+```
+
+Ask the provider for a reply to the cursor's walk.
+
+#### Job.Sample.__new__
+
+```python
+def __new__(cls) -> Job.Sample
+```
+
+### Job.RunCalls
+
+```python
+class RunCalls(Job)
+```
+
+Run a batch of calls and answer each with `Answer.CallDone`.
+
+#### Job.RunCalls.__new__
+
+```python
+def __new__(cls, node: int, calls: Sequence[RunCall]) -> Job.RunCalls
+```
+
+#### Job.RunCalls.node
+
+```python
+property node: int
+```
+
+The `Assistant` node holding the batch.
+
+#### Job.RunCalls.calls
+
+```python
+property calls: list[RunCall]
+```
+
+The calls, in call order.
+
+### Job.Pending
+
+```python
+class Pending(Job)
+```
+
+Calls are still out; nothing to do until they are answered.
+
+#### Job.Pending.__new__
+
+```python
+def __new__(cls) -> Job.Pending
+```
+
+### Job.Rest
+
+```python
+class Rest(Job)
+```
+
+The step is over and the cursor is at rest.
+
+#### Job.Rest.__new__
+
+```python
+def __new__(cls) -> Job.Rest
+```
+
+## Next
+
+```python
+class Next
+    Wait: ClassVar[Next]
+    Sample: ClassVar[Next]
+    RunTools: ClassVar[Next]
+```
+
+What a cursor's walk needs next.
+
+## RunCall
+
+```python
+class RunCall
+```
+
+One call of a batch, handed out in `Job.RunCalls` to be run.
+
+### RunCall.id
+
+```python
+property id: str
+```
+
+The call's id, as in the reply.
+
+### RunCall.tool
+
+```python
+property tool: str
+```
+
+The name of the tool to run.
+
+### RunCall.args_raw
+
+```python
+property args_raw: str
+```
+
+The arguments exactly as the model produced them.
+
+## SampleEnd
+
+```python
+class SampleEnd
+```
+
+How a sample ended, as the driver saw it. Core decides what the tree records.
+
+### SampleEnd.Finished
+
+```python
+class Finished(SampleEnd)
+```
+
+The provider finished the reply.
+
+#### SampleEnd.Finished.__new__
+
+```python
+def __new__(
+    cls,
+    stop: Stop,
+    reason: str | None = None,
+    meta: str | None = None,
+) -> SampleEnd.Finished
+```
+
+#### SampleEnd.Finished.stop
+
+```python
+property stop: Stop
+```
+
+Why the reply ended.
+
+#### SampleEnd.Finished.reason
+
+```python
+property reason: str | None
+```
+
+The provider's own finish string, or `None`.
+
+#### SampleEnd.Finished.meta
+
+```python
+property meta: str | None
+```
+
+What the response carried besides its parts, as JSON object text, or `None`.
+
+### SampleEnd.Failed
+
+```python
+class Failed(SampleEnd)
+```
+
+The sample failed.
+
+#### SampleEnd.Failed.__new__
+
+```python
+def __new__(cls, error: str, meta: str | None = None) -> SampleEnd.Failed
+```
+
+#### SampleEnd.Failed.error
+
+```python
+property error: str
+```
+
+What went wrong.
+
+#### SampleEnd.Failed.meta
+
+```python
+property meta: str | None
+```
+
+The failure's details as JSON object text, or `None`.
+
+### SampleEnd.Cancelled
+
+```python
+class Cancelled(SampleEnd)
+```
+
+The cursor was aborted before the sample finished.
+
+#### SampleEnd.Cancelled.__new__
+
+```python
+def __new__(cls) -> SampleEnd.Cancelled
+```
+
+## Session
+
+```python
+class Session
+```
+
+One session: its tree, cursors, scratchpad, and every cursor's step. It does no IO of its
+own: a program asks it for each cursor's next `Job` and gives back an `Answer`.
+
+A call that changes the session hands its records to the store (when there is one) before
+it returns, so a program never saves. Every call takes the session's one lock, so a
+session may be shared across threads. A closed session raises `Closed`.
+
+### Session.create
+
+```python
+@staticmethod
+def create(
+    config: Config,
+    system: str,
+    now: int,
+    directory: str | PathLike[str] | None = None,
+) -> Session
+```
+
+A new session with a `Config` root, a `System` node, and cursor 0 on
+it. In `directory` (created if missing) when given, else in memory.
+
+### Session.load
+
+```python
+@staticmethod
+def load(directory: str | PathLike[str]) -> Session
+```
+
+Open the session in `directory`, taking its lease. Every cursor loads
+with auto-step off, woken (load is a wake).
+
+### Session.read
+
+```python
+@staticmethod
+def read(directory: str | PathLike[str]) -> Session
+```
+
+The session in `directory` as a copy in memory, as of its last sync, taking no lease
+and writing nothing (D18 section 7). It accepts changes and never saves them.
+
+### Session.fork
+
+```python
+def fork(self, node: int, now: int, directory: str | PathLike[str] | None = None) -> Session
+```
+
+A new session holding a copy of `walk(node)` (D18 section 6): node *i* of the copy is
+node *i* of the walk, with cursor 0 on its tip. In `directory` (created if missing)
+when given, else in memory, written with one sync. `NoSuchNode` if `node` is absent.
+
+### Session.close
+
+```python
+def close(self) -> None
+```
+
+Drop the store and release the lease without writing what is not yet
+synced, as a crash would. Every later call raises `Closed`. A second
+close is `Closed` too.
+
+### Session.tree
+
+```python
+property tree: Tree
+```
+
+The session's nodes.
+
+### Session.input
+
+```python
+def input(self, cursor: int, by: Author, text: str) -> int
+```
+
+Add an `Input` item for `cursor`, written `by` the author, and wake the cursor.
+Returns the item's id. `NoSuchCursor` or `CursorClosed` if the cursor is not open.
+
+### Session.step
+
+```python
+def step(self, cursor: int) -> None
+```
+
+Run one step of `cursor` whether or not auto-step is on, and leave auto-step as it is.
+`Busy` if a step is already running.
+
+### Session.go_to
+
+```python
+def go_to(self, cursor: int, to: int, client: str, now: int) -> bool
+```
+
+Move `cursor` to node `to` for the frontend named `client`, turn auto-step off and wake
+the cursor. On a busy cursor the step is aborted and the move applies when it rests.
+Returns whether the driver must cancel the effect in flight. `NoSuchNode` if `to`
+is absent.
+
+### Session.set_auto
+
+```python
+def set_auto(self, cursor: int, on: bool) -> None
+```
+
+Turn auto-step on or off for `cursor`; on wakes it.
+
+### Session.abort
+
+```python
+def abort(self, cursor: int) -> bool
+```
+
+Stop `cursor`'s step: auto-step goes off and no later phase runs. A running hook finishes.
+Returns whether the driver must cancel the effect in flight.
+
+### Session.close_cursor
+
+```python
+def close_cursor(self, cursor: int) -> None
+```
+
+Close a cursor at rest (`Busy` otherwise): the driver aborts and waits first.
+
+### Session.open
+
+```python
+def open(self, at: int, by: Author, now: int) -> int
+```
+
+Open a new cursor at node `at` and wake it. Returns its id. `NoSuchNode` if `at` is absent.
+
+### Session.add_item
+
+```python
+def add_item(self, to: int, data: ItemData) -> int
+```
+
+Add an item to cursor `to`'s scratchpad and wake it. Returns the item's id.
+
+### Session.remove_item
+
+```python
+def remove_item(self, id: int) -> None
+```
+
+Remove an item from the scratchpad. `NoSuchItem` if it is not there.
+
+### Session.append
+
+```python
+def append(
+    self,
+    parent: int,
+    body: Body,
+    by: Author,
+    now: int,
+    copied_from: int | None = None,
+    derived_from: int | None = None,
+) -> int
+```
+
+Append a node under `parent` without moving any cursor. `copied_from` names the node it
+repeats verbatim, `derived_from` the node whose walk its content was computed from;
+`NoSuchNode` if either is not a node.
+
+### Session.append_root
+
+```python
+def append_root(self, config: Config, by: Author, now: int) -> int
+```
+
+Append a root `Config` (a detached tree) without moving any cursor.
+
+### Session.set_label
+
+```python
+def set_label(self, label: str, cursor: int) -> None
+```
+
+Put `label` on `cursor`; a label already on another cursor moves. `CursorClosed` if the
+cursor is closed.
+
+### Session.remove_label
+
+```python
+def remove_label(self, label: str) -> None
+```
+
+Remove `label`. `NoSuchLabel` if it is not set.
+
+### Session.hook_move
+
+```python
+def hook_move(self, cursor: int, to: int, by: Author, now: int) -> None
+```
+
+A cursor hook's move of its own cursor to node `to`. `NotInHook` unless a cursor hook
+job is out for `cursor`.
+
+### Session.hook_write
+
+```python
+def hook_write(
+    self,
+    cursor: int,
+    body: Body,
+    delivers: Sequence[int],
+    by: Author,
+    now: int,
+    copied_from: int | None = None,
+    derived_from: int | None = None,
+) -> int
+```
+
+A cursor hook's write: append a node under the cursor's node, move onto it and consume
+the `delivers` items. Returns the new node's id. `NotInHook` unless a cursor hook job is
+out for `cursor`; `NotPending` if an item is not pending for it. `copied_from` and
+`derived_from` as for `append`.
+
+### Session.hook_set_auto
+
+```python
+def hook_set_auto(self, cursor: int, on: bool) -> None
+```
+
+A cursor hook's change of its own cursor's auto-step. `NotInHook` unless a cursor hook
+job is out for `cursor`.
+
+### Session.next_job
+
+```python
+def next_job(self, cursor: int) -> Job
+```
+
+The cursor's next job; `Job.Rest` when it has no step.
+
+### Session.answer
+
+```python
+def answer(self, cursor: int, answer: Answer, now: int) -> None
+```
+
+Answer the job last handed out for `cursor`.
+
+### Session.cursors
+
+```python
+def cursors(self) -> list[int]
+```
+
+Every open cursor, by id.
+
+### Session.closed
+
+```python
+def closed(self) -> list[tuple[int, int]]
+```
+
+Each closed cursor with its last node, in id order.
+
+### Session.cursor
+
+```python
+def cursor(self, cursor: int) -> CursorState
+```
+
+One cursor as it stands, all read under one lock.
+
+### Session.labels
+
+```python
+def labels(self) -> list[tuple[str, int]]
+```
+
+Every label with its cursor, in string order.
+
+### Session.label
+
+```python
+def label(self, label: str) -> int
+```
+
+The cursor `label` is on.
+
+### Session.take_notices
+
+```python
+def take_notices(self) -> list[tuple[str, str]]
+```
+
+Drain the `(client, text)` messages to clients, oldest first.

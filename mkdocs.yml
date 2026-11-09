@@ -83,6 +83,30 @@ nav:
               - tau/reference/api/export.md
               - tau/reference/api/runs.md
           # <<< generated
+  - Tau 0.16 preview:
+      - tau/preview/index.md
+      - Quickstart: tau/preview/quickstart.md
+      - Extensions: tau/preview/extensions.md
+      - Operating it: tau/preview/operations.md
+      - Reference: tau/preview/reference.md
+      - What changed from 0.15: tau/preview/differences.md
+      - API:
+          - tau/preview/api/index.md
+          - tau/preview/api/clients.md
+          - tau/preview/api/config.md
+          - tau/preview/api/diagnostics.md
+          - tau/preview/api/driver.md
+          - tau/preview/api/errors.md
+          - tau/preview/api/events.md
+          - tau/preview/api/extensions.md
+          - tau/preview/api/machine.md
+          - tau/preview/api/providers.md
+          - tau/preview/api/records.md
+          - tau/preview/api/sessions.md
+          - tau/preview/api/tools.md
+          - tau/preview/api/tui.md
+          - tau/preview/api/wire.md
+          - tau/preview/api/wire-protocol.md
   - JMFTS:
       - jmfts/index.md
       - Tutorials:

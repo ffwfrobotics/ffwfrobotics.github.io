@@ -10,11 +10,13 @@ Run Tau headless against a repository and read the session tree it produces.
 
 ## 1. Install it
 
-Tau needs Python 3.11 or newer. The distribution is **`ffwf-tau`** — the
-guessable name, a meta package that pulls `ffwf-tau-coding-agent[tui]` at the
-same version. The `ffwf-` prefix is load-bearing rather than branding: `tau-ai`
-and `tau-llm` on PyPI are unrelated third-party projects, so a command missing
-the prefix installs someone else's code.
+Tau needs Python 3.12 or newer. The distribution is **`ffwf-tau`** — the
+guessable name, a meta package that pulls `ffwf-tau-coding-agent[tui]`,
+`ffwf-tau-agent-core[images]` and `ffwf-tau-llm[anthropic,google]` at the same
+version, so it comes with the interface, image reads, and all three wire
+protocols. The `ffwf-` prefix is load-bearing rather than branding: `tau-ai`
+and `tau` on PyPI are unrelated third-party projects, so a command missing the
+prefix installs someone else's code.
 
 Everything below installs the same release. Pick the installer you already use.
 
@@ -86,9 +88,17 @@ a cron line — PyPI reserves distribution names but not command names, and an
 unrelated project ships its own `tau`, so in an environment holding both,
 whichever installed last owns the short name.
 
+For a prompt line without the full-screen interface, `tau --mode repl` runs in
+the terminal's own scrollback behind its own extra:
+
+```bash
+pip install 'ffwf-tau-coding-agent[repl]'
+tau --mode repl
+```
+
 The [DevOps Manual](../devops.md#install) covers the remaining extras
-(`[jmfts]` for `--store jmfts`, `ffwf-tau-agent-core[bus]` for the `nats_bus`
-extension) and the deployment shapes.
+(`[jmfts]` for `--store jmfts`, `[serve]` for `tau serve` and
+`tau --connect`, `ffwf-tau-agent-core[bus]` for the `nats_bus` extension) and the deployment shapes.
 
 !!! warning "The rest of this page is not yet written"
     Installation is authored. The headless run against a repository, and
