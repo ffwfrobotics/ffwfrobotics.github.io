@@ -1,0 +1,425 @@
+---
+title: "Tau 0.16 preview API: Tools"
+---
+
+!!! warning "Unreleased"
+    Generated from the docstrings of Tau 0.16.0-dev (commit `c439c401`) by `scripts/api_docs.py` in the Tau repository. Not the 0.15 API.
+
+# Tools
+
+What the model can call. Write a `Tool`, or use the six base tools.
+
+Names: `BashTool`, `EditTool`, `FindTool`, `GrepTool`, `Progress`, `ReadTool`, `Tool`, `ToolError`, `WriteTool`, `base_tools`
+
+## BashTool
+
+```python
+class BashTool
+```
+
+`bash`: a shell command with a timeout. Keeps the tail of long output.
+
+`timeout_ms` is the timeout of a call that gives none, `max_timeout_ms` the most a call may
+ask for (more is an `Err`), `kill_grace_ms` the time between SIGTERM and SIGKILL.
+Cancelling `call` terminates the command's whole process group and waits for it to end
+before the `CancelledError` propagates, however often it is cancelled meanwhile: no child
+is left running. Each call has a thread
+of its own.
+
+### BashTool.__init__
+
+```python
+def __init__(
+    self,
+    cwd: str | os.PathLike[str] | None = None,
+    *,
+    max_output: int = 10000,
+    overflow_dir: str | os.PathLike[str] | None = None,
+    max_overflow: int = 64 * 1024 * 1024,
+    timeout_ms: int = 30000,
+    max_timeout_ms: int = 600000,
+    kill_grace_ms: int = 2000,
+) -> None
+```
+
+### BashTool.call
+
+```python
+async def call(self, args_raw: str, *, progress: Progress | None = None) -> Outcome
+```
+
+Run the command. With `progress`, the output also goes to it as it arrives: at
+most one call per 100 ms, carrying all the text since the last, from a thread of the
+engine's own. The answer is the same either way. The command never waits on `progress`:
+a slow one loses the oldest output it has not yet been given (the answer keeps its
+10 kB and the overflow file all of it). The answer does wait for a `progress` call
+already running and for the final flush, one more call, so a slow `progress` delays
+the answer by that much. Calls stop for good when the interpreter begins to exit.
+
+### BashTool.name
+
+```python
+property name: str
+```
+
+The tool's name: `read`, `write`, `edit`, `grep`, `find` or `bash`.
+
+### BashTool.description
+
+```python
+property description: str
+```
+
+What the tool does, as the model reads it.
+
+### BashTool.parameters
+
+```python
+property parameters: Mapping[str, object]
+```
+
+A JSON Schema object describing the tool's arguments.
+
+## EditTool
+
+```python
+class EditTool
+```
+
+`edit`: exact search and replace in one file, atomically; answers a unified diff. Keeps
+the head of a long diff.
+
+### EditTool.__init__
+
+```python
+def __init__(
+    self,
+    cwd: str | os.PathLike[str] | None = None,
+    *,
+    max_output: int = 10000,
+    overflow_dir: str | os.PathLike[str] | None = None,
+    max_overflow: int = 64 * 1024 * 1024,
+) -> None
+```
+
+### EditTool.call
+
+```python
+async def call(self, args_raw: str) -> Outcome
+```
+
+Edit the file named in `args_raw`. `Ok` with the diff, or `Err`.
+
+### EditTool.name
+
+```python
+property name: str
+```
+
+The tool's name: `read`, `write`, `edit`, `grep`, `find` or `bash`.
+
+### EditTool.description
+
+```python
+property description: str
+```
+
+What the tool does, as the model reads it.
+
+### EditTool.parameters
+
+```python
+property parameters: Mapping[str, object]
+```
+
+A JSON Schema object describing the tool's arguments.
+
+## FindTool
+
+```python
+class FindTool
+```
+
+`find`: the files under a directory whose name matches a glob, with `grep`'s walk.
+Keeps the head.
+
+### FindTool.__init__
+
+```python
+def __init__(
+    self,
+    cwd: str | os.PathLike[str] | None = None,
+    *,
+    max_output: int = 10000,
+    overflow_dir: str | os.PathLike[str] | None = None,
+    max_overflow: int = 64 * 1024 * 1024,
+) -> None
+```
+
+### FindTool.call
+
+```python
+async def call(self, args_raw: str) -> Outcome
+```
+
+Run the call in `args_raw`, stopping early if the call is cancelled. `Ok` with the
+output, or `Err`.
+
+### FindTool.name
+
+```python
+property name: str
+```
+
+The tool's name: `read`, `write`, `edit`, `grep`, `find` or `bash`.
+
+### FindTool.description
+
+```python
+property description: str
+```
+
+What the tool does, as the model reads it.
+
+### FindTool.parameters
+
+```python
+property parameters: Mapping[str, object]
+```
+
+A JSON Schema object describing the tool's arguments.
+
+## GrepTool
+
+```python
+class GrepTool
+```
+
+`grep`: a regex over a file or a directory tree, honoring .gitignore. Keeps the head.
+
+### GrepTool.__init__
+
+```python
+def __init__(
+    self,
+    cwd: str | os.PathLike[str] | None = None,
+    *,
+    max_output: int = 10000,
+    overflow_dir: str | os.PathLike[str] | None = None,
+    max_overflow: int = 64 * 1024 * 1024,
+) -> None
+```
+
+### GrepTool.call
+
+```python
+async def call(self, args_raw: str) -> Outcome
+```
+
+Run the call in `args_raw`, stopping early if the call is cancelled. `Ok` with the
+output, or `Err`.
+
+### GrepTool.name
+
+```python
+property name: str
+```
+
+The tool's name: `read`, `write`, `edit`, `grep`, `find` or `bash`.
+
+### GrepTool.description
+
+```python
+property description: str
+```
+
+What the tool does, as the model reads it.
+
+### GrepTool.parameters
+
+```python
+property parameters: Mapping[str, object]
+```
+
+A JSON Schema object describing the tool's arguments.
+
+## Progress
+
+```python
+Progress = Callable[[str], None]
+```
+
+A running tool's way to show partial output: `progress(text)` with the new output since the
+last call. Safe to call from any thread. Once the tool's call is over (it returned, was
+aborted, or was cancelled) calling it does nothing.
+
+## ReadTool
+
+```python
+class ReadTool
+```
+
+`read`: a text file, from line `offset` for `limit` lines. Keeps the head of long output.
+
+### ReadTool.__init__
+
+```python
+def __init__(self, cwd: str | os.PathLike[str] | None = None, *, max_output: int = 10000) -> None
+```
+
+### ReadTool.call
+
+```python
+async def call(self, args_raw: str) -> Outcome
+```
+
+Run the call in `args_raw`, stopping early if the call is cancelled. `Ok` with the
+output, or `Err`.
+
+### ReadTool.name
+
+```python
+property name: str
+```
+
+The tool's name: `read`, `write`, `edit`, `grep`, `find` or `bash`.
+
+### ReadTool.description
+
+```python
+property description: str
+```
+
+What the tool does, as the model reads it.
+
+### ReadTool.parameters
+
+```python
+property parameters: Mapping[str, object]
+```
+
+A JSON Schema object describing the tool's arguments.
+
+## Tool
+
+```python
+class Tool(Protocol)
+```
+
+What the driver and providers depend on. A plain function is described as one
+(`tau._tools`); any object with these attributes works too.
+
+Any object with these attributes works, whatever it is written in. The tool
+owns argument validation: it gets the call's raw JSON text.
+
+A tool that shows partial output as it runs opts in by giving `call` a parameter named
+`progress` (`call(self, args_raw, *, progress=None)`; the `None` default keeps the tool a
+`Tool` and callable without a driver), detected once when the driver is built.
+The driver then passes a `Progress` by keyword. A tool whose `call` has no such parameter
+is called with `args_raw` alone, as before.
+
+### Tool.name
+
+```python
+property name: str
+```
+
+The name the model calls the tool by; unique among a driver's tools.
+
+### Tool.description
+
+```python
+property description: str
+```
+
+What the tool does, as the model reads it.
+
+### Tool.parameters
+
+```python
+property parameters: Mapping[str, object]
+```
+
+A JSON Schema object describing the arguments.
+
+### Tool.call
+
+```python
+async def call(self, args_raw: str) -> Outcome
+```
+
+Run with the call's `args_raw`. Answer `Ok` or `Err`; an exception raised is
+the call's `Err(str(e))`.
+
+## ToolError
+
+```python
+class ToolError(Exception)
+```
+
+Why a call failed; the call answers it as `Err(message)`, exactly that text. A tool
+function may raise it to say something to the model without a type prefix.
+
+## WriteTool
+
+```python
+class WriteTool
+```
+
+`write`: a whole file, atomically, creating parent directories.
+
+### WriteTool.__init__
+
+```python
+def __init__(self, cwd: str | os.PathLike[str] | None = None) -> None
+```
+
+### WriteTool.call
+
+```python
+async def call(self, args_raw: str) -> Outcome
+```
+
+Write the file named in `args_raw`. `Ok` with a short confirmation, or `Err`.
+
+### WriteTool.name
+
+```python
+property name: str
+```
+
+The tool's name: `read`, `write`, `edit`, `grep`, `find` or `bash`.
+
+### WriteTool.description
+
+```python
+property description: str
+```
+
+What the tool does, as the model reads it.
+
+### WriteTool.parameters
+
+```python
+property parameters: Mapping[str, object]
+```
+
+A JSON Schema object describing the tool's arguments.
+
+## base_tools
+
+```python
+def base_tools(
+    cwd: str | os.PathLike[str] | None = None,
+    *,
+    max_output: int = 10000,
+    overflow_dir: str | os.PathLike[str] | None = None,
+    max_overflow: int = 64 * 1024 * 1024,
+    bash_timeout_ms: int = 30000,
+    bash_max_timeout_ms: int = 600000,
+    bash_kill_grace_ms: int = 2000,
+) -> list[ReadTool | WriteTool | EditTool | GrepTool | FindTool | BashTool]
+```
+
+`read`, `write`, `edit`, `grep`, `find` and `bash`, all working in `cwd` (default: the
+current directory).

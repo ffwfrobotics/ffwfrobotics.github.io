@@ -74,6 +74,35 @@ submissions that have not been admitted yet, i.e. input this abort was
 never about, arriving from a source the aborting user cannot see. They are
 drained at session shutdown instead (:meth:`emit_session_shutdown`).
 
+### answer_request
+
+```python
+answer_request(request_id: str, action: str, values: dict[str, Any] | None = None) -> ExtensionCommandResult
+```
+
+`tau_agent_core.agent_session.AgentSession.answer_request`
+
+Answer an extension's ask: append the response, then dispatch its action.
+
+Reference: docs/EXTENSION-LOCKS.md §3, §8. The append is what releases a
+lock — appending moves the cursor and the cursor is where a lock is read
+— so the order matters: the handler runs on a session that is already
+unlocked and may therefore submit a turn of its own.
+
+**Parameters**
+
+- `request_id: str` — The entry :meth:`~tau_agent_core.extension_types.ExtensionAPI.request_user_action` returned.
+- `action: str` — The pressed action's ``label``, which names the command.
+- `values: dict[str, Any] | None = None` — The filled fields, keyed by field name. ``None`` is the empty dict, which is what an ask declaring no fields takes.
+
+**Returns**
+
+The dispatched command's :class:`ExtensionCommandResult`. ``handled`` is ``False`` when the extension is not loaded — the response entry is still appended and the lock still released, because a lock the owner cannot answer must not become a session nobody can continue.
+
+**Raises**
+
+- `ValueError` — no such request, the request carries no ask, an unknown action label, or values that :func:`validate_form_values` rejects. Fail-Early: nothing is coerced and no partial answer is persisted.
+
 ### compact
 
 ```python
@@ -629,6 +658,16 @@ Current conversation messages (active path).
 Built at read time from the log's raw entries + persisted cursor by
 ``ConversationTree.context_for`` — the leaf→root walk plus the
 compaction/branch_summary splice (§2.1, §2.6).
+
+### pending_request
+
+`tau_agent_core.agent_session.AgentSession.pending_request: ExtensionRequest | None`
+
+The extension request the cursor points at, or ``None`` (EXTENSION-LOCKS §2).
+
+The cursor only — never a walk. Every head reads this to decide what to
+draw, and :meth:`submit` reads it to decide whether to refuse, so the
+thing a user is looking at and the thing that refused them are one entry.
 
 ### performed
 
@@ -1576,6 +1615,26 @@ docstring) applies here — never acquire this from a hook running on the
 session's own current turn task, or it deadlocks exactly as a reentrant
 ``submit()`` call would.
 
+### vocabulary
+
+`tau_agent_core.agent_session.AgentSession.vocabulary: Vocabulary`
+
+τ's registry, plus the flows this session's extensions declared.
+
+What every caller reading the flow tables should pass — ``next_step``,
+``flow_arguments``, ``enumerate_domain``, ``complete_command_argument`` — so a
+gesture an extension added is offered and stepped exactly like a built-in.
+See docs/EXTENSION-FLOWS.md.
+
+Per-session rather than a mutable global, which is the property that makes it
+safe: a fork, a ``switch_session`` and a sub-agent are separate sessions in one
+process, and a global would have let one see another's flows. :data:`BUILTIN`
+is returned unchanged when nothing declared a flow, so a session with no
+extensions costs nothing and is the same object every test already reads.
+
+Cached against the registry's ``flows_revision`` because building it runs the
+whole registry cross-check and a head asks on every keystroke.
+
 ## Argument
 <!-- agent: yes -->
 
@@ -1892,6 +1951,46 @@ entries() -> list[dict[str, Any]]
 The UNDERLYING session's id — a branch is a lane in one conversation, not a
 second conversation. (Its own identity is :attr:`lane`.)
 
+## BrowseNode
+<!-- agent: yes -->
+
+```python
+class BrowseNode(entry_id: str, parent_id: str | None, kind: str, role: str | None, preview: str, is_cursor: bool, timestamp: int | None, first_kept_id: str | None, from_id: str | None, is_system: bool, tool_call_ids: tuple[str, ...], tool_call_id: str | None, copyable: bool, estimated_tokens: int)
+```
+
+`tau_agent_core.conversation_tree.BrowseNode`
+
+One row of the browsable tree, with the facts a head's zone rules read.
+
+:class:`TreeNode` is the shape and nothing else, which is enough to DRAW a tree
+and not enough to colour one. A head outside this process cannot recover the
+rest — the fold's boundary, the tool pairing, the copyable kinds — because each
+of them is read out of the raw entry, and no verb hands a raw entry over. This
+record is what :meth:`ConversationTree.browse` adds so that an out-of-process
+head computes the same zones the TUI's browser computes in-process, from the
+same facts, rather than from a second reading of the log's shape.
+
+Bounded on purpose: ``preview`` is one line, and no message body rides along.
+A body is fetched per node, the way the TUI's detail pane calls
+:meth:`ConversationTree.entry` for the one node it is showing.
+
+**Constructor parameters**
+
+- `entry_id: str` — The entry's id — the value every ``message_id`` argument takes.
+- `parent_id: str | None` — The id this entry hangs from; ``None`` for a root.
+- `kind: str` — The entry's ``type`` — ``message``, ``compaction``, ``elide``, ``branch_summary``, ``navigate``, ``customEntry`` and the rest.
+- `role: str | None` — ``user`` / ``assistant`` / ``toolResult`` / ``system`` on a message entry, ``None`` on every bookkeeping kind.
+- `preview: str` — The entry's first line, cut nowhere — the caller elides to width.
+- `is_cursor: bool` — Whether this entry is the session's current cursor.
+- `timestamp: int | None` — Epoch milliseconds, or ``None`` when no clock applies. This is the key children are sorted by, so a caller re-sorting gets this order.
+- `first_kept_id: str | None` — On a splice anchor (``compaction`` / ``elide``), the oldest entry the fold keeps. ``None`` on every other kind, and on an anchor that names none. The fold's whole boundary, so a head computes the folded span rather than guessing at it.
+- `from_id: str | None` — On a ``branch_summary``, the head of the branch it summarizes.
+- `is_system: bool` — Whether this entry is the system prompt, which a fold carries across rather than dropping (docs/SYSTEM-PROMPT-IN-THE-FOLD.md).
+- `tool_call_ids: tuple[str, ...]` — The ``toolCall`` block ids an assistant message declares. Empty on every other entry.
+- `tool_call_id: str | None` — The call a ``toolResult`` answers; ``None`` elsewhere. With ``tool_call_ids`` this is the whole of the pairing rule a mark expands over (docs/TREE-EDITOR-MANUAL.md §6).
+- `copyable: bool` — Whether ``paste_subtree`` can take this entry as a source root.
+- `estimated_tokens: int` — ``compaction.estimate_tokens`` over this entry's message, or 0 for an entry carrying none. An ESTIMATE — a 4-chars-per-token heuristic — and the only token figure available for an arbitrary set of entries, so a caller showing a total says "estimate" beside it.
+
 ## Capability
 <!-- agent: yes -->
 
@@ -2154,6 +2253,29 @@ log is never mutated — ``navigate`` only moves the in-memory cursor.
 
 - `entries: list[dict[str, Any]]` — *(no description)*
 - `cursor: str | None` — *(no description)*
+
+### browse
+
+```python
+browse() -> tuple[BrowseNode, ...]
+```
+
+`tau_agent_core.conversation_tree.ConversationTree.browse`
+
+Every entry as a :class:`BrowseNode`, in the order a browser draws them.
+
+Preorder over :meth:`tree` — roots in load order, children oldest first —
+which is the same walk ``tree_surgery`` orders a selection by, so a caller
+rendering this list top to bottom draws the rows the TUI's browser draws.
+
+FLAT, and deep-tree safe both here and at the far end: ``parent_id`` carries
+the shape. A nested projection of a five-hundred-message linear conversation
+is five hundred levels of nesting, which is a serializer's recursion limit
+rather than a tree anybody wanted.
+
+**Returns**
+
+One node per entry, including the kinds a browser then declines to draw (a ``navigate`` with one child). Which rows are hidden is the reader's rule, not the log's, so nothing is filtered out here.
 
 ### children_of
 
@@ -2618,6 +2740,14 @@ that is not loaded); ``message`` is the human-readable line the listing box show
 A hard failure (a broken file on reload) still raises out of the action —
 ``ok=False`` is reserved for reportable, non-exceptional outcomes (Fail-Early).
 
+There is no ``cursor`` field, though one action moves it: disabling an
+extension whose lock is the cursor releases it (docs/EXTENSION-LOCKS.md §6).
+Both projections of this record already carry the LIVE cursor — the RPC verb
+reads ``session.session_log.cursor``, and ``AgentSession.performed`` writes it
+and refuses a caller that hands it one — so a second copy here would be the
+two-writers drift that method exists to remove. The move is visible in
+``message``.
+
 **Constructor parameters**
 
 - `action: str` — *(no description)*
@@ -2788,6 +2918,13 @@ append_at(parent_id: str | None, entry_type: str, payload: dict[str, Any]) -> st
 `tau_agent_core.session_log.InMemorySessionLog.append_at`
 
 Explicit-parent append (see the Protocol). Does NOT move this log's leaf.
+
+The entry's ``timestamp`` is WHEN THE EVENT HAPPENED, not when the log was
+written: a whole turn is persisted in one pass after the agent loop
+returns, so the write time collapses every completion of that turn onto one
+millisecond (docs/MESSAGE-TIMESTAMPS.md §1). It is taken from the payload's
+message when that message carries one, and falls back to now for an entry
+with no event of its own — a system message, a navigate, a compaction.
 
 **Parameters**
 
@@ -4316,7 +4453,7 @@ is what keeps that answer distinct from a caller who never looked.
 <!-- agent: yes -->
 
 ```python
-bind_command_args(flow: str, raw: str) -> dict[str, Any]
+bind_command_args(flow: str, raw: str, vocabulary: Vocabulary = BUILTIN) -> dict[str, Any]
 ```
 
 `tau_agent_core.flows.bind_command_args`
@@ -4337,6 +4474,7 @@ known gap (docs/SLASH-COMMANDS.md §4) this function does not close.
 
 - `flow: str` — The flow's name.
 - `raw: str` — Everything the reader typed after the command word.
+- `vocabulary: Vocabulary = BUILTIN` — The registry to look the flow up in. A session's own (``AgentSession.vocabulary``) also carries the flows its extensions declared; the default is τ's alone.
 
 **Returns**
 
@@ -4351,7 +4489,7 @@ The bound arguments, ready for :func:`next_step`.
 <!-- agent: yes -->
 
 ```python
-bind_text(argument: Argument, text: str) -> Any
+bind_text(argument: Argument, text: str, vocabulary: Vocabulary = BUILTIN) -> Any
 ```
 
 `tau_agent_core.flows.bind_text`
@@ -4379,6 +4517,7 @@ This converts a TYPE, and refuses only where the type itself is wrong.
 
 - `argument: Argument` — The argument being bound, for its domain and its name.
 - `text: str` — What the person typed, already stripped of the command word.
+- `vocabulary: Vocabulary = BUILTIN` — The registry ``argument``'s domain is declared in.
 
 **Returns**
 
@@ -4596,7 +4735,7 @@ The messages those entries contribute, in order. Entry kinds that carry no messa
 <!-- agent: yes -->
 
 ```python
-enumerate_domain(domain: str, *, session: Any = None, runtime: Any = None, scope: MessageIdScope | None = None, cursor: str | None = None, query: str = '', limit: int = _ENUMERATION_LIMIT) -> DomainValues
+enumerate_domain(domain: str, *, session: Any = None, runtime: Any = None, scope: MessageIdScope | None = None, cursor: str | None = None, query: str = '', limit: int = _ENUMERATION_LIMIT, vocabulary: Vocabulary = BUILTIN) -> DomainValues
 ```
 
 `tau_agent_core.flows.enumerate_domain`
@@ -4612,15 +4751,22 @@ them, so a listing here and the corresponding RPC verb cannot disagree about wha
 exists. A ``free`` domain has no value set and returns none, with ``total`` 0; a
 domain whose values are fixed returns them without touching either object.
 
+A domain an extension declared is answered by the callable it registered, looked
+up BEFORE τ's own dispatch so an extension cannot be shadowed by a name τ later
+adds. The callable is passed ``query`` and ``limit`` and returns
+``(value, label)`` pairs; it never sees the session or the runtime, because an
+extension already holds its own context.
+
 **Parameters**
 
-- `domain: str` — The domain's name, a key of :data:`~tau_agent_core.capabilities.DOMAINS`.
+- `domain: str` — The domain's name, a key of ``vocabulary.domains``.
 - `session: Any = None` — The :class:`~tau_agent_core.agent_session.AgentSession` to read models, extensions and the session tree from.
 - `runtime: Any = None` — The :class:`~tau_agent_core.agent_session_runtime.AgentSessionRuntime` to read the session catalog and the working directory from. Separate from ``session`` because both live there, not on the session. ``path`` needs it as much as ``session_id`` does: completing against the process's own directory instead of the runtime's answers a different question than the one that was asked, so its absence raises rather than falling back.
 - `scope: MessageIdScope | None = None` — For ``message_id``, which entries are candidates.
 - `cursor: str | None = None` — For a scoped ``message_id``, the entry the scope is relative to.
 - `query: str = ''` — Filter text. Honoured by the domains whose readers take one; a domain with a small fixed set ignores it.
 - `limit: int = _ENUMERATION_LIMIT` — How many values to return at most.
+- `vocabulary: Vocabulary = BUILTIN` — The registry to look ``domain`` up in, and whose ``enumerators`` answer for a domain an extension declared.
 
 **Returns**
 
@@ -4631,11 +4777,39 @@ class:`DomainValues` carrying the values and the true total.
 - `KeyError` — No domain has that name.
 - `ValueError` — The domain needs an object this call did not supply — a session or a runtime. Fail-Early: returning an empty list would say "there are none" when the truth is "nothing was asked".
 
+## event_iso
+<!-- agent: yes -->
+
+```python
+event_iso(payload: dict[str, Any], now: Callable[[], str]) -> str
+```
+
+`tau_agent_core.session_log.event_iso`
+
+The event time of an entry payload, or now when it carries no clock.
+
+A ``message``/``customMessage`` payload holds the message dict, whose
+``timestamp`` is epoch ms set where the event happened — the user's send, the
+tool result's collection, the completion's end. Anything else (a navigate, a
+compaction, a system message) has no event of its own and takes the write
+time, which for those is the same moment. All three ``SessionLog``
+implementations call this from ``append_at``, so the same session reads the
+same whichever one wrote it (docs/MESSAGE-TIMESTAMPS.md §4).
+
+**Parameters**
+
+- `payload: dict[str, Any]` — The entry payload about to be written.
+- `now: Callable[[], str]` — The CALLER's write-time clock, passed rather than imported so each store keeps its own ``_now_iso`` as the one thing a test can substitute.
+
+**Returns**
+
+An ISO-8601 UTC string in ``_now_iso``'s exact format.
+
 ## flow_arguments
 <!-- agent: yes -->
 
 ```python
-flow_arguments(flow: str) -> tuple[Argument, ...]
+flow_arguments(flow: str, vocabulary: Vocabulary = BUILTIN) -> tuple[Argument, ...]
 ```
 
 `tau_agent_core.flows.flow_arguments`
@@ -4649,6 +4823,7 @@ two cannot come to disagree about what a flow takes.
 **Parameters**
 
 - `flow: str` — The flow's name.
+- `vocabulary: Vocabulary = BUILTIN` — The registry to look the flow up in. A session's own (``AgentSession.vocabulary``) also carries the flows its extensions declared; the default is τ's alone.
 
 **Returns**
 
@@ -4662,7 +4837,7 @@ The declared arguments. Empty for a flow that takes none.
 <!-- agent: yes -->
 
 ```python
-flow_form_spec(flow: str, bound: dict[str, Any] | None = None, *, options: dict[str, list[str]] | None = None) -> dict[str, Any]
+flow_form_spec(flow: str, bound: dict[str, Any] | None = None, *, options: dict[str, list[str]] | None = None, vocabulary: Vocabulary = BUILTIN) -> dict[str, Any]
 ```
 
 `tau_agent_core.flows.flow_form_spec`
@@ -4688,6 +4863,7 @@ dry run").
 - `flow: str` — The flow's name.
 - `bound: dict[str, Any] | None = None` — The arguments bound so far. ``None`` and ``{}`` are the same thing.
 - `options: dict[str, list[str]] | None = None` — The legal values for any argument whose domain renders as a ``select``, keyed by ARGUMENT name — from :func:`enumerate_domain`, which needs the live objects this function deliberately does not take. Pure: the caller reads, this shapes.
+- `vocabulary: Vocabulary = BUILTIN` — The registry to look the flow up in. A session's own (``AgentSession.vocabulary``) also carries the flows its extensions declared; the default is τ's alone.
 
 **Returns**
 
@@ -4767,7 +4943,7 @@ here unchanged.
 <!-- agent: yes -->
 
 ```python
-next_step(flow: str, bound: dict[str, Any] | None = None, cursor: str | None = None) -> FlowStep | Ready
+next_step(flow: str, bound: dict[str, Any] | None = None, cursor: str | None = None, vocabulary: Vocabulary = BUILTIN) -> FlowStep | Ready
 ```
 
 `tau_agent_core.flows.next_step`
@@ -4788,6 +4964,7 @@ command with only optional flags does.
 - `flow: str` — The flow's name.
 - `bound: dict[str, Any] | None = None` — The arguments bound so far. ``None`` and ``{}`` are the same thing: the flow's first step.
 - `cursor: str | None = None` — The entry a ``message_id`` argument's scope is relative to. Required of the caller rather than read off a session, for the reason ``resolve_command`` takes ``extension_commands`` as a parameter: it keeps this callable from a head that is peeking, a runtime that is deciding, and a test with neither. A caller stepping a sub-agent's flow passes THAT agent's cursor.
+- `vocabulary: Vocabulary = BUILTIN` — The registry to look the flow up in. A session's own (``AgentSession.vocabulary``) also carries the flows its extensions declared; the default is τ's alone.
 
 **Returns**
 
@@ -4796,6 +4973,35 @@ class:`FlowStep` while a required argument is unbound, otherwise a class:`Ready`
 **Raises**
 
 - `UnknownFlowError` — No flow has that name.
+
+## normalize_loaded_entries
+<!-- agent: yes -->
+
+```python
+normalize_loaded_entries(entries: list[dict[str, Any]]) -> list[dict[str, Any]]
+```
+
+`tau_agent_core.session_log.normalize_loaded_entries`
+
+Map legacy ``timestamp: 0`` on a loaded assistant message to ``None``.
+
+The ONE place a 0 is interpreted. τ did not run in 1970, so a 0 in a stored
+message is the fabricated value ``openai-completions`` wrote before
+docs/MESSAGE-TIMESTAMPS.md; everything downstream reads ``None`` and never
+tests for 0. Every session store calls this on its load path, so a session
+reads the same whichever store it came from.
+
+Mutates the message dicts in place and returns the same list, because a store
+loading tens of thousands of entries should not copy them all to fix a field
+that is usually already absent.
+
+**Parameters**
+
+- `entries: list[dict[str, Any]]` — Session-log entries as read from storage.
+
+**Returns**
+
+The same list, with legacy assistant zeros replaced by ``None``.
 
 ## open_branch
 <!-- agent: yes -->
@@ -5089,7 +5295,9 @@ slash_vocabulary() -> dict[str, str]
 Every built-in slash command, mapped to what it does.
 
 The projection :data:`tau_agent_core.commands.FRONTEND_COMMANDS` is built from,
-so the flow table and the slash vocabulary cannot drift apart.
+so the flow table and the slash vocabulary cannot drift apart. Built-ins only —
+what an extension added is :meth:`Vocabulary.extension_vocabulary`, kept apart
+because ``resolve_command`` resolves the two halves in that order.
 
 Ordering is ``compact``, the view commands, then the remaining flows, which is
 the order the vocabulary already had — completion lists and the RPC

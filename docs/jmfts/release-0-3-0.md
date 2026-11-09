@@ -5,7 +5,9 @@ title: "0.3.0 — the job system"
 # JMFTS 0.3.0 — the job system
 
 !!! note "Released 2026-09-03"
-    0.3.0 is the current release: tag [`v0.3.0`](https://github.com/jmccardle/jmfts/releases/tag/v0.3.0), and both wheels on PyPI. One of the seven planned phases has not landed and two more are still under consideration — see [What is not here](#what-is-not-here).
+    **This page is history.** 0.3.0 was the current release when it was written; the current one is [0.6.0](release-0-6-0.md). What is below is still an accurate account of what 0.3.0 changed, and the two breaks it names are still breaks — later releases add to them rather than reverse them. One of the seven planned phases had not landed at the time and two more were under consideration — see [What is not here](#what-is-not-here).
+
+    Tag [`v0.3.0`](https://github.com/jmccardle/jmfts/releases/tag/v0.3.0), both wheels on PyPI.
 
     Every console block below is real output, captured by running `scripts/demo_release_0_3_0.py` against the tree. Regenerating that file is how this page is updated, so the page cannot describe a run the appliance no longer does.
 
@@ -378,6 +380,9 @@ Two migrations, applied in order:
 | `016_document_produced_by.sql` | Adds `documents.produced_by` and an index on `(parent_id, produced_by)`. |
 
 There is no migration ledger. Choosing and applying deltas is still a deliberate act by an operator who knows the target's state.
+
+!!! note "0.5.0 added one"
+    `schema_migrations` (migration `017`) records one row per applied delta, and `jmfts-init-db --pending` reads it. On 0.5.0 and later, ask the database what it is missing rather than reasoning about it.
 
 !!! warning "015 moves data a running 0.2.1 process reads"
     Deploy the code together with the migration, not around it. 016 is additive and backfills nothing: nodes that predate it read as asserted, which is the honest answer rather than a guessed one.

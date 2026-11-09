@@ -8,11 +8,11 @@ status: "draft"
 
 <p class="axis">Action × Application</p>
 
-Recipes for specific Tectum jobs. Most are built from a schema that actually ships in the tree rather than a hypothetical; a few are patterns assembled from shipped substrate mechanics that no single schema wires end to end, and those say so. Tectum's `praxis/` directory holds many independently-tried schemas — most of these are experiments, not a single evolving design — so each recipe below states plainly whether it is the stable boot default, a try that worked once and stopped there, or a pattern the substrate supports that is waiting for its schema.
+Recipes for specific Tectum jobs. The framework repository ships these schemas in `praxis/`: `bootstrap`, `handset`, `edge_asr`, `edge_asr_memory`, `streaming_audio` and `transcription`, and `praxis/active.yaml` ships empty (what a host runs is that host's business). Several recipes below were first worked out on schemas and agent nodes that now live in a separate, private deployment repository (`listening_mode`, `thinking_fast_slow`, `harness_text`, the `loose_loop` family, `persona_live_test`, and the agents `agent.persona_reflection`, `agent.responder` and `agent.workspace_curator`). Those recipes keep the YAML because the shape is the lesson, but each one says which parts you must supply yourself. The recipes whose parts all ship in the framework repository say so.
 
 ## Wire a wakeword-gated agent loop
 
-**Status: stable — this is the boot default most Tectum deployments ship with.**
+**Status: pattern. `audio.gateway`, `effector.speech` and `effector.journal_append` ship in the framework; the agent node (`agent.persona_reflection` here) does not, and `listening_mode.yaml` is not in this repository's `praxis/`. It was a deployment's boot default.**
 
 The smallest complete loop: a transcript comes in, a wakeword filter decides whether it was addressed to the agent, the agent judges the event and may speak, and a durable record gets written before the turn is considered finished.
 
@@ -37,7 +37,7 @@ bindings:
     to: effector.journal_append
 ```
 
-`audio.gateway` does a plain substring test against a configured wakeword — for example, an assistant named "Kevin" only reacts to a transcript that actually contains "kevin". Everything before the wakeword check is sensation; everything from `agent.persona_reflection` onward is workspace. Apply it:
+`audio.gateway` does a plain substring test against a configured wakeword — for example, an assistant named "Kevin" only reacts to a transcript that actually contains "kevin". Everything before the wakeword check is sensation; everything from `agent.persona_reflection` onward is workspace. Supply your own agent node (see [Nodes from other packages](devops.md#nodes-from-other-packages)), save the schema as `praxis/listening_mode.yaml`, and apply it:
 
 ```bash
 tectum schema validate praxis/listening_mode.yaml
@@ -48,7 +48,7 @@ Activating this one file brings up all four nodes (RAII ref-counted — each is 
 
 ## Split an agent into a fast responder and a slow curator
 
-**Status: experimental — one try (`thinking_fast_slow`) among several later attempts at the same idea. Landed and ran, not the current boot default.**
+**Status: experimental pattern — one try (`thinking_fast_slow`) among several later attempts at the same idea. The schema and its agent nodes (`agent.responder`, `agent.workspace_curator`) live in the deployment repository, not in this one.**
 
 A single LLM call has to trade latency against depth. This pattern splits the work across two agent nodes on the same underlying model instead: a **fast** node that reads the current view of shared state each turn and either speaks immediately or delegates, and a **slow** node that only runs on delegation, does one thinking-on call, and writes its answer back rather than speaking directly.
 
@@ -75,7 +75,7 @@ Shared state here is append-only and multi-writer: the slow node's write becomes
 
 ## Add a push-to-talk agent on a second device
 
-**Status: experimental, recent. Runs against the stable core's persona/tool pattern but is not the boot default.**
+**Status: ships — `praxis/handset.yaml`, `praxis/edge_asr.yaml` and `praxis/edge_asr_memory.yaml` and their nodes are in the framework repository. (The shipped files also bind `events.>` to `system.event_log`; that line is omitted below.)**
 
 A handset app that already has its own push-to-talk button doesn't need a wakeword — someone pressing the button *is* the wake signal. This pattern gives such a device its own sensation rail, skipping the wakeword gateway entirely, and its own command rail back, using the device token described in [Reference](reference.md#subject-namespace).
 
@@ -148,7 +148,7 @@ Each side also states a quality of service per subject — durable, idempotent, 
 
 ## Drive the loop without a microphone
 
-**Status: stable tooling — `harness_text.yaml` and the `parley-nats` injector ship in the tree and were the daily drivers for the `loose_loop` experiments.**
+**Status: `scripts/heard.py` and `scripts/say.py` ship in the framework. `harness_text.yaml` and the `parley-nats` injector were the deployment repository's drivers for the `loose_loop` experiments and are not in this one.**
 
 Nothing in the sensation DAG checks that a transcript came from a microphone. A subject is a contract, not a provenance claim, so the whole physical edge — mic, streaming ASR, resolver, TTS — can be swapped for a keyboard without the cognition schemas noticing.
 
@@ -186,7 +186,7 @@ Filter the log by one `binding_id` and the whole turn lines up in order. The env
 
 ## Shadow-run a candidate agent on live traffic
 
-**Status: pattern — every mechanism is shipped; the nearest shipped precedent is `loose_loop3`, which A/B'd its slow tier by swapping one node in an otherwise identical schema.**
+**Status: pattern — every mechanism ships; the nearest precedent is `loose_loop3` (deployment repository), which A/B'd its slow tier by swapping one node in an otherwise identical schema.**
 
 A binding delivers a subject to a node, and nothing requires an agent's output subjects to be bound anywhere. Those two facts make a shadow deployment a routing decision rather than a codebase feature:
 
@@ -220,7 +220,7 @@ The substrate supports both orders; it does not choose for you. Which failure is
 
 ## Put code where a model is tempting
 
-**Status: stable nodes — `audio.resolver` and `audio.echo_gate` ship in the tree and are wired by `persona_live_test.yaml`.**
+**Status: ships — `audio.resolver` and `audio.echo_gate` are in the framework (`tests/test_audio_resolver.py`, `tests/test_echo_gate.py`). The schema that wired them for a robot, `persona_live_test.yaml`, is in the deployment repository.**
 
 Two shipped nodes do work that reads like it needs a model, with none:
 
@@ -243,7 +243,7 @@ The new process registers, heartbeats with its load, and joins the group — no 
 
 ## Share one prompt cache across every agent
 
-**Status: stable mechanism — `persona.py` composes every agent's system prompt persona-first for exactly this reason.**
+**Status: ships — `tectum/persona.py` composes every agent's system prompt persona-first for exactly this reason. It composes a persona from `resources["persona"]` or `$TECTUM_PERSONA` and raises if neither is set; it carries no persona of its own.**
 
 Multi-agent topologies like `thinking_fast_slow` run several agent nodes against one inference server. Every one of those agents' system prompts begins with the same byte-identical persona prefix, with the per-agent material after it — so the server's prefix cache (llama.cpp's KV cache, in the deployments in the tree) stays warm no matter which agent dispatches next. The persona is shared identity and shared cache at once: N agents, one prefix computation.
 

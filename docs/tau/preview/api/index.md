@@ -1,0 +1,25 @@
+---
+title: "Tau 0.16 preview API: Reference"
+---
+
+!!! warning "Unreleased"
+    Generated from the docstrings of Tau 0.16.0-dev (commit `c439c401`) by `scripts/api_docs.py` in the Tau repository. Not the 0.15 API.
+
+# Reference
+
+One page per group of the public surface (`docs/api/README.md` says who each is for).
+
+- [Writing an extension](extensions.md): 30 names
+- [Tools](tools.md): 10 names
+- [The session's records](records.md): 14 names
+- [Writing a frontend](clients.md): 11 names
+- [Events](events.md): 18 names
+- [Starting and finding sessions](sessions.md): 19 names
+- [The wire](wire.md): 6 names
+- [Embedding tau](driver.md): 5 names
+- [Providers](providers.md): 10 names
+- [The step machine](machine.md): 8 names
+- [Configuration and context](config.md): 35 names
+- [Errors](errors.md): 22 names
+- [The terminal UI](tui.md): 8 names
+- [Tracing](diagnostics.md): 4 names

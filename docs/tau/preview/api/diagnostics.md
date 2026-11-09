@@ -1,0 +1,46 @@
+---
+title: "Tau 0.16 preview API: Tracing"
+---
+
+!!! warning "Unreleased"
+    Generated from the docstrings of Tau 0.16.0-dev (commit `c439c401`) by `scripts/api_docs.py` in the Tau repository. Not the 0.15 API.
+
+# Tracing
+
+One timeline across Rust and Python, for finding where time goes.
+
+Names: `trace.capture`, `trace.span`, `trace.start`, `trace.stop`
+
+## tau.trace.capture
+
+```python
+@contextlib.contextmanager
+def capture(path: str | Path) -> Generator[None]
+```
+
+`start(path)` then, on leaving the block, `stop()`.
+
+## tau.trace.span
+
+```python
+def span(kind: str, name: str, **args: object) -> contextlib.AbstractContextManager[None]
+```
+
+A context manager timing its block as a span of `kind` (`hook`, `sample`,
+`tool`, `driver`) and `name`. A no-op unless a trace is running.
+
+## tau.trace.start
+
+```python
+def start(path: str | Path) -> None
+```
+
+Record to `path` until `stop()`. Raises `TraceError` if a trace is running.
+
+## tau.trace.stop
+
+```python
+def stop() -> Path
+```
+
+End the trace and write the file, native and Python spans together.

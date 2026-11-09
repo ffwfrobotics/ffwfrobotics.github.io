@@ -10,27 +10,30 @@ Index a small corpus and run your first hybrid query.
 
 You will stand up the appliance, put three documents in it, search them by meaning, add a BM25 index, and then run the hybrid query that uses both. Most of the time is the embedding model downloading.
 
-Everything here has been in JMFTS since [0.1.0](https://github.com/jmccardle/jmfts/releases/tag/0.1.0), and runs unchanged on [0.3.0](https://github.com/jmccardle/jmfts/releases/tag/v0.3.0). Neither break in the [Changelog](../changelog.md) touches anything below.
+Everything here has been in JMFTS since [0.1.0](https://github.com/jmccardle/jmfts/releases/tag/0.1.0), and was last checked against [0.8.0](https://github.com/jmccardle/jmfts/releases/tag/v0.8.0). The one break in the [Changelog](../changelog.md) that reaches it is the token: since 0.8.0 `JMFTS_API_TOKEN` has no default, so you choose one in step 1. Every request body below carries only declared fields, which 0.8.0 enforces (an undeclared field is a 422).
+
+If you would rather look than type, [See a result on the page](see-a-result-on-the-page.md) does the same shape in the browser and needs nothing from this page.
 
 ## 1. Start it
 
 ```bash
 git clone https://github.com/jmccardle/jmfts.git
 cd jmfts
+export JMFTS_API_TOKEN="$(openssl rand -base64 32)"
 docker compose up --build -d
 docker compose logs -f api
 ```
 
 The first build downloads a CPU build of torch, and the first request downloads `nomic-ai/modernbert-embed-base` — a few hundred MB, cached in a volume so it only happens once.
 
-The Compose file pins the API token to `jmfts-dev-local` so a local client can use a known value. Export it and the API root:
+The Compose file has no default for the token: it stops and says so if `JMFTS_API_TOKEN` is unset, and so does the server (0.8.0; before that it generated one and printed it). Use the value you exported above, and the API root:
 
 ```bash
-export TOKEN=jmfts-dev-local
+export TOKEN="$JMFTS_API_TOKEN"
 export API=http://localhost:8100
 ```
 
-Every request needs `Authorization: Bearer $TOKEN`. There is no mode where a blank token means "allow all" — if you had not pinned one, the server would have generated one and printed it to the log you just tailed.
+Every request needs `Authorization: Bearer $TOKEN`. There is no mode where a blank token means "allow all."
 
 ## 2. Put something in it
 

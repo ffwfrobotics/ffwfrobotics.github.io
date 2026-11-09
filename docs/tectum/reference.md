@@ -26,6 +26,7 @@ Every message on the bus is a `TectumEvent`. Fields:
 | `origin_node` | str | The host that first emitted the event. |
 | `hops` | list[str] | Ordered list of nodes/agents that have processed the event. |
 | `seen_by` | set[str] | Subscribers that have acknowledged it. |
+| `cause_id` | str \| None | The `event_id` of the event that caused this one, as a string. `None` when the cause is not known; never a guess. |
 | `binding_id` | str \| None | Correlates events in the same logical flow (e.g. perceive → plan → act), preserved across hops. |
 | `produced_by_schema` / `routed_by_schema` | str \| None | Which schema produced/routed the event, for audit and replay. |
 | `expectation` / `residual` | dict \| None | Predictive-routing fields: what the producer expected next, and the post-hoc difference from what actually happened. |
@@ -68,7 +69,7 @@ A node declares its contract once, at the `@tectum_node` decorator that wraps it
 | Manifest field | Meaning |
 |---|---|
 | `name` | The node's registered name, e.g. `effector.speech`. |
-| `substrate` | Which substrate this node belongs to. |
+| `requires_substrate` | A placement constraint, not a location: the substrate this node must run on, or `None` (the default) for "anywhere". Only a node bound to one machine's hardware sets it (a microphone, a specific GPU). Where a node actually runs is its runner's own substrate name (`--substrate`, `$TECTUM_SUBSTRATE`, else the hostname). |
 | `subscribes` | Subject patterns this node is designed to handle — a descriptive contract the schema loader validates bindings against, not a hard dependency on a publisher existing. |
 | `publishes` | Subject patterns this node may emit. |
 | `resources` | Advisory config, e.g. `llm_endpoint`, `llm_model`. |
@@ -94,7 +95,7 @@ Nodes do not subscribe to the bus themselves. Bindings live in Praxis: the activ
 name: listening_mode
 version: 1                 # authoring metadata only (no enforcement yet)
 author: hand                # who/what authored this schema
-substrate: home              # advisory home substrate for the schema
+requires_substrate: home     # optional; a control agent on another substrate refuses it
 immutable: false            # true => only operator-class callers may deactivate
 ttl: forever                # forever | <seconds>
 description: "..."
@@ -109,27 +110,34 @@ audit:
   journal_threshold: 0.5
 ```
 
-A binding delivers events matching `from` to a **node** — `to` must be a registered node name listed in `requires.nodes`. Subject-to-subject re-publish bridges and inline payload predicates are deliberately not part of this model: payload filtering belongs in filter nodes, and behavior belongs in nodes. `predicates` (system-event reactions) are parsed but not yet acted on.
+`requires_substrate` is optional; omit it for a schema that may activate anywhere. The old `substrate:` key is now a load error rather than a silent no-op: rename it or delete it. `agent.persona_reflection` in the example is a name, not a bundled node; the framework ships `agent.edge_asr` and `agent.edge_asr_memory` as its agent archetypes (see the [Cookbook](cookbook.md)).
+
+A binding delivers events matching `from` to a **node** — `to` must be a registered node name listed in `requires.nodes`. Subject-to-subject re-publish bridges and inline payload predicates are deliberately not part of this model: payload filtering belongs in filter nodes, and behavior belongs in nodes. `predicates` (system-event reactions) are parsed but not yet acted on. A schema may also carry an optional `pscript` phase track, which turns it into a multi-step script with expectations and a deviation exit, run by the `praxis.tracker` node; a schema without one is unchanged.
 
 ## CLI
 
 ```bash
+tectum bus                        # run a nats-server in this terminal until Ctrl-C
 tectum scan                       # offline node graph (delivery/slots too)
-tectum status                     # live-stack reachability + control/supervision graph
+tectum status                     # live-stack reachability + control/supervision graph (also: is nats-server present)
 tectum up                         # control agent + supervised node fleet, hold until Ctrl-C
+tectum up --own-bus               # ... plus a broker that lives exactly as long as the fleet
 tectum up --no-supervise          # force-fork every node, no supervision
+tectum down                       # stop the whole stack on this host (remote Ctrl-C)
+tectum clear                      # unapply behavioural schemas + stop their nodes; keep the agent
 
-tectum --node effector.speech     # one node as its own process; --module/-e for custom nodes
+tectum --node effector.speech     # one node as its own process; --module/-e for nodes from other packages
 
-tectum schema validate praxis/listening_mode.yaml   # offline type-check
-tectum schema apply    praxis/listening_mode.yaml   # apply (spawns required absent nodes)
-tectum schema unapply  listening_mode               # refused if immutable
+tectum schema validate praxis/streaming_audio.yaml  # offline type-check
+tectum schema apply    praxis/streaming_audio.yaml  # apply (spawns required absent nodes)
+tectum schema unapply  streaming_audio              # refused if immutable
 tectum schema list                                  # active schemas + binding refcounts
 tectum node list                                    # instances, heartbeat age, slots, supervision
 tectum node restart    effector.speech              # real restart (supervisor respawns it)
 tectum node stop       effector.speech              # stop + suppress respawn
 tectum node spawn      effector.speech              # bring a required node up from its spec
 tectum spec list                                    # launch specs the agent can respawn from
+tectum spec forget     effector.speech              # drop a stored launch spec
 ```
 
 See the [DevOps Manual](devops.md) for how these fit into a running deployment, and the [Cookbook](cookbook.md) for worked schema examples.

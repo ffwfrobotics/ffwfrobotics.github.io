@@ -13,8 +13,8 @@ the tree a session actually is. Headless: no Textual, no assumptions about
 stdin or stdout. It runs under the TUI, in a host process, or as an RPC
 subprocess, and cannot tell which.
 
-Distribution `ffwf-tau-agent-core`. `tau_agent_core` never imports
-`tau_coding_agent`.
+Distribution `ffwf-tau-agent-core`, Python 3.12 or later. It depends on
+`tau_llm`; `tau_agent_core` never imports `tau_coding_agent`.
 
 ## The agent loop
 
@@ -22,23 +22,38 @@ Distribution `ffwf-tau-agent-core`. `tau_agent_core` never imports
 AgentLoop(
     config: AgentLoopConfig, emit=None, tools=None, model=None,
     abort_signal=None, hook_dispatcher=None, steer_queue=None,
+    mid_turn_compactor=None, writer=None, call_gate=None,
+    turn_settings=None, input_failure=None, position=None,
 )
 ```
 
-`config`, `tools`, `model` and `abort_signal` are constructor arguments, not
-fields on one shared object. `AgentLoopConfig` is deliberately small: `model`,
-`system_prompt`, `tool_execution_mode`, `max_retries`, `max_turns`,
+`AgentLoop` lives in `tau_agent_core.agent_loop` and is not re-exported from
+the package root. `config`, `tools`, `model` and `abort_signal` are constructor
+arguments, not fields on one shared object. `AgentLoopConfig` is deliberately
+small: `model`, `system_prompt`, `system_prompt_override`,
+`tool_execution_mode`, `max_retries`, `max_turns`, `repeat_tool_call_limit`,
 `temperature`, `api_key`, `reasoning`.
 
 Everything an earlier design put on the config as callbacks —
 `before_tool_call`, `get_steering_messages`, `transform_context` — is injected
-instead. Extension hooks go through `hook_dispatcher`, gated on
-`has_hook_handlers()` so a zero-extension session pays nothing for it;
-mid-turn steering goes through a shared `steer_queue`.
+instead. Extension hooks go through `hook_dispatcher`; mid-turn steering goes
+through a shared `steer_queue`; `mid_turn_compactor` is offered the context at
+each turn boundary; `writer` receives each message as it exists, so the loop
+need not hold a turn's output in memory to persist it; `call_gate` refuses a
+model-issued call by name while the tool stays declared (so the tool block and
+the prompt cache hold); and `turn_settings` is awaited before every request for
+its model, key, reasoning level and temperature, so a switch made between two
+requests reaches the second. With a `turn_settings` source the config's own
+`temperature`, `api_key` and `reasoning` are ignored.
 
-`max_turns` defaults to 50. It is a τ-original safeguard — pi has no turn
-bound at all — but it is a blunt one, and it does not notice that turns 2
-through 50 are the same failure repeating.
+`max_turns` defaults to `None`: no ceiling. pi has none either, and τ's former
+hardcoded 50 is gone. Set it through `create_agent_session(max_turns=...)` or
+the config. What bounds a runaway loop without one is the abort signal and
+`repeat_tool_call_limit`, which stops the loop when that many turns in a row
+repeat the same wholly-failing batch of tool calls (default 3; `None`
+disables it). `agent_end` carries `end_reason`: `done`, `terminate`,
+`aborted`, `max_turns`, `repeat_tool_calls`, `error` or `suspended`, so a
+caller can tell a truncated answer from a complete one.
 
 ## Two event vocabularies
 
@@ -59,10 +74,24 @@ widget:
 When tool calling misbehaves, trace the `arguments` value through all four
 hops rather than reading any one of them.
 
-Beyond the base event set, τ stamps provenance on every event —
-`submission_id`, `source`, `submitter`, `correlation` — plus `blocked` and
-`blocked_by` on `tool_execution_end` for extension vetoes, and `error` on
-`agent_end` when the loop raised.
+`AgentEvent.type` is one of eighteen values: the twelve above (`agent_*`,
+`turn_*`, `message_*`, `tool_execution_*`) and six τ additions —
+`side_completion_start`/`_update`/`_end` (a compaction or branch summary,
+which belongs to no turn; `purpose` and `reason` say which and why),
+`provider_retry` (a request is being re-sent; `attempt`, `max_retries`,
+`delay_seconds`), `follow_ups_dropped` (a user abort discarded queued
+follow-ups and waiting `enqueue` submissions; `dropped` lists their texts),
+`suspension_open`/`suspension_closed` (a turn is waiting on a responder, see
+below), and `lock_changed` (this process gained or lost write access to the
+tree).
+
+τ stamps provenance on turn events — `submission_id`, `source`, `submitter`,
+`correlation` — and `cursor_id`, the cursor whose turn emitted the event,
+because several cursors can run turns on one session at once. It adds
+`blocked` and `blocked_by` on `tool_execution_end` for extension vetoes,
+`details` there for a tool's structured facts about its own execution,
+`error`/`error_detail` on `agent_end` when the loop raised, and
+`response_headers` on the usage-bearing `message_end`.
 
 ## The one door
 
@@ -94,19 +123,56 @@ That is what makes fork, branch and rollback ordinary operations rather than
 special cases, and it is why a rollback leaves the abandoned branch on disk
 instead of deleting it.
 
+A store keeps entries and nothing else. The position a new entry is parented
+at belongs to a `Cursor`, and every writer holds one: a head, `tau -p`, an RPC
+client and a sub-agent are all cursors on the same tree, none privileged.
+Moving a cursor writes nothing, and a cursor is not durable.
+
 | Piece | Role |
 |---|---|
-| `SessionLog` (Protocol) | The minimal contract: `append_message`, `append_custom_message`, `append_custom_entry`, `append_compaction`, `append_elide`, `append_navigate`, `append_branch_summary`, `append_at`, `entries`, `cursor`. |
-| `BranchView` / `open_branch()` | A lightweight view of one branch that does not disturb the parent log's cursor. |
+| `SessionLog` (Protocol) | The storage contract, four members: `id`, `entries()`, `async append_at(parent_id, entry_type, payload)` and `async finalize(entry_id, payload)`. |
+| `Cursor` | A position in one tree and the only thing that appends at it. It holds the typed appenders (`append_message`, `append_custom_message`, `append_custom_entry`, `append_config`, `append_compaction`, `append_elide`, `append_branch_summary`), `move()`, and the turn state: abort signal, steer, follow-up and enqueue queues. One turn runs at a time on a cursor, any number across cursors. |
 | `ConversationTree` | Walks `parent_id` chains to build model input. |
-| `SessionCatalog` | Lists and resolves sessions. File-backed or JMFTS-backed, chosen by `--store`. |
+| `SessionCatalog` | Lists and resolves sessions. File-backed or JMFTS-backed, chosen by `--store file\|jmfts` or the config's `session_store.backend`. |
 
-There is no method named `clone`, and none named `navigate` — the latter is
-`append_navigate`, which appends a marker entry rather than mutating a cursor
-in place.
+`BranchView`, `open_branch()` and `append_navigate` are gone. A sub-agent is a
+cursor opened with a `TurnFrame` (the tool subset, model, reasoning level,
+prompt and `max_turns` it runs under) rather than a second session. Config
+(model, reasoning, tools) is recorded in the tree as `config` entries, so a
+reopened session continues as it was.
+
+Where a reopened tree continues is `default_leaf`: the newest finished entry a
+person's turn wrote. Entries a sub-agent wrote (`source: "agent"`), incomplete
+entries and side entries are passed over, so a session a child wrote last
+reopens in the main conversation.
+
+Two entry mechanisms are new in 0.15:
+
+* **Incomplete entries.** An entry is opened with `status: "incomplete"` and
+  later `finalize`d, keeping its id and position. A session interrupted
+  mid-message reopens at the entry before it, and the interrupted branch stays
+  beside the retry.
+* **Side entries.** An entry of a kind in `SIDE_KINDS` (today only
+  `suspension`) hangs beside its parent. It is never an ancestor of a later
+  entry, so it is no branch, tip or leaf; `is_side_entry` is how a walker asks.
+
+An `annotate` extension hook returns JSON for each message entry the loop
+writes, and τ stores it at `ext[<extension name>]` on that entry, in the same
+write. A failing `annotate` handler does not lose the entry: the entry is written
+with the failure recorded in place of the annotation, and the turn is aborted.
 
 `tau_agent_core.testing` ships contract suites for both `SessionCatalog` and
-`SessionLog`. A new store costs about twenty lines of knobs to run them.
+`SessionLog` (`SessionCatalogContractTests`, `SessionLogContractTests`). A new
+store costs about twenty lines of knobs to run them. `SessionLog` contract:
+several cursors may append concurrently within one process, and the store
+keeps each write whole with a distinct id.
+
+**One writer per stored session.** A process that hosts a session for writing
+holds an exclusive `flock` on a `.lock` sidecar file beside it. Another process
+opening the same session gets a read-only replica whose writes raise
+`SessionReadOnlyError`, naming the holder; `lock_changed` reports the change.
+On a filesystem where `flock` excludes nothing, the session opens for writing
+with a warning, which `sessions.allow_unlocked_fs` silences.
 
 !!! warning "Release note for `SessionLog` implementors"
     The `branchOf` lane tag is gone. It recorded *who wrote an entry*, while
@@ -116,31 +182,41 @@ in place.
     three mutually exclusive alternatives as one conversation, and a
     two-message session counted four messages.
 
-    `Session.messages` and session listing now walk the cursor's ancestry.
-    `resolve_cursor` is the last-entry rule again; the guarantee dropped on
-    purpose is crash-exact resume under a second concurrent writer, which τ
-    does not buy. `subtree_text` is bounded by descendants of the node the
-    caller named rather than by write provenance.
-
-    In the contract suite, one test is inverted rather than deleted: a store
-    must not reintroduce a cursor filter.
+    `Session.messages` and session listing walk the cursor's ancestry.
+    `subtree_text` is bounded by descendants of the node the caller named
+    rather than by write provenance. In the contract suite, one test is
+    inverted rather than deleted: a store must not reintroduce a cursor
+    filter.
 
 ## SDK entry point
 
 ```python
 def create_agent_session(
-    model: str | Model = "gpt-4o", provider: str = "openai",
+    model: str | Model | None = None, provider: str | None = None,
     base_url: str | None = None, api_key: str | None = None,
     tools: list[str] | None = None, session_log: SessionLog | None = None,
     extensions: list[Callable] | None = None, system_prompt: str | None = None,
     no_context_files: bool = False,
-    thinking_level: str = "off", cwd: str | None = None,
+    thinking_level: str | None = None, cwd: str | None = None,
     tool_execution_mode: Literal["sequential", "parallel"] = "parallel",
     compaction_policy: CompactionPolicy | None = None,
+    compaction_settings: CompactionSettings | None = None,
+    model_resolver: Callable[[str], Model] | None = None,
     bus_available: bool = False,
     no_tools: Literal["all", "builtin"] | None = None,
+    max_turns: int | None = None,
+    tool_options: dict[str, dict[str, Any]] | None = None,
+    prompt_template_paths=(), no_prompt_templates: bool = False,
+    skill_paths=(), no_skills: bool = False,
 ) -> AgentSession
 ```
+
+`model=None` is the built-in default, `gpt-4o`. A model id that is not built in
+needs `provider`. `thinking_level=None` sends no reasoning control, `"off"`
+sends the provider's off form, and any other level marks the model
+reasoning-capable. `compaction_settings` and `compaction_policy` are mutually
+exclusive. The template and skill parameters are described under
+[prompt templates and skills](#prompt-templates-and-skills).
 
 `tools` takes built-in name strings only — `read`, `write`, `edit`, `bash`,
 `grep`, `find`, `ls`. A custom `AgentTool` instance needs the `AgentSession`
@@ -152,10 +228,11 @@ passing it raises `TypeError`.
 
 `no_tools` is the SDK half of the CLI's two flags. `"all"` offers the model
 nothing at all; `"builtin"` drops the built-in set and keeps whatever
-extensions registered. Passing `tools=` and `no_tools=` together **raises** —
-they ask for opposite things, and neither outranks the other at a call site.
-`tools=None` and `tools=[]` stay legal alongside `"all"`, which also withholds
-extension-registered tools.
+extensions registered. Passing a non-empty `tools=` together with `no_tools=`
+**raises** `ValueError` — they ask for opposite things, and neither outranks the
+other at a call site. `tools=None` and `tools=[]` stay legal alongside `"all"`,
+which also withholds extension-registered tools. An unknown tool name raises
+`ValueError` too.
 
 This factory is not on the live TUI or headless path: `tau_coding_agent`'s
 backend constructs `AgentSession` directly. What used to follow from that no
@@ -165,10 +242,10 @@ prompt and its context files reach the model on every path.
 ## Project context files
 
 The system prompt is τ's base prompt, then any discovered context files, then
-the tool schemas. `system_prompt` replaces the base text and **nothing else**;
+the tool list. `system_prompt` replaces the base text and **nothing else**;
 setting it does not switch context files off.
 
-Discovery takes the agent directory's file first, then walks every ancestor of
+Discovery takes the agent directory's file first (τ home by default), then walks every ancestor of
 the working directory, root-most first so the nearest file is read last. At
 most one file per directory, deduplicated by resolved path, first match
 winning among:
@@ -203,22 +280,62 @@ mid-session `/model` switch cannot hand the files back.
 ## Compaction
 
 LLM-backed, with no fabricated-summary fallback. A compaction error raises
-rather than silently truncating the conversation.
+(`CompactionError`) rather than silently truncating the conversation.
 
 ```python
 should_compact(context_tokens, context_window, settings) -> bool
 prepare_compaction(path_entries, settings) -> CompactionPreparation | None
-async def compact(preparation, model, api_key, *,
-                  custom_instructions=None, thinking_level=None) -> CompactionResult
+async def compact(preparation, model, api_key, *, custom_instructions=None,
+                  thinking_level=None, on_text_delta=None) -> CompactionResult
 ```
+
+`CompactionSettings` defaults: `auto=True`, `reserve_tokens=16384`,
+`keep_recent_tokens=20000`, `soft_limit_ratio=0.8`, and `hard_limit_tokens` /
+`soft_limit_tokens` unset (derived). Auto-compaction is **on by default**; `auto`
+was formerly called `enabled`. The hard limit is `context_window -
+reserve_tokens`, and the soft limit sits at `soft_limit_ratio` of that.
+Crossing the soft limit compacts at the end of a turn. Crossing the hard limit
+compacts *inside* the loop at a turn boundary, after the turn so far has been
+written to the tree, so a long tool-calling turn is not lost to a refused
+request. A manual `/compact` or `AgentSession.compact()` ignores `auto`.
+
+A compaction runs outside any turn, so it is reported as `side_completion_*`
+events with `reason` `manual` or `threshold`, and the tokens it spent appear on
+`side_completion_end.usage`. A declared `CompactionPolicy` (`disabled`,
+`local_summarizer` or `turn_cap`) is for measured runs: it makes an undeclared
+compaction impossible rather than changing how τ compacts.
 
 Applying one is tree surgery rather than truncation: the first kept entry is
 re-parented onto the compaction entry, so the summary is on the path and the
 compacted span is still in the tree.
 
+## Prompt templates and skills
+
+`create_agent_session` and the CLI load prompt templates and skills from
+discovered locations plus explicit paths (`prompt_template_paths`,
+`skill_paths`); `no_prompt_templates` and `no_skills` skip discovery while
+explicit paths still load. See `docs/PROMPT-TEMPLATES-AND-SKILLS.md` in the τ
+source for the file formats.
+
+## Waiting for an answer
+
+An extension can pause a turn with `api.suspend` and wait in-process for a
+responder's answer (a step debugger, an approval form). The session writes a
+`suspension` side entry, queues per cursor, emits `suspension_open`, and
+resolves on the first valid answer or on abort, emitting `suspension_closed`
+with a `close_reason` of `answered`, `aborted`, `cursor_closed` or `abandoned`.
+It may be called from the `tool_call`, `entry_written`, `turn_end` and
+`user_turn_end` hooks. A turn that unwinds at a suspension ends with
+`end_reason` `suspended`. Nothing resumes across a process boundary yet.
+
 ## Built-in tools
 
-`read`, `write`, `edit`, `bash`, `grep`, `find`, `ls`. `--tools` allowlists,
+`read`, `write`, `edit`, `bash`, `grep`, `find`, `ls`. Two things ride on top
+as extensions rather than core tools: `background`, which gives any named tool
+a model-chosen `background` option plus a `bg` tool to check, wait on or cancel
+jobs, and `codemode`, a sandboxed scripting tool (providers `cpython`, `monty`,
+`typescript`, which per its source is prompt-only) that runs scripts which call
+other tools. `--tools` allowlists,
 `--exclude-tools` denylists, `--no-builtin-tools` drops the set while keeping
 extension-registered ones, and `--no-tools` offers the model nothing at all.
 

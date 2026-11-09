@@ -24,15 +24,17 @@ docs/
       quickstart.md
     cookbook.md
     devops.md
-    reference.md
+    reference.md        # or reference/index.md plus sub-pages (Tau)
   integrations/         # cross-project pages, kind: integration
   style-guide.md
 hooks/docstate.py       # expands the state table and integration roster
 mkdocs.yml              # nav + theme config
 ```
 
-Every page ships as a stub (clearly marked "Not yet written") — structure
-first, content per project as a follow-up pass.
+A category page that has not been written is a stub, clearly marked "Not yet
+written", and its `status` says so. Check the state table on the home page for
+what is currently written; it is generated from the pages themselves, so this
+README does not repeat it.
 
 ## Documentation state
 
@@ -59,7 +61,7 @@ No webfonts are fetched — the site is self-contained.
 ```bash
 python3 -m venv .venv && ./.venv/bin/pip install -r requirements.txt
 ./.venv/bin/mkdocs serve      # http://127.0.0.1:8000 with live reload
-./.venv/bin/mkdocs build      # renders static site/ (gitignored)
+./.venv/bin/mkdocs build --strict -d /tmp/site   # the check to pass before merging; keeps site/ out of the tree
 ```
 
 ## Deploy
@@ -70,10 +72,15 @@ python3 -m venv .venv && ./.venv/bin/pip install -r requirements.txt
 **One-time repo setup:** in Settings → Pages, set the source to the
 `gh-pages` branch (created by the first successful workflow run).
 
+Do not commit output of `mkdocs serve` or `mkdocs build` into `docs/`: anything
+under `docs/` is published verbatim.
+
 ## Adding a new project
 
 1. Create `docs/<project>/index.md` with `kind: project`, `title`, `version`,
-   and optionally `repo`.
+   and optionally `repo`. With a `repo`, `version` must be spelled exactly like
+   the release tag on GitHub (`v0.10.1` if the tag has the `v`), because the
+   state table links to `releases/tag/<version>`.
 2. Add the four category pages, each with `category` and `status`.
 3. Add the section to `nav:` in `mkdocs.yml` — the state table orders projects
    by their nav position.

@@ -1,0 +1,1146 @@
+---
+title: "Tau 0.16 preview API: Writing an extension"
+---
+
+!!! warning "Unreleased"
+    Generated from the docstrings of Tau 0.16.0-dev (commit `c439c401`) by `scripts/api_docs.py` in the Tau repository. Not the 0.15 API.
+
+# Writing an extension
+
+An extension is a module that adds hooks, tools, commands and options to a session. These are the contract it implements and the handles its hooks are given.
+
+Names: `Agents`, `Attachments`, `Basis`, `CURSOR_POINTS`, `CallDraft`, `Compaction`, `Count`, `CountJob`, `Counter`, `CounterAnswer`, `Cursor`, `CursorHook`, `CursorId`, `DefinitionError`, `Extension`, `Form`, `LabelName`, `Model`, `NodeHandle`, `NodeId`, `Permissions`, `Prune`, `RequestCount`, `Skills`, `StepLimit`, `Subject`, `TOOL_POINTS`, `ToolHook`, `TreeHandle`, `Usage`
+
+## Agents
+
+```python
+class Agents
+    name = 'agents'
+    options = Options
+```
+
+Gives the model the `agent` tool (the module docstring).
+
+### Agents.__init__
+
+```python
+def __init__(self) -> None
+```
+
+### Agents.pre_sample
+
+```python
+async def pre_sample(self, cursor: Cursor, subject: Subject) -> str | None
+```
+
+Offer an agent's cursor its tools: the `tools` option's, or all but `agent`.
+
+### Agents.agent
+
+```python
+async def agent(
+    self,
+    node: NodeHandle,
+    task: Annotated[str, 'everything the agent needs: it sees none of this conversation'],
+    to: Annotated[str | None, 'an earlier agent to continue, such as agent:1'] = None,
+) -> str
+```
+
+Give a task to a sub-agent that starts with a fresh context and returns its final
+reply. With `to`, send a follow-up to an agent you used before; it remembers its work.
+
+## Attachments
+
+```python
+class Attachments
+    name = 'attachments'
+    options = Options
+```
+
+The built-in extension `attachments`: `@path` in every input names a file (the module
+docstring). `cwd` is the session's working directory, where relative paths start.
+
+### Attachments.__init__
+
+```python
+def __init__(self, cwd: Path) -> None
+```
+
+### Attachments.pre_input
+
+```python
+async def pre_input(self, cursor: Cursor, subject: Subject) -> str | None
+```
+
+Rewrite what a person typed with the files its `@` words name, and say which `@`
+words that look like paths named none.
+
+## Basis
+
+```python
+class Basis(StrEnum)
+    REPORTED = 'reported'
+    RENDERED = 'rendered'
+    CALIBRATED = 'calibrated'
+    HEURISTIC = 'heuristic'
+    CEILING = 'ceiling'
+```
+
+Where a `Count` came from, strongest first. A sum is as weak as its weakest part.
+
+## CURSOR_POINTS
+
+```python
+CURSOR_POINTS = ('pre_step', 'pre_input', 'pre_sample', 'pre_reply', 'post_reply', 'post_result', 'post_step')
+```
+
+The names of the cursor hook points, in the order a step reaches them.
+
+## CallDraft
+
+```python
+class CallDraft
+```
+
+The call a tool hook works on. `id` and `tool` are read-only: the call is already
+named, and an edit to either would be ignored. `args_raw` and `outcome` may be set.
+
+Setting `outcome` in `pre_tool` answers the call (the tool does not run, and later
+`pre_tool` hooks still see it and may change it); in `pre_result` it edits the outcome.
+
+### CallDraft.__init__
+
+```python
+def __init__(self, id: str, tool: str, args_raw: str, outcome: Outcome | None = None) -> None
+```
+
+### CallDraft.id
+
+```python
+property id: str
+```
+
+The provider's id for the call. Read-only.
+
+### CallDraft.tool
+
+```python
+property tool: str
+```
+
+The name of the tool being called. Read-only.
+
+## Compaction
+
+```python
+class Compaction
+    name = 'compaction'
+    options = Options
+```
+
+The built-in extension `compaction` (the module docstring).
+
+### Compaction.__init__
+
+```python
+def __init__(self) -> None
+```
+
+### Compaction.pre_sample
+
+```python
+async def pre_sample(self, cursor: Cursor, subject: Subject) -> None
+```
+
+The hard limit: compact first, interrupting the turn, if the branch would not fit the
+model's window.
+
+### Compaction.pre_step
+
+```python
+async def pre_step(self, cursor: Cursor, subject: Subject) -> None
+```
+
+A step begins: it has committed no reply yet.
+
+### Compaction.post_reply
+
+```python
+async def post_reply(self, cursor: Cursor, subject: Subject) -> None
+```
+
+Remember the reply this step committed.
+
+### Compaction.post_step
+
+```python
+async def post_step(self, cursor: Cursor, subject: Subject) -> None
+```
+
+The soft limit: when a turn ends (a step that came to a reply with no calls, the cursor
+coming to rest), compact if the branch is past it. A turn that is still going on is left
+alone until the hard limit. Only a step that committed the reply itself counts: going back
+to a reply, or a cursor opened on one, ends a step there without a turn.
+
+### Compaction.pre_tool
+
+```python
+async def pre_tool(self, node: NodeHandle, call: CallDraft) -> str | None
+```
+
+Refuse any call a summarizer makes.
+
+### Compaction.compact
+
+```python
+async def compact(self, cursor: Cursor, focus: str = '') -> str
+```
+
+Summarize this conversation now, on a new line (the old one stays in the tree).
+`focus` is text the summary should keep in mind.
+
+## Count
+
+```python
+@dataclass(frozen=True)
+class Count
+    tokens: int
+    basis: Basis
+    bound: int = 0
+```
+
+A number of tokens and what is known about it. `bound` is how many more it may be.
+
+### Count.upper
+
+```python
+property upper: int
+```
+
+The most it can be: `tokens + bound`.
+
+## CountJob
+
+```python
+@dataclass(frozen=True)
+class CountJob
+    walk: tuple[Node, ...]
+    model: str
+    tools: tuple[str, ...]
+    base: Count
+    base_nodes: int
+    known: Mapping[int, Count]
+    unreported: tuple[int, ...]
+```
+
+What a counter is asked: the walk to count, the model and tools of the request, and what
+core already knows (`base`, `base_nodes`, and in `known` the nodes a report covers). The
+counter answers for the rest, `unreported`.
+
+## Counter
+
+```python
+class Counter(Protocol)
+```
+
+What an extension offers as its `counter` attribute (at most one extension may). `count`
+is synchronous and does no network IO: the driver runs it in a thread. Core keeps every
+report: an answer for a node a report covers fails the count with a `DefinitionError`.
+
+### Counter.count
+
+```python
+def count(self, job: CountJob) -> CounterAnswer
+```
+
+Count the nodes of `job.unreported`.
+
+## CounterAnswer
+
+```python
+@dataclass(frozen=True)
+class CounterAnswer
+    nodes: Mapping[int, Count]
+    why: str | None = None
+```
+
+A counter's answer: a count for some of the job's `unreported` nodes, and `why` the rest
+stay as weak as they are (or `None`).
+
+## Cursor
+
+```python
+class Cursor(TreeHandle)
+```
+
+What a cursor hook acts through: one cursor, bound to its extension.
+
+The tree handle, plus the cursor's own `move`, `write`, and `set_auto`,
+which core allows only while a cursor hook job is out for the cursor. Once
+the hook coroutine returns (`retire`), they raise `NotInHook`; so does every
+other write and `ask`. Reads still work. Core checks no more than that the
+tree stays valid (no hook edit limits).
+
+### Cursor.node
+
+```python
+def node(self, id: int | None = None) -> Node
+```
+
+The node `id`, or the node this cursor is on when `id` is `None`.
+
+### Cursor.walk
+
+```python
+def walk(self) -> list[Node]
+```
+
+The nodes from the root to the node this cursor is on.
+
+### Cursor.options
+
+```python
+def options(self) -> Any
+```
+
+This extension's options at the cursor's `at` (its `options` dataclass); raises
+`ConfigError` if it has none or what is set does not fit.
+
+### Cursor.options_of
+
+```python
+def options_of(self, extension: str) -> Any
+```
+
+Another extension's options at the cursor's `at`, as `options` reads its own;
+`ConfigError` if it has none (it is not loaded, or declares no `options`).
+
+### Cursor.models
+
+```python
+def models(self) -> tuple[str, ...]
+```
+
+The qualified names of the models the catalog defines, in file order: what
+`set_model` accepts.
+
+### Cursor.tools
+
+```python
+def tools(self) -> tuple[str, ...]
+```
+
+The names of the driver's tools, the extensions' included, in the order a sample is
+offered them: the names a `pre_sample` hook may put in `Subject.tools`.
+
+### Cursor.show
+
+```python
+def show(self, text: str | None) -> None
+```
+
+Show `text` on this cursor to every client, as this extension's one line
+(`CursorView.shown`); a later call replaces it, and `None` shows nothing. It is not in the
+log or the scratchpad: it is gone when the session is reloaded, and dropped when the
+cursor closes. `TypeError` for anything else.
+
+### Cursor.set_model
+
+```python
+def set_model(self, model: Model) -> int
+```
+
+Write a `Config` node under `at` that sets the branch's `model` (a qualified name)
+and move onto it, as `write` does. `ConfigError` if it is not configured; nothing is
+written then. Returns the new node's id.
+
+### Cursor.set_options
+
+```python
+def set_options(self, **changes: object) -> int
+```
+
+Write a `Config` node under `at` that sets these options of this extension (JSON
+values) and move onto it, as `write` does: each replaces the walk's earlier value.
+`ConfigError` if the extension has no options, or those that result, folded with the
+walk's, do not fit its options type (a `__post_init__` that raises refuses); nothing is
+written then. Returns the new node's id.
+
+### Cursor.save_options
+
+```python
+def save_options(self, **changes: object) -> None
+```
+
+Write these options of this extension (JSON values) into the user's config file,
+`extensions.<name>` in `<TAU_HOME>/config.json`, and have the driver read it at once. The
+file is every session's and every branch's; `set_options` is this branch's, a node. No node
+is written and nothing moves. The project's config is never written. `ConfigError` if the
+extension has no options, the options that result (the layers, with these) do not fit its
+options type, or the driver was given no user config; nothing is written then.
+
+The file is read, changed and written back with no `await` in between, so on the event
+loop (a hook, a tool, an async command) saves cannot interleave. It is not safe against
+another τ process saving at the same moment (the last write wins, losing the other's
+change), nor from sync commands that save at once on worker threads.
+
+### Cursor.saved_options
+
+```python
+def saved_options(self) -> Mapping[str, object]
+```
+
+What the user's config file itself sets of this extension's options, as JSON values
+(`{}` if it sets none, or there is no file): the value `save_options` changes, not
+`options()`, which folds the project's layer, the overrides and this branch's nodes in.
+To add to a list option in the file, read it here, not there. `ConfigError` if the
+extension has no options or the driver was given no user config.
+
+### Cursor.move
+
+```python
+def move(self, to: int) -> None
+```
+
+Move to `to` at once; later hooks see the new `at`. Raises `NoSuchNode`.
+
+### Cursor.write
+
+```python
+def write(
+    self,
+    body: Body,
+    delivers: Sequence[int] = (),
+    *,
+    copied_from: int | None = None,
+    derived_from: int | None = None,
+) -> int
+```
+
+Append `body` under `at` and move onto it, as one record; the
+`delivers` items are removed. Returns the new node's id. `copied_from` and
+`derived_from` as for `TreeHandle.append`.
+
+### Cursor.set_auto
+
+```python
+def set_auto(self, on: bool) -> None
+```
+
+Turn this cursor's auto-step on or off. Wakes nothing: the step is running.
+Turning it on inside a step that is aborted leaves the cursor at rest.
+
+### Cursor.tell
+
+```python
+def tell(self, text: str, *, to: str | None = None) -> None
+```
+
+Send `text` as a `Notice` to client `to`, or to every connected client by default.
+Dropped if `to` is not connected: a notice is for someone who is there.
+
+### Cursor.ask
+
+```python
+async def ask(self, text: str, expect: object = str, *, to: str | None = None) -> Any
+```
+
+Ask the cursor's clients `text`, and wait for an answer of type `expect` (any hint
+of the type language; `str` by default). Returns the checked, converted answer, or
+`None` if declined. `to` names the client asked first (`None`: anyone; a client that is
+not connected is the same). The hook's job stays out meanwhile, however long and whoever
+is connected, so the cursor is busy; an abort or go-to declines it (and any asked later
+in that step). A `CursorId` answer of `"new"` opens a cursor at the cursor's `at`.
+
+## CursorHook
+
+```python
+class CursorHook(Protocol)
+```
+
+A cursor hook: an extension's method named for one of `CURSOR_POINTS`. A string it
+returns halts the later hooks of the point; `None` goes on.
+
+### CursorHook.__call__
+
+```python
+async def __call__(self, cursor: Cursor, subject: Subject, /) -> str | None
+```
+
+## CursorId
+
+```python
+CursorId = NewType('CursorId', int)
+```
+
+An open cursor, or `"new"`, which opens one at the asker's node.
+
+## DefinitionError
+
+```python
+class DefinitionError(TypeError)
+```
+
+A tool, command, extension or question that cannot be built: a parameter with no
+annotation or one outside the type language, a default that does not fit its hint, an
+injected parameter the function cannot have, a name taken twice, or an object that breaks the
+`Tool` or `Extension` contract. The message names the extension, function and parameter.
+
+## Extension
+
+```python
+class Extension(Protocol)
+```
+
+Hooks are methods named for their hook point, found by name and all optional.
+
+Cursor hooks (`CursorHook`): `pre_step`, `pre_input`, `pre_sample`,
+`pre_reply`, `post_reply`, `post_result`, `post_step`. Tool hooks
+(`ToolHook`): `pre_tool`, `pre_result`. `name` is non-empty and unique among a
+driver's extensions; any attribute named `pre_*` or `post_*` that is not a hook point is
+refused when the driver is built (`DefinitionError`), so a misspelt hook cannot
+sit silent. That covers data too: a dataclass field `pre_prompt` is refused. Name such a
+field for what it holds (`prompt_prefix`, `before_prompt`), never with those two prefixes.
+
+Optional attributes besides the hooks: `tools`, `commands`, `options`, `yields_names`, and
+`rescan` (`Rescanning`).
+
+### Extension.name
+
+```python
+property name: str
+```
+
+The extension's name: letters, digits, `_` and `-`, unique among a driver's
+extensions.
+
+## Form
+
+```python
+@dataclass(frozen=True)
+class Form
+    name: str
+    description: str
+    schema: Json
+    extension: str | None = None
+    yields: bool = False
+```
+
+What a client knows of something it fills in: a command (its `name`, typed as `/name`,
+its `description` and the `schema` of its arguments, with the named types' `"format"` and
+each default, and the `extension` that owns it) or an extension's options (the `name` of the
+extension, and a `schema` whose defaults are the values now; `extension` is `None`, as it is
+for `/config`). A command is called by its `qualified` name, `extension:name`, which on the
+wire a client writes itself from the two fields. A command that `yields` gives its bare name
+up to any other command that has it (`/model` stays the built-in's; the yielding one is only
+`/skills:model`). Frozen, compared by value, and not hashable:
+the schema is a dict.
+
+### Form.qualified
+
+```python
+property qualified: str
+```
+
+`extension:name` for a command, which nothing can take the name of; `name` for a form
+with no extension.
+
+## LabelName
+
+```python
+LabelName = NewType('LabelName', str)
+```
+
+A label that exists.
+
+## Model
+
+```python
+Model = NewType('Model', str)
+```
+
+A model name that is configured; a frontend offers the catalog.
+
+## NodeHandle
+
+```python
+class NodeHandle(TreeHandle)
+```
+
+What a tool hook acts through: the batch's node, bound to its extension.
+
+The tree handle, plus the batch's node (`id`), the cursor whose batch it is (`cursor_id`),
+and `ask`, which goes to that cursor. Has none of the cursor's own operations.
+
+### NodeHandle.node
+
+```python
+property node: Node
+```
+
+The `Assistant` node that holds the batch being run.
+
+### NodeHandle.options
+
+```python
+def options(self) -> Any
+```
+
+This extension's options at the batch's node (its `options` dataclass); raises
+`ConfigError` if it has none or what is set does not fit.
+
+### NodeHandle.save_options
+
+```python
+def save_options(self, **changes: object) -> None
+```
+
+`Cursor.save_options`, from a tool hook.
+
+### NodeHandle.saved_options
+
+```python
+def saved_options(self) -> Mapping[str, object]
+```
+
+`Cursor.saved_options`, from a tool hook.
+
+### NodeHandle.walk
+
+```python
+def walk(self) -> list[Node]
+```
+
+The nodes from the root to the batch's node.
+
+### NodeHandle.tell
+
+```python
+def tell(self, text: str, *, to: str | None = None) -> None
+```
+
+`Cursor.tell`, from a tool hook: send `text` as a `Notice` to client `to`, or to every
+connected client by default.
+
+### NodeHandle.ask
+
+```python
+async def ask(self, text: str, expect: object = str, *, to: str | None = None) -> Any
+```
+
+Ask the batch's cursor's clients `text`, and wait for an answer of type `expect`
+(any hint of the type language; `str` by default). Returns the checked, converted
+answer, or `None` if declined. `to` names the client asked first (`None`: anyone; a
+client that is not connected is the same). The call stays out meanwhile, however long and
+whoever is connected, so the cursor is busy; an abort or go-to declines it (and any asked
+later in that step). A `CursorId` answer of `"new"` opens a cursor at the batch's node.
+
+## NodeId
+
+```python
+NodeId = NewType('NodeId', int)
+```
+
+A node that exists.
+
+## Permissions
+
+```python
+class Permissions
+    name = 'permissions'
+    options = Options
+```
+
+Asks before, or refuses, a tool call a rule names (the module docstring). `cwd` is the
+session's working directory, which a relative path is resolved against.
+
+### Permissions.__init__
+
+```python
+def __init__(self, cwd: Path) -> None
+```
+
+### Permissions.pre_tool
+
+```python
+async def pre_tool(self, node: NodeHandle, call: CallDraft) -> str | None
+```
+
+Refuse a denied call, let an allowed one go, and hold an asked one for an answer.
+
+## Prune
+
+```python
+class Prune
+    name = 'prune'
+    options = Options
+```
+
+The built-in extension `prune` (the module docstring).
+
+### Prune.__init__
+
+```python
+def __init__(self) -> None
+```
+
+### Prune.prune
+
+```python
+async def prune(self, cursor: Cursor) -> str
+```
+
+Shorten this conversation without a model: old turns become a transcript and old
+tool output goes, on a new line (the old one stays in the tree).
+
+## RequestCount
+
+```python
+@dataclass(frozen=True)
+class RequestCount
+    total: Count
+    base: Count
+    base_nodes: int
+    nodes: Mapping[int, Count]
+    why: str | None = None
+```
+
+What the walk to a node will cost as a request (`Cursor.count`).
+
+`total` is the whole request. `base` counts the walk's first `base_nodes` nodes and the
+request's overhead (tool definitions, hidden prompts, per-message overhead) as one; it is
+`NONE` with `base_nodes` 0 while no reply on the walk has reported its usage. `nodes` has one
+count for each node that is sent, by node id, except a node inside a **lump**: where two
+requests prove that the nodes between them cost a known sum, the first node holds the sum and
+the others have no count of their own, so a cut never lands inside one. `why` says why the
+total is weaker than it could be, or is `None`.
+
+## Skills
+
+```python
+class Skills
+    name = 'skills'
+    options = Options
+    yields_names = True
+```
+
+The built-in extension `skills`: a command for each template and skill, and the skills list
+for the model (the module docstring). `prompts` are what `Skills.of` found; an extension made
+of `prompts` alone reads no files again.
+
+### Skills.of
+
+```python
+@classmethod
+def of(cls, loaded: LoadedConfig) -> 'Skills'
+```
+
+The extension for the files `loaded` can read. `SkillFileError`, naming every problem
+with a file, if any cannot be used.
+
+### Skills.rescan
+
+```python
+def rescan(self) -> bool
+```
+
+Read the template and skill files again if a stat says one was added, removed or
+edited since the last time; whether the commands changed. A file that cannot be used is
+a command that says why when it is run, and the trusted project's files, if what is on
+disk is no longer what trust approved, all say to run `tau trust`. The skills list the
+model sees is not rewritten (D24 section 6).
+
+### Skills.pre_step
+
+```python
+async def pre_step(self, cursor: Cursor, subject: Subject) -> str | None
+```
+
+At a session's first step, write the skills list (the module docstring).
+
+## StepLimit
+
+```python
+class StepLimit
+    name = 'step_limit'
+    options = Options
+```
+
+Turns a cursor's auto-step off after `limit` unattended steps in a row (D1).
+
+The limit is the extension's option (`Options.limit`, 50 unless configured), read at
+each hook, so `/config step_limit` changes it for a branch.
+
+It guards the loops where the cursor does move every step, such as a model
+that calls tools forever or a hook that writes "continue" after every reply.
+A cursor that does not move is stopped by core, not by this limit.
+
+The count is this object's own memory, per cursor, kept at hook points:
+
+- `pre_input` sets it to 1: the step that takes an input is the first. There
+  is no `post_input` hook; `pre_input` fires once per input item offered.
+- `pre_step` adds one, when the cursor's auto-step is on. A step run with
+  auto-step off (a frontend's `step`, a load) is attended and is not counted.
+- `post_step` turns auto-step off when the count has reached `limit`, and
+  starts the count over, so whoever resumes the cursor (`set_auto`) gets
+  another `limit` steps. It also starts over whenever it sees auto-step off:
+  a halt, an abort, or a go-to ended the run.
+
+When core turns auto-step off because a step did not move the cursor, that
+happens after `post_step`: the count stays as it was until the next input.
+
+A hook that leaves an input pending offers it again every step, so
+`pre_input` restarts the count every time: this limit does not bound that.
+List it after any extension that turns auto-step back on from `post_step`,
+or that hook's `set_auto(True)` wins.
+
+### StepLimit.__init__
+
+```python
+def __init__(self) -> None
+```
+
+### StepLimit.pre_input
+
+```python
+async def pre_input(self, cursor: Cursor, subject: Subject) -> str | None
+```
+
+Start the cursor's count at 1: the step that takes an input is the first.
+
+### StepLimit.pre_step
+
+```python
+async def pre_step(self, cursor: Cursor, subject: Subject) -> str | None
+```
+
+Count this step if auto-step is on. A bad `limit` option fails the step here.
+
+### StepLimit.post_step
+
+```python
+async def post_step(self, cursor: Cursor, subject: Subject) -> str | None
+```
+
+Turn auto-step off once the count reaches `limit`, then start the count over.
+
+## Subject
+
+```python
+@dataclass
+class Subject
+    draft: Draft | None = None
+    node: Node | None = None
+    ending: Ending | None = None
+    tools: Sequence[str] | None = None
+```
+
+The mutable thing a cursor hook works on, by hook point.
+
+`draft` for `pre_input`, `pre_sample`, `pre_reply` (a hook may replace it;
+from `pre_sample` it is a reply that answers the sample). `node` for
+`post_reply` and `post_result`. `ending` for `post_step`. `pre_step` has
+none.
+
+`tools` is for `pre_sample` alone: the names of the tools this one sample is offered, or
+`None` (the start) for all of them. What the hooks leave in it is the offer; the next sample
+starts at `None` again. A name that is not one of the driver's tools, or any `tools` set at
+another point, fails the step as a hook that breaks its contract does.
+
+## TOOL_POINTS
+
+```python
+TOOL_POINTS = ('pre_tool', 'pre_result')
+```
+
+The names of the tool hook points.
+
+## ToolHook
+
+```python
+class ToolHook(Protocol)
+```
+
+A tool hook: an extension's method named for one of `TOOL_POINTS`. A string it returns
+becomes the call's `Err` and halts the later hooks of the point; `None` goes on.
+
+### ToolHook.__call__
+
+```python
+async def __call__(self, node: NodeHandle, call: 'CallDraft', /) -> str | None
+```
+
+## TreeHandle
+
+```python
+class TreeHandle
+```
+
+What both handles share: reads of the whole session, and the writes that
+belong to no cursor, bound to an extension (which fills in `by`).
+
+A handle has no client: work on a cursor does not depend on who is watching it.
+
+Every call goes into Rust at once. Nothing here moves a cursor.
+
+### TreeHandle.by
+
+```python
+property by: Author
+```
+
+The `Author` this handle's writes carry: `Author.Extension` with the extension's name.
+
+### TreeHandle.retire
+
+```python
+def retire(self) -> None
+```
+
+Called by the driver when the hook coroutine returns: the handle is dead.
+Its reads still work; everything else raises `NotInHook`.
+
+### TreeHandle.tree
+
+```python
+property tree: Tree
+```
+
+The session's nodes.
+
+### TreeHandle.cursor
+
+```python
+def cursor(self, cursor: int) -> CursorState
+```
+
+`cursor` as it stands now: `at`, `auto`, `items`, `labels`, `moves`, ...
+
+### TreeHandle.cursors
+
+```python
+def cursors(self) -> list[int]
+```
+
+The ids of every open cursor.
+
+### TreeHandle.closed
+
+```python
+def closed(self) -> list[tuple[int, int]]
+```
+
+Each closed cursor and its last node, in id order.
+
+### TreeHandle.label
+
+```python
+def label(self, label: str) -> int
+```
+
+The cursor `label` is on (a closed cursor too); raises `NoSuchLabel`.
+
+### TreeHandle.model
+
+```python
+def model(self, at: int | None = None) -> str
+```
+
+The qualified name of the model the branch at node `at` is on: the last one a `Config`
+on the walk to `at` names, which a sample from there uses. `at` defaults to the cursor's
+node (a `Cursor`) or the batch's (a `NodeHandle`); a tree handle must give it
+(`ValueError`). `ConfigError` if no `Config` names a model, or one on the walk is
+malformed. A reply's own node is where the model it was sampled with is read.
+
+### TreeHandle.resolved_model
+
+```python
+def resolved_model(self, name: str | None = None) -> ModelConfig
+```
+
+The `ModelConfig` of the model `name` (a qualified name) in the catalog as it is now,
+the one a sample resolves, with its `context_window` and `price`. `name` defaults to
+`model()`, so a tree handle must give it (`ValueError`). `ConfigError` if the catalog has
+no such model.
+
+### TreeHandle.counter
+
+```python
+property counter: str | None
+```
+
+The key of the extension that offers the counter (D26), or `None`: then `count` is
+the meter's alone.
+
+### TreeHandle.count
+
+```python
+async def count(self, at: int | None = None) -> RequestCount
+```
+
+What the walk to node `at` will cost as a request: a `RequestCount`, its `total` and a
+count for each node. Every count is a report, or a ceiling (the node's bytes) for what no
+report covers, unless the `counter` extension counts it better. `at` defaults to the
+cursor's node (a `Cursor`) or the batch's (a `NodeHandle`); a tree handle must give it
+(`ValueError`). `DefinitionError` if the counter counts what a report covers.
+
+### TreeHandle.append
+
+```python
+def append(
+    self,
+    parent: int,
+    body: Body,
+    *,
+    copied_from: int | None = None,
+    derived_from: int | None = None,
+) -> int
+```
+
+Append a node under `parent` without moving any cursor. Returns its id.
+`copied_from` names the node this one repeats verbatim, `derived_from` the node whose
+walk its content was computed from (`NoSuchNode` if either is not a node).
+
+### TreeHandle.append_root
+
+```python
+def append_root(self, config: Config) -> int
+```
+
+Append a root (a detached tree) holding `config`, without moving any
+cursor. Returns its id.
+
+### TreeHandle.open
+
+```python
+def open(self, at: int) -> int
+```
+
+Open a cursor at `at`; it wakes. Returns its id.
+
+### TreeHandle.add_item
+
+```python
+def add_item(self, to: int, data: str) -> int
+```
+
+Add this extension's item to a cursor's scratchpad; the cursor wakes.
+
+### TreeHandle.remove_item
+
+```python
+def remove_item(self, id: int) -> None
+```
+
+Remove any item; raises `NoSuchItem`. Wakes nothing.
+
+### TreeHandle.send
+
+```python
+def send(self, to: int, text: str) -> int
+```
+
+Send `text` to cursor `to` as a `User` message authored by this extension, and turn
+its auto-step on: `to` takes the text at its next step (through its `pre_input` hooks)
+and answers. Needs no client. Returns the item.
+
+### TreeHandle.rest
+
+```python
+async def rest(self, cursor: int) -> Ending | None
+```
+
+Wait until `cursor` is at rest with no effect out, and return how its last step
+ended; `None` if that is not known (it has not stepped since the session was loaded).
+After a `send` to a cursor that was at rest, this is the ending of the step the send
+caused. If the cursor was mid-step, the input waits for that step to end and this may
+return that earlier step's ending with the input still pending: to wait for the step a
+send causes, `rest` first, then `send`, then `rest` again. A cursor held by an open
+question or a gate does not rest, so this waits as long as the cursor is held. Async
+only: a sync tool, which runs on a worker thread, cannot call it. `ValueError` for this
+handle's own cursor: waiting for itself would never end. No cycle between two cursors
+is detected; the user's abort is the way out: when this handle's own cursor is aborted
+(or sent elsewhere) while the wait is out, the wait ends at once and returns
+`Ending.Aborted()`, so a hook, which an abort never cancels, learns it was aborted. The
+cursor waited on is left as it is.
+
+### TreeHandle.abort
+
+```python
+def abort(self, cursor: int) -> None
+```
+
+Abort `cursor`'s step as a client's `abort` does: cancel its sample or calls, stop
+its command, decline its open questions, and turn its auto-step off. Safe from a sync
+tool's worker thread: it returns once the event loop has done it. `ValueError` for this
+handle's own cursor: aborting it would cancel this very call.
+
+### TreeHandle.close_cursor
+
+```python
+async def close_cursor(self, cursor: int) -> None
+```
+
+Close `cursor`: abort its step as `abort` does, wait for it to rest, drop its pending
+items, and close it (D17). It leaves `cursors()` and the clients' views; its id, its last
+node (in `closed()`) and its labels stay, which is what `reopen` restarts from. Anyone
+waiting on it sees the abort. `CursorClosed` if it is already closed. Async only, like
+`rest`. `ValueError` for this handle's own cursor: closing it would wait on itself.
+
+### TreeHandle.reopen
+
+```python
+def reopen(self, cursor: int) -> int
+```
+
+Open a new cursor at the closed `cursor`'s last node and move each of its labels
+onto it, as this extension. Returns the new id. `ValueError` if `cursor` is open,
+`NoSuchCursor` if it was never opened.
+
+### TreeHandle.set_label
+
+```python
+def set_label(self, label: str, cursor: int) -> None
+```
+
+Set `label` on `cursor`; a label set elsewhere moves.
+
+### TreeHandle.remove_label
+
+```python
+def remove_label(self, label: str) -> None
+```
+
+Remove `label`; raises `NoSuchLabel`.
+
+## Usage
+
+```python
+class Usage
+    name = 'usage'
+    options = Options
+```
+
+The built-in extension `usage` (the module docstring).
+
+### Usage.__init__
+
+```python
+def __init__(self) -> None
+```
+
+### Usage.usage
+
+```python
+def usage(self, tree: TreeHandle) -> str
+```
+
+What this session has spent: one row per model, and a total.
+
+### Usage.post_reply
+
+```python
+async def post_reply(self, cursor: Cursor, subject: Subject) -> str | None
+```
+
+Show the reply's counts on the cursor, and tell the clients if it missed the cache.
