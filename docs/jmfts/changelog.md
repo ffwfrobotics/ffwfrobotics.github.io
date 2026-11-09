@@ -6,18 +6,116 @@ title: "Changelog"
 
 What each release changed, newest first.
 
-This page is the release record. The [Reference](reference.md), the [Cookbook](cookbook.md) and the [DevOps Manual](devops.md) were written against **0.2.0** and have been corrected in place since; where a later release moved something one of them describes, the entry below says what moved. The three pages the appliance generates from its own registries are always current by construction, and are the better answer where they overlap — see [The three pages that cannot go stale](reference.md#the-three-pages-that-cannot-go-stale).
+This page is the release record, current through **0.8.0** plus the unreleased work on `master` after it. The full per-commit record is [`CHANGELOG.md`](https://github.com/jmccardle/jmfts/blob/master/CHANGELOG.md) in the repository; this page keeps what an operator or client author needs. The [Reference](reference.md), the [Cookbook](cookbook.md) and the [DevOps Manual](devops.md) were written against **0.2.0** and have been corrected in place since; where a later release moved something one of them describes, the entry below says what moved. The three pages the appliance generates from its own registries are always current by construction, and are the better answer where they overlap — see [The three pages that cannot go stale](reference.md#the-three-pages-that-cannot-go-stale).
 
 !!! warning "Two numbers are missing from PyPI, for two different reasons"
-    Every release is tagged on GitHub. `pip install jmfts` resolves **0.6.0**.
+    Every release is tagged on GitHub. `pip install jmfts` resolves **0.8.0** (checked against PyPI, which lists 0.2.0, 0.3.0, 0.5.0 through 0.5.2, 0.6.0 through 0.6.2, 0.7.0, 0.7.1 and 0.8.0).
 
     **0.2.1 was never uploaded.** Its tag push ran the publish workflow and the upload step failed on a leftover configuration from the hand-built 0.2.0 bootstrap. `pip install jmfts==0.2.1` finds nothing. The gap is recorded rather than repaired — republishing a superseded version under a new number would make the release record lie about what 0.2.1 was.
 
     **There is no 0.4.0 at all.** Most of what its sprint planned shipped inside 0.5.0 instead, because the two sprints ran together. Cutting a 0.4.0 tag after the fact would name a tree that never existed.
 
+## Unreleased (on `master` after 0.8.0)
+
+Not tagged and not on PyPI. Issue #59: a BM25-only install.
+
+### One break: `pip install jmfts` no longer ingests PDFs
+
+`pymupdf`, `ruptures` and `transformers` (about 480 MB with their dependencies) left the base install. Three new extras carry them: `pdf`, `segment` and `tokenizer`, and **`ingest` is all three, which is the old base**. `embed` implies `tokenizer`; `dev` implies `ingest`. Each is imported at the point of use, and without its extra the operation raises `PdfStackNotInstalled`, `SegmentStackNotInstalled` or `TokenizerStackNotInstalled` (PERMANENT in the queue, 501 over REST), naming `pip install "jmfts[<extra>]"`. A PDF probed without `pdf` fails by name instead of reporting an empty pattern set.
+
+Affected: any install, image or worker that relied on base for PDF probing and extraction, `rollup` segmentation, `check_fit` or the chunker, a thin worker included. Fix: `pip install 'jmfts[ingest]'`. `Dockerfile.worker` now defaults to `EXTRAS=[embed,ingest]`, and whether it bakes the model is decided by `EXTRAS` containing `embed`, so the thin build is `--build-arg EXTRAS='[ingest]'` (an empty value no longer means a working thin worker). `Dockerfile` installs `ingest` too.
+
+### Added
+
+- **`JMFTS_AUTO_EMBED_DEFAULT`** (default `true`, so existing deployments behave as before). `DocumentCreate.auto_embed` and `embed_tokens` are now optional and resolve from it; so do `StructuralSplitRequest.auto_embed` and `ChunkRequest.auto_embed`. An explicit `auto_embed=true` with no model still fails. `GET /capabilities` reports `embedding.auto_embed_default`.
+- **`Containerfile.bm25`**, a base-install-only image on `python:3.13-slim`: no torch, ingest worker off, `JMFTS_AUTO_EMBED_DEFAULT=false`, non-root, and a start command that runs `jmfts-init-db` first. See [A BM25-only appliance](devops.md#a-bm25-only-appliance-no-torch-no-model).
+
+## 0.8.0
+
+Released 2026-10-24 as tag [`v0.8.0`](https://github.com/jmccardle/jmfts/releases/tag/v0.8.0). Three wheels.
+
+**A request the server would have ignored is refused, and a conflict names the row it hit.**
+
+### Breaking
+
+1. **An empty `JMFTS_API_TOKEN` makes the API server refuse to start (#51).** Before, it generated a token and printed it, and a client sharing the environment sent an empty bearer and got 401 on every call. `docker-compose.yml` no longer defaults it to `jmfts-dev-local`. Fix: `export JMFTS_API_TOKEN="$(openssl rand -base64 32)"`. See [Auth](devops.md#auth).
+2. **A request field the contract does not declare is a 422 (#47).** Every JSON request contract forbids extras, nested ones included, and the `/runner` bodies too. The `X-JMFTS-Ignored-Fields` header is removed. Unknown query parameters and extra multipart form fields are still dropped. Fix: stop sending the field (tectum's `max_context_tokens`, removed in 0.6.0, is the known one). See [Wire behaviour since 0.7](reference.md#wire-behaviour-since-07).
+
+### Added
+
+- `GET /documents/{id}/subtree` takes `usetype` (#49).
+- `JMFTS_SEARCH_EXCLUDE_USETYPES` and `JMFTS_BM25_EXCLUDE_USETYPES` accept `*` and `?` globs (#52), and a request's `exclude_types` does too: `exclude_types: ["*"]` now drops every non-NULL usetype. BM25 applies usetype filters inside the scored SQL, so a filtered page is no longer short (#57).
+- A triple's object can be a literal: `object_literal` and `object_datatype` on `POST`/`PUT /triples` and `supersede` (#48).
+- `jmfts-eval beir`, the BEIR harness, restored under `jmfts_core/eval/`. It has no default data directory or database, and refuses over-window documents unless told to skip them.
+
+### Changed and fixed
+
+- A duplicate triple or predicate is a 409 with `detail: {"message", "existing_id"}`; the predicate 409 used to carry a bare string (#54, #55). `GET /triples/predicates` lists predicates with no triples by default.
+- An LLM-backed verb with no `JMFTS_LLM_*` endpoint answers 501, not 500 (#56).
+- `jmfts-init-db` on an initialised database loads nothing: `already initialised, 0 pending` (exit 0) or the pending deltas named (exit 1) (#50).
+- `POST /documents` with `auto_index_bm25` indexes into the named index that covers the document, not always `default` (#53).
+- PDF tables on PyMuPDF 2.0: floor is now `pymupdf>=1.27.1`; `ffwf-tau-llm` floor is `>=0.14.1` (typed errors; JMFTS owns the retry).
+
+No migration.
+
+## 0.7.1
+
+Released 2026-10-18. Three wheels.
+
+**Office previews work end to end.** Compose now runs a `libreoffice` service and installs the `office` and `convert` extras; `Dockerfile.libreoffice` gains Carlito, Caladea and Noto CJK fonts (626 MB to 723 MB). Rendition matching was measured against real LibreOffice output and every test case now locates all of its blocks. PDF tables on rotated pages read in order; tables on a page both rotated and cropped are no longer detected. A PDF table node can be previewed.
+
+**One break:** a `render_anchor` now carries the `rendition_hash` it was measured on, and `/region` and `/image` refuse (409) a rectangle whose hash does not match the stored rendition. Every office preview made before 0.7.1 has no hash and is refused until `anchor:render` runs again on its file node. No endpoint re-runs one task yet, so delete and re-upload the document (a re-upload of the same bytes is deduplicated). PDF anchors are unaffected. No migration.
+
+## 0.7.0
+
+Released 2026-10-17. Three wheels.
+
+**Chunks are measured in words, and a summary stops outliving its source.**
+
+### Breaking
+
+- **`structure.max_tokens` is now `structure.max_words` (#1).** The option always counted words. The old name is refused with a hint to rename it, and `/chunk` answers 422 to unknown fields. A queued structure task still carrying `max_tokens` fails PERMANENT: re-ingest the document.
+- **A queued `structure:conversation` row from before this release fails PERMANENT (#4)**; re-ingest.
+- `EmbeddingService.chunk_to_fit` is removed; call `chunk_text(text, fits=service.fits_token_window)`.
+
+### Added
+
+- `jmfts-ui`, a standalone Vue console (unpackaged; `jmfts-web` at `/app` is unchanged), and a page preview of a node's anchor.
+- PDF tables become `table` nodes (`extract:tables`); spreadsheet nodes carry `cells` source anchors.
+- `JMFTS_EMBEDDING_REVISION` pins the default embedding model to a Hub commit.
+- The `sentence_window` chunk strategy.
+
+### Changed and fixed
+
+- A `summarize:tree` node carries no vector, and deleting a document deletes the summary nodes that stood for it (ROADMAP gap 11).
+- Ten operations that ignored subtree access now respect it (#30).
+- An LLM failure inside a queued task is retried by the endpoint's HTTP status: a 4xx other than 408 and 429 is PERMANENT (#8).
+- PDF rectangles on rotated pages are stored in the displayed page's space (#38). Anchors written before this are not migrated; re-run `citation`, or `extract:text` then `extract:tables`.
+- Security floors: `python-multipart>=0.0.31`, `starlette>=1.3.1`, `transformers>=5.10`.
+
+### Upgrading
+
+Two migrations, `024_max_words.sql` and `025_summary_tree_no_vector.sql`. **Read them first:** `024` refuses to run while a structure task that could still run is queued, and `025` rebuilds `idx_documents_embed` under a write lock on `documents`. See [the migration list](devops.md#what-the-compose-stack-actually-runs).
+
+## 0.6.2
+
+Released 2026-10-12.
+
+- **`JMFTS_EMBEDDING_BATCH_SIZE` is gone** because nothing read it. A `.env` *file* that still sets it stops startup; delete the line.
+- Synthesis catches only LLM failures, so an unexpected error is a 500 rather than `llm_available: false` (#32). `llm_error` is added to the synthesize response, and a 502/503/504 from the LLM is retried within `JMFTS_SYNTHESIS_RETRY_BUDGET` (default 4 s).
+- Dependency floors rose to the versions the suite runs against, `ffwf-tau-llm` 0.12.0 among them. There are no upper bounds.
+- An uncached tokenizer on an offline host raises `TokenizerNotCached` and answers 501.
+- 0.6.2 added an `X-JMFTS-Ignored-Fields` header; 0.8.0 removed it when unknown fields became a 422.
+
+## 0.6.1
+
+Released 2026-10-12.
+
+- **`JMFTS_LLM_BASE_URL` is used as given; JMFTS no longer appends `/v1`.** Set it to the URL the server advertises, version segment included. A config that gives a server root now 404s; `GET /health/llm` names the URL it tried. `GET /health/llm` now makes one outbound call, not two.
+
 ## 0.6.0
 
-Released TAGDATE as tag [`v0.6.0`](https://github.com/jmccardle/jmfts/releases/tag/v0.6.0). **Three** wheels — `jmfts-web` is new.
+Released 2026-10-12 as tag [`v0.6.0`](https://github.com/jmccardle/jmfts/releases/tag/v0.6.0). **Three** wheels — `jmfts-web` is new.
 
 A web front end, and the things a web front end found. It has its own page — see **[0.6.0 — eyes and hands](release-0-6-0.md)**, which runs the changes rather than describing them.
 

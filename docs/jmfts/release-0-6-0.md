@@ -4,8 +4,8 @@ title: "0.6.0 — eyes and hands"
 
 # JMFTS 0.6.0 — eyes and hands
 
-!!! note "Released TAGDATE"
-    0.6.0 is the current release: tag [`v0.6.0`](https://github.com/jmccardle/jmfts/releases/tag/v0.6.0), and **three** wheels on PyPI. The third is new — see [The appliance has a face](#1-the-appliance-has-a-face).
+!!! note "Released 2026-10-12"
+    0.6.0 was the current release when this page was written (the current one is 0.8.0; see the [Changelog](changelog.md)): tag [`v0.6.0`](https://github.com/jmccardle/jmfts/releases/tag/v0.6.0), and **three** wheels on PyPI. The third is new — see [The appliance has a face](#1-the-appliance-has-a-face).
 
 **Drag a PDF in, search it, click a result, see the page with the answer boxed on it.** That
 is the release, and everything else here is either something that sentence needed or

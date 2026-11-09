@@ -31,6 +31,8 @@ cd jmfts && docker compose up --build -d
 docker compose logs -f api
 ```
 
+Set `JMFTS_API_TOKEN` first (`export JMFTS_API_TOKEN="$(openssl rand -base64 32)"`); since 0.8.0 compose stops without it, and you will paste the same value into the page in step 2.
+
 If you already have JMFTS running some other way, add the front end to it:
 
 ```bash
@@ -42,12 +44,13 @@ And from nothing, without Docker:
 ```bash
 python3 -m venv .venv && . .venv/bin/activate
 pip install 'jmfts[embed,web]'
+export JMFTS_API_TOKEN="$(openssl rand -base64 32)"
 jmfts-init-db
 uvicorn jmfts_core.rest.main:app --host 0.0.0.0 --port 8100
 ```
 
 `[embed]` is the model stack, and it is separate for a reason worth knowing: base JMFTS
-carries a tokenizer and no torch, because a storage worker can ask another appliance for
+carries no torch, because a storage worker can ask another appliance for
 vectors. The machine serving `/search` embeds its queries locally whatever else is
 configured, so it needs the model.
 

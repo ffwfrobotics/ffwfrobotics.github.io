@@ -15,16 +15,17 @@ The [quickstart](quickstart.md) had you write documents by hand, one JSON body a
 
     ```bash
     git clone https://github.com/jmccardle/jmfts.git
-    cd jmfts && git checkout v0.6.0
+    cd jmfts && git checkout v0.8.0
+    export JMFTS_API_TOKEN="$(openssl rand -base64 32)"   # required since 0.8.0
     docker compose up --build -d
     ```
 
-    If you already have a 0.1.0 database, apply `migrations/008` through `023` in order. On 0.5.0 and later, `jmfts-init-db --pending` names exactly which of them yours is missing.
+    If you already have a 0.1.0 database, apply `migrations/008` through `025` in order. On 0.5.0 and later, `jmfts-init-db --pending` names exactly which of them yours is missing.
 
 As before:
 
 ```bash
-export TOKEN=jmfts-dev-local
+export TOKEN="$JMFTS_API_TOKEN"   # the value you started the appliance with; there is no default since 0.8.0
 export API=http://localhost:8100
 ```
 
@@ -60,7 +61,7 @@ The response is the task plan, read out of the same declaration the scheduler wo
 ```json
 {"format": "text", "prober_available": true,
  "patterns_known": false, "patterns_source": "unknown", "patterns_ignored": [],
- "options": {"structure": {"chunk_strategy": "sentence_packed", "max_tokens": 120,
+ "options": {"structure": {"chunk_strategy": "sentence_packed", "max_words": 120,
                            "min_chunk_length": 20},
              "rollup": {"max_children": 16, "penalty": 1.0, "min_segment": 3,
                         "llm_model": ""}},
@@ -129,7 +130,7 @@ Read the response carefully: it comes back almost immediately, and it does **not
 
 Uploading the same bytes twice gives you one file record, not two — the path is idempotent on content, and `was_existing: true` in the response says which happened. Three consequences of that are worth learning now rather than from a confusing result later.
 
-**Re-uploading with different options is refused.** The existing node records the options it was ingested with. An upload asking for anything else gets a 400 naming both sets, because the alternative — returning the node as though your new `max_tokens` had been applied — is a quiet wrong answer. Changing how an already-ingested file was processed has no path today; see [step 6](#6-when-something-goes-wrong).
+**Re-uploading with different options is refused.** The existing node records the options it was ingested with. An upload asking for anything else gets a 400 naming both sets, because the alternative — returning the node as though your new `max_words` had been applied — is a quiet wrong answer. Changing how an already-ingested file was processed has no path today; see [step 6](#6-when-something-goes-wrong).
 
 **Uploading into a folder links, it does not copy — or reparent.** Pass `parent_id` for bytes that are already stored and the existing node is attached to that parent by a `contains` graph edge, with `linked_into_parent: true` in the response. Its `parent_id` is unchanged, so `GET /documents/{parent}/subtree` **does not reach it** and `GET /documents/{parent}/links` does. That is the honest cost of placing a file in two trees without duplicating its bytes, and it is worth knowing before an apparently empty folder listing sends you looking for a bug.
 

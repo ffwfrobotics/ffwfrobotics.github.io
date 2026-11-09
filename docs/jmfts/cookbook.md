@@ -14,9 +14,11 @@ Recipes for specific JMFTS jobs — tuning matryoshka dimensions, reweighting BM
     The recipes below are real, drawn from JMFTS's own benchmark runs and defect write-ups — but they have not been organized into full step-by-step walkthroughs or checked against a fresh deployment, so this page stays `stub` until that pass happens.
 
 !!! note "The measurements are not reproducible from a clone"
-    Every endpoint and setting named here is in **0.2.0**, and still in 0.6.0 — where a later release moved something a recipe depends on, it is flagged in place. The evaluation harness that produced the numbers is not in the public tree — it follows separately, along with the write-ups behind the defect recipes (see [Documents not in this release](devops.md#documents-not-in-this-release)). So the figures below are reported, not yet reproducible from a clone.
+    Every endpoint and setting named here is in **0.2.0**, and still in 0.8.0 — where a later release moved something a recipe depends on, it is flagged in place. The evaluation harness that produced the numbers is not in the public tree — it follows separately, along with the write-ups behind the defect recipes (see [Documents not in this release](devops.md#documents-not-in-this-release)). So the figures below are reported, not yet reproducible from a clone.
 
     Two of 0.6.0's breaks reach recipes rather than only the API: [asserting an edge](#assert-an-edge-as-a-restricted-principal) now takes write on its source, and the graph-analytics verbs compute over the caller's own graph. Both are in the [Changelog](changelog.md#060).
+
+    Three more reach recipes since: request bodies are strict (0.8.0, an undeclared field is a 422), `structure.max_tokens` is `max_words` (0.7.0), and `pip install jmfts` no longer includes the PDF reader on `master` after 0.8.0 (use `jmfts[ingest]`). Each is flagged where it applies.
 
 ## Show somebody the appliance instead of describing it
 
@@ -175,7 +177,7 @@ Three ways to ask, along one axis: how much does the planner actually know about
 **`POST /ingest/explain` with a format name** — no file, and usually a conditional answer:
 
 ```json
-{"format": "pdf", "options": {"structure": {"max_tokens": 60}}}
+{"format": "pdf", "options": {"structure": {"max_words": 60}}}
 ```
 
 !!! warning "`format` is a detector name, not a pipeline name"
@@ -282,26 +284,26 @@ Options are namespaced by **group**, where a group names the parameters one kind
 ```bash
 curl -X POST -H "Authorization: Bearer $TOKEN" \
      -F "file=@paper.pdf" \
-     -F 'options={"structure": {"max_tokens": 60, "chunk_strategy": "sentence_packed"}}' \
+     -F 'options={"structure": {"max_words": 60, "chunk_strategy": "sentence_packed"}}' \
      "$API/ingest/file"
 ```
 
 The `structure` group is read by both structure rungs; `rollup` is read at the settling boundary. A parameter belongs to the **task** that reads it, not to the format that fed it — which is why chunking parameters are not a property of `pdf`. Formats get to say where they *deviate*, and today none do.
 
 !!! warning "A typo in an option is a 400, not a shrug"
-    Write `max_token` instead of `max_tokens` and the request fails naming the key. It is not silently ignored. A run that quietly does something other than what was asked, and reports success, is precisely the swallowed failure this project refuses to ship.
+    Write `max_word` instead of `max_words` and the request fails naming the key (the old `max_tokens` is refused with a hint to rename it, since 0.7.0). It is not silently ignored. A run that quietly does something other than what was asked, and reports success, is precisely the swallowed failure this project refuses to ship.
 
 ### It works on a new file, not on one you already uploaded
 
 Uploads deduplicate on content hash. Send bytes the appliance already holds and it resolves to the existing node — which recorded the options it was ingested under. **An upload asking for different options is a 400**, naming both sets:
 
 ```
-Document 41 already holds these exact bytes, ingested with {'structure': {'max_tokens': 120, …}};
-this upload asks for {'structure': {'max_tokens': 60, …}}. Uploading does not re-run work that
+Document 41 already holds these exact bytes, ingested with {'structure': {'max_words': 120, …}};
+this upload asks for {'structure': {'max_words': 60, …}}. Uploading does not re-run work that
 has already been done …
 ```
 
-That refusal is the honest answer, not an obstacle to work around. Two answers are available — do the work, or say it was not done — and returning the node as though your `max_tokens` had been applied is the third one.
+That refusal is the honest answer, not an obstacle to work around. Two answers are available — do the work, or say it was not done — and returning the node as though your `max_words` had been applied is the third one.
 
 Reprocessing an already-ingested file under new options is specified (diff `(task_type, param_fingerprint)` against the node's attempt log, enqueue only the difference, no re-parse and no duplicate tree) and **is not built**. Until it is:
 

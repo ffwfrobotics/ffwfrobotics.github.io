@@ -13,8 +13,8 @@ Table schema, query API, scoring parameters, and the pgvector index definitions.
 !!! note "Draft"
     Built for lookup, not narrative reading. Endpoint tables give verb, path, and purpose — not every parameter; a running instance's `/openapi.json` (or `/docs`) is the exact contract. Tables are checked against `schema.sql`, `jmfts_core/config.py`, and the `@expose` registry that generates the routes.
 
-!!! note "This page was written against 0.2.0. The current release is 0.6.0."
-    Four releases have landed since, and this page has been corrected in place rather than rewritten: 0.2.1 added the spreadsheet task types, the Turtle surface and two extras; 0.3.0 replaced the ingest planner; 0.5.0 moved the token index and added the capability and audit surfaces; 0.6.0 added a front end, three byte routes and two access gates. The [Changelog](changelog.md) says what each one changed, and [0.3.0 — the job system](release-0-3-0.md) and [0.6.0 — eyes and hands](release-0-6-0.md) run their changes rather than describing them.
+!!! note "This page was written against 0.2.0. The current release is 0.8.0."
+    Several releases have landed since, and this page has been corrected in place rather than rewritten: 0.2.1 added the spreadsheet task types, the Turtle surface and two extras; 0.3.0 replaced the ingest planner; 0.5.0 moved the token index and added the capability and audit surfaces; 0.6.0 added a front end, three byte routes and two access gates; 0.7.0 renamed `structure.max_tokens` to `max_words`; 0.8.0 made every JSON request body strict. The [Changelog](changelog.md) says what each one changed, and [0.3.0 — the job system](release-0-3-0.md) and [0.6.0 — eyes and hands](release-0-6-0.md) run their changes rather than describing them. Unreleased work on `master` after 0.8.0 (the BM25-only install, #59) is marked **unreleased** where it appears.
 
     Where a section describes a design that no longer exists it has been corrected and says so: [One ingest path](#one-ingest-path), the `.xlsx` row under [Office formats](#office-formats), and the index table under [Vector indexes](#vector-indexes). Everything else is 0.2.0's surface, which later releases are a superset of except for the breaks the changelog names.
 
@@ -46,7 +46,7 @@ Every request needs `Authorization: Bearer <token>`.
 
 | Setting | Default | Meaning |
 |---|---|---|
-| `JMFTS_API_TOKEN` | blank → ephemeral, printed to stdout at boot | Set a value to pin a fixed token. A blank token never means "allow all." |
+| `JMFTS_API_TOKEN` | blank → **the server refuses to start** (0.8.0) | Required. Through 0.7.1 a blank token generated an ephemeral one and printed it; that is gone. Whitespace-only counts as blank. A blank token never means "allow all." |
 | `JMFTS_CORS_ORIGINS` | `[]` | JSON list of allowed browser origins. Empty = server-to-server only. `"*"` is rejected. |
 
 ## Endpoint families
@@ -61,13 +61,38 @@ All routes are generated from a service-layer `@expose` registry (`jmfts_core/se
 | Conversations | `/conversations` | `ingest` — a whole conversation into the tree in one call. |
 | Search | `/search` | `vector`, `fulltext`, `bm25`, `maxsim`, `hybrid`, `synthesize`, `auto`, plus a convenience `GET /search/?q=`. |
 | Search contexts | `/search-contexts` | CRUD for the named parameter presets any search endpoint's `context` param resolves. |
-| Triples | `/triples` | Predicates CRUD, triple create/query/path-find, `invalidate`, `supersede`. |
+| Triples | `/triples` | Predicates CRUD, triple create/query/path-find, `invalidate`, `supersede`. Since 0.8.0 an object can be a literal — see [Wire behaviour since 0.7](#wire-behaviour-since-07). |
 | Templates | `/templates` | Prompt-template CRUD, `render`, `search`. |
 | Graph | `/graph` | `centrality`, `subtree-authority`, `spines`, `communities`, `neighbors`, `diff`, `stats`, `lint`. **Since 0.6.0 the first four compute over the caller's visible graph rather than the corpus** — see [Access control](#access-control-what-changed-in-060). |
 | Indexes | `/indexes` | Index CRUD, root membership, `refresh`, `index-document/{id}`. |
 | View | `/view` | Rendered read side: `/view/{id}`, `expand-children`, `breadcrumbs`, `back-references`. |
 | Presentations | `/usetype-presentations` | CRUD for the per-`usetype` rendering rules `/view` applies. |
 | Access | `/access` | Principals, their tokens, and per-document grants — the subtree RBAC surface. |
+
+### Wire behaviour since 0.7
+
+What a client sees on the wire, by release. Every item here is in the [Changelog](changelog.md) with its reasoning.
+
+**Request bodies are strict (0.8.0, #47).** Every request contract in `jmfts_client.contracts` (44 models: bodies, the models nested in them, and the two `/runner` bodies) forbids undeclared fields. An unknown field is a **422** that names it:
+
+```json
+{"detail": [{"type": "extra_forbidden", "loc": ["body", "max_context_tokens"],
+             "msg": "Extra inputs are not permitted", "input": 5}]}
+```
+
+A nested field has the path in `loc` (`["body", "project", "shade"]`). Only JSON bodies are covered: unknown **query** parameters (`GET /search/?q=x&bogus=1` is a 200) and extra multipart form fields on `/ingest/file` and `/ingest/analyze` are still dropped. The `/runner` bodies forbid too, so keep a `JMFTS_RUNNER_URL` worker and its runner on the same release. The `X-JMFTS-Ignored-Fields` response header that 0.6.2 added is gone, since nothing is ignored any more.
+
+**Conflicts name the row (0.8.0, #54, #55).** A duplicate triple (node or literal object, without `dedup`) or a duplicate predicate is a **409** whose `detail` is an object, `{"message": ..., "existing_id": N}`; the predicate 409 used to carry a bare string. `GET /triples/predicates` lists predicates with no triples by default; pass `with_triples_only=true` for the old listing.
+
+**A triple's object can be a literal (0.8.0, #48).** `POST /triples`, `PUT /triples` and `POST /triples/{id}/supersede` take `object_literal` (the lexical form) and an optional `object_datatype` (an absolute IRI, default `xsd:string`) in place of `object_id`. Exactly one of `object_id` and `object_literal`; `object_datatype` without a literal is a 422. An unknown XSD datatype, a CURIE or relative IRI as datatype, or a value invalid for its datatype is refused, never coerced.
+
+**`GET /documents/{id}/subtree` takes `usetype` (0.8.0, #49).** It keeps only descendants whose usetype is exactly that, at any depth and with no row cap; the root is returned whatever its usetype, and `total` counts the root plus the matches. `children?depth=-1&usetype=X` asks the same but stops at its `limit`.
+
+**No LLM is 501 (0.8.0, #56).** Verbs that reach the LLM (`extract-facts`, `raptor`, ...) answer 501 with the setting names in `detail`; `/search/synthesize` still answers 200 with `llm_available: false`.
+
+**Stale office previews are 409 (0.7.1).** `render_anchor` carries the `rendition_hash` it was measured on, and `/region` and `/image` refuse a rectangle whose hash does not match the stored rendition, naming `anchor:render` on the file node to re-run. Every office preview made before 0.7.1 is in that state. PDF anchors are unaffected.
+
+**Introspection.** Swagger UI is at `/docs`, ReDoc at `/redoc`, the document at `/openapi.json`; all three answer without a token. `GET /health` is the cheap probe (no token); `GET /health/llm` needs a token and makes one outbound call. `GET /capabilities` reports installed extras (including `pdf`, `segment` and `tokenizer` in the unreleased #59 work), whether a vector can be produced, and `embedding.auto_embed_default`.
 
 ### Calling them from Python
 
@@ -121,8 +146,10 @@ A caller-facing note: several `GET` endpoints across these families lost their F
 | `JMFTS_BM25_B` | `0.75` | Length normalization strength. |
 | `JMFTS_TOKEN_TOP_PERCENT` | `0.50` | Fraction of a document's tokens kept for late interaction, selected by MMR + attention variance + stopword penalties. Half is a deliberately generous default — it keeps the tiered `tier<=X` bands usable for benchmarking rather than sizing the index for production. |
 | `JMFTS_TOKEN_EMBED_DIMS` | `[256]` | Matryoshka dims actually populated. The schema reserves `embed_384`/`embed_512` columns and indexes them, but nothing writes them unless a deployment opts in here. |
-| `JMFTS_BM25_EXCLUDE_USETYPES` | `["entity", "summary"]` | Usetypes held out of the BM25 index — derived nodes, not source text. |
-| `JMFTS_SEARCH_EXCLUDE_USETYPES` | `["entity", "summary"]` | Usetypes held out of search results. |
+| `JMFTS_BM25_EXCLUDE_USETYPES` | `["entity", "entities", "summary", "derived", "cell"]` | Usetypes held out of the BM25 index — derived nodes, not source text. Entries are exact names or globs (see below). Setting the list **replaces** the defaults. |
+| `JMFTS_SEARCH_EXCLUDE_USETYPES` | `["entity", "entities", "summary", "derived"]` | Usetypes held out of default search results. Same syntax and replace semantics. Load-bearing: it keeps derived nodes out of results. |
+
+**Globs (0.8.0, #52).** An entry containing `*` (any run of characters) or `?` (one character) is a pattern: `["registry:*"]` holds `registry:topic` and `registry:source` out without naming each. Every other character is literal, including `_`, `%` and `\`. A request's `exclude_types` takes the same syntax, so a literal `*` in a request entry is now a wildcard (`exclude_types: ["*"]` drops every non-NULL usetype). To hold a corpus out of default search but keep it in its own named BM25 index, put its glob in `JMFTS_SEARCH_EXCLUDE_USETYPES` and **not** in `JMFTS_BM25_EXCLUDE_USETYPES`; a request naming `usetype="registry:*"` still finds it. Since 0.8.0 (#57) BM25 applies the positive `usetype` and `exclude_types` filters inside the scored SQL, so a filtered page is no longer short, and it applies `JMFTS_SEARCH_EXCLUDE_USETYPES` at query time when the request names neither. `GET /capabilities` lists the entries as written.
 | Hybrid vector/BM25 weight | corpus-dependent | Not a single global default — see the [Cookbook](cookbook.md) for measured weightings and why the right one varies by dataset. |
 | `JMFTS_RERANKER_MODEL` | `cross-encoder/ms-marco-MiniLM-L-6-v2` | Second-stage model for `?rerank=true&rerank_method=cross_encoder`. Any Hub cross-encoder. |
 | `JMFTS_RERANKER_DEVICE` | blank | Blank follows `JMFTS_EMBEDDING_DEVICE`. Pin only to split the two across devices. |
@@ -134,12 +161,15 @@ A caller-facing note: several `GET` endpoints across these families lost their F
 | Setting | Default | Notes |
 |---|---|---|
 | `JMFTS_EMBEDDING_MODEL` | `nomic-ai/modernbert-embed-base` | Produces the 768-dim document vector and the token-level embeddings. |
+| `JMFTS_EMBEDDING_REVISION` | a pinned Hub commit | **0.7.0.** Pins the default embedding model (and its tokenizer) to a commit. An overridden `JMFTS_EMBEDDING_MODEL` with no revision loads unpinned and logs one WARNING. The reranker is not pinned. |
+| `JMFTS_AUTO_EMBED_DEFAULT` | `true` | **Unreleased (#59).** What an omitted `auto_embed` means on `POST /documents`, `StructuralSplitRequest` and `ChunkRequest`; an omitted `embed_tokens` follows it. `false` lets a torch-free deployment `POST /documents` plainly. An explicit `auto_embed=true` with no model still fails (501 naming the extra). Reported by `GET /capabilities` as `embedding.auto_embed_default`. |
 | `JMFTS_EMBEDDING_DEVICE` | `cpu` | Set `cuda` for GPU-accelerated bulk ingestion — see the [DevOps Manual](devops.md) for why this matters. |
-| `JMFTS_EMBEDDING_BATCH_SIZE` | `32` | Texts per forward pass on the document path; `JMFTS_TOKEN_BATCH_SIZE` (also `32`) is the token path's. |
+| `JMFTS_TOKEN_BATCH_SIZE` | `32` | Documents per batch on the token path. (`JMFTS_EMBEDDING_BATCH_SIZE` was removed in 0.6.2 because nothing read it; a `.env` file that still sets it stops startup.) |
 | `JMFTS_EMBEDDING_TOKEN_WINDOW` | `512` | The token/MaxSim path's cap. It is a **memory** budget, not a model limit: token embedding runs the transformer with `output_attentions=True`, which materializes every layer's attention matrix (~277 MB at 512, ~4.4 GB at 2048). Text over the window is refused, not truncated. |
 | `JMFTS_EMBEDDING_DOC_WINDOW` | `8192` | The document-vector path's cap — the model's real limit. |
 | `JMFTS_CHUNK_MAX_CHARS` | `1800` | Hard cap every chunking strategy is held to, sized to land inside the token window (~5 chars per subword token, plus prefix headroom). |
-| `JMFTS_LLM_BASE_URL` / `JMFTS_LLM_MODEL` / `JMFTS_LLM_TIMEOUT` | blank / blank / `0` | OpenAI-compatible endpoint for RAPTOR summarization, fact extraction, and read-side synthesis. Each blank field falls back to its `JMFTS_ENSONET_*` counterpart, so what a stock instance actually dials is the fallback, not nothing. JMFTS does not host its own model — see the [DevOps Manual](devops.md). |
+| `JMFTS_LLM_BASE_URL` / `JMFTS_LLM_MODEL` / `JMFTS_LLM_TIMEOUT` | blank / blank / `0` | OpenAI-compatible endpoint for RAPTOR summarization, fact extraction, and read-side synthesis. **The base URL is used as given (0.6.1)**: include the version segment the server advertises (`http://host:8080/v1`); JMFTS appends only `/chat/completions` and `/models`. With none configured, an LLM-backed verb answers **501** (0.8.0), not 500. The client library is `ffwf-tau-llm`, floor `>=0.14.1`. Each blank field falls back to its `JMFTS_ENSONET_*` counterpart, so what a stock instance actually dials is the fallback, not nothing. JMFTS does not host its own model — see the [DevOps Manual](devops.md). |
+| `JMFTS_SYNTHESIS_RETRY_BUDGET` | `4.0` | **0.6.2.** Seconds `/search/synthesize` keeps retrying a 502/503/504 from the LLM, the wait doubling from 0.5 s. `0` disables. A 400 is reported, not retried. |
 | `JMFTS_ENSONET_URL` / `_MODEL` / `_TIMEOUT` | `http://localhost:8853` / `THUDM_GLM4_32b` / `180.0` | The fallback the blanks above resolve to — the maintainer's own model orchestrator. Point `JMFTS_LLM_*` at your endpoint and these stop being reachable. |
 
 There is no separate extraction endpoint. Fact extraction shares the LLM settings above; `JMFTS_EXTRACTION_*` tunes the extraction *request* (`MAX_FACTS` `5`, `CONFIDENCE_THRESHOLD` `0.5`, `ENTITY_SIMILARITY_THRESHOLD` `0.8`, `TEMPERATURE` `0.1`, `MAX_TOKENS` `4096`), not where it is sent.
@@ -237,8 +267,8 @@ Office support splits by what the dependency actually is. The split is the opera
 | Tier | What | Where it lives | Status |
 |---|---|---|---|
 | 1 | `zipfile`, `xml.etree`, `olefile` | base install | detection and all four probers ship |
-| 2 | `python-docx`, `python-pptx`, `openpyxl` | `jmfts[office]` extra | the `docx` and `pptx` readers call it; `openpyxl` has no caller yet |
-| 3 | LibreOffice, driven by `unoserver` | a badged worker image; `jmfts[convert]` is the client only | nothing yet |
+| 2 | `python-docx`, `python-pptx`, `openpyxl` | `jmfts[office]` extra | the `docx`, `pptx` and sheet readers call it |
+| 3 | LibreOffice, driven by `unoserver` | `Dockerfile.libreoffice`; `jmfts[convert]` is the client only | `render:pdf` and `convert:ooxml` (0.6.0), connected by `JMFTS_CONVERT_URL` |
 
 `jmfts_core.office` is the only module permitted to import a tier-2 library, and only through its `require_docx()` / `require_pptx()` / `require_openpyxl()` guards, at the point of use and never at module scope. `tests/test_office_packaging.py` fails if one reaches the application's import path, and `scripts/check_base_install.sh` asserts the same thing against a real base virtualenv.
 
@@ -271,7 +301,10 @@ Step 6 is what makes `.xlsx` readable, and it is a different job from steps 5: a
 
 ### Task types
 
-Ten declared, seven with handlers today. A task type with no handler is enqueued only if something schedules it; nothing does.
+!!! note "This table is the 0.2.0 set"
+    Many task types have been added since, and `extract:tables` has a handler as of 0.7.0 (a PDF table becomes a `table` node, keyed `p{page}.t{index}`). The ones added by later releases include `fetch:url`, `fetch:arxiv`, `fetch:path`, `structure:conversation`, `structure:sheets`, `profile:sheet`, `extract:sheet`, `propose:links`, `citation`, `anchor:source`, `anchor:render`, `render:pdf`, `convert:ooxml`, `summarize:tree`, `extract:facts`, `index:bm25`, `validate:shape` and `derive:rule`; `GET /ingest/pipelines`, the generated [`INGEST.md`](https://github.com/jmccardle/jmfts/blob/master/docs/reference/INGEST.md) and `deploy/README.md` in the repository carry the current list with their badges. `ocr` and `extract:images` are declared with no handler.
+
+Ten declared at 0.2.0, seven with handlers. A task type with no handler is enqueued only if something schedules it; nothing does.
 
 | `task_type` | Handler in | Does |
 |---|---|---|
@@ -283,7 +316,7 @@ Ten declared, seven with handlers today. A task type with no handler is enqueued
 | `summarize` | `rollup_tasks.py` | Gives a container node a text embedding from its children. Concatenates while that fits the window. |
 | `summarize:llm` | `rollup_tasks.py` | The same job when concatenation does not fit. Split out so it can carry its own badge and its own pool. |
 | `ocr` | — | Declared, no handler. |
-| `extract:tables` | — | Declared, no handler. |
+| `extract:tables` | `structure_tasks.py` | **0.7.0.** Writes each PDF table as a `table` child of the file node, keyed `p{page}.t{index}`. |
 | `extract:images` | — | Declared, no handler. |
 
 `summarize` does not call an LLM. It measures, and if the concatenated children are over the embedding window it enqueues `summarize:llm` and completes. That deferral is deliberate: whether a node needs a model is a fact about its children right now, and the only way to learn it is to concatenate and tokenize.
@@ -418,7 +451,7 @@ Options are **namespaced by group**, where a group names the parameters one kind
 | Group | Key | Default | Read by |
 |---|---|---|---|
 | `structure` | `chunk_strategy` | `sentence_packed` | `structure:declared`, `structure:inferred` |
-| `structure` | `max_tokens` | `120` | both structure rungs |
+| `structure` | `max_words` | `120` | both structure rungs. **0.7.0:** renamed from `max_tokens`; it always counted words. |
 | `structure` | `min_chunk_length` | `20` | both structure rungs |
 | `rollup` | `max_children` | `16` | the rollup planner — over this, segment instead of summarize |
 | `rollup` | `penalty` | `1.0` | PELT changepoint penalty |
@@ -428,7 +461,7 @@ Options are **namespaced by group**, where a group names the parameters one kind
 Every group resolves for every format, so no document can reach a task whose parameters nobody set.
 
 !!! warning "An unknown option is a 400, not a shrug"
-    Writing `max_token` instead of `max_tokens` fails the request naming the key. It is not ignored. A run that does something other than what was asked and reports success is the swallowed failure the project's Fail Early rule exists to prevent — and it is what `/ingest/explain` rests on, since a plan that reports options the run would reject is a wrong answer rather than a partial one.
+    Writing `max_token` instead of `max_words` fails the request naming the key, and the retired `max_tokens` is refused with a hint to rename it (0.7.0). It is not ignored. A run that does something other than what was asked and reports success is the swallowed failure the project's Fail Early rule exists to prevent — and it is what `/ingest/explain` rests on, since a plan that reports options the run would reject is a wrong answer rather than a partial one.
 
 ## Workers and routing
 

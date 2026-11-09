@@ -10,22 +10,25 @@ status: "draft"
 
 How JMFTS runs in production: sizing PostgreSQL and pgvector, which container holds the embedding model and which ones deliberately do not, and what an index rebuild costs you.
 
-!!! note "Draft. Written against 0.2.0; the current release is 0.6.0."
+!!! note "Draft. Written against 0.2.0 and corrected through 0.8.0, plus the unreleased BM25-only work."
     Written against **0.2.0** — its `Dockerfile`, `Dockerfile.worker`, `docker-compose.yml`, `deploy/` manifests and entry points — plus benchmark and defect write-ups that are not in the public tree (see [Documents not in this release](#documents-not-in-this-release)). Not yet checked against a deployment outside the maintainer's own.
 
-    Four things an operator needs have been corrected in place for the releases since: [Getting it](#getting-it), the migration list under [What the Compose stack actually runs](#what-the-compose-stack-actually-runs), the tier-2 and tier-3 notes under [Office files](#office-files-three-tiers-two-extras), and [Serving the front end](#serving-the-front-end) is new for 0.6.0. The [Changelog](changelog.md) is the release record; nothing else on this page has moved past 0.2.0.
+    Corrected in place for the releases since: [Getting it](#getting-it), the migration list under [What the Compose stack actually runs](#what-the-compose-stack-actually-runs), [Auth](#auth) (an empty token is now fatal, 0.8.0), [the extras](#the-model-stack-is-an-extra-not-a-dependency) (PDF, segmentation and the tokenizer left the base install, unreleased), the tier-2 and tier-3 notes under [Office files](#office-files-three-tiers-two-extras), [Serving the front end](#serving-the-front-end) (0.6.0), and [A BM25-only appliance](#a-bm25-only-appliance-no-torch-no-model) (unreleased). The [Changelog](changelog.md) is the release record; nothing else on this page has moved past 0.2.0.
 
 !!! note "All of this page is released"
     [Ingestion](#ingestion-runs-on-a-queue), [the containers and worker types](#containers-and-worker-types), and [running a fleet](#running-a-fleet) shipped in **0.1.1**, along with `jmfts-worker`, `Dockerfile.worker`, `deploy/`, the `/runner` surface, and the `embed` extra that took torch out of the base install. 0.1.0 had none of it, and the notes that said "branch only" have been removed.
 
 ## Getting it
 
-JMFTS is on PyPI, and `0.6.0` is the current release:
+JMFTS is on PyPI, and `0.8.0` is the current release (tag `v0.8.0`):
 
 ```bash
 pip install jmfts                 # the appliance, plus the jmfts-client it depends on
 pip install 'jmfts[web]'          # ...and the browser front end at /app
 ```
+
+!!! warning "Unreleased: `pip install jmfts` stops ingesting PDFs"
+    On `master` after 0.8.0, the base install no longer carries `pymupdf`, `ruptures` or `transformers`. A PDF, `rollup` segmentation and the chunker then raise an error naming the extra to install. When the next release ships, every install, image and worker that ingests needs `pip install 'jmfts[ingest]'` (or `[embed,ingest]`). 0.8.0 and earlier are unaffected. See [the extras](#the-model-stack-is-an-extra-not-a-dependency).
 
 `pip install jmfts==0.2.1` finds nothing. That release is tagged on GitHub and was never uploaded — the [Changelog](changelog.md) says why, and 0.3.0 contains everything it did. There is also no 0.4.0: its sprint shipped inside 0.5.0.
 
@@ -33,7 +36,7 @@ The source is public too:
 
 ```bash
 git clone https://github.com/jmccardle/jmfts.git
-cd jmfts && git checkout v0.6.0    # or stay on master
+cd jmfts && git checkout v0.8.0    # or stay on master (0.8.0 plus unreleased work)
 ```
 
 **The repository is a real history from 0.5.1 on.** Up to 0.5.0 it was a squash — each release replaced the whole tree in one commit — because development happened in a private tree and a publish step copied it out. That step no longer runs: development happens in the public repository, one history on two remotes, and a commit reaches both as it is made. The squash chain is still there behind 0.5.1 and nothing published was rewritten, so `git log` is short for old releases and ordinary for new ones.
@@ -51,11 +54,12 @@ pip install -e ".[dev]"
 
 ## Two ways to run it
 
-**Docker Compose** — a Postgres+pgvector container and the API container, both managed together. This is the fastest path to a working instance and the one the [quickstart](tutorials/quickstart.md) uses.
+**Docker Compose** — a Postgres+pgvector container, the API container and (since 0.7.1) a LibreOffice converter, managed together. This is the fastest path to a working instance and the one the [quickstart](tutorials/quickstart.md) uses.
 
 ```bash
+export JMFTS_API_TOKEN="$(openssl rand -base64 32)"   # required since 0.8.0: compose stops without it
 docker compose up --build -d      # first run builds the image (CPU torch)
-docker compose logs -f api        # watch startup — this is where the auth token line appears
+docker compose logs -f api        # watch startup
 docker compose down               # stop (keeps the DB + model-cache volumes)
 docker compose down -v            # stop and WIPE the DB + the downloaded embedding model
 ```
@@ -64,7 +68,7 @@ docker compose down -v            # stop and WIPE the DB + the downloaded embedd
 
 ```bash
 pip install -e ./jmfts-client     # first; jmfts depends on it
-pip install -e ".[dev]"           # dev adds pytest/black/ruff; plain -e . is enough to run
+pip install -e ".[dev]"           # dev adds pytest/black/ruff and implies embed, ingest, office, rdf, sketch
 jmfts-init-db                     # creates the DB (if missing) and applies schema.sql
 jmfts-server --host 0.0.0.0 --port 8100
 ```
@@ -81,7 +85,8 @@ The test suite runs against a throwaway database, never the appliance's: `./scri
 | Container | Image | Notes |
 |---|---|---|
 | `postgres` | `pgvector/pgvector:pg16` | `schema.sql` is mounted as `01_schema.sql` and runs once, on a fresh data volume. `127.0.0.1:5433` → container `5432`, chosen so it never collides with a host Postgres. |
-| `api` | built from the repo's `Dockerfile` | CPU-only image — `uvicorn --reload` with `jmfts_core/` bind-mounted, so edits reload live without a rebuild. Since 0.6.0 it also carries the front end at [`/app`](#serving-the-front-end), with `jmfts-web/jmfts_web` bind-mounted for the same reason. `127.0.0.1:8100`. |
+| `api` | built from the repo's `Dockerfile` | CPU-only image — `uvicorn --reload` with `jmfts_core/` bind-mounted, so edits reload live without a rebuild. Since 0.6.0 it also carries the front end at [`/app`](#serving-the-front-end), with `jmfts-web/jmfts_web` bind-mounted for the same reason. Since 0.7.1 it installs `[embed,ingest,web,office,convert]` (`ingest` joined in the unreleased #59 work) and points at the `libreoffice` service through `JMFTS_CONVERT_URL`. `127.0.0.1:8100`. |
+| `libreoffice` | built from `Dockerfile.libreoffice` | **0.7.1.** LibreOffice behind unoserver, no JMFTS in it, no published port. Without it, `render:pdf` fails PERMANENT and an office document has no page image or preview (409). Compose before 0.7.1 had neither this service nor the `office`/`convert` extras in the API image; a document ingested through it then is not repaired by re-uploading (deduplicated by content hash) — delete it and upload it again. |
 
 Both publications are bound to loopback, not `0.0.0.0` — the dev stack is not reachable from the LAN unless you change that yourself.
 
@@ -102,7 +107,14 @@ The other four are additive: `018_derived_roots.sql`, `019_link_derived_by.sql`,
 
 0.6.0 adds one, `023_document_renditions.sql`, and it is additive. It creates the table derived bytes live in — see [Office files](#office-files-three-tiers-two-extras).
 
-That is 22 migrations at 0.6.0, `002` through `023`.
+0.7.0 adds two, and both are worth reading before you apply them:
+
+- **`024_max_words.sql`** renames the stored `structure.max_tokens` option to `max_words` (the option always counted words). It refuses to run while a structure task that could still run is queued — drain the queue or delete those rows first.
+- **`025_summary_tree_no_vector.sql`** clears the vector from `summarize:tree` nodes, deletes summary nodes orphaned by a deleted source, and **rebuilds `idx_documents_embed` under a write lock on `documents`**. It aborts, changing nothing, if any summary vector differs from its source's. Budget for the lock on a large corpus.
+
+0.7.1 and 0.8.0 add none (`jmfts-init-db --list-migrations` lists what your installed package ships).
+
+That is 24 migrations at 0.8.0, `002` through `025`.
 
 Apply them in order against an existing database, or take `schema.sql` for a fresh one. Both live inside the installed package at `jmfts_core/sql/`, so `jmfts-init-db` finds them without a source checkout.
 
@@ -112,14 +124,16 @@ Apply them in order against an existing database, or take `schema.sql` for a fre
 jmfts-init-db --pending           # names the shipped deltas this database has not applied
 ```
 
-The Compose image is deliberately **not** a production build: embedding runs on CPU there, which is fine for development and wrong for bulk ingestion (see [Sizing the write path](#sizing-the-write-path-and-why-it-is-cpu-bound) below). It is also not the image the worker pools run — that one is [`Dockerfile.worker`](#five-images-three-dockerfiles), and the difference is deliberate rather than incidental.
+The Compose image is deliberately **not** a production build: embedding runs on CPU there, which is fine for development and wrong for bulk ingestion (see [Sizing the write path](#sizing-the-write-path-and-why-it-is-cpu-bound) below). It is also not the image the worker pools run — that one is [`Dockerfile.worker`](#six-images-four-build-files), and the difference is deliberate rather than incidental.
 
 ## Auth
 
-Every request needs `Authorization: Bearer <token>`. Two modes, both controlled by `JMFTS_API_TOKEN`:
+Every request needs `Authorization: Bearer <token>`, and `JMFTS_API_TOKEN` is **required**.
 
-- **Left blank** — the server generates a token at startup and prints it to stdout, the same pattern Jupyter uses. There is no state where a blank token means "allow all."
-- **Set to a value** — that token is pinned, and the startup message is silenced. The Compose file pins `jmfts-dev-local` by default specifically so other local services (an agent harness, a test client) can point at a known value; override it by exporting `JMFTS_API_TOKEN` before `docker compose up`.
+!!! warning "Changed in 0.8.0: a blank token is fatal"
+    Through 0.7.1 a blank or unset `JMFTS_API_TOKEN` made the server generate a one-off token and print it to stdout. A client that shared the same environment (a compose file, a Secret) sent an empty bearer and got 401 on every call. Since 0.8.0 an empty (or whitespace-only) token stops startup with an error naming the variable. `docker-compose.yml` no longer defaults it to `jmfts-dev-local`; `docker compose up` stops and says so. Generate one and give clients the same value: `export JMFTS_API_TOKEN="$(openssl rand -base64 32)"`. The worker, `jmfts-eval`, `jmfts-init-db` and the batch worker never authenticate with this token and are unaffected.
+
+There is no state where a blank token means "allow all." A document under no access-control root is readable and writable by anyone holding a token, which is the default; `GET /access/audit` (owner only) lists what is in that state.
 
 `JMFTS_CORS_ORIGINS` is a JSON list of allowed browser origins and defaults to empty — server-to-server only, no `Origin` header accepted. `"*"` is rejected outright when credentials are in play; there is no wildcard escape hatch.
 
@@ -130,16 +144,20 @@ There is a **second, unrelated credential** — `JMFTS_RUNNER_KEY`, which gates 
 !!! note "Since 0.1.1"
     On 0.1.0, `torch` and `sentence-transformers` were ordinary dependencies and every install had them.
 
-**`pip install jmfts` does not install torch.** Base JMFTS is storage, retrieval, the tree, BM25, the queue and the whole ingest pipeline. The only step in any of that which needs an accelerator is producing vectors, and since [`embed` became its own task type](#worker-types) that step is one HTTP call away from being another process's problem.
+**`pip install jmfts` does not install torch.** Base JMFTS is storage, retrieval, the tree, BM25 and the queue. The only step in the ingest pipeline which needs an accelerator is producing vectors, and since [`embed` became its own task type](#worker-types) that step is one HTTP call away from being another process's problem.
 
 ```bash
-pip install jmfts                 # storage side: no torch, cannot embed
-pip install 'jmfts[embed]'        # + torch (CUDA build) and sentence-transformers
+pip install jmfts                 # storage side: BM25 and the queue; no torch, no PDF reader
+pip install 'jmfts[ingest]'       # + pdf (pymupdf), segment (ruptures), tokenizer (transformers)
+pip install 'jmfts[embed]'        # + torch (CUDA build) and sentence-transformers; implies tokenizer
 ```
 
-Measured with a clean virtualenv by `scripts/check_base_install.sh`: **583 MB installed, against 5.2 GB with `[embed]`.** That gap is the whole reason the split exists, and it is paid on every cold start of every replica.
+!!! warning "Unreleased: the old base is now `[ingest]` (#59)"
+    Through 0.8.0 the base install carried `pymupdf`, `ruptures` and `transformers`. After 0.8.0 on `master` they are three extras — `pdf`, `segment`, `tokenizer` — and `ingest` is all three. `embed` implies `tokenizer`; `dev` implies `ingest`. Each library is imported at the point of use; without its extra the operation raises `PdfStackNotInstalled`, `SegmentStackNotInstalled` or `TokenizerStackNotInstalled`, each naming `pip install "jmfts[<extra>]"`, classified PERMANENT in the queue and answered 501 over REST. A PDF probed without `pdf` fails by name rather than reporting an empty pattern set. `GET /capabilities` lists all three extras. **Anything that ingested PDFs, ran `rollup` segmentation or the chunker on the old base, a thin worker included, needs `pip install 'jmfts[ingest]'`.**
 
-A base install is not a crippled install. It still **measures** text — `check_fit`, the chunker, and matryoshka truncation are tokenizer and numpy work, and `transformers` stays in the base dependency list precisely so that a storage-side process measures with the same tokenizer the model would have used. What it cannot do is produce a vector, and it says so by name:
+Measured in empty venvs (Python 3.11, `du -sm site-packages`, 2026-11-04): the pre-change base was **753 MB**, the new base is **216 MB**, base plus `[tokenizer]` is **396 MB**, and `[embed]` is about 5.2 GB. (The 583 MB figure earlier on this page was the 0.2.0-era base.) That gap is the whole reason the split exists, and it is paid on every cold start of every replica. `scripts/check_base_install.sh` rebuilds the empty venv and checks the claim.
+
+A tokenizer-only install (`[ingest]` or `[tokenizer]`) is not a crippled install. It still **measures** text — `check_fit`, the chunker, and matryoshka truncation are tokenizer and numpy work, so a storage-side process measures with the same tokenizer the model would have used. What it cannot do is produce a vector, and it says so by name:
 
 ```
 ModelStackNotInstalled: No module named 'torch'
@@ -158,6 +176,19 @@ Three operational consequences worth stating before you build an image:
 - **An install with no model is a deployment, not a fault**, which is why the message names both exits rather than just the `pip` one.
 - **`ImportError` classifies PERMANENT.** A package that is not installed is not installed on the third attempt, so the task fails the node immediately with a readable reason instead of arriving three backoffs later.
 - **There is no `[cpu]` extra.** The wheel index is an install-time choice pip cannot take from a dependency specifier, so a `cpu` extra would be a name that installed the CUDA build anyway. CPU torch is two commands, and `Dockerfile.worker` takes them as one build argument.
+
+## A BM25-only appliance: no torch, no model
+
+**Unreleased (#59).** If you only need keyword search, the base install is enough: `POST /documents` with `auto_embed=false` and `/search/bm25` import no PDF reader, no segmentation library and no tokenizer.
+
+- **`JMFTS_AUTO_EMBED_DEFAULT`** (default `true`, so existing deployments behave as before) decides what an omitted `auto_embed` means on `POST /documents`, `StructuralSplitRequest` and `ChunkRequest`. `embed_tokens` follows it when omitted. Set it `false` on a torch-free deployment and a plain `POST /documents` works. An explicit `auto_embed=true` with no model still fails, with a 501 naming the missing extra; it is never skipped. `GET /capabilities` reports the value as `embedding.auto_embed_default`.
+- **`Containerfile.bm25`** builds that appliance: `python:3.13-slim`, base install only, no torch, the ingest worker off (`JMFTS_INGEST_WORKER_ENABLED=false`), `JMFTS_AUTO_EMBED_DEFAULT=false`, runs as a non-root user and serves with `--no-reload`.
+
+```bash
+podman build -f Containerfile.bm25 -t jmfts-bm25:$(git rev-parse --short HEAD) .
+```
+
+It requires `JMFTS_API_TOKEN` and `JMFTS_DB_HOST`, `_PORT`, `_NAME`, `_USER` and `_PASSWORD` at run time. The database still needs the `vector` and `pg_trgm` extensions, because `schema.sql` creates them, even though this image never writes a vector. The default command is `jmfts-init-db && exec jmfts-server --no-reload`: an empty database is initialised, and an initialised one with pending migrations stops the start with exit 1 and their names on stderr, so the server never runs against a schema older than its code. Apply pending migrations by hand (`psql -v ON_ERROR_STOP=1 -f`), or override the command with plain `jmfts-server --no-reload` to run them elsewhere. podman's default OCI format drops `HEALTHCHECK`; build with `--format docker` to keep it, or declare `HealthCmd=` in the unit.
 
 ## Office files: three tiers, two extras
 
@@ -320,15 +351,16 @@ Worth stating here because it is a deployment property, not an API detail. Subtr
 
 Everything that runs is one of five process roles over one of four JMFTS images, plus stock Postgres. The images differ in **whether they carry the embedding model**; the process roles differ in **what they do with it**. Those two axes are independent, which is the part worth internalizing: an image that holds the model can run a process that never uses it, and a process that answers for embedding work can run in an image that has no torch at all.
 
-### Five images, three Dockerfiles
+### Six images, four build files
 
 | Image | Built by | Torch | Size |
 |---|---|---|---|
 | `pgvector/pgvector:pg16` | upstream, unmodified | — | upstream |
-| the API image | `Dockerfile` | CPU wheel, `[embed]` | not measured |
-| `jmfts-worker-cpu` | `Dockerfile.worker`, defaults | CPU wheel, `[embed]` | **3.98 GB** |
-| `jmfts-worker-gpu` | `Dockerfile.worker --build-arg TORCH_INDEX=…/cu126` | CUDA wheel, `[embed]` | larger; not measured |
-| `jmfts-worker-thin` | `Dockerfile.worker --build-arg EXTRAS=` | **none** | **689 MB** |
+| the API image | `Dockerfile` | CPU wheel, `[embed,ingest,web,office,convert]` | not measured |
+| `jmfts-worker-cpu` | `Dockerfile.worker`, defaults (`EXTRAS=[embed,ingest]`) | CPU wheel | **3.98 GB** (measured before #59; `ingest` is what base used to carry) |
+| `jmfts-worker-gpu` | `Dockerfile.worker --build-arg TORCH_INDEX=…/cu126` | CUDA wheel | larger; not measured |
+| `jmfts-worker-thin` | `Dockerfile.worker --build-arg EXTRAS='[ingest]'` | **none** | **689 MB** (same caveat) |
+| the BM25-only API | `Containerfile.bm25` (**unreleased**) | **none**, base install only | not measured |
 | the LibreOffice converter | `Dockerfile.libreoffice` (**0.6.0**) | none — it is not a JMFTS | not measured |
 
 ```bash
@@ -336,12 +368,12 @@ docker build -f Dockerfile.worker -t jmfts-worker-cpu:latest .
 docker build -f Dockerfile.worker -t jmfts-worker-gpu:latest \
        --build-arg TORCH_INDEX=https://download.pytorch.org/whl/cu126 .
 docker build -f Dockerfile.worker -t jmfts-worker-thin:latest \
-       --build-arg EXTRAS= .
+       --build-arg EXTRAS='[ingest]' .
 docker build -f Dockerfile.libreoffice -t jmfts-libreoffice:latest .
 docker run -d --name libreoffice -p 2003:2003 jmfts-libreoffice:latest
 ```
 
-**The fifth holds no JMFTS at all.** It drains no queue and makes no database connection; it runs `unoserver` in front of LibreOffice, and workers reach it over `JMFTS_CONVERT_URL`. Three things follow from keeping them apart:
+**The LibreOffice image holds no JMFTS at all.** It drains no queue and makes no database connection; it runs `unoserver` in front of LibreOffice, and workers reach it over `JMFTS_CONVERT_URL`. Three things follow from keeping them apart:
 
 - The 500 MB is paid by one pool rather than by every worker that might claim a `render:pdf`, and **any** worker with the URL can convert.
 - A conversion that wedges LibreOffice takes down a container holding no queue claim. `unoserver`'s `--conversion-timeout` makes the recovery automatic — it terminates LibreOffice and exits, the container restarts, and the worker sees a connection error, which grades RETRYABLE.
@@ -388,13 +420,13 @@ That is why the credential is separate:
 |---|---|---|
 | resolves to | a principal, whose grants filter which subtree the request sees | nothing — there is no subtree to scope |
 | stored as | a row in `api_tokens` | a shared secret in the environment |
-| blank means | generate, print, and require an ephemeral token | the surface answers **503** |
+| blank means | the server **refuses to start** (0.8.0; before, it generated and printed one) | the surface answers **503** |
 | can it read a document? | yes | no |
 | can it embed? | no | yes |
 
 The two are disjoint in both directions, and the app-level bearer check steps aside for the `/runner` prefix rather than accepting either credential — making them alternatives inside one dependency would have produced exactly the coupling the split exists to avoid.
 
-**Blank is the off switch here, not a generator.** `JMFTS_API_TOKEN` generates when blank because one appliance printing a token an operator reads is the case it serves. A fleet is the opposite case: two replicas would generate two different keys, and a worker would authenticate against whichever pod it happened to reach. So a blank runner key means "this deployment does not offer embedding", and it never means "come in."
+**Blank is the off switch here, not a generator.** `JMFTS_API_TOKEN` used to generate when blank, and 0.8.0 removed that because a client sharing the environment sent an empty bearer and got 401 on every call. A fleet is the same case sharper: two replicas would generate two different keys, and a worker would authenticate against whichever pod it happened to reach. So a blank runner key means "this deployment does not offer embedding", and it never means "come in."
 
 ### Worker types
 
@@ -423,7 +455,7 @@ So the CPU pool never runs the model, and still ships it: `jmfts-worker-cpu` is 
 
 **The LLM pool is two deployments for one badge, and that is the point.** `llm` names a *resource* — "this worker can get a completion" — not a machine shape. `jmfts-worker-llm-local` runs a model on a card; `jmfts-worker-llm-api` forwards to a metered web API and needs no accelerator. Both answer the same badge, so adding a replica to either adds capacity for the same work, and an idle local GPU absorbs work the API would otherwise have been paid for. Both still carry the embedding model, because both embed the summary they store — which is why they are JMFTS workers and not scripts.
 
-**A thin worker is answering for embedding work; it just is not doing it.** The badge and the location of the model are orthogonal, and confusing them is the easiest mistake on this page. A thin worker built with `EXTRAS=` **must** be given `--runner-url` — otherwise its first `embed` task raises `ModelStackNotInstalled` and fails the node permanently.
+**A thin worker is answering for embedding work; it just is not doing it.** The badge and the location of the model are orthogonal, and confusing them is the easiest mistake on this page. A thin worker built with `EXTRAS='[ingest]'` **must** be given `--runner-url` — otherwise its first `embed` task raises `ModelStackNotInstalled` and fails the node permanently.
 
 ### Batch processing halves the LLM bill
 
@@ -638,6 +670,8 @@ Two gaps specific to the container story, stated so they are not discovered in a
 ## LLM-backed features are optional, and JMFTS does not host one
 
 RAPTOR summarization, fact extraction, and read-side synthesis (`/search/synthesize`) all call out to one OpenAI-compatible endpoint — `JMFTS_LLM_BASE_URL` / `JMFTS_LLM_MODEL` — and there is no second endpoint for the extraction path; `JMFTS_EXTRACTION_*` tunes that request, not its destination. Without one configured, those endpoints report a degraded response rather than failing outright — documents, embeddings, chunking, indexing, and every search method work regardless.
+
+**`JMFTS_LLM_BASE_URL` is used as given (0.6.1).** Set it to the base URL the server advertises, version segment included: `http://gpu-box:8080/v1` for llama-server, vLLM or Ollama. JMFTS appends only `/chat/completions` and `/models`. Before 0.6.1 it wanted the server root and appended `/v1` itself, so a config that gives a server root now 404s; `GET /health/llm` (token required, one outbound call) names the URL it tried. **With no endpoint configured, an LLM-backed verb (`extract-facts`, `raptor`, ...) answers 501 (0.8.0, #56)**, with the missing setting names in `detail`; `/search/synthesize` still answers 200 with `llm_available: false`. A 4xx from the endpoint other than 408 and 429 fails a queued task PERMANENT on the first attempt (0.7.0); 429 and 5xx retry. The LLM client is `ffwf-tau-llm`, floor `>=0.14.1` as of 0.8.0 (it was 0.12.0 in 0.6.2).
 
 One sharp edge in the defaults: leaving `JMFTS_LLM_*` blank does not mean "no LLM". Each blank field falls through to its `JMFTS_ENSONET_*` counterpart, which points at `http://localhost:8853` — the maintainer's own model orchestrator. On any other host that address is simply not listening, which is why the degraded path is what you see; set `JMFTS_LLM_BASE_URL` explicitly rather than relying on the fallback to be absent.
 

@@ -1,13 +1,15 @@
 ---
 title: "JMFTS"
 kind: "project"
-version: "v0.6.0"
+version: "v0.8.0"
 repo: "jmccardle/jmfts"
 ---
 
 # JMFTS
 
 JMFTS is a retrieval appliance. It combines matryoshka embeddings, ColBERT-style late interaction, and BM25 into one hybrid search over PostgreSQL with pgvector.
+
+Current release: **0.8.0** (PyPI and tag `v0.8.0`). `master` carries unreleased work after it, chiefly a BM25-only install with no torch (see the [Changelog](changelog.md#unreleased-on-master-after-080)).
 
 Since 0.6.0 it also has a face. `pip install 'jmfts[web]'` mounts a browser front end at `/app`, where you can drag a file in, watch the queue settle it, run one query down seven columns, and click a result to see the page with the answer boxed on it. See [0.6.0 — eyes and hands](release-0-6-0.md), or [See a result on the page](tutorials/see-a-result-on-the-page.md) to run the beeline yourself.
 

@@ -27,6 +27,8 @@ start from.
    `.docx` has two of them, and how to check that the page is not doing anything the API
    did not do. Needs 0.6.0 or later.
 
+All three were last checked against 0.8.0, where the appliance needs `JMFTS_API_TOKEN` set before it starts.
+
 The third one stands on its own — it needs nothing from the first two, and it is the
 shortest way to see what the appliance does. Take it first if you would rather look than
 type.
