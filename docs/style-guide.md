@@ -226,14 +226,14 @@ Project index pages carry `version`, and `repo` when the project is on GitHub:
 
 ```yaml
 ---
-title: Tau
+title: Example
 kind: project
-version: v0.9.2
-repo: jmccardle/tau
+version: v1.2.3
+repo: owner/name
 ---
 ```
 
-With a `repo`, the version links to that release tag. Without one it renders as
+With a `repo`, the version links to `releases/tag/<version>`, so it must be spelled exactly like the git tag (including a leading `v`, if the tag has one). Without one it renders as
 plain text — projects hosted elsewhere get an honest unlinked version rather
 than a GitHub URL that does not resolve.
 

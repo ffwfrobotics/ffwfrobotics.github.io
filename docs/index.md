@@ -12,7 +12,8 @@ Documentation for the FFwF agentic software stack.
     <p>Event substrate orchestrated with schema documents. Manage shared nodes
     by activating a task definition.</p>
     <div class="roster__badges">
-      <a class="chip" href="tectum/tutorials/quickstart/">Quickstart</a>
+      <a class="chip" href="tectum/devops/">DevOps Manual</a>
+      <a class="chip" href="tectum/cookbook/">Cookbook</a>
     </div>
   </div>
   <div class="roster__item">

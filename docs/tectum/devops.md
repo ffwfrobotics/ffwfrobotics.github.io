@@ -46,6 +46,24 @@ A schema is a YAML document naming the nodes it requires and the bindings it ins
 
 Deactivating a schema reverses both steps, unless the schema is marked `immutable: true`, in which case only an operator-class caller may unwind it. This is RAII: a node or binding lives exactly as long as at least one active schema needs it, and disappears the moment none do. Two schemas can require the same node without conflict — the reference count is the coordination mechanism, not a lock.
 
+## The bus
+
+Tectum's bus is NATS, and `nats-py` is a client library only. The default is to connect to a broker you already run and to fail when none is there: a bus that is down is not a bus that is quiet. Tectum can also run the broker for you, which means a clean checkout needs nothing started by hand:
+
+```bash
+tectum bus                    # a nats-server in this terminal, until Ctrl-C
+tectum up --own-bus           # ... or one that lives exactly as long as the fleet
+```
+
+Both need the `nats-server` binary (one static file, a separate Go program that Tectum does not vendor or download) on `PATH` or at `$NATS_SERVER_BIN`; `tectum status` reports whether it is present. Two brokers on two ports are also how you run two substrates on one machine:
+
+```bash
+tectum up --own-bus --substrate workshop --nats-url nats://127.0.0.1:4322 --sock /tmp/a.sock
+tectum up            --substrate orin     --nats-url nats://127.0.0.1:4322 --sock /tmp/b.sock
+```
+
+A **substrate** is a name for a machine, chosen by whoever runs it (`--substrate`, `$TECTUM_SUBSTRATE`, else the hostname). A node's manifest may name one in `requires_substrate`; that is a constraint ("this node needs the machine with the microphone on it"), not a location. A control agent refuses a schema while a required substrate has no live node reporting it, and will not start a pinned node on a machine that is not it. Of the bundled nodes only `audio.stt`, `audio.transcribe` and `effector.speech` name one (`audio`).
+
 ## Bringing a deployment up
 
 Each node runs as its own OS process. A per-host **control agent** observes node registrations, holds the active-schema desired state, reconciles bindings against it, and supervises the node processes: when a schema needs a node that isn't running, the agent spawns it from a learned launch spec and restarts it per `restart_policy` with crash-loop backoff.
@@ -56,7 +74,29 @@ tectum status                     # live-stack reachability + control/supervisio
 tectum up                         # control agent + supervised node fleet, hold until Ctrl-C
 ```
 
-`tectum up` with no arguments activates whatever `praxis/active.yaml` lists — the boot default for that deployment — and then supervises the resulting fleet. A single node can also run standalone (`tectum --node <name>`), which is how you'd attach one more process to an already-running fleet without going through the control agent.
+`tectum up` with no arguments activates whatever `praxis/active.yaml` lists — the boot default for that deployment — and then supervises the resulting fleet. A single node can also run standalone (`tectum --node <name>`), which is how you'd attach one more process to an already-running fleet without going through the control agent. `tectum down` stops the whole stack on the host; `tectum clear` unapplies the behavioural schemas and stops their nodes but keeps the control agent.
+
+### Nodes from other packages
+
+Tectum runs nodes it does not ship. A node is registered by importing its module, and there are four ways to say which modules those are:
+
+1. An entry point: an installed package declares `[project.entry-points."tectum.nodes"]` and needs no flag and no variable from anyone.
+2. `$TECTUM_NODE_MODULES`: colon-separated importable names, for an installed package that declares no entry point.
+3. `--module my_nodes.agents`, accepted by `scan`, `status`, `up`, `schema validate` and `--node`.
+4. `-e path/to/nodes`: a working copy that is not installed at all.
+
+A source that fails to import raises and names which of the four declared it. Skipping it would surface later as "unknown node" at schema validation, which reads exactly like a typo in the schema. The framework ships agent archetypes (`agent.edge_asr`, `agent.edge_asr_memory`) but no personality; a deployment's own agents, prompts and host configuration live in its own package.
+
+### As a container
+
+The repository's `Dockerfile` builds the control agent and its supervised fleet into one image, because Tectum runs each node as its own OS process and the container is the host. Targets are `runtime` (tectum and its nodes) and `verify` (runtime plus the test runner):
+
+```bash
+docker build --target runtime -t ffwf/tectum .
+docker build --target verify  -t ffwf/tectum-verify .
+```
+
+The image sets `NATS_URL=nats://nats:4222` and defaults to `tectum scan`. The broker is a separate container: the image does not ship `nats-server`, so `--own-bus` does not work inside it. The audio front end is deliberately not containerized: a microphone, Piper and a speaker are not something a container is, and those nodes declare `requires_substrate="audio"`. Drive the same cognition at a subject instead, with `scripts/heard.py` and `scripts/say.py`. Nodes from another package are installed into the image and found through the `tectum.nodes` entry point, or `$TECTUM_NODE_MODULES`.
 
 ## What happens on partition
 
@@ -68,14 +108,29 @@ This pattern has been exercised as a real WAN link between two physically separa
 
 ## Operating posture
 
-A Tectum deployment runs against a live stack and does not fake liveness: if a dependency is down, the node that needs it raises a real error rather than degrading silently. A deployment typically depends on:
+A Tectum deployment runs against a live stack and does not fake liveness: if a dependency is down, the node that needs it raises a real error rather than degrading silently. Deployment addresses have no defaults in the code, because an address that exists on one network is worse than a startup failure (`tectum/endpoints.py`). What you point it at:
+
+| What | Set with | Default |
+|---|---|---|
+| NATS broker | `NATS_URL` | `nats://127.0.0.1:4222` |
+| `nats-server` binary | `NATS_SERVER_BIN` | `nats-server` on `PATH` |
+| This machine's substrate | `TECTUM_SUBSTRATE` | the hostname |
+| Node packages to load | `TECTUM_NODE_MODULES` | none |
+| JMFTS document store | `JMFTS_URL` | `http://localhost:8100` (the store's own loopback port) |
+| Inference server, API prefix included (`http://host:8080/v1`) | `TECTUM_LLM_ENDPOINT` | none; raises |
+| Model name, as that server names it | `TECTUM_LLM_MODEL` | none; raises |
+| Persona prefix file | `TECTUM_PERSONA` | none; raises |
+| τ binary | `TAU_BIN` | `tau` on `PATH` |
+| pi binary | `PI_BIN` | `pi` on `PATH` |
+
+A deployment typically depends on:
 
 - A **NATS** broker, reachable from every host that runs a node.
 - A **JMFTS** document store, for nodes that read or write durable memory.
-- One or more **LLM inference endpoints**, for agent nodes. Endpoint addresses and model names are deployment-specific configuration, not part of Tectum itself.
-- **Piper** (or another TTS) for any `effector.speech` instance, falling back further down the chain (e.g. `espeak-ng`, then a no-op recorder) rather than blocking on an unavailable voice.
+- One or more **LLM inference endpoints**, for agent nodes.
+- **Piper** (or another TTS) for any `effector.speech` instance, falling back further down the chain (`espeak-ng`, then a `null` recorder) rather than blocking on an unavailable voice.
 
-None of these addresses belong in a schema document or in source control — they're read from environment configuration at node startup, and a missing one is a startup failure rather than a surprise mid-run.
+Agent dispatch runs through either backend: the τ node (`TauAgentNode`, see [Tectum + Tau](../integrations/tectum-tau.md)) or the pi RPC pool. None of these addresses belong in a schema document or in source control; they are read from environment configuration at node startup, and a missing one is a startup failure rather than a surprise mid-run.
 
 ## Dev loop
 
@@ -84,5 +139,7 @@ python3 -m venv .venv && ./.venv/bin/pip install -e '.[dev]'
 ./.venv/bin/python -m pytest -q                  # unit tier (no services)
 ./.venv/bin/python -m pytest -q -m integration   # live-stack tier (skips if unreachable)
 ```
+
+The `web_search` and `web_fetch` verbs need the `web` extra (`pip install -e '.[web]'`, which installs [`ffwf-tau-search`](https://pypi.org/project/ffwf-tau-search/)); without it those two verbs raise an error naming the install command. The live tier writes to the document store, so `tectum.testing` is registered as a pytest plugin that points every client at a separate `tectum-test` root and drops it afterwards.
 
 See the [Reference](reference.md) page for the schema document format, the event envelope, and node lifecycle hooks; see the [Cookbook](cookbook.md) for worked examples built from schemas that actually ship in the tree.

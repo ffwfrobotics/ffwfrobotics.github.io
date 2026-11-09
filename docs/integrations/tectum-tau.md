@@ -29,6 +29,16 @@ substrate.
     [What is demonstrated](#what-is-demonstrated-and-what-is-only-claimed)
     at the end.
 
+!!! warning "Targets τ 0.14"
+    Everything on this page describes the Python τ that Tectum currently
+    drives: its RPC gate requires protocol major 3, which is τ 0.14.0. The
+    τ 0.16 rewrite does not carry the stdio `--mode rpc`, the `--bus` NATS
+    extension, or the `--no-builtin-tools` flag that this seam is built on;
+    Tau's own migration notes (`docs/from-0.15.md`) list them as regressions or
+    as work planned for `tau serve`. Until Tectum's `TauAgentNode` is ported,
+    this integration works only with the Python τ line (0.14.x, and 0.15,
+    whose RPC is protocol 3.1); it does not work with the 0.16 preview.
+
 That division is the point. The agent never subscribes to anything, never
 picks its own inputs, and cannot reach an effector except by publishing a
 verb some schema chose to bind. Rewiring who hears what, or swapping one
@@ -70,8 +80,8 @@ sessions the TUI can open later.
 
 ## One process, one node
 
-`TauAgentNode.setup()` starts τ headless (`--no-tools --no-extensions
---no-session`), performs the `get_capabilities` handshake, and holds the
+`TauAgentNode.setup()` starts τ headless (`--mode rpc --no-session
+--no-extensions --no-context-files --no-builtin-tools`), performs the `get_capabilities` handshake, and holds the
 process open across turns — the conversation lives in the τ process, not in
 Tectum. On each inbound event the node writes the event's `binding_id` to a
 per-run file that the extensions re-read on every publish, frames the
@@ -88,8 +98,10 @@ for the day the agent stops being a well-behaved tenant.
 
 ## Why the agent gets no shell
 
-Every τ node runs with `--no-tools`. This looks like a restriction; it is
-the design.
+Every τ node runs with `--no-builtin-tools`: the base tools (shell,
+file access) are withheld, and the only tools the model has are the
+verbs the extensions register. (`--no-tools` would withhold those too.)
+This looks like a restriction; it is the design.
 
 The earlier pi-based agent nodes exposed verbs as bash shims on `PATH` — the
 agent ran a shell, and `tectum-speak` was a script that published an event.
@@ -216,7 +228,7 @@ agent, in search counts and subtree walks included.
 
 Under a shell-bearing agent this fence is decorative — any credential the
 tools can use is one `printenv` away from the model. Under τ with
-`--no-tools`, the model has no shell, so it has no mechanism to disclose
+`--no-builtin-tools`, the model has no shell, so it has no mechanism to disclose
 its own credential: the extension holds it, uses it, and never surfaces it
 in a tool result. Two agents on one substrate can then hold genuinely
 different views of the same memory tree, enforced by the store rather than
