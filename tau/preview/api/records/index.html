@@ -1,0 +1,6801 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for Tectum, Tau, and JMFTS">
+      
+      
+      
+        <link rel="canonical" href="https://ffwfrobotics.github.io/tau/preview/api/records/">
+      
+      
+        <link rel="prev" href="../providers/">
+      
+      
+        <link rel="next" href="../sessions/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
+    
+    
+      
+        <title>Tau 0.16 preview API: The session's records - FFWF Robotics Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/ffwf.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#the-sessions-records" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../.." title="FFWF Robotics Docs" class="md-header__button md-logo" aria-label="FFWF Robotics Docs" data-md-component="logo">
+      
+  <img src="../../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            FFWF Robotics Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Tau 0.16 preview API: The session's records
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9 8.99 8.99 0 0 0 4 7.47V22h2v-3h2v3h2v-3h2v3h2v-3.54c2.47-1.65 4-4.46 4-7.46a9 9 0 0 0-9-9m-4 9a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m8 0a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m-4 3 1.5 3h-3z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 15a2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2m2.5 2 1.5-3 1.5 3zm5.5-2a2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2m6-4A10 10 0 0 0 12 1 10 10 0 0 0 2 11c0 2.8 1.2 5.3 3 7.1V22h14v-3.9c1.8-1.8 3-4.3 3-7.1m-5 9h-2v-2h-2v2h-2v-2H9v2H7v-2.8c-1.8-1.5-3-3.7-3-6.2a8 8 0 0 1 8-8 8 8 0 0 1 8 8c0 2.5-1.2 4.8-3 6.2z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../tectum/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tectum
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tau
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tau 0.16 preview
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../jmfts/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  JMFTS
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../integrations/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Integrations
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../style-guide/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Style guide
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="FFWF Robotics Docs" class="md-nav__button md-logo" aria-label="FFWF Robotics Docs" data-md-component="logo">
+      
+  <img src="../../../../assets/logo.png" alt="logo">
+
+    </a>
+    FFWF Robotics Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../tectum/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tectum
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../tectum/tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../tectum/tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../tectum/cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../tectum/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../tectum/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tau
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../reference/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/tau-llm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_llm
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/tau-agent-core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_agent_core
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extensions
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/rpc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RPC
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/tau-coding-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_coding_agent
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../reference/api/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_5_7" id="__nav_3_5_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_5_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/messages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Messages and content
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/providers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Providers and the client
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/constraints/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Constrained decoding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/agent-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The agent loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/sessions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sessions and the conversation tree
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/sdk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The SDK entry point
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/compaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compaction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/rpc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The RPC protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/export/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Export
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/runs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Run manifests and latency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tau 0.16 preview
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operating it
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../differences/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What changed from 0.15
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_7" id="__nav_4_7_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clients/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Writing a frontend
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Configuration and context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diagnostics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Tracing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../driver/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Embedding tau
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../errors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Errors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Writing an extension
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../machine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The step machine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../providers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The session's records
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The session's records
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#author" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Author
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Author">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authorfrontend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Author.Frontend
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Author.Frontend">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authorfrontendnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Author.Frontend.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authorfrontendclient" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Author.Frontend.client
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authorprovider" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Author.Provider
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Author.Provider">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authorprovidernew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Author.Provider.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authortools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Author.Tools
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Author.Tools">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authortoolsnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Author.Tools.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authorcore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Author.Core
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Author.Core">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authorcorenew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Author.Core.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authorextension" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Author.Extension
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Author.Extension">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authorextensionnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Author.Extension.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authorextensionname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Author.Extension.name
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#body" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Body">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bodysystem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.System
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Body.System">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bodysystemnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.System.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodysystemtext" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.System.text
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodyuser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.User
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Body.User">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bodyusernew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.User.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodyusertext" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.User.text
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodyassistant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Assistant
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Body.Assistant">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bodyassistantnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Assistant.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodyassistantparts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Assistant.parts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodyassistantstop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Assistant.stop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodyassistantfinish_reason" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Assistant.finish_reason
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodyassistantmeta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Assistant.meta
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodyresults" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Results
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Body.Results">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bodyresultsnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Results.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodyresultsoutcomes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Results.outcomes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodyconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Config
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Body.Config">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bodyconfignew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Config.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodyconfigconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Config.config
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodycustom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Custom
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Body.Custom">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bodycustomnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Custom.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodycustomkind" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Custom.kind
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodycustomdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Custom.data
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Config
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Config">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#confignew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Config.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Config.data
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cursorstate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CursorState
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CursorState">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cursorstateat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CursorState.at
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorstateauto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CursorState.auto
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorstatebusy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CursorState.busy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorstatenext" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CursorState.next
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorstateitems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CursorState.items
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorstatelabels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CursorState.labels
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorstatemoves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CursorState.moves
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorstatemoves_since_step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CursorState.moves_since_step
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#draft" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Draft
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Draft">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#draftnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Draft.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#draftbody" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Draft.body
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#draftdelivers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Draft.delivers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#draftby" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Draft.by
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#item" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Item
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Item">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#itemid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Item.id
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#itemto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Item.to
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#itemdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Item.data
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#itemdata_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ItemData
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ItemData">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#itemdatainput" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ItemData.Input
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ItemData.Input">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#itemdatainputnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ItemData.Input.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#itemdatainputby" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ItemData.Input.by
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#itemdatainputtext" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ItemData.Input.text
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#itemdataextension" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ItemData.Extension
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ItemData.Extension">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#itemdataextensionnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ItemData.Extension.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#itemdataextensionname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ItemData.Extension.name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#itemdataextensiondata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ItemData.Extension.data
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#move" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Move
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Move">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#movecursor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Move.cursor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#movefrom_" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Move.from_
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moveto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Move.to
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moveby" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Move.by
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#movetime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Move.time
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#node" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Node">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nodeid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node.id
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodeparent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node.parent
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodetime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node.time
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodeby" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node.by
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodebody" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node.body
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodedelivers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node.delivers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodecopied_from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node.copied_from
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodederived_from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node.derived_from
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodetyped" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node.typed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#outcome" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outcome
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Outcome">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#outcomeok" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outcome.Ok
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Outcome.Ok">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#outcomeoknew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outcome.Ok.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#outcomeokvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outcome.Ok.value
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#outcomeerr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outcome.Err
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Outcome.Err">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#outcomeerrnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outcome.Err.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#outcomeerrerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outcome.Err.error
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#outcomeinterrupted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outcome.Interrupted
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Outcome.Interrupted">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#outcomeinterruptednew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outcome.Interrupted.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parttext" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Text
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part.Text">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parttextnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Text.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parttexttext" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Text.text
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parttextreplay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Text.replay
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partthinking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Thinking
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part.Thinking">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#partthinkingnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Thinking.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partthinkingtext" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Thinking.text
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partthinkingreplay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Thinking.replay
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partcall" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Call
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part.Call">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#partcallnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Call.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partcallid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Call.id
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partcalltool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Call.tool
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partcallargs_raw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Call.args_raw
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partcallreplay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Call.replay
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#replay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Replay
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Replay">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#replaynew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Replay.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replayprovider" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Replay.provider
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replaydata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Replay.data
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stop
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tree
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tree">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#treenode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tree.node
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treewalk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tree.walk
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treechildren" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tree.children
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treelen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tree.len
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treeconfig_at" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tree.config_at
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treelca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tree.lca
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sessions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Starting and finding sessions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The terminal UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wire/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The wire
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wire-protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The wire protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../jmfts/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JMFTS
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JMFTS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../jmfts/tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/tutorials/ingest-a-document/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ingest a document
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/tutorials/see-a-result-on-the-page/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    See a result on the page
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/release-0-6-0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    0.6.0 — eyes and hands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/release-0-3-0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    0.3.0 — the job system
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../integrations/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integrations
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Integrations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../integrations/tectum-tau/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum + Tau
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../integrations/tectum-jmfts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum + JMFTS
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../integrations/tau-jmfts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau + JMFTS
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../integrations/full-stack-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The FFwF Full Stack Agent
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../style-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guide
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stable"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#author" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Author
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Author">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authorfrontend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Author.Frontend
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Author.Frontend">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authorfrontendnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Author.Frontend.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authorfrontendclient" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Author.Frontend.client
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authorprovider" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Author.Provider
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Author.Provider">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authorprovidernew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Author.Provider.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authortools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Author.Tools
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Author.Tools">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authortoolsnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Author.Tools.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authorcore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Author.Core
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Author.Core">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authorcorenew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Author.Core.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authorextension" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Author.Extension
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Author.Extension">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authorextensionnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Author.Extension.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authorextensionname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Author.Extension.name
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#body" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Body">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bodysystem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.System
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Body.System">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bodysystemnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.System.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodysystemtext" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.System.text
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodyuser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.User
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Body.User">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bodyusernew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.User.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodyusertext" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.User.text
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodyassistant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Assistant
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Body.Assistant">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bodyassistantnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Assistant.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodyassistantparts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Assistant.parts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodyassistantstop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Assistant.stop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodyassistantfinish_reason" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Assistant.finish_reason
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodyassistantmeta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Assistant.meta
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodyresults" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Results
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Body.Results">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bodyresultsnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Results.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodyresultsoutcomes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Results.outcomes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodyconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Config
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Body.Config">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bodyconfignew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Config.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodyconfigconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Config.config
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodycustom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Custom
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Body.Custom">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bodycustomnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Custom.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodycustomkind" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Custom.kind
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bodycustomdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body.Custom.data
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Config
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Config">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#confignew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Config.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Config.data
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cursorstate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CursorState
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CursorState">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cursorstateat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CursorState.at
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorstateauto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CursorState.auto
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorstatebusy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CursorState.busy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorstatenext" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CursorState.next
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorstateitems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CursorState.items
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorstatelabels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CursorState.labels
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorstatemoves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CursorState.moves
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorstatemoves_since_step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CursorState.moves_since_step
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#draft" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Draft
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Draft">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#draftnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Draft.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#draftbody" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Draft.body
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#draftdelivers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Draft.delivers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#draftby" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Draft.by
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#item" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Item
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Item">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#itemid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Item.id
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#itemto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Item.to
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#itemdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Item.data
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#itemdata_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ItemData
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ItemData">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#itemdatainput" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ItemData.Input
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ItemData.Input">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#itemdatainputnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ItemData.Input.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#itemdatainputby" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ItemData.Input.by
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#itemdatainputtext" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ItemData.Input.text
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#itemdataextension" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ItemData.Extension
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ItemData.Extension">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#itemdataextensionnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ItemData.Extension.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#itemdataextensionname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ItemData.Extension.name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#itemdataextensiondata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ItemData.Extension.data
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#move" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Move
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Move">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#movecursor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Move.cursor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#movefrom_" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Move.from_
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moveto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Move.to
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moveby" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Move.by
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#movetime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Move.time
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#node" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Node">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nodeid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node.id
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodeparent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node.parent
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodetime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node.time
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodeby" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node.by
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodebody" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node.body
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodedelivers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node.delivers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodecopied_from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node.copied_from
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodederived_from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node.derived_from
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodetyped" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node.typed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#outcome" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outcome
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Outcome">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#outcomeok" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outcome.Ok
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Outcome.Ok">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#outcomeoknew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outcome.Ok.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#outcomeokvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outcome.Ok.value
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#outcomeerr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outcome.Err
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Outcome.Err">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#outcomeerrnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outcome.Err.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#outcomeerrerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outcome.Err.error
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#outcomeinterrupted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outcome.Interrupted
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Outcome.Interrupted">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#outcomeinterruptednew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outcome.Interrupted.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parttext" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Text
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part.Text">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parttextnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Text.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parttexttext" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Text.text
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parttextreplay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Text.replay
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partthinking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Thinking
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part.Thinking">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#partthinkingnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Thinking.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partthinkingtext" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Thinking.text
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partthinkingreplay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Thinking.replay
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partcall" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Call
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part.Call">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#partcallnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Call.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partcallid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Call.id
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partcalltool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Call.tool
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partcallargs_raw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Call.args_raw
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partcallreplay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part.Call.replay
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#replay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Replay
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Replay">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#replaynew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Replay.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replayprovider" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Replay.provider
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replaydata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Replay.data
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stop
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tree
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tree">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#treenode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tree.node
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treewalk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tree.walk
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treechildren" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tree.children
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treelen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tree.len
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treeconfig_at" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tree.config_at
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treelca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tree.lca
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<div class="admonition warning">
+<p class="admonition-title">Unreleased</p>
+<p>Generated from the docstrings of Tau 0.16.0-dev (commit <code>c439c401</code>) by <code>scripts/api_docs.py</code> in the Tau repository. Not the 0.15 API.</p>
+</div>
+<h1 id="the-sessions-records">The session's records<a class="headerlink" href="#the-sessions-records" title="Permanent link">&para;</a></h1>
+<p>The values a session is made of, read by every kind of program: nodes and what they hold, who wrote them, the scratchpad's items.</p>
+<p>Names: <code>Author</code>, <code>Body</code>, <code>Config</code>, <code>CursorState</code>, <code>Draft</code>, <code>Item</code>, <code>ItemData</code>, <code>Move</code>, <code>Node</code>, <code>Outcome</code>, <code>Part</code>, <code>Replay</code>, <code>Stop</code>, <code>Tree</code></p>
+<h2 id="author">Author<a class="headerlink" href="#author" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Author</span>
+</code></pre></div>
+<p>Who wrote a node, or asked for a move. Core only records it; extensions and clients may decide by it (attachments expands only what a <code>Frontend</code> typed).</p>
+<h3 id="authorfrontend">Author.Frontend<a class="headerlink" href="#authorfrontend" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Frontend</span><span class="p">(</span><span class="n">Author</span><span class="p">)</span>
+</code></pre></div>
+<p>A frontend, named by its client name.</p>
+<h4 id="authorfrontendnew">Author.Frontend.<strong>new</strong><a class="headerlink" href="#authorfrontendnew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Author</span><span class="o">.</span><span class="n">Frontend</span>
+</code></pre></div>
+<h4 id="authorfrontendclient">Author.Frontend.client<a class="headerlink" href="#authorfrontendclient" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">client</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The client name the frontend gave.</p>
+<h3 id="authorprovider">Author.Provider<a class="headerlink" href="#authorprovider" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Provider</span><span class="p">(</span><span class="n">Author</span><span class="p">)</span>
+</code></pre></div>
+<p>The model's provider.</p>
+<h4 id="authorprovidernew">Author.Provider.<strong>new</strong><a class="headerlink" href="#authorprovidernew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Author</span><span class="o">.</span><span class="n">Provider</span>
+</code></pre></div>
+<h3 id="authortools">Author.Tools<a class="headerlink" href="#authortools" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Tools</span><span class="p">(</span><span class="n">Author</span><span class="p">)</span>
+</code></pre></div>
+<p>The tools that ran a call.</p>
+<h4 id="authortoolsnew">Author.Tools.<strong>new</strong><a class="headerlink" href="#authortoolsnew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Author</span><span class="o">.</span><span class="n">Tools</span>
+</code></pre></div>
+<h3 id="authorcore">Author.Core<a class="headerlink" href="#authorcore" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Core</span><span class="p">(</span><span class="n">Author</span><span class="p">)</span>
+</code></pre></div>
+<p>The core itself.</p>
+<h4 id="authorcorenew">Author.Core.<strong>new</strong><a class="headerlink" href="#authorcorenew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Author</span><span class="o">.</span><span class="n">Core</span>
+</code></pre></div>
+<h3 id="authorextension">Author.Extension<a class="headerlink" href="#authorextension" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Extension</span><span class="p">(</span><span class="n">Author</span><span class="p">)</span>
+</code></pre></div>
+<p>An extension.</p>
+<h4 id="authorextensionnew">Author.Extension.<strong>new</strong><a class="headerlink" href="#authorextensionnew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Author</span><span class="o">.</span><span class="n">Extension</span>
+</code></pre></div>
+<h4 id="authorextensionname">Author.Extension.name<a class="headerlink" href="#authorextensionname" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The extension's name.</p>
+<h2 id="body">Body<a class="headerlink" href="#body" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Body</span>
+</code></pre></div>
+<p>What a node holds. <code>System</code>, <code>User</code>, <code>Assistant</code> and <code>Results</code> are what the model reads;
+<code>Config</code> and <code>Custom</code> never reach it.</p>
+<h3 id="bodysystem">Body.System<a class="headerlink" href="#bodysystem" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">System</span><span class="p">(</span><span class="n">Body</span><span class="p">)</span>
+</code></pre></div>
+<p>The system text a session starts with.</p>
+<h4 id="bodysystemnew">Body.System.<strong>new</strong><a class="headerlink" href="#bodysystemnew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Body</span><span class="o">.</span><span class="n">System</span>
+</code></pre></div>
+<h4 id="bodysystemtext">Body.System.text<a class="headerlink" href="#bodysystemtext" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The system text.</p>
+<h3 id="bodyuser">Body.User<a class="headerlink" href="#bodyuser" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">(</span><span class="n">Body</span><span class="p">)</span>
+</code></pre></div>
+<p>A message from the person (or an extension) using the session.</p>
+<h4 id="bodyusernew">Body.User.<strong>new</strong><a class="headerlink" href="#bodyusernew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Body</span><span class="o">.</span><span class="n">User</span>
+</code></pre></div>
+<h4 id="bodyusertext">Body.User.text<a class="headerlink" href="#bodyusertext" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The message.</p>
+<h3 id="bodyassistant">Body.Assistant<a class="headerlink" href="#bodyassistant" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Assistant</span><span class="p">(</span><span class="n">Body</span><span class="p">)</span>
+</code></pre></div>
+<p>The model's reply.</p>
+<h4 id="bodyassistantnew">Body.Assistant.<strong>new</strong><a class="headerlink" href="#bodyassistantnew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span>
+    <span class="bp">cls</span><span class="p">,</span>
+    <span class="n">parts</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Part</span><span class="p">],</span>
+    <span class="n">stop</span><span class="p">:</span> <span class="n">Stop</span><span class="p">,</span>
+    <span class="n">finish_reason</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">meta</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Body</span><span class="o">.</span><span class="n">Assistant</span>
+</code></pre></div>
+<h4 id="bodyassistantparts">Body.Assistant.parts<a class="headerlink" href="#bodyassistantparts" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">parts</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Part</span><span class="p">]</span>
+</code></pre></div>
+<p>The reply's pieces, in stream order.</p>
+<h4 id="bodyassistantstop">Body.Assistant.stop<a class="headerlink" href="#bodyassistantstop" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">stop</span><span class="p">:</span> <span class="n">Stop</span>
+</code></pre></div>
+<p>Why the reply ended.</p>
+<h4 id="bodyassistantfinish_reason">Body.Assistant.finish_reason<a class="headerlink" href="#bodyassistantfinish_reason" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">finish_reason</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>The provider's own finish string, or <code>None</code>.</p>
+<h4 id="bodyassistantmeta">Body.Assistant.meta<a class="headerlink" href="#bodyassistantmeta" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">meta</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>What the response carried besides its parts (usage, for one), as JSON object text,
+or <code>None</code>.</p>
+<h3 id="bodyresults">Body.Results<a class="headerlink" href="#bodyresults" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Results</span><span class="p">(</span><span class="n">Body</span><span class="p">)</span>
+</code></pre></div>
+<p>The answer to a batch of calls: one <code>(call id, outcome, author)</code> per call, in call order.</p>
+<h4 id="bodyresultsnew">Body.Results.<strong>new</strong><a class="headerlink" href="#bodyresultsnew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">outcomes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Outcome</span><span class="p">,</span> <span class="n">Author</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Body</span><span class="o">.</span><span class="n">Results</span>
+</code></pre></div>
+<h4 id="bodyresultsoutcomes">Body.Results.outcomes<a class="headerlink" href="#bodyresultsoutcomes" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">outcomes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Outcome</span><span class="p">,</span> <span class="n">Author</span><span class="p">]]</span>
+</code></pre></div>
+<p>The outcomes, one per call.</p>
+<h3 id="bodyconfig">Body.Config<a class="headerlink" href="#bodyconfig" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Config</span><span class="p">(</span><span class="n">Body</span><span class="p">)</span>
+</code></pre></div>
+<p>A change of how steps run from here on.</p>
+<h4 id="bodyconfignew">Body.Config.<strong>new</strong><a class="headerlink" href="#bodyconfignew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Config</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Body</span><span class="o">.</span><span class="n">Config</span>
+</code></pre></div>
+<h4 id="bodyconfigconfig">Body.Config.config<a class="headerlink" href="#bodyconfigconfig" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">config</span><span class="p">:</span> <span class="n">Config</span>
+</code></pre></div>
+<p>The new configuration.</p>
+<h3 id="bodycustom">Body.Custom<a class="headerlink" href="#bodycustom" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Custom</span><span class="p">(</span><span class="n">Body</span><span class="p">)</span>
+</code></pre></div>
+<p>A record an extension (or core) keeps in the tree that the model never reads.</p>
+<h4 id="bodycustomnew">Body.Custom.<strong>new</strong><a class="headerlink" href="#bodycustomnew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Body</span><span class="o">.</span><span class="n">Custom</span>
+</code></pre></div>
+<h4 id="bodycustomkind">Body.Custom.kind<a class="headerlink" href="#bodycustomkind" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>What kind of record this is; core writes <code>sample_error</code>.</p>
+<h4 id="bodycustomdata">Body.Custom.data<a class="headerlink" href="#bodycustomdata" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">data</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The record's data, as text.</p>
+<h2 id="config">Config<a class="headerlink" href="#config" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Config</span>
+</code></pre></div>
+<p>How a step runs from this node on: the text of a JSON object with at most two keys, <code>"model"</code>
+and <code>"extensions"</code> (the options). The constructor does not check the text, and core stores it
+without reading it.</p>
+<h3 id="confignew">Config.<strong>new</strong><a class="headerlink" href="#confignew" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Config</span>
+</code></pre></div>
+<h3 id="configdata">Config.data<a class="headerlink" href="#configdata" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">data</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The JSON object text, as given.</p>
+<h2 id="cursorstate">CursorState<a class="headerlink" href="#cursorstate" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">CursorState</span>
+</code></pre></div>
+<p>One cursor as <code>Session.cursor</code> read it: every field from the same instant,
+under one lock, so <code>busy</code> and <code>at</code> cannot disagree. Later changes do not
+reach it. Building one costs the cursor's items and labels, not its moves:
+a move list is append-only, so the snapshot keeps where it ended and reads
+<code>moves</code> (under the lock, raising <code>Closed</code> if the session is closed) when
+asked. A move made after the snapshot is not in it.</p>
+<h3 id="cursorstateat">CursorState.at<a class="headerlink" href="#cursorstateat" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">at</span><span class="p">:</span> <span class="nb">int</span>
+</code></pre></div>
+<p>The node the cursor is on.</p>
+<h3 id="cursorstateauto">CursorState.auto<a class="headerlink" href="#cursorstateauto" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">auto</span><span class="p">:</span> <span class="nb">bool</span>
+</code></pre></div>
+<p>Whether auto-step is on.</p>
+<h3 id="cursorstatebusy">CursorState.busy<a class="headerlink" href="#cursorstatebusy" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">busy</span><span class="p">:</span> <span class="nb">bool</span>
+</code></pre></div>
+<p>A step is running.</p>
+<h3 id="cursorstatenext">CursorState.next<a class="headerlink" href="#cursorstatenext" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="nb">next</span><span class="p">:</span> <span class="n">Next</span>
+</code></pre></div>
+<p>What the cursor needs next, read from its walk alone.</p>
+<h3 id="cursorstateitems">CursorState.items<a class="headerlink" href="#cursorstateitems" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Item</span><span class="p">]</span>
+</code></pre></div>
+<p>Its scratchpad, oldest first.</p>
+<h3 id="cursorstatelabels">CursorState.labels<a class="headerlink" href="#cursorstatelabels" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">labels</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div>
+<p>Its labels, in string order.</p>
+<h3 id="cursorstatemoves">CursorState.moves<a class="headerlink" href="#cursorstatemoves" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">moves</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Move</span><span class="p">]</span>
+</code></pre></div>
+<p>Every move of the cursor, oldest first.</p>
+<h3 id="cursorstatemoves_since_step">CursorState.moves_since_step<a class="headerlink" href="#cursorstatemoves_since_step" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">moves_since_step</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Move</span><span class="p">]</span>
+</code></pre></div>
+<p>Its moves since the running step woke, other hooks' included; none at rest.</p>
+<h2 id="draft">Draft<a class="headerlink" href="#draft" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Draft</span>
+</code></pre></div>
+<p>What the current phase will commit as a node. A hook may edit it; none (<code>None</code>) commits
+nothing. Built as <code>Draft(body, delivers, by)</code>.</p>
+<h3 id="draftnew">Draft.<strong>new</strong><a class="headerlink" href="#draftnew" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="n">Body</span><span class="p">,</span> <span class="n">delivers</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">by</span><span class="p">:</span> <span class="n">Author</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draft</span>
+</code></pre></div>
+<h3 id="draftbody">Draft.body<a class="headerlink" href="#draftbody" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">body</span><span class="p">:</span> <span class="n">Body</span>
+</code></pre></div>
+<p>What the node will hold.</p>
+<h3 id="draftdelivers">Draft.delivers<a class="headerlink" href="#draftdelivers" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">delivers</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</code></pre></div>
+<p>The ids of the scratchpad items the node will consume.</p>
+<h3 id="draftby">Draft.by<a class="headerlink" href="#draftby" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">by</span><span class="p">:</span> <span class="n">Author</span>
+</code></pre></div>
+<p>Who the node will be written by.</p>
+<h2 id="item">Item<a class="headerlink" href="#item" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Item</span>
+</code></pre></div>
+<p>One item in a cursor's scratchpad. Ids are never reused.</p>
+<h3 id="itemid">Item.id<a class="headerlink" href="#itemid" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+</code></pre></div>
+<p>The item's id.</p>
+<h3 id="itemto">Item.to<a class="headerlink" href="#itemto" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">to</span><span class="p">:</span> <span class="nb">int</span>
+</code></pre></div>
+<p>The cursor it is addressed to.</p>
+<h3 id="itemdata">Item.data<a class="headerlink" href="#itemdata" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">data</span><span class="p">:</span> <span class="n">ItemData</span>
+</code></pre></div>
+<p>What it holds.</p>
+<h2 id="itemdata_1">ItemData<a class="headerlink" href="#itemdata_1" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ItemData</span>
+</code></pre></div>
+<p>What a scratchpad item holds: an <code>Input</code>, or an <code>Extension</code>'s own data.</p>
+<h3 id="itemdatainput">ItemData.Input<a class="headerlink" href="#itemdatainput" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Input</span><span class="p">(</span><span class="n">ItemData</span><span class="p">)</span>
+</code></pre></div>
+<p>A line for the cursor to take as a <code>User</code> message.</p>
+<h4 id="itemdatainputnew">ItemData.Input.<strong>new</strong><a class="headerlink" href="#itemdatainputnew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">by</span><span class="p">:</span> <span class="n">Author</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ItemData</span><span class="o">.</span><span class="n">Input</span>
+</code></pre></div>
+<h4 id="itemdatainputby">ItemData.Input.by<a class="headerlink" href="#itemdatainputby" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">by</span><span class="p">:</span> <span class="n">Author</span>
+</code></pre></div>
+<p>Who wrote it.</p>
+<h4 id="itemdatainputtext">ItemData.Input.text<a class="headerlink" href="#itemdatainputtext" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The line.</p>
+<h3 id="itemdataextension">ItemData.Extension<a class="headerlink" href="#itemdataextension" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Extension</span><span class="p">(</span><span class="n">ItemData</span><span class="p">)</span>
+</code></pre></div>
+<p>Data an extension keeps in the scratchpad; core does not read it.</p>
+<h4 id="itemdataextensionnew">ItemData.Extension.<strong>new</strong><a class="headerlink" href="#itemdataextensionnew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ItemData</span><span class="o">.</span><span class="n">Extension</span>
+</code></pre></div>
+<h4 id="itemdataextensionname">ItemData.Extension.name<a class="headerlink" href="#itemdataextensionname" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The extension's name.</p>
+<h4 id="itemdataextensiondata">ItemData.Extension.data<a class="headerlink" href="#itemdataextensiondata" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">data</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The extension's data, as text.</p>
+<h2 id="move">Move<a class="headerlink" href="#move" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Move</span>
+</code></pre></div>
+<p>The record of a cursor changing node. <code>from</code> is a Python keyword, so <code>from_</code>.</p>
+<h3 id="movecursor">Move.cursor<a class="headerlink" href="#movecursor" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">cursor</span><span class="p">:</span> <span class="nb">int</span>
+</code></pre></div>
+<p>The cursor that moved.</p>
+<h3 id="movefrom_">Move.from_<a class="headerlink" href="#movefrom_" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">from_</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>The node it left, or <code>None</code> when the move opened the cursor.</p>
+<h3 id="moveto">Move.to<a class="headerlink" href="#moveto" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">to</span><span class="p">:</span> <span class="nb">int</span>
+</code></pre></div>
+<p>The node it moved to.</p>
+<h3 id="moveby">Move.by<a class="headerlink" href="#moveby" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">by</span><span class="p">:</span> <span class="n">Author</span>
+</code></pre></div>
+<p>Who asked for the move.</p>
+<h3 id="movetime">Move.time<a class="headerlink" href="#movetime" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">time</span><span class="p">:</span> <span class="nb">int</span>
+</code></pre></div>
+<p>The time the driver gave it, in milliseconds.</p>
+<h2 id="node">Node<a class="headerlink" href="#node" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Node</span>
+</code></pre></div>
+<p>One record of a session's tree, written once and never changed: its <code>id</code>, its <code>parent</code>
+(<code>None</code> for a root), the <code>time</code> the driver gave it in milliseconds, who wrote it (<code>by</code>), what
+it holds (<code>body</code>), the scratchpad items it consumed (<code>delivers</code>), and where its content came
+from (<code>copied_from</code>, <code>derived_from</code>), and what a person typed (<code>typed</code>).</p>
+<h3 id="nodeid">Node.id<a class="headerlink" href="#nodeid" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+</code></pre></div>
+<p>The node's id; ids are dense from 0.</p>
+<h3 id="nodeparent">Node.parent<a class="headerlink" href="#nodeparent" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">parent</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>The node it follows, or <code>None</code> for a root.</p>
+<h3 id="nodetime">Node.time<a class="headerlink" href="#nodetime" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">time</span><span class="p">:</span> <span class="nb">int</span>
+</code></pre></div>
+<p>The time the driver gave it, in milliseconds.</p>
+<h3 id="nodeby">Node.by<a class="headerlink" href="#nodeby" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">by</span><span class="p">:</span> <span class="n">Author</span>
+</code></pre></div>
+<p>Who wrote it.</p>
+<h3 id="nodebody">Node.body<a class="headerlink" href="#nodebody" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">body</span><span class="p">:</span> <span class="n">Body</span>
+</code></pre></div>
+<p>What it holds.</p>
+<h3 id="nodedelivers">Node.delivers<a class="headerlink" href="#nodedelivers" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">delivers</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</code></pre></div>
+<p>The ids of the scratchpad items it consumed.</p>
+<h3 id="nodecopied_from">Node.copied_from<a class="headerlink" href="#nodecopied_from" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">copied_from</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>The node this one repeats verbatim (a compaction or prune copy), or <code>None</code>.</p>
+<h3 id="nodederived_from">Node.derived_from<a class="headerlink" href="#nodederived_from" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">derived_from</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>The node whose walk this one's content was computed from (a summary, a pruned
+transcript), or <code>None</code>.</p>
+<h3 id="nodetyped">Node.typed<a class="headerlink" href="#nodetyped" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">typed</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>What a person typed, when a hook changed the text of this <code>User</code> node (an attachment
+inlined a file); <code>None</code> when the body is what was typed.</p>
+<h2 id="outcome">Outcome<a class="headerlink" href="#outcome" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Outcome</span>
+</code></pre></div>
+<p>How one tool call ended: <code>Ok</code>, <code>Err</code> or <code>Interrupted</code>.</p>
+<h3 id="outcomeok">Outcome.Ok<a class="headerlink" href="#outcomeok" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Ok</span><span class="p">(</span><span class="n">Outcome</span><span class="p">)</span>
+</code></pre></div>
+<p>The call succeeded.</p>
+<h4 id="outcomeoknew">Outcome.Ok.<strong>new</strong><a class="headerlink" href="#outcomeoknew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Outcome</span><span class="o">.</span><span class="n">Ok</span>
+</code></pre></div>
+<h4 id="outcomeokvalue">Outcome.Ok.value<a class="headerlink" href="#outcomeokvalue" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>What the tool returned.</p>
+<h3 id="outcomeerr">Outcome.Err<a class="headerlink" href="#outcomeerr" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Err</span><span class="p">(</span><span class="n">Outcome</span><span class="p">)</span>
+</code></pre></div>
+<p>The call failed.</p>
+<h4 id="outcomeerrnew">Outcome.Err.<strong>new</strong><a class="headerlink" href="#outcomeerrnew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Outcome</span><span class="o">.</span><span class="n">Err</span>
+</code></pre></div>
+<h4 id="outcomeerrerror">Outcome.Err.error<a class="headerlink" href="#outcomeerrerror" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">error</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>Why, as the model will read it.</p>
+<h3 id="outcomeinterrupted">Outcome.Interrupted<a class="headerlink" href="#outcomeinterrupted" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Interrupted</span><span class="p">(</span><span class="n">Outcome</span><span class="p">)</span>
+</code></pre></div>
+<p>An abort stopped the call or kept it from starting; the tool may or may not have run.</p>
+<h4 id="outcomeinterruptednew">Outcome.Interrupted.<strong>new</strong><a class="headerlink" href="#outcomeinterruptednew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Outcome</span><span class="o">.</span><span class="n">Interrupted</span>
+</code></pre></div>
+<h2 id="part">Part<a class="headerlink" href="#part" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Part</span>
+</code></pre></div>
+<p>One piece of a reply, in the order the provider streamed it: <code>Text</code>, <code>Thinking</code> or <code>Call</code>.
+Each may carry a <code>Replay</code>.</p>
+<h3 id="parttext">Part.Text<a class="headerlink" href="#parttext" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Text</span><span class="p">(</span><span class="n">Part</span><span class="p">)</span>
+</code></pre></div>
+<p>Words for the reader.</p>
+<h4 id="parttextnew">Part.Text.<strong>new</strong><a class="headerlink" href="#parttextnew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">replay</span><span class="p">:</span> <span class="n">Replay</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Part</span><span class="o">.</span><span class="n">Text</span>
+</code></pre></div>
+<h4 id="parttexttext">Part.Text.text<a class="headerlink" href="#parttexttext" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The words.</p>
+<h4 id="parttextreplay">Part.Text.replay<a class="headerlink" href="#parttextreplay" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">replay</span><span class="p">:</span> <span class="n">Replay</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Data only the writing provider can send back, or <code>None</code>.</p>
+<h3 id="partthinking">Part.Thinking<a class="headerlink" href="#partthinking" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Thinking</span><span class="p">(</span><span class="n">Part</span><span class="p">)</span>
+</code></pre></div>
+<p>The model's reasoning. <code>text</code> may be empty when <code>replay</code> holds a redacted block.</p>
+<h4 id="partthinkingnew">Part.Thinking.<strong>new</strong><a class="headerlink" href="#partthinkingnew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">replay</span><span class="p">:</span> <span class="n">Replay</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Part</span><span class="o">.</span><span class="n">Thinking</span>
+</code></pre></div>
+<h4 id="partthinkingtext">Part.Thinking.text<a class="headerlink" href="#partthinkingtext" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The reasoning, possibly empty.</p>
+<h4 id="partthinkingreplay">Part.Thinking.replay<a class="headerlink" href="#partthinkingreplay" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">replay</span><span class="p">:</span> <span class="n">Replay</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Data only the writing provider can send back, or <code>None</code>.</p>
+<h3 id="partcall">Part.Call<a class="headerlink" href="#partcall" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Call</span><span class="p">(</span><span class="n">Part</span><span class="p">)</span>
+</code></pre></div>
+<p>A request to run one tool. A call is never a node of its own.</p>
+<h4 id="partcallnew">Part.Call.<strong>new</strong><a class="headerlink" href="#partcallnew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tool</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">args_raw</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">replay</span><span class="p">:</span> <span class="n">Replay</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Part</span><span class="o">.</span><span class="n">Call</span>
+</code></pre></div>
+<h4 id="partcallid">Part.Call.id<a class="headerlink" href="#partcallid" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The provider's id for the call, unique within its node.</p>
+<h4 id="partcalltool">Part.Call.tool<a class="headerlink" href="#partcalltool" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">tool</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The name of the tool to run.</p>
+<h4 id="partcallargs_raw">Part.Call.args_raw<a class="headerlink" href="#partcallargs_raw" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">args_raw</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The arguments exactly as the model produced them, never re-serialised.</p>
+<h4 id="partcallreplay">Part.Call.replay<a class="headerlink" href="#partcallreplay" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">replay</span><span class="p">:</span> <span class="n">Replay</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Data only the writing provider can send back, or <code>None</code>.</p>
+<h2 id="replay">Replay<a class="headerlink" href="#replay" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Replay</span>
+</code></pre></div>
+<p>Data only the provider that wrote a part can send back (a thinking signature, for one).
+<code>provider</code> names that provider; <code>data</code> is the text of a JSON object, kept exactly as given.
+Construction raises <code>BadReplay</code> for an empty or blank provider name, or <code>data</code> that is not
+a strict JSON object, so a <code>Part</code> never holds a bad one.</p>
+<h3 id="replaynew">Replay.<strong>new</strong><a class="headerlink" href="#replaynew" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">provider</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Replay</span>
+</code></pre></div>
+<h3 id="replayprovider">Replay.provider<a class="headerlink" href="#replayprovider" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">provider</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The name of the provider that wrote the part.</p>
+<h3 id="replaydata">Replay.data<a class="headerlink" href="#replaydata" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">data</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The text of the JSON object, exactly as the provider gave it.</p>
+<h2 id="stop">Stop<a class="headerlink" href="#stop" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Stop</span>
+    <span class="n">End</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Stop</span><span class="p">]</span>
+    <span class="n">Tools</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Stop</span><span class="p">]</span>
+    <span class="n">Length</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Stop</span><span class="p">]</span>
+    <span class="n">Interrupted</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Stop</span><span class="p">]</span>
+    <span class="n">Error</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Stop</span><span class="p">]</span>
+</code></pre></div>
+<p>Why a reply ended. Only <code>Tools</code> makes its calls runnable. It is not an integer:
+<code>Stop.Tools != 1</code>.</p>
+<h2 id="tree">Tree<a class="headerlink" href="#tree" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Tree</span>
+</code></pre></div>
+<p>The session's nodes: <code>Session.tree</code>. It shares the session's lock, so a
+read is as current as the call that made it, and a closed session raises
+<code>Closed</code> here too.</p>
+<h3 id="treenode">Tree.node<a class="headerlink" href="#treenode" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Node</span>
+</code></pre></div>
+<p>The node with this id. <code>NoSuchNode</code> if there is none.</p>
+<h3 id="treewalk">Tree.walk<a class="headerlink" href="#treewalk" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">walk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Node</span><span class="p">]</span>
+</code></pre></div>
+<p>The nodes root to <code>node</code>, inclusive.</p>
+<h3 id="treechildren">Tree.children<a class="headerlink" href="#treechildren" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</code></pre></div>
+<p>The children of <code>node</code>, in append order.</p>
+<h3 id="treelen">Tree.<strong>len</strong><a class="headerlink" href="#treelen" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>
+<h3 id="treeconfig_at">Tree.config_at<a class="headerlink" href="#treeconfig_at" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">config_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Config</span>
+</code></pre></div>
+<p>The <code>Config</code> in force at <code>node</code>: the nearest one on its walk. <code>NoSuchNode</code> if absent.</p>
+<h3 id="treelca">Tree.lca<a class="headerlink" href="#treelca" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">lca</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>The deepest node on both walks; <code>None</code> across trees.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "content.code.copy"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,4823 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for Tectum, Tau, and JMFTS">
+      
+      
+      
+        <link rel="canonical" href="https://ffwfrobotics.github.io/tau/preview/api/tui/">
+      
+      
+        <link rel="prev" href="../tools/">
+      
+      
+        <link rel="next" href="../wire/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
+    
+    
+      
+        <title>Tau 0.16 preview API: The terminal UI - FFWF Robotics Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/ffwf.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#the-terminal-ui" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../.." title="FFWF Robotics Docs" class="md-header__button md-logo" aria-label="FFWF Robotics Docs" data-md-component="logo">
+      
+  <img src="../../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            FFWF Robotics Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Tau 0.16 preview API: The terminal UI
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9 8.99 8.99 0 0 0 4 7.47V22h2v-3h2v3h2v-3h2v3h2v-3.54c2.47-1.65 4-4.46 4-7.46a9 9 0 0 0-9-9m-4 9a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m8 0a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m-4 3 1.5 3h-3z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 15a2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2m2.5 2 1.5-3 1.5 3zm5.5-2a2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2m6-4A10 10 0 0 0 12 1 10 10 0 0 0 2 11c0 2.8 1.2 5.3 3 7.1V22h14v-3.9c1.8-1.8 3-4.3 3-7.1m-5 9h-2v-2h-2v2h-2v-2H9v2H7v-2.8c-1.8-1.5-3-3.7-3-6.2a8 8 0 0 1 8-8 8 8 0 0 1 8 8c0 2.5-1.2 4.8-3 6.2z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../tectum/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tectum
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tau
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tau 0.16 preview
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../jmfts/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  JMFTS
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../integrations/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Integrations
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../style-guide/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Style guide
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="FFWF Robotics Docs" class="md-nav__button md-logo" aria-label="FFWF Robotics Docs" data-md-component="logo">
+      
+  <img src="../../../../assets/logo.png" alt="logo">
+
+    </a>
+    FFWF Robotics Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../tectum/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tectum
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../tectum/tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../tectum/tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../tectum/cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../tectum/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../tectum/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tau
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../reference/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/tau-llm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_llm
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/tau-agent-core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_agent_core
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extensions
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/rpc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RPC
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/tau-coding-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_coding_agent
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../reference/api/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_5_7" id="__nav_3_5_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_5_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/messages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Messages and content
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/providers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Providers and the client
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/constraints/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Constrained decoding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/agent-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The agent loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/sessions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sessions and the conversation tree
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/sdk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The SDK entry point
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/compaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compaction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/rpc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The RPC protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/export/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Export
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/runs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Run manifests and latency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tau 0.16 preview
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operating it
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../differences/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What changed from 0.15
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_7" id="__nav_4_7_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clients/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Writing a frontend
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Configuration and context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diagnostics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Tracing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../driver/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Embedding tau
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../errors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Errors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Writing an extension
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../machine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The step machine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../providers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../records/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The session's records
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sessions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Starting and finding sessions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The terminal UI
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The terminal UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#tautuiformingcall" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.FormingCall
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tautuiholder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.Holder
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="tau.tui.Holder">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tautuiholderpickable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.Holder.pickable
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tautuilivelayer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.LiveLayer
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="tau.tui.LiveLayer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tautuilivelayerempty" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.LiveLayer.empty
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuilivelayerdrop_reply" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.LiveLayer.drop_reply
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tautuisessionpicker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionPicker
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="tau.tui.SessionPicker">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionpickerinit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionPicker.init
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionpickeron_mount" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionPicker.on_mount
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionpickershown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionPicker.shown
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionpickerwatch_scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionPicker.watch_scope
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionpickerwatch_filter_text" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionPicker.watch_filter_text
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionpickeron_resize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionPicker.on_resize
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionpickeraction_toggle_scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionPicker.action_toggle_scope
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionpickeraction_focus_filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionPicker.action_focus_filter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionpickeron_input_changed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionPicker.on_input_changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionpickeron_input_submitted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionPicker.on_input_submitted
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionpickeron_data_table_row_highlighted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionPicker.on_data_table_row_highlighted
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionpickeron_data_table_row_selected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionPicker.on_data_table_row_selected
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tautuisessionview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionView
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="tau.tui.SessionView">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionviewinit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionView.init
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionviewhear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionView.hear
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionviewforget_live" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionView.forget_live
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionviewlabels_of" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionView.labels_of
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionviewpath" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionView.path
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tautuiswitch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.Switch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tautuitauapp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="tau.tui.TauApp">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauappinit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.init
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauappcompose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.compose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauappdraft" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.draft
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauapprestore_draft" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.restore_draft
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauappfocus_editor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.focus_editor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauappcomplete_value" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.complete_value
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauapptoast" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.toast
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauappscreen_text" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.screen_text
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauappview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.view
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauappaction_abort" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.action_abort
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauappaction_interrupt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.action_interrupt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauappaction_quit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.action_quit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauappaction_move" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.action_move
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauappaction_scroll" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.action_scroll
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauappaction_fold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.action_fold
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tautuitaudialog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauDialog
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="tau.tui.TauDialog">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tautuitaudialoginit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauDialog.init
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitaudialogdialog_title" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauDialog.dialog_title
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitaudialogcompose_body" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauDialog.compose_body
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitaudialogcompose_header" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauDialog.compose_header
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitaudialogcompose_footer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauDialog.compose_footer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitaudialogcompose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauDialog.compose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitaudialogaction_cancel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauDialog.action_cancel
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wire/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The wire
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wire-protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The wire protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../jmfts/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JMFTS
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JMFTS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../jmfts/tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/tutorials/ingest-a-document/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ingest a document
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/tutorials/see-a-result-on-the-page/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    See a result on the page
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/release-0-6-0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    0.6.0 — eyes and hands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/release-0-3-0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    0.3.0 — the job system
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../integrations/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integrations
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Integrations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../integrations/tectum-tau/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum + Tau
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../integrations/tectum-jmfts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum + JMFTS
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../integrations/tau-jmfts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau + JMFTS
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../integrations/full-stack-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The FFwF Full Stack Agent
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../style-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guide
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stable"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#tautuiformingcall" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.FormingCall
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tautuiholder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.Holder
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="tau.tui.Holder">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tautuiholderpickable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.Holder.pickable
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tautuilivelayer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.LiveLayer
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="tau.tui.LiveLayer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tautuilivelayerempty" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.LiveLayer.empty
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuilivelayerdrop_reply" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.LiveLayer.drop_reply
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tautuisessionpicker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionPicker
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="tau.tui.SessionPicker">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionpickerinit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionPicker.init
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionpickeron_mount" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionPicker.on_mount
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionpickershown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionPicker.shown
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionpickerwatch_scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionPicker.watch_scope
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionpickerwatch_filter_text" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionPicker.watch_filter_text
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionpickeron_resize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionPicker.on_resize
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionpickeraction_toggle_scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionPicker.action_toggle_scope
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionpickeraction_focus_filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionPicker.action_focus_filter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionpickeron_input_changed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionPicker.on_input_changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionpickeron_input_submitted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionPicker.on_input_submitted
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionpickeron_data_table_row_highlighted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionPicker.on_data_table_row_highlighted
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionpickeron_data_table_row_selected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionPicker.on_data_table_row_selected
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tautuisessionview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionView
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="tau.tui.SessionView">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionviewinit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionView.init
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionviewhear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionView.hear
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionviewforget_live" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionView.forget_live
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionviewlabels_of" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionView.labels_of
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuisessionviewpath" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.SessionView.path
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tautuiswitch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.Switch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tautuitauapp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="tau.tui.TauApp">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauappinit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.init
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauappcompose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.compose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauappdraft" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.draft
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauapprestore_draft" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.restore_draft
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauappfocus_editor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.focus_editor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauappcomplete_value" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.complete_value
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauapptoast" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.toast
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauappscreen_text" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.screen_text
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauappview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.view
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauappaction_abort" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.action_abort
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauappaction_interrupt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.action_interrupt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauappaction_quit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.action_quit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauappaction_move" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.action_move
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauappaction_scroll" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.action_scroll
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitauappaction_fold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauApp.action_fold
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tautuitaudialog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauDialog
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="tau.tui.TauDialog">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tautuitaudialoginit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauDialog.init
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitaudialogdialog_title" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauDialog.dialog_title
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitaudialogcompose_body" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauDialog.compose_body
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitaudialogcompose_header" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauDialog.compose_header
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitaudialogcompose_footer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauDialog.compose_footer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitaudialogcompose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauDialog.compose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tautuitaudialogaction_cancel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tau.tui.TauDialog.action_cancel
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<div class="admonition warning">
+<p class="admonition-title">Unreleased</p>
+<p>Generated from the docstrings of Tau 0.16.0-dev (commit <code>c439c401</code>) by <code>scripts/api_docs.py</code> in the Tau repository. Not the 0.15 API.</p>
+</div>
+<h1 id="the-terminal-ui">The terminal UI<a class="headerlink" href="#the-terminal-ui" title="Permanent link">&para;</a></h1>
+<p><code>tau.tui</code>: the Textual app <code>tau</code> opens, which a program can embed or drive, and the picture of the session it draws from.</p>
+<p>Names: <code>tui.FormingCall</code>, <code>tui.Holder</code>, <code>tui.LiveLayer</code>, <code>tui.SessionPicker</code>, <code>tui.SessionView</code>, <code>tui.Switch</code>, <code>tui.TauApp</code>, <code>tui.TauDialog</code></p>
+<h2 id="tautuiformingcall">tau.tui.FormingCall<a class="headerlink" href="#tautuiformingcall" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">FormingCall</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">tool</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">args</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">''</span>
+</code></pre></div>
+<p>A call the model is still writing: its provider <code>id</code>, the <code>tool</code> and the <code>args</code> text so far
+(<code>args_raw</code> once it is a node).</p>
+<h2 id="tautuiholder">tau.tui.Holder<a class="headerlink" href="#tautuiholder" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Holder</span>
+    <span class="n">state</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">detail</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">''</span>
+</code></pre></div>
+<p>Who has a session, as the picker shows it: a <code>state</code> (<code>served</code>: a live <code>tau serve</code>, which
+opening attaches to; <code>current</code>: this very session; <code>in use</code>: another process holds its lease;
+<code>no reply</code>: a serve record whose server did not answer <code>hello</code>) and the <code>detail</code> that says
+more.</p>
+<h3 id="tautuiholderpickable">tau.tui.Holder.pickable<a class="headerlink" href="#tautuiholderpickable" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">pickable</span><span class="p">:</span> <span class="nb">bool</span>
+</code></pre></div>
+<p>Whether opening it can work: not a session in use, nor one whose server is silent.</p>
+<h2 id="tautuilivelayer">tau.tui.LiveLayer<a class="headerlink" href="#tautuilivelayer" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LiveLayer</span>
+    <span class="n">at</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">''</span>
+    <span class="n">thinking</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">''</span>
+    <span class="n">calls</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">FormingCall</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{})</span>
+    <span class="n">progress</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{})</span>
+    <span class="n">retrying</span><span class="p">:</span> <span class="n">Retrying</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</code></pre></div>
+<p>What a watched cursor's sample has said and the tree does not hold yet: the reply's <code>text</code>
+and <code>thinking</code> so far, the <code>calls</code> forming (by their index in the reply), and each running
+call's <code>progress</code> output keyed by <code>(node, call_id)</code>. <code>retrying</code> is the <code>Retrying</code> the provider
+last said, until the sample says anything else or ends. <code>at</code> is the cursor's node when the
+first delta arrived: the layer is drawn over it.</p>
+<h3 id="tautuilivelayerempty">tau.tui.LiveLayer.empty<a class="headerlink" href="#tautuilivelayerempty" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">empty</span><span class="p">:</span> <span class="nb">bool</span>
+</code></pre></div>
+<p>Whether there is nothing to draw.</p>
+<h3 id="tautuilivelayerdrop_reply">tau.tui.LiveLayer.drop_reply<a class="headerlink" href="#tautuilivelayerdrop_reply" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">drop_reply</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Forget the reply's text, thinking and calls (the node arrived, or the step ended).</p>
+<h2 id="tautuisessionpicker">tau.tui.SessionPicker<a class="headerlink" href="#tautuisessionpicker" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SessionPicker</span><span class="p">(</span><span class="n">TauDialog</span><span class="p">[</span><span class="n">SessionInfo</span> <span class="o">|</span> <span class="kc">None</span><span class="p">])</span>
+    <span class="n">AGE_WIDTH</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">STATE_WIDTH</span> <span class="o">=</span> <span class="mi">6</span>
+    <span class="n">CWD_WIDTH</span> <span class="o">=</span> <span class="mi">26</span>
+    <span class="n">MIN_TITLE_WIDTH</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="n">scope</span><span class="p">:</span> <span class="n">reactive</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s1">'here'</span><span class="p">,</span> <span class="s1">'all'</span><span class="p">]]</span> <span class="o">=</span> <span class="n">reactive</span><span class="p">(</span><span class="s1">'here'</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">filter_text</span><span class="p">:</span> <span class="n">reactive</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">reactive</span><span class="p">(</span><span class="s1">''</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+<p>Pick a saved session, newest first. <code>rows</code> are <code>tau.list_sessions</code> of the sessions
+directory (all of them); <code>here</code> is the working directory the "this directory" scope keeps
+(rows with an <code>error</code> are always listed); <code>held</code> says who holds some of the sessions, by id
+(<code>session_holders</code>): <code>served</code>, <code>current</code>, <code>in use</code>, <code>no reply</code>. Tab toggles this directory
+and all; <code>/</code> filters; Enter picks; Esc leaves the filter, then cancels. Dismissed with the
+row, or <code>None</code>. A row with an <code>error</code>, one in use or one whose server does not answer cannot
+be picked: the status line says why. The current session can be (it dismisses
+with its row; the caller does nothing).</p>
+<h3 id="tautuisessionpickerinit">tau.tui.SessionPicker.<strong>init</strong><a class="headerlink" href="#tautuisessionpickerinit" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">rows</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">SessionInfo</span><span class="p">],</span>
+    <span class="n">here</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">held</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Holder</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">scope</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s1">'here'</span><span class="p">,</span> <span class="s1">'all'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'here'</span><span class="p">,</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<h3 id="tautuisessionpickeron_mount">tau.tui.SessionPicker.on_mount<a class="headerlink" href="#tautuisessionpickeron_mount" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">on_mount</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>List the rows and put the keyboard on the table.</p>
+<h3 id="tautuisessionpickershown">tau.tui.SessionPicker.shown<a class="headerlink" href="#tautuisessionpickershown" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">shown</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">SessionInfo</span><span class="p">]</span>
+</code></pre></div>
+<p>The rows the scope and the filter admit, newest first.</p>
+<h3 id="tautuisessionpickerwatch_scope">tau.tui.SessionPicker.watch_scope<a class="headerlink" href="#tautuisessionpickerwatch_scope" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">watch_scope</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>The scope changed: list again.</p>
+<h3 id="tautuisessionpickerwatch_filter_text">tau.tui.SessionPicker.watch_filter_text<a class="headerlink" href="#tautuisessionpickerwatch_filter_text" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">watch_filter_text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>The filter changed: list again.</p>
+<h3 id="tautuisessionpickeron_resize">tau.tui.SessionPicker.on_resize<a class="headerlink" href="#tautuisessionpickeron_resize" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">on_resize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>The table's width changed: the title column takes what is left.</p>
+<h3 id="tautuisessionpickeraction_toggle_scope">tau.tui.SessionPicker.action_toggle_scope<a class="headerlink" href="#tautuisessionpickeraction_toggle_scope" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">action_toggle_scope</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Tab: this directory, or every directory.</p>
+<h3 id="tautuisessionpickeraction_focus_filter">tau.tui.SessionPicker.action_focus_filter<a class="headerlink" href="#tautuisessionpickeraction_focus_filter" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">action_focus_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p><code>/</code>: type a filter.</p>
+<h3 id="tautuisessionpickeron_input_changed">tau.tui.SessionPicker.on_input_changed<a class="headerlink" href="#tautuisessionpickeron_input_changed" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">on_input_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Input</span><span class="o">.</span><span class="n">Changed</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Typing in the filter narrows the rows.</p>
+<h3 id="tautuisessionpickeron_input_submitted">tau.tui.SessionPicker.on_input_submitted<a class="headerlink" href="#tautuisessionpickeron_input_submitted" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">on_input_submitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Input</span><span class="o">.</span><span class="n">Submitted</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Enter in the filter returns to the list: picking is a second, deliberate Enter, so a
+half-typed filter never opens whatever sorts first.</p>
+<h3 id="tautuisessionpickeron_data_table_row_highlighted">tau.tui.SessionPicker.on_data_table_row_highlighted<a class="headerlink" href="#tautuisessionpickeron_data_table_row_highlighted" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">on_data_table_row_highlighted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">DataTable</span><span class="o">.</span><span class="n">RowHighlighted</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Say which session the highlighted row is, or why it cannot be opened.</p>
+<h3 id="tautuisessionpickeron_data_table_row_selected">tau.tui.SessionPicker.on_data_table_row_selected<a class="headerlink" href="#tautuisessionpickeron_data_table_row_selected" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">on_data_table_row_selected</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">DataTable</span><span class="o">.</span><span class="n">RowSelected</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Enter on a row: pick its session, unless it cannot be opened.</p>
+<h2 id="tautuisessionview">tau.tui.SessionView<a class="headerlink" href="#tautuisessionview" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SessionView</span>
+</code></pre></div>
+<p>What the session's stream has told one client. Feed it every event, in order, with <code>hear</code>;
+read <code>views</code>, <code>gone</code>, <code>labels</code>, <code>nodes</code>, <code>live</code> and <code>notices</code>. It makes no call and keeps no
+widget: <code>tau.tui.TauApp</code> renders from it.</p>
+<h3 id="tautuisessionviewinit">tau.tui.SessionView.<strong>init</strong><a class="headerlink" href="#tautuisessionviewinit" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<h3 id="tautuisessionviewhear">tau.tui.SessionView.hear<a class="headerlink" href="#tautuisessionviewhear" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">hear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Take one event into the picture.</p>
+<h3 id="tautuisessionviewforget_live">tau.tui.SessionView.forget_live<a class="headerlink" href="#tautuisessionviewforget_live" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">forget_live</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Drop <code>cursor</code>'s live layer: the client stopped watching it, so what the layer holds
+would be heard again, from the start, if it is watched again.</p>
+<h3 id="tautuisessionviewlabels_of">tau.tui.SessionView.labels_of<a class="headerlink" href="#tautuisessionviewlabels_of" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">labels_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+</code></pre></div>
+<p>The labels on <code>cursor</code>, in label order.</p>
+<h3 id="tautuisessionviewpath">tau.tui.SessionView.path<a class="headerlink" href="#tautuisessionviewpath" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tip</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">at</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Node</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>The nodes after <code>tip</code> down to <code>at</code>, oldest first, if <code>at</code> descends from <code>tip</code> through
+nodes this view holds (<code>[]</code> when they are the same node). <code>None</code> if it does not, or a node
+on the way was never carried: the caller reads <code>walk(at)</code> instead.</p>
+<h2 id="tautuiswitch">tau.tui.Switch<a class="headerlink" href="#tautuiswitch" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Switch</span>
+    <span class="n">session</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">served</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+<p>Where the person asked to go: the <code>session</code> id to open, or <code>None</code> for a new session.
+<code>served</code> says that a live <code>tau serve</code> holds it, so the extensions and options of this run do
+not carry (the server's are loaded already).</p>
+<h2 id="tautuitauapp">tau.tui.TauApp<a class="headerlink" href="#tautuitauapp" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">TauApp</span><span class="p">(</span><span class="n">App</span><span class="p">[</span><span class="kc">None</span><span class="p">])</span>
+    <span class="n">CSS_PATH</span> <span class="o">=</span> <span class="s1">'tau.tcss'</span>
+    <span class="n">COMMANDS</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">set</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="n">Provider</span><span class="p">]</span> <span class="o">|</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="nb">type</span><span class="p">[</span><span class="n">Provider</span><span class="p">]]]]</span> <span class="o">=</span> <span class="p">{</span><span class="n">TauCommands</span><span class="p">}</span>
+    <span class="n">BINDINGS</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">BindingType</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="n">Binding</span><span class="p">(</span><span class="s1">'escape'</span><span class="p">,</span> <span class="s1">'abort'</span><span class="p">,</span> <span class="s1">'Abort'</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">Binding</span><span class="p">(</span><span class="s1">'ctrl+c'</span><span class="p">,</span> <span class="s1">'interrupt'</span><span class="p">,</span> <span class="s1">'Abort / quit'</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">Binding</span><span class="p">(</span><span class="s1">'ctrl+q'</span><span class="p">,</span> <span class="s1">'quit'</span><span class="p">,</span> <span class="s1">'Quit'</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">Binding</span><span class="p">(</span><span class="s1">'ctrl+r'</span><span class="p">,</span> <span class="s2">"fold('thinking')"</span><span class="p">,</span> <span class="s1">'Fold thinking'</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">Binding</span><span class="p">(</span><span class="s1">'ctrl+t'</span><span class="p">,</span> <span class="s2">"fold('tools')"</span><span class="p">,</span> <span class="s1">'Fold tool boxes'</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">Binding</span><span class="p">(</span><span class="s1">'alt+left'</span><span class="p">,</span> <span class="s2">"move('previous')"</span><span class="p">,</span> <span class="s1">'Previous cursor'</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">Binding</span><span class="p">(</span><span class="s1">'alt+right'</span><span class="p">,</span> <span class="s2">"move('next')"</span><span class="p">,</span> <span class="s1">'Next cursor'</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">Binding</span><span class="p">(</span><span class="s1">'ctrl+g'</span><span class="p">,</span> <span class="s2">"move('tree')"</span><span class="p">,</span> <span class="s1">'The tree'</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">Binding</span><span class="p">(</span><span class="s1">'ctrl+o'</span><span class="p">,</span> <span class="s2">"move('sessions')"</span><span class="p">,</span> <span class="s1">'Sessions'</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">Binding</span><span class="p">(</span><span class="s1">'ctrl+n'</span><span class="p">,</span> <span class="s2">"move('new')"</span><span class="p">,</span> <span class="s1">'New session'</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">Binding</span><span class="p">(</span><span class="s1">'ctrl+up'</span><span class="p">,</span> <span class="s2">"scroll('up')"</span><span class="p">,</span> <span class="s1">'Scroll up'</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">Binding</span><span class="p">(</span><span class="s1">'ctrl+down'</span><span class="p">,</span> <span class="s2">"scroll('down')"</span><span class="p">,</span> <span class="s1">'Scroll down'</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+</code></pre></div>
+<p>The terminal UI of one session, over <code>client</code>, viewing <code>cursor</code>.</p>
+<p><code>welcome</code> is the server's (or the local start's) answer: the session id and working directory
+the header shows (<code>None</code> for a session kept in memory, whose header shows <code>cwd</code>, the directory
+it works in). <code>snapshot</code> are the events the client's
+stream already gave up (<code>Opened.snapshot</code>); a client whose stream has not been read needs
+none. <code>theme</code> names one of the themes (<code>None</code>: the default); user themes are read from
+<code>home</code>, which is <code>TAU_HOME</code>. <code>reconnect</code>, for a remote client, makes a new client with the
+same id; without it a stream that ends in <code>ConnectionError</code> ends the app's session: the
+failure is shown, the transcript stays readable and <code>return_code</code> is 1 once the person quits.</p>
+<p>The keys: Enter sends, Ctrl+J starts a new line, Tab completes, Esc aborts the cursor's step
+(or declines the question the keyboard is in), Ctrl+C aborts if busy, else clears the draft,
+else quits when pressed twice, Ctrl+R folds the thinking and Ctrl+T the tool boxes, Ctrl+Q
+quits. <code>/</code> starts a command; one missing arguments opens a form for them.</p>
+<h3 id="tautuitauappinit">tau.tui.TauApp.<strong>init</strong><a class="headerlink" href="#tautuitauappinit" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">client</span><span class="p">:</span> <span class="n">Client</span><span class="p">,</span>
+    <span class="n">cursor</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">welcome</span><span class="p">:</span> <span class="n">Welcome</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">home</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="n">cwd</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="n">snapshot</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Event</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="n">theme</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">reconnect</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">Awaitable</span><span class="p">[</span><span class="n">Client</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">sessions</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<h3 id="tautuitauappcompose">tau.tui.TauApp.compose<a class="headerlink" href="#tautuitauappcompose" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compose</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ComposeResult</span>
+</code></pre></div>
+<p>The screen, top to bottom: header, cursor bar, transcript, open questions, pending
+lines, popup and editor, status bar.</p>
+<h3 id="tautuitauappdraft">tau.tui.TauApp.draft<a class="headerlink" href="#tautuitauappdraft" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">draft</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The text in the editor.</p>
+<h3 id="tautuitauapprestore_draft">tau.tui.TauApp.restore_draft<a class="headerlink" href="#tautuitauapprestore_draft" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">restore_draft</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Give the editor back a line that was not used.</p>
+<h3 id="tautuitauappfocus_editor">tau.tui.TauApp.focus_editor<a class="headerlink" href="#tautuitauappfocus_editor" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">focus_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Put the keyboard in the editor.</p>
+<h3 id="tautuitauappcomplete_value">tau.tui.TauApp.complete_value<a class="headerlink" href="#tautuitauappcomplete_value" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">complete_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema</span><span class="p">:</span> <span class="n">Json</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div>
+<p>What could finish <code>text</code> as a value of <code>schema</code> (a question's answer).</p>
+<h3 id="tautuitauapptoast">tau.tui.TauApp.toast<a class="headerlink" href="#tautuitauapptoast" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">toast</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">''</span><span class="p">,</span>
+    <span class="n">severity</span><span class="p">:</span> <span class="n">SeverityLevel</span> <span class="o">=</span> <span class="s1">'information'</span><span class="p">,</span>
+    <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Show a toast, and keep it in <code>toasts</code>.</p>
+<h3 id="tautuitauappscreen_text">tau.tui.TauApp.screen_text<a class="headerlink" href="#tautuitauappscreen_text" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">screen_text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>
+<p>What the screen says, without its styling: the header, the cursor bar, the transcript,
+the open questions, the pending lines, the popup and the status bar.</p>
+<h3 id="tautuitauappview">tau.tui.TauApp.view<a class="headerlink" href="#tautuitauappview" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>View <code>cursor</code>, an open one: watch it (and so stop hearing the last one's <code>Live</code>), read
+its walk again and show its state. <code>LookupError</code> for a cursor that is not open.</p>
+<h3 id="tautuitauappaction_abort">tau.tui.TauApp.action_abort<a class="headerlink" href="#tautuitauappaction_abort" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">action_abort</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Abort the viewed cursor's step (it declines the questions it has open).</p>
+<h3 id="tautuitauappaction_interrupt">tau.tui.TauApp.action_interrupt<a class="headerlink" href="#tautuitauappaction_interrupt" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">action_interrupt</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Ctrl+C: abort if busy, else clear the draft, else quit when pressed twice.</p>
+<h3 id="tautuitauappaction_quit">tau.tui.TauApp.action_quit<a class="headerlink" href="#tautuitauappaction_quit" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">action_quit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Leave. The exit status is 1 if the session was lost.</p>
+<h3 id="tautuitauappaction_move">tau.tui.TauApp.action_move<a class="headerlink" href="#tautuitauappaction_move" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">action_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">what</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Alt+Left, Alt+Right, Ctrl+Z, Ctrl+G, Ctrl+O, Ctrl+N: a move (<code>tau.tui._moves</code>), a task
+of its own because it may ask a question.</p>
+<h3 id="tautuitauappaction_scroll">tau.tui.TauApp.action_scroll<a class="headerlink" href="#tautuitauappaction_scroll" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">action_scroll</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Ctrl+Up, Ctrl+Down: a page of the transcript; against its edge, the render window
+slides a turn.</p>
+<h3 id="tautuitauappaction_fold">tau.tui.TauApp.action_fold<a class="headerlink" href="#tautuitauappaction_fold" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">action_fold</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">what</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Fold or unfold the thinking regions, or the tool boxes.</p>
+<h2 id="tautuitaudialog">tau.tui.TauDialog<a class="headerlink" href="#tautuitaudialog" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">TauDialog</span><span class="p">(</span><span class="n">ModalScreen</span><span class="p">[</span><span class="n">_T</span><span class="p">])</span>
+    <span class="n">DIALOG_ID</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'tau-dialog'</span>
+    <span class="n">TITLE_TEXT</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s1">''</span>
+    <span class="n">CANCEL_VALUE</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">BODY_ID</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">BINDINGS</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">BindingType</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="n">Binding</span><span class="p">(</span><span class="s1">'escape'</span><span class="p">,</span> <span class="s1">'cancel'</span><span class="p">,</span> <span class="s1">'Cancel'</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+</code></pre></div>
+<p>A centred modal with a title, a body, and <code>escape</code> meaning cancel.</p>
+<p>Subclasses supply :meth:<code>compose_body</code> and, usually, :attr:<code>TITLE_TEXT</code>. What
+they do NOT supply is the shell, the centering, the title styling or the cancel
+binding — those are the things every dialog agreed on by accident before, and
+the things a new dialog now gets without asking.</p>
+<p>Attributes:
+    DIALOG_ID: The shell's widget id. Carries the two properties that genuinely
+        differ between dialogs (<code>width</code>, <code>height</code>); everything else comes
+        from the <code>tau-dialog</code> class.
+    TITLE_TEXT: The title, for a dialog whose title never varies. A dialog whose
+        title is supplied per instance passes it to <code>__init__</code> instead.
+    CANCEL_VALUE: What <code>escape</code> dismisses with. <code>None</code> for a dialog returning
+        an optional value, <code>False</code> for a confirmation — a cancelled question is
+        never a hidden yes.
+    BODY_ID: Set it to give the dialog a scrolling body with that id between a
+        header (the title plus :meth:<code>compose_header</code>) and a footer
+        (:meth:<code>compose_footer</code>), both pinned, so the buttons stay on screen
+        however long the body is . <code>None</code> keeps the
+        plain stack.</p>
+<h3 id="tautuitaudialoginit">tau.tui.TauDialog.<strong>init</strong><a class="headerlink" href="#tautuitaudialoginit" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<h3 id="tautuitaudialogdialog_title">tau.tui.TauDialog.dialog_title<a class="headerlink" href="#tautuitaudialogdialog_title" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">dialog_title</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The text of the title row.</p>
+<h3 id="tautuitaudialogcompose_body">tau.tui.TauDialog.compose_body<a class="headerlink" href="#tautuitaudialogcompose_body" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compose_body</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ComposeResult</span>
+</code></pre></div>
+<p>Everything between the title and the bottom of the shell.</p>
+<h3 id="tautuitaudialogcompose_header">tau.tui.TauDialog.compose_header<a class="headerlink" href="#tautuitaudialogcompose_header" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compose_header</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ComposeResult</span>
+</code></pre></div>
+<p>What stays pinned under the title when :attr:<code>BODY_ID</code> is set.</p>
+<h3 id="tautuitaudialogcompose_footer">tau.tui.TauDialog.compose_footer<a class="headerlink" href="#tautuitaudialogcompose_footer" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compose_footer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ComposeResult</span>
+</code></pre></div>
+<p>What stays pinned at the bottom when :attr:<code>BODY_ID</code> is set: hints, buttons.</p>
+<h3 id="tautuitaudialogcompose">tau.tui.TauDialog.compose<a class="headerlink" href="#tautuitaudialogcompose" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compose</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ComposeResult</span>
+</code></pre></div>
+<p>The shell: a title and the body, pinned header and footer if <code>BODY_ID</code> is set.</p>
+<h3 id="tautuitaudialogaction_cancel">tau.tui.TauDialog.action_cancel<a class="headerlink" href="#tautuitaudialogaction_cancel" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">action_cancel</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Esc: dismiss with <code>CANCEL_VALUE</code>.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "content.code.copy"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,6682 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for Tectum, Tau, and JMFTS">
+      
+      
+      
+        <link rel="canonical" href="https://ffwfrobotics.github.io/tau/preview/api/extensions/">
+      
+      
+        <link rel="prev" href="../events/">
+      
+      
+        <link rel="next" href="../machine/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
+    
+    
+      
+        <title>Tau 0.16 preview API: Writing an extension - FFWF Robotics Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/ffwf.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#writing-an-extension" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../.." title="FFWF Robotics Docs" class="md-header__button md-logo" aria-label="FFWF Robotics Docs" data-md-component="logo">
+      
+  <img src="../../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            FFWF Robotics Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Tau 0.16 preview API: Writing an extension
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9 8.99 8.99 0 0 0 4 7.47V22h2v-3h2v3h2v-3h2v3h2v-3.54c2.47-1.65 4-4.46 4-7.46a9 9 0 0 0-9-9m-4 9a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m8 0a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m-4 3 1.5 3h-3z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 15a2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2m2.5 2 1.5-3 1.5 3zm5.5-2a2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2m6-4A10 10 0 0 0 12 1 10 10 0 0 0 2 11c0 2.8 1.2 5.3 3 7.1V22h14v-3.9c1.8-1.8 3-4.3 3-7.1m-5 9h-2v-2h-2v2h-2v-2H9v2H7v-2.8c-1.8-1.5-3-3.7-3-6.2a8 8 0 0 1 8-8 8 8 0 0 1 8 8c0 2.5-1.2 4.8-3 6.2z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../tectum/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tectum
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tau
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tau 0.16 preview
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../jmfts/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  JMFTS
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../integrations/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Integrations
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../style-guide/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Style guide
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="FFWF Robotics Docs" class="md-nav__button md-logo" aria-label="FFWF Robotics Docs" data-md-component="logo">
+      
+  <img src="../../../../assets/logo.png" alt="logo">
+
+    </a>
+    FFWF Robotics Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../tectum/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tectum
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../tectum/tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../tectum/tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../tectum/cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../tectum/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../tectum/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tau
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../reference/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/tau-llm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_llm
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/tau-agent-core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_agent_core
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extensions
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/rpc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RPC
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/tau-coding-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_coding_agent
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../reference/api/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_5_7" id="__nav_3_5_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_5_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/messages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Messages and content
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/providers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Providers and the client
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/constraints/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Constrained decoding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/agent-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The agent loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/sessions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sessions and the conversation tree
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/sdk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The SDK entry point
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/compaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compaction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/rpc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The RPC protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/export/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Export
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/runs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Run manifests and latency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tau 0.16 preview
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operating it
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../differences/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What changed from 0.15
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_7" id="__nav_4_7_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clients/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Writing a frontend
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Configuration and context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diagnostics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Tracing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../driver/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Embedding tau
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../errors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Errors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Writing an extension
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Writing an extension
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agents
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Agents">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#agentsinit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agents.init
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentspre_sample" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agents.pre_sample
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentsagent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agents.agent
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#attachments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attachments
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Attachments">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#attachmentsinit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attachments.init
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#attachmentspre_input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attachments.pre_input
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#basis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cursor_points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CURSOR_POINTS
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calldraft" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CallDraft
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CallDraft">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#calldraftinit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CallDraft.init
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#calldraftid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CallDraft.id
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#calldrafttool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CallDraft.tool
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compaction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compaction
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Compaction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#compactioninit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compaction.init
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compactionpre_sample" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compaction.pre_sample
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compactionpre_step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compaction.pre_step
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compactionpost_reply" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compaction.post_reply
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compactionpost_step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compaction.post_step
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compactionpre_tool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compaction.pre_tool
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compactioncompact" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compaction.compact
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#count" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Count
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Count">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#countupper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Count.upper
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#countjob" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CountJob
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#counter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Counter
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Counter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#countercount" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Counter.count
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#counteranswer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CounterAnswer
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cursor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cursor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cursornode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.node
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorwalk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.walk
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursoroptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursoroptions_of" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.options_of
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursormodels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.models
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursortools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.tools
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorshow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.show
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorset_model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.set_model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorset_options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.set_options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorsave_options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.save_options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorsaved_options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.saved_options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursormove" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.move
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorwrite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.write
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorset_auto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.set_auto
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursortell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.tell
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorask" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.ask
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cursorhook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CursorHook
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CursorHook">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cursorhookcall" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CursorHook.call
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cursorid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CursorId
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#definitionerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DefinitionError
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extension" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extension
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Extension">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#extensionname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extension.name
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#form" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Form
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Form">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#formqualified" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Form.qualified
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#labelname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LabelName
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nodehandle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NodeHandle
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="NodeHandle">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nodehandlenode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NodeHandle.node
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodehandleoptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NodeHandle.options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodehandlesave_options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NodeHandle.save_options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodehandlesaved_options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NodeHandle.saved_options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodehandlewalk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NodeHandle.walk
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodehandletell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NodeHandle.tell
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodehandleask" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NodeHandle.ask
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nodeid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NodeId
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Permissions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Permissions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#permissionsinit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Permissions.init
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#permissionspre_tool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Permissions.pre_tool
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prune" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prune
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Prune">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pruneinit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prune.init
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pruneprune" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prune.prune
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#requestcount" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RequestCount
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#skills" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Skills
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Skills">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#skillsof" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Skills.of
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#skillsrescan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Skills.rescan
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#skillspre_step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Skills.pre_step
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#steplimit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StepLimit
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="StepLimit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steplimitinit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StepLimit.init
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#steplimitpre_input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StepLimit.pre_input
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#steplimitpre_step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StepLimit.pre_step
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#steplimitpost_step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StepLimit.post_step
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#subject" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Subject
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tool_points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TOOL_POINTS
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#toolhook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ToolHook
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ToolHook">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#toolhookcall" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ToolHook.call
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#treehandle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="TreeHandle">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#treehandleby" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.by
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandleretire" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.retire
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandletree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.tree
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandlecursor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.cursor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandlecursors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.cursors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandleclosed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.closed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandlelabel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.label
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandlemodel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandleresolved_model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.resolved_model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandlecounter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.counter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandlecount" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.count
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandleappend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.append
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandleappend_root" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.append_root
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandleopen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.open
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandleadd_item" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.add_item
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandleremove_item" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.remove_item
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandlesend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.send
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandlerest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.rest
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandleabort" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.abort
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandleclose_cursor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.close_cursor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandlereopen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.reopen
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandleset_label" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.set_label
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandleremove_label" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.remove_label
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usageinit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage.init
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usageusage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage.usage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usagepost_reply" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage.post_reply
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../machine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The step machine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../providers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../records/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The session's records
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sessions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Starting and finding sessions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The terminal UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wire/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The wire
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wire-protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The wire protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../jmfts/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JMFTS
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JMFTS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../jmfts/tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/tutorials/ingest-a-document/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ingest a document
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/tutorials/see-a-result-on-the-page/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    See a result on the page
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/release-0-6-0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    0.6.0 — eyes and hands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/release-0-3-0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    0.3.0 — the job system
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../integrations/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integrations
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Integrations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../integrations/tectum-tau/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum + Tau
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../integrations/tectum-jmfts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum + JMFTS
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../integrations/tau-jmfts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau + JMFTS
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../integrations/full-stack-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The FFwF Full Stack Agent
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../style-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guide
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stable"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agents
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Agents">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#agentsinit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agents.init
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentspre_sample" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agents.pre_sample
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentsagent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agents.agent
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#attachments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attachments
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Attachments">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#attachmentsinit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attachments.init
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#attachmentspre_input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attachments.pre_input
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#basis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cursor_points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CURSOR_POINTS
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calldraft" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CallDraft
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CallDraft">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#calldraftinit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CallDraft.init
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#calldraftid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CallDraft.id
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#calldrafttool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CallDraft.tool
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compaction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compaction
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Compaction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#compactioninit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compaction.init
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compactionpre_sample" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compaction.pre_sample
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compactionpre_step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compaction.pre_step
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compactionpost_reply" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compaction.post_reply
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compactionpost_step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compaction.post_step
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compactionpre_tool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compaction.pre_tool
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compactioncompact" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compaction.compact
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#count" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Count
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Count">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#countupper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Count.upper
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#countjob" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CountJob
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#counter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Counter
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Counter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#countercount" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Counter.count
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#counteranswer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CounterAnswer
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cursor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cursor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cursornode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.node
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorwalk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.walk
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursoroptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursoroptions_of" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.options_of
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursormodels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.models
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursortools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.tools
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorshow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.show
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorset_model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.set_model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorset_options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.set_options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorsave_options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.save_options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorsaved_options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.saved_options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursormove" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.move
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorwrite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.write
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorset_auto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.set_auto
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursortell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.tell
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cursorask" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor.ask
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cursorhook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CursorHook
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CursorHook">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cursorhookcall" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CursorHook.call
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cursorid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CursorId
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#definitionerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DefinitionError
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extension" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extension
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Extension">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#extensionname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extension.name
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#form" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Form
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Form">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#formqualified" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Form.qualified
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#labelname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LabelName
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nodehandle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NodeHandle
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="NodeHandle">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nodehandlenode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NodeHandle.node
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodehandleoptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NodeHandle.options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodehandlesave_options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NodeHandle.save_options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodehandlesaved_options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NodeHandle.saved_options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodehandlewalk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NodeHandle.walk
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodehandletell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NodeHandle.tell
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodehandleask" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NodeHandle.ask
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nodeid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NodeId
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Permissions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Permissions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#permissionsinit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Permissions.init
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#permissionspre_tool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Permissions.pre_tool
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prune" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prune
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Prune">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pruneinit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prune.init
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pruneprune" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prune.prune
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#requestcount" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RequestCount
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#skills" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Skills
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Skills">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#skillsof" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Skills.of
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#skillsrescan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Skills.rescan
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#skillspre_step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Skills.pre_step
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#steplimit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StepLimit
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="StepLimit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steplimitinit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StepLimit.init
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#steplimitpre_input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StepLimit.pre_input
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#steplimitpre_step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StepLimit.pre_step
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#steplimitpost_step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StepLimit.post_step
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#subject" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Subject
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tool_points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TOOL_POINTS
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#toolhook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ToolHook
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ToolHook">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#toolhookcall" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ToolHook.call
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#treehandle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="TreeHandle">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#treehandleby" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.by
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandleretire" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.retire
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandletree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.tree
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandlecursor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.cursor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandlecursors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.cursors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandleclosed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.closed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandlelabel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.label
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandlemodel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandleresolved_model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.resolved_model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandlecounter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.counter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandlecount" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.count
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandleappend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.append
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandleappend_root" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.append_root
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandleopen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.open
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandleadd_item" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.add_item
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandleremove_item" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.remove_item
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandlesend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.send
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandlerest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.rest
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandleabort" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.abort
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandleclose_cursor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.close_cursor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandlereopen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.reopen
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandleset_label" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.set_label
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treehandleremove_label" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TreeHandle.remove_label
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usageinit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage.init
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usageusage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage.usage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usagepost_reply" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage.post_reply
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<div class="admonition warning">
+<p class="admonition-title">Unreleased</p>
+<p>Generated from the docstrings of Tau 0.16.0-dev (commit <code>c439c401</code>) by <code>scripts/api_docs.py</code> in the Tau repository. Not the 0.15 API.</p>
+</div>
+<h1 id="writing-an-extension">Writing an extension<a class="headerlink" href="#writing-an-extension" title="Permanent link">&para;</a></h1>
+<p>An extension is a module that adds hooks, tools, commands and options to a session. These are the contract it implements and the handles its hooks are given.</p>
+<p>Names: <code>Agents</code>, <code>Attachments</code>, <code>Basis</code>, <code>CURSOR_POINTS</code>, <code>CallDraft</code>, <code>Compaction</code>, <code>Count</code>, <code>CountJob</code>, <code>Counter</code>, <code>CounterAnswer</code>, <code>Cursor</code>, <code>CursorHook</code>, <code>CursorId</code>, <code>DefinitionError</code>, <code>Extension</code>, <code>Form</code>, <code>LabelName</code>, <code>Model</code>, <code>NodeHandle</code>, <code>NodeId</code>, <code>Permissions</code>, <code>Prune</code>, <code>RequestCount</code>, <code>Skills</code>, <code>StepLimit</code>, <code>Subject</code>, <code>TOOL_POINTS</code>, <code>ToolHook</code>, <code>TreeHandle</code>, <code>Usage</code></p>
+<h2 id="agents">Agents<a class="headerlink" href="#agents" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Agents</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">'agents'</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="n">Options</span>
+</code></pre></div>
+<p>Gives the model the <code>agent</code> tool (the module docstring).</p>
+<h3 id="agentsinit">Agents.<strong>init</strong><a class="headerlink" href="#agentsinit" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<h3 id="agentspre_sample">Agents.pre_sample<a class="headerlink" href="#agentspre_sample" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">pre_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="n">Cursor</span><span class="p">,</span> <span class="n">subject</span><span class="p">:</span> <span class="n">Subject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Offer an agent's cursor its tools: the <code>tools</code> option's, or all but <code>agent</code>.</p>
+<h3 id="agentsagent">Agents.agent<a class="headerlink" href="#agentsagent" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">agent</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">node</span><span class="p">:</span> <span class="n">NodeHandle</span><span class="p">,</span>
+    <span class="n">task</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s1">'everything the agent needs: it sees none of this conversation'</span><span class="p">],</span>
+    <span class="n">to</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">'an earlier agent to continue, such as agent:1'</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>
+<p>Give a task to a sub-agent that starts with a fresh context and returns its final
+reply. With <code>to</code>, send a follow-up to an agent you used before; it remembers its work.</p>
+<h2 id="attachments">Attachments<a class="headerlink" href="#attachments" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Attachments</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">'attachments'</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="n">Options</span>
+</code></pre></div>
+<p>The built-in extension <code>attachments</code>: <code>@path</code> in every input names a file (the module
+docstring). <code>cwd</code> is the session's working directory, where relative paths start.</p>
+<h3 id="attachmentsinit">Attachments.<strong>init</strong><a class="headerlink" href="#attachmentsinit" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cwd</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<h3 id="attachmentspre_input">Attachments.pre_input<a class="headerlink" href="#attachmentspre_input" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">pre_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="n">Cursor</span><span class="p">,</span> <span class="n">subject</span><span class="p">:</span> <span class="n">Subject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Rewrite what a person typed with the files its <code>@</code> words name, and say which <code>@</code>
+words that look like paths named none.</p>
+<h2 id="basis">Basis<a class="headerlink" href="#basis" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Basis</span><span class="p">(</span><span class="n">StrEnum</span><span class="p">)</span>
+    <span class="n">REPORTED</span> <span class="o">=</span> <span class="s1">'reported'</span>
+    <span class="n">RENDERED</span> <span class="o">=</span> <span class="s1">'rendered'</span>
+    <span class="n">CALIBRATED</span> <span class="o">=</span> <span class="s1">'calibrated'</span>
+    <span class="n">HEURISTIC</span> <span class="o">=</span> <span class="s1">'heuristic'</span>
+    <span class="n">CEILING</span> <span class="o">=</span> <span class="s1">'ceiling'</span>
+</code></pre></div>
+<p>Where a <code>Count</code> came from, strongest first. A sum is as weak as its weakest part.</p>
+<h2 id="cursor_points">CURSOR_POINTS<a class="headerlink" href="#cursor_points" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">CURSOR_POINTS</span> <span class="o">=</span> <span class="p">(</span><span class="s1">'pre_step'</span><span class="p">,</span> <span class="s1">'pre_input'</span><span class="p">,</span> <span class="s1">'pre_sample'</span><span class="p">,</span> <span class="s1">'pre_reply'</span><span class="p">,</span> <span class="s1">'post_reply'</span><span class="p">,</span> <span class="s1">'post_result'</span><span class="p">,</span> <span class="s1">'post_step'</span><span class="p">)</span>
+</code></pre></div>
+<p>The names of the cursor hook points, in the order a step reaches them.</p>
+<h2 id="calldraft">CallDraft<a class="headerlink" href="#calldraft" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">CallDraft</span>
+</code></pre></div>
+<p>The call a tool hook works on. <code>id</code> and <code>tool</code> are read-only: the call is already
+named, and an edit to either would be ignored. <code>args_raw</code> and <code>outcome</code> may be set.</p>
+<p>Setting <code>outcome</code> in <code>pre_tool</code> answers the call (the tool does not run, and later
+<code>pre_tool</code> hooks still see it and may change it); in <code>pre_result</code> it edits the outcome.</p>
+<h3 id="calldraftinit">CallDraft.<strong>init</strong><a class="headerlink" href="#calldraftinit" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tool</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">args_raw</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">outcome</span><span class="p">:</span> <span class="n">Outcome</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<h3 id="calldraftid">CallDraft.id<a class="headerlink" href="#calldraftid" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The provider's id for the call. Read-only.</p>
+<h3 id="calldrafttool">CallDraft.tool<a class="headerlink" href="#calldrafttool" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">tool</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The name of the tool being called. Read-only.</p>
+<h2 id="compaction">Compaction<a class="headerlink" href="#compaction" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Compaction</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">'compaction'</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="n">Options</span>
+</code></pre></div>
+<p>The built-in extension <code>compaction</code> (the module docstring).</p>
+<h3 id="compactioninit">Compaction.<strong>init</strong><a class="headerlink" href="#compactioninit" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<h3 id="compactionpre_sample">Compaction.pre_sample<a class="headerlink" href="#compactionpre_sample" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">pre_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="n">Cursor</span><span class="p">,</span> <span class="n">subject</span><span class="p">:</span> <span class="n">Subject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>The hard limit: compact first, interrupting the turn, if the branch would not fit the
+model's window.</p>
+<h3 id="compactionpre_step">Compaction.pre_step<a class="headerlink" href="#compactionpre_step" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">pre_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="n">Cursor</span><span class="p">,</span> <span class="n">subject</span><span class="p">:</span> <span class="n">Subject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>A step begins: it has committed no reply yet.</p>
+<h3 id="compactionpost_reply">Compaction.post_reply<a class="headerlink" href="#compactionpost_reply" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">post_reply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="n">Cursor</span><span class="p">,</span> <span class="n">subject</span><span class="p">:</span> <span class="n">Subject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Remember the reply this step committed.</p>
+<h3 id="compactionpost_step">Compaction.post_step<a class="headerlink" href="#compactionpost_step" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">post_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="n">Cursor</span><span class="p">,</span> <span class="n">subject</span><span class="p">:</span> <span class="n">Subject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>The soft limit: when a turn ends (a step that came to a reply with no calls, the cursor
+coming to rest), compact if the branch is past it. A turn that is still going on is left
+alone until the hard limit. Only a step that committed the reply itself counts: going back
+to a reply, or a cursor opened on one, ends a step there without a turn.</p>
+<h3 id="compactionpre_tool">Compaction.pre_tool<a class="headerlink" href="#compactionpre_tool" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">pre_tool</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">NodeHandle</span><span class="p">,</span> <span class="n">call</span><span class="p">:</span> <span class="n">CallDraft</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Refuse any call a summarizer makes.</p>
+<h3 id="compactioncompact">Compaction.compact<a class="headerlink" href="#compactioncompact" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">compact</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="n">Cursor</span><span class="p">,</span> <span class="n">focus</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">''</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>
+<p>Summarize this conversation now, on a new line (the old one stays in the tree).
+<code>focus</code> is text the summary should keep in mind.</p>
+<h2 id="count">Count<a class="headerlink" href="#count" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Count</span>
+    <span class="n">tokens</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">basis</span><span class="p">:</span> <span class="n">Basis</span>
+    <span class="n">bound</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+</code></pre></div>
+<p>A number of tokens and what is known about it. <code>bound</code> is how many more it may be.</p>
+<h3 id="countupper">Count.upper<a class="headerlink" href="#countupper" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">upper</span><span class="p">:</span> <span class="nb">int</span>
+</code></pre></div>
+<p>The most it can be: <code>tokens + bound</code>.</p>
+<h2 id="countjob">CountJob<a class="headerlink" href="#countjob" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CountJob</span>
+    <span class="n">walk</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Node</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">tools</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+    <span class="n">base</span><span class="p">:</span> <span class="n">Count</span>
+    <span class="n">base_nodes</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">known</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Count</span><span class="p">]</span>
+    <span class="n">unreported</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+</code></pre></div>
+<p>What a counter is asked: the walk to count, the model and tools of the request, and what
+core already knows (<code>base</code>, <code>base_nodes</code>, and in <code>known</code> the nodes a report covers). The
+counter answers for the rest, <code>unreported</code>.</p>
+<h2 id="counter">Counter<a class="headerlink" href="#counter" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Counter</span><span class="p">(</span><span class="n">Protocol</span><span class="p">)</span>
+</code></pre></div>
+<p>What an extension offers as its <code>counter</code> attribute (at most one extension may). <code>count</code>
+is synchronous and does no network IO: the driver runs it in a thread. Core keeps every
+report: an answer for a node a report covers fails the count with a <code>DefinitionError</code>.</p>
+<h3 id="countercount">Counter.count<a class="headerlink" href="#countercount" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job</span><span class="p">:</span> <span class="n">CountJob</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CounterAnswer</span>
+</code></pre></div>
+<p>Count the nodes of <code>job.unreported</code>.</p>
+<h2 id="counteranswer">CounterAnswer<a class="headerlink" href="#counteranswer" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CounterAnswer</span>
+    <span class="n">nodes</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Count</span><span class="p">]</span>
+    <span class="n">why</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</code></pre></div>
+<p>A counter's answer: a count for some of the job's <code>unreported</code> nodes, and <code>why</code> the rest
+stay as weak as they are (or <code>None</code>).</p>
+<h2 id="cursor">Cursor<a class="headerlink" href="#cursor" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Cursor</span><span class="p">(</span><span class="n">TreeHandle</span><span class="p">)</span>
+</code></pre></div>
+<p>What a cursor hook acts through: one cursor, bound to its extension.</p>
+<p>The tree handle, plus the cursor's own <code>move</code>, <code>write</code>, and <code>set_auto</code>,
+which core allows only while a cursor hook job is out for the cursor. Once
+the hook coroutine returns (<code>retire</code>), they raise <code>NotInHook</code>; so does every
+other write and <code>ask</code>. Reads still work. Core checks no more than that the
+tree stays valid (no hook edit limits).</p>
+<h3 id="cursornode">Cursor.node<a class="headerlink" href="#cursornode" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Node</span>
+</code></pre></div>
+<p>The node <code>id</code>, or the node this cursor is on when <code>id</code> is <code>None</code>.</p>
+<h3 id="cursorwalk">Cursor.walk<a class="headerlink" href="#cursorwalk" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">walk</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Node</span><span class="p">]</span>
+</code></pre></div>
+<p>The nodes from the root to the node this cursor is on.</p>
+<h3 id="cursoroptions">Cursor.options<a class="headerlink" href="#cursoroptions" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">options</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span>
+</code></pre></div>
+<p>This extension's options at the cursor's <code>at</code> (its <code>options</code> dataclass); raises
+<code>ConfigError</code> if it has none or what is set does not fit.</p>
+<h3 id="cursoroptions_of">Cursor.options_of<a class="headerlink" href="#cursoroptions_of" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">options_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extension</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span>
+</code></pre></div>
+<p>Another extension's options at the cursor's <code>at</code>, as <code>options</code> reads its own;
+<code>ConfigError</code> if it has none (it is not loaded, or declares no <code>options</code>).</p>
+<h3 id="cursormodels">Cursor.models<a class="headerlink" href="#cursormodels" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">models</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+</code></pre></div>
+<p>The qualified names of the models the catalog defines, in file order: what
+<code>set_model</code> accepts.</p>
+<h3 id="cursortools">Cursor.tools<a class="headerlink" href="#cursortools" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">tools</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+</code></pre></div>
+<p>The names of the driver's tools, the extensions' included, in the order a sample is
+offered them: the names a <code>pre_sample</code> hook may put in <code>Subject.tools</code>.</p>
+<h3 id="cursorshow">Cursor.show<a class="headerlink" href="#cursorshow" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Show <code>text</code> on this cursor to every client, as this extension's one line
+(<code>CursorView.shown</code>); a later call replaces it, and <code>None</code> shows nothing. It is not in the
+log or the scratchpad: it is gone when the session is reloaded, and dropped when the
+cursor closes. <code>TypeError</code> for anything else.</p>
+<h3 id="cursorset_model">Cursor.set_model<a class="headerlink" href="#cursorset_model" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Model</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>
+<p>Write a <code>Config</code> node under <code>at</code> that sets the branch's <code>model</code> (a qualified name)
+and move onto it, as <code>write</code> does. <code>ConfigError</code> if it is not configured; nothing is
+written then. Returns the new node's id.</p>
+<h3 id="cursorset_options">Cursor.set_options<a class="headerlink" href="#cursorset_options" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">changes</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>
+<p>Write a <code>Config</code> node under <code>at</code> that sets these options of this extension (JSON
+values) and move onto it, as <code>write</code> does: each replaces the walk's earlier value.
+<code>ConfigError</code> if the extension has no options, or those that result, folded with the
+walk's, do not fit its options type (a <code>__post_init__</code> that raises refuses); nothing is
+written then. Returns the new node's id.</p>
+<h3 id="cursorsave_options">Cursor.save_options<a class="headerlink" href="#cursorsave_options" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">save_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">changes</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Write these options of this extension (JSON values) into the user's config file,
+<code>extensions.&lt;name&gt;</code> in <code>&lt;TAU_HOME&gt;/config.json</code>, and have the driver read it at once. The
+file is every session's and every branch's; <code>set_options</code> is this branch's, a node. No node
+is written and nothing moves. The project's config is never written. <code>ConfigError</code> if the
+extension has no options, the options that result (the layers, with these) do not fit its
+options type, or the driver was given no user config; nothing is written then.</p>
+<p>The file is read, changed and written back with no <code>await</code> in between, so on the event
+loop (a hook, a tool, an async command) saves cannot interleave. It is not safe against
+another τ process saving at the same moment (the last write wins, losing the other's
+change), nor from sync commands that save at once on worker threads.</p>
+<h3 id="cursorsaved_options">Cursor.saved_options<a class="headerlink" href="#cursorsaved_options" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">saved_options</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">]</span>
+</code></pre></div>
+<p>What the user's config file itself sets of this extension's options, as JSON values
+(<code>{}</code> if it sets none, or there is no file): the value <code>save_options</code> changes, not
+<code>options()</code>, which folds the project's layer, the overrides and this branch's nodes in.
+To add to a list option in the file, read it here, not there. <code>ConfigError</code> if the
+extension has no options or the driver was given no user config.</p>
+<h3 id="cursormove">Cursor.move<a class="headerlink" href="#cursormove" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">to</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Move to <code>to</code> at once; later hooks see the new <code>at</code>. Raises <code>NoSuchNode</code>.</p>
+<h3 id="cursorwrite">Cursor.write<a class="headerlink" href="#cursorwrite" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">body</span><span class="p">:</span> <span class="n">Body</span><span class="p">,</span>
+    <span class="n">delivers</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">copied_from</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">derived_from</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>
+<p>Append <code>body</code> under <code>at</code> and move onto it, as one record; the
+<code>delivers</code> items are removed. Returns the new node's id. <code>copied_from</code> and
+<code>derived_from</code> as for <code>TreeHandle.append</code>.</p>
+<h3 id="cursorset_auto">Cursor.set_auto<a class="headerlink" href="#cursorset_auto" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_auto</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">on</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Turn this cursor's auto-step on or off. Wakes nothing: the step is running.
+Turning it on inside a step that is aborted leaves the cursor at rest.</p>
+<h3 id="cursortell">Cursor.tell<a class="headerlink" href="#cursortell" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">tell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">to</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Send <code>text</code> as a <code>Notice</code> to client <code>to</code>, or to every connected client by default.
+Dropped if <code>to</code> is not connected: a notice is for someone who is there.</p>
+<h3 id="cursorask">Cursor.ask<a class="headerlink" href="#cursorask" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">ask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">expect</span><span class="p">:</span> <span class="nb">object</span> <span class="o">=</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">to</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span>
+</code></pre></div>
+<p>Ask the cursor's clients <code>text</code>, and wait for an answer of type <code>expect</code> (any hint
+of the type language; <code>str</code> by default). Returns the checked, converted answer, or
+<code>None</code> if declined. <code>to</code> names the client asked first (<code>None</code>: anyone; a client that is
+not connected is the same). The hook's job stays out meanwhile, however long and whoever
+is connected, so the cursor is busy; an abort or go-to declines it (and any asked later
+in that step). A <code>CursorId</code> answer of <code>"new"</code> opens a cursor at the cursor's <code>at</code>.</p>
+<h2 id="cursorhook">CursorHook<a class="headerlink" href="#cursorhook" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">CursorHook</span><span class="p">(</span><span class="n">Protocol</span><span class="p">)</span>
+</code></pre></div>
+<p>A cursor hook: an extension's method named for one of <code>CURSOR_POINTS</code>. A string it
+returns halts the later hooks of the point; <code>None</code> goes on.</p>
+<h3 id="cursorhookcall">CursorHook.<strong>call</strong><a class="headerlink" href="#cursorhookcall" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="n">Cursor</span><span class="p">,</span> <span class="n">subject</span><span class="p">:</span> <span class="n">Subject</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<h2 id="cursorid">CursorId<a class="headerlink" href="#cursorid" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">CursorId</span> <span class="o">=</span> <span class="n">NewType</span><span class="p">(</span><span class="s1">'CursorId'</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+</code></pre></div>
+<p>An open cursor, or <code>"new"</code>, which opens one at the asker's node.</p>
+<h2 id="definitionerror">DefinitionError<a class="headerlink" href="#definitionerror" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">DefinitionError</span><span class="p">(</span><span class="ne">TypeError</span><span class="p">)</span>
+</code></pre></div>
+<p>A tool, command, extension or question that cannot be built: a parameter with no
+annotation or one outside the type language, a default that does not fit its hint, an
+injected parameter the function cannot have, a name taken twice, or an object that breaks the
+<code>Tool</code> or <code>Extension</code> contract. The message names the extension, function and parameter.</p>
+<h2 id="extension">Extension<a class="headerlink" href="#extension" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Extension</span><span class="p">(</span><span class="n">Protocol</span><span class="p">)</span>
+</code></pre></div>
+<p>Hooks are methods named for their hook point, found by name and all optional.</p>
+<p>Cursor hooks (<code>CursorHook</code>): <code>pre_step</code>, <code>pre_input</code>, <code>pre_sample</code>,
+<code>pre_reply</code>, <code>post_reply</code>, <code>post_result</code>, <code>post_step</code>. Tool hooks
+(<code>ToolHook</code>): <code>pre_tool</code>, <code>pre_result</code>. <code>name</code> is non-empty and unique among a
+driver's extensions; any attribute named <code>pre_*</code> or <code>post_*</code> that is not a hook point is
+refused when the driver is built (<code>DefinitionError</code>), so a misspelt hook cannot
+sit silent. That covers data too: a dataclass field <code>pre_prompt</code> is refused. Name such a
+field for what it holds (<code>prompt_prefix</code>, <code>before_prompt</code>), never with those two prefixes.</p>
+<p>Optional attributes besides the hooks: <code>tools</code>, <code>commands</code>, <code>options</code>, <code>yields_names</code>, and
+<code>rescan</code> (<code>Rescanning</code>).</p>
+<h3 id="extensionname">Extension.name<a class="headerlink" href="#extensionname" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The extension's name: letters, digits, <code>_</code> and <code>-</code>, unique among a driver's
+extensions.</p>
+<h2 id="form">Form<a class="headerlink" href="#form" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Form</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">schema</span><span class="p">:</span> <span class="n">Json</span>
+    <span class="n">extension</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">yields</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+<p>What a client knows of something it fills in: a command (its <code>name</code>, typed as <code>/name</code>,
+its <code>description</code> and the <code>schema</code> of its arguments, with the named types' <code>"format"</code> and
+each default, and the <code>extension</code> that owns it) or an extension's options (the <code>name</code> of the
+extension, and a <code>schema</code> whose defaults are the values now; <code>extension</code> is <code>None</code>, as it is
+for <code>/config</code>). A command is called by its <code>qualified</code> name, <code>extension:name</code>, which on the
+wire a client writes itself from the two fields. A command that <code>yields</code> gives its bare name
+up to any other command that has it (<code>/model</code> stays the built-in's; the yielding one is only
+<code>/skills:model</code>). Frozen, compared by value, and not hashable:
+the schema is a dict.</p>
+<h3 id="formqualified">Form.qualified<a class="headerlink" href="#formqualified" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">qualified</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p><code>extension:name</code> for a command, which nothing can take the name of; <code>name</code> for a form
+with no extension.</p>
+<h2 id="labelname">LabelName<a class="headerlink" href="#labelname" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">LabelName</span> <span class="o">=</span> <span class="n">NewType</span><span class="p">(</span><span class="s1">'LabelName'</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+</code></pre></div>
+<p>A label that exists.</p>
+<h2 id="model">Model<a class="headerlink" href="#model" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">Model</span> <span class="o">=</span> <span class="n">NewType</span><span class="p">(</span><span class="s1">'Model'</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+</code></pre></div>
+<p>A model name that is configured; a frontend offers the catalog.</p>
+<h2 id="nodehandle">NodeHandle<a class="headerlink" href="#nodehandle" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">NodeHandle</span><span class="p">(</span><span class="n">TreeHandle</span><span class="p">)</span>
+</code></pre></div>
+<p>What a tool hook acts through: the batch's node, bound to its extension.</p>
+<p>The tree handle, plus the batch's node (<code>id</code>), the cursor whose batch it is (<code>cursor_id</code>),
+and <code>ask</code>, which goes to that cursor. Has none of the cursor's own operations.</p>
+<h3 id="nodehandlenode">NodeHandle.node<a class="headerlink" href="#nodehandlenode" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">node</span><span class="p">:</span> <span class="n">Node</span>
+</code></pre></div>
+<p>The <code>Assistant</code> node that holds the batch being run.</p>
+<h3 id="nodehandleoptions">NodeHandle.options<a class="headerlink" href="#nodehandleoptions" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">options</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span>
+</code></pre></div>
+<p>This extension's options at the batch's node (its <code>options</code> dataclass); raises
+<code>ConfigError</code> if it has none or what is set does not fit.</p>
+<h3 id="nodehandlesave_options">NodeHandle.save_options<a class="headerlink" href="#nodehandlesave_options" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">save_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">changes</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p><code>Cursor.save_options</code>, from a tool hook.</p>
+<h3 id="nodehandlesaved_options">NodeHandle.saved_options<a class="headerlink" href="#nodehandlesaved_options" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">saved_options</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">]</span>
+</code></pre></div>
+<p><code>Cursor.saved_options</code>, from a tool hook.</p>
+<h3 id="nodehandlewalk">NodeHandle.walk<a class="headerlink" href="#nodehandlewalk" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">walk</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Node</span><span class="p">]</span>
+</code></pre></div>
+<p>The nodes from the root to the batch's node.</p>
+<h3 id="nodehandletell">NodeHandle.tell<a class="headerlink" href="#nodehandletell" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">tell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">to</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p><code>Cursor.tell</code>, from a tool hook: send <code>text</code> as a <code>Notice</code> to client <code>to</code>, or to every
+connected client by default.</p>
+<h3 id="nodehandleask">NodeHandle.ask<a class="headerlink" href="#nodehandleask" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">ask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">expect</span><span class="p">:</span> <span class="nb">object</span> <span class="o">=</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">to</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span>
+</code></pre></div>
+<p>Ask the batch's cursor's clients <code>text</code>, and wait for an answer of type <code>expect</code>
+(any hint of the type language; <code>str</code> by default). Returns the checked, converted
+answer, or <code>None</code> if declined. <code>to</code> names the client asked first (<code>None</code>: anyone; a
+client that is not connected is the same). The call stays out meanwhile, however long and
+whoever is connected, so the cursor is busy; an abort or go-to declines it (and any asked
+later in that step). A <code>CursorId</code> answer of <code>"new"</code> opens a cursor at the batch's node.</p>
+<h2 id="nodeid">NodeId<a class="headerlink" href="#nodeid" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">NodeId</span> <span class="o">=</span> <span class="n">NewType</span><span class="p">(</span><span class="s1">'NodeId'</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+</code></pre></div>
+<p>A node that exists.</p>
+<h2 id="permissions">Permissions<a class="headerlink" href="#permissions" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Permissions</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">'permissions'</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="n">Options</span>
+</code></pre></div>
+<p>Asks before, or refuses, a tool call a rule names (the module docstring). <code>cwd</code> is the
+session's working directory, which a relative path is resolved against.</p>
+<h3 id="permissionsinit">Permissions.<strong>init</strong><a class="headerlink" href="#permissionsinit" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cwd</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<h3 id="permissionspre_tool">Permissions.pre_tool<a class="headerlink" href="#permissionspre_tool" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">pre_tool</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">NodeHandle</span><span class="p">,</span> <span class="n">call</span><span class="p">:</span> <span class="n">CallDraft</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Refuse a denied call, let an allowed one go, and hold an asked one for an answer.</p>
+<h2 id="prune">Prune<a class="headerlink" href="#prune" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Prune</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">'prune'</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="n">Options</span>
+</code></pre></div>
+<p>The built-in extension <code>prune</code> (the module docstring).</p>
+<h3 id="pruneinit">Prune.<strong>init</strong><a class="headerlink" href="#pruneinit" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<h3 id="pruneprune">Prune.prune<a class="headerlink" href="#pruneprune" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">prune</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="n">Cursor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>
+<p>Shorten this conversation without a model: old turns become a transcript and old
+tool output goes, on a new line (the old one stays in the tree).</p>
+<h2 id="requestcount">RequestCount<a class="headerlink" href="#requestcount" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RequestCount</span>
+    <span class="n">total</span><span class="p">:</span> <span class="n">Count</span>
+    <span class="n">base</span><span class="p">:</span> <span class="n">Count</span>
+    <span class="n">base_nodes</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">nodes</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Count</span><span class="p">]</span>
+    <span class="n">why</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</code></pre></div>
+<p>What the walk to a node will cost as a request (<code>Cursor.count</code>).</p>
+<p><code>total</code> is the whole request. <code>base</code> counts the walk's first <code>base_nodes</code> nodes and the
+request's overhead (tool definitions, hidden prompts, per-message overhead) as one; it is
+<code>NONE</code> with <code>base_nodes</code> 0 while no reply on the walk has reported its usage. <code>nodes</code> has one
+count for each node that is sent, by node id, except a node inside a <strong>lump</strong>: where two
+requests prove that the nodes between them cost a known sum, the first node holds the sum and
+the others have no count of their own, so a cut never lands inside one. <code>why</code> says why the
+total is weaker than it could be, or is <code>None</code>.</p>
+<h2 id="skills">Skills<a class="headerlink" href="#skills" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Skills</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">'skills'</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="n">Options</span>
+    <span class="n">yields_names</span> <span class="o">=</span> <span class="kc">True</span>
+</code></pre></div>
+<p>The built-in extension <code>skills</code>: a command for each template and skill, and the skills list
+for the model (the module docstring). <code>prompts</code> are what <code>Skills.of</code> found; an extension made
+of <code>prompts</code> alone reads no files again.</p>
+<h3 id="skillsof">Skills.of<a class="headerlink" href="#skillsof" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nd">@classmethod</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">of</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">loaded</span><span class="p">:</span> <span class="n">LoadedConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">'Skills'</span>
+</code></pre></div>
+<p>The extension for the files <code>loaded</code> can read. <code>SkillFileError</code>, naming every problem
+with a file, if any cannot be used.</p>
+<h3 id="skillsrescan">Skills.rescan<a class="headerlink" href="#skillsrescan" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">rescan</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div>
+<p>Read the template and skill files again if a stat says one was added, removed or
+edited since the last time; whether the commands changed. A file that cannot be used is
+a command that says why when it is run, and the trusted project's files, if what is on
+disk is no longer what trust approved, all say to run <code>tau trust</code>. The skills list the
+model sees is not rewritten (D24 section 6).</p>
+<h3 id="skillspre_step">Skills.pre_step<a class="headerlink" href="#skillspre_step" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">pre_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="n">Cursor</span><span class="p">,</span> <span class="n">subject</span><span class="p">:</span> <span class="n">Subject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>At a session's first step, write the skills list (the module docstring).</p>
+<h2 id="steplimit">StepLimit<a class="headerlink" href="#steplimit" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">StepLimit</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">'step_limit'</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="n">Options</span>
+</code></pre></div>
+<p>Turns a cursor's auto-step off after <code>limit</code> unattended steps in a row (D1).</p>
+<p>The limit is the extension's option (<code>Options.limit</code>, 50 unless configured), read at
+each hook, so <code>/config step_limit</code> changes it for a branch.</p>
+<p>It guards the loops where the cursor does move every step, such as a model
+that calls tools forever or a hook that writes "continue" after every reply.
+A cursor that does not move is stopped by core, not by this limit.</p>
+<p>The count is this object's own memory, per cursor, kept at hook points:</p>
+<ul>
+<li><code>pre_input</code> sets it to 1: the step that takes an input is the first. There
+  is no <code>post_input</code> hook; <code>pre_input</code> fires once per input item offered.</li>
+<li><code>pre_step</code> adds one, when the cursor's auto-step is on. A step run with
+  auto-step off (a frontend's <code>step</code>, a load) is attended and is not counted.</li>
+<li><code>post_step</code> turns auto-step off when the count has reached <code>limit</code>, and
+  starts the count over, so whoever resumes the cursor (<code>set_auto</code>) gets
+  another <code>limit</code> steps. It also starts over whenever it sees auto-step off:
+  a halt, an abort, or a go-to ended the run.</li>
+</ul>
+<p>When core turns auto-step off because a step did not move the cursor, that
+happens after <code>post_step</code>: the count stays as it was until the next input.</p>
+<p>A hook that leaves an input pending offers it again every step, so
+<code>pre_input</code> restarts the count every time: this limit does not bound that.
+List it after any extension that turns auto-step back on from <code>post_step</code>,
+or that hook's <code>set_auto(True)</code> wins.</p>
+<h3 id="steplimitinit">StepLimit.<strong>init</strong><a class="headerlink" href="#steplimitinit" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<h3 id="steplimitpre_input">StepLimit.pre_input<a class="headerlink" href="#steplimitpre_input" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">pre_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="n">Cursor</span><span class="p">,</span> <span class="n">subject</span><span class="p">:</span> <span class="n">Subject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Start the cursor's count at 1: the step that takes an input is the first.</p>
+<h3 id="steplimitpre_step">StepLimit.pre_step<a class="headerlink" href="#steplimitpre_step" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">pre_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="n">Cursor</span><span class="p">,</span> <span class="n">subject</span><span class="p">:</span> <span class="n">Subject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Count this step if auto-step is on. A bad <code>limit</code> option fails the step here.</p>
+<h3 id="steplimitpost_step">StepLimit.post_step<a class="headerlink" href="#steplimitpost_step" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">post_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="n">Cursor</span><span class="p">,</span> <span class="n">subject</span><span class="p">:</span> <span class="n">Subject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Turn auto-step off once the count reaches <code>limit</code>, then start the count over.</p>
+<h2 id="subject">Subject<a class="headerlink" href="#subject" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Subject</span>
+    <span class="n">draft</span><span class="p">:</span> <span class="n">Draft</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">node</span><span class="p">:</span> <span class="n">Node</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">ending</span><span class="p">:</span> <span class="n">Ending</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">tools</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</code></pre></div>
+<p>The mutable thing a cursor hook works on, by hook point.</p>
+<p><code>draft</code> for <code>pre_input</code>, <code>pre_sample</code>, <code>pre_reply</code> (a hook may replace it;
+from <code>pre_sample</code> it is a reply that answers the sample). <code>node</code> for
+<code>post_reply</code> and <code>post_result</code>. <code>ending</code> for <code>post_step</code>. <code>pre_step</code> has
+none.</p>
+<p><code>tools</code> is for <code>pre_sample</code> alone: the names of the tools this one sample is offered, or
+<code>None</code> (the start) for all of them. What the hooks leave in it is the offer; the next sample
+starts at <code>None</code> again. A name that is not one of the driver's tools, or any <code>tools</code> set at
+another point, fails the step as a hook that breaks its contract does.</p>
+<h2 id="tool_points">TOOL_POINTS<a class="headerlink" href="#tool_points" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">TOOL_POINTS</span> <span class="o">=</span> <span class="p">(</span><span class="s1">'pre_tool'</span><span class="p">,</span> <span class="s1">'pre_result'</span><span class="p">)</span>
+</code></pre></div>
+<p>The names of the tool hook points.</p>
+<h2 id="toolhook">ToolHook<a class="headerlink" href="#toolhook" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ToolHook</span><span class="p">(</span><span class="n">Protocol</span><span class="p">)</span>
+</code></pre></div>
+<p>A tool hook: an extension's method named for one of <code>TOOL_POINTS</code>. A string it returns
+becomes the call's <code>Err</code> and halts the later hooks of the point; <code>None</code> goes on.</p>
+<h3 id="toolhookcall">ToolHook.<strong>call</strong><a class="headerlink" href="#toolhookcall" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">NodeHandle</span><span class="p">,</span> <span class="n">call</span><span class="p">:</span> <span class="s1">'CallDraft'</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<h2 id="treehandle">TreeHandle<a class="headerlink" href="#treehandle" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">TreeHandle</span>
+</code></pre></div>
+<p>What both handles share: reads of the whole session, and the writes that
+belong to no cursor, bound to an extension (which fills in <code>by</code>).</p>
+<p>A handle has no client: work on a cursor does not depend on who is watching it.</p>
+<p>Every call goes into Rust at once. Nothing here moves a cursor.</p>
+<h3 id="treehandleby">TreeHandle.by<a class="headerlink" href="#treehandleby" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">by</span><span class="p">:</span> <span class="n">Author</span>
+</code></pre></div>
+<p>The <code>Author</code> this handle's writes carry: <code>Author.Extension</code> with the extension's name.</p>
+<h3 id="treehandleretire">TreeHandle.retire<a class="headerlink" href="#treehandleretire" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">retire</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Called by the driver when the hook coroutine returns: the handle is dead.
+Its reads still work; everything else raises <code>NotInHook</code>.</p>
+<h3 id="treehandletree">TreeHandle.tree<a class="headerlink" href="#treehandletree" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">tree</span><span class="p">:</span> <span class="n">Tree</span>
+</code></pre></div>
+<p>The session's nodes.</p>
+<h3 id="treehandlecursor">TreeHandle.cursor<a class="headerlink" href="#treehandlecursor" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">cursor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CursorState</span>
+</code></pre></div>
+<p><code>cursor</code> as it stands now: <code>at</code>, <code>auto</code>, <code>items</code>, <code>labels</code>, <code>moves</code>, ...</p>
+<h3 id="treehandlecursors">TreeHandle.cursors<a class="headerlink" href="#treehandlecursors" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">cursors</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</code></pre></div>
+<p>The ids of every open cursor.</p>
+<h3 id="treehandleclosed">TreeHandle.closed<a class="headerlink" href="#treehandleclosed" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">closed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span>
+</code></pre></div>
+<p>Each closed cursor and its last node, in id order.</p>
+<h3 id="treehandlelabel">TreeHandle.label<a class="headerlink" href="#treehandlelabel" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>
+<p>The cursor <code>label</code> is on (a closed cursor too); raises <code>NoSuchLabel</code>.</p>
+<h3 id="treehandlemodel">TreeHandle.model<a class="headerlink" href="#treehandlemodel" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">at</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The qualified name of the model the branch at node <code>at</code> is on: the last one a <code>Config</code>
+on the walk to <code>at</code> names, which a sample from there uses. <code>at</code> defaults to the cursor's
+node (a <code>Cursor</code>) or the batch's (a <code>NodeHandle</code>); a tree handle must give it
+(<code>ValueError</code>). <code>ConfigError</code> if no <code>Config</code> names a model, or one on the walk is
+malformed. A reply's own node is where the model it was sampled with is read.</p>
+<h3 id="treehandleresolved_model">TreeHandle.resolved_model<a class="headerlink" href="#treehandleresolved_model" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">resolved_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModelConfig</span>
+</code></pre></div>
+<p>The <code>ModelConfig</code> of the model <code>name</code> (a qualified name) in the catalog as it is now,
+the one a sample resolves, with its <code>context_window</code> and <code>price</code>. <code>name</code> defaults to
+<code>model()</code>, so a tree handle must give it (<code>ValueError</code>). <code>ConfigError</code> if the catalog has
+no such model.</p>
+<h3 id="treehandlecounter">TreeHandle.counter<a class="headerlink" href="#treehandlecounter" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">counter</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>The key of the extension that offers the counter (D26), or <code>None</code>: then <code>count</code> is
+the meter's alone.</p>
+<h3 id="treehandlecount">TreeHandle.count<a class="headerlink" href="#treehandlecount" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">at</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RequestCount</span>
+</code></pre></div>
+<p>What the walk to node <code>at</code> will cost as a request: a <code>RequestCount</code>, its <code>total</code> and a
+count for each node. Every count is a report, or a ceiling (the node's bytes) for what no
+report covers, unless the <code>counter</code> extension counts it better. <code>at</code> defaults to the
+cursor's node (a <code>Cursor</code>) or the batch's (a <code>NodeHandle</code>); a tree handle must give it
+(<code>ValueError</code>). <code>DefinitionError</code> if the counter counts what a report covers.</p>
+<h3 id="treehandleappend">TreeHandle.append<a class="headerlink" href="#treehandleappend" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">append</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">body</span><span class="p">:</span> <span class="n">Body</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">copied_from</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">derived_from</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>
+<p>Append a node under <code>parent</code> without moving any cursor. Returns its id.
+<code>copied_from</code> names the node this one repeats verbatim, <code>derived_from</code> the node whose
+walk its content was computed from (<code>NoSuchNode</code> if either is not a node).</p>
+<h3 id="treehandleappend_root">TreeHandle.append_root<a class="headerlink" href="#treehandleappend_root" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">append_root</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Config</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>
+<p>Append a root (a detached tree) holding <code>config</code>, without moving any
+cursor. Returns its id.</p>
+<h3 id="treehandleopen">TreeHandle.open<a class="headerlink" href="#treehandleopen" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">at</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>
+<p>Open a cursor at <code>at</code>; it wakes. Returns its id.</p>
+<h3 id="treehandleadd_item">TreeHandle.add_item<a class="headerlink" href="#treehandleadd_item" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">to</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>
+<p>Add this extension's item to a cursor's scratchpad; the cursor wakes.</p>
+<h3 id="treehandleremove_item">TreeHandle.remove_item<a class="headerlink" href="#treehandleremove_item" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">remove_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Remove any item; raises <code>NoSuchItem</code>. Wakes nothing.</p>
+<h3 id="treehandlesend">TreeHandle.send<a class="headerlink" href="#treehandlesend" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">to</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>
+<p>Send <code>text</code> to cursor <code>to</code> as a <code>User</code> message authored by this extension, and turn
+its auto-step on: <code>to</code> takes the text at its next step (through its <code>pre_input</code> hooks)
+and answers. Needs no client. Returns the item.</p>
+<h3 id="treehandlerest">TreeHandle.rest<a class="headerlink" href="#treehandlerest" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">rest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Ending</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Wait until <code>cursor</code> is at rest with no effect out, and return how its last step
+ended; <code>None</code> if that is not known (it has not stepped since the session was loaded).
+After a <code>send</code> to a cursor that was at rest, this is the ending of the step the send
+caused. If the cursor was mid-step, the input waits for that step to end and this may
+return that earlier step's ending with the input still pending: to wait for the step a
+send causes, <code>rest</code> first, then <code>send</code>, then <code>rest</code> again. A cursor held by an open
+question or a gate does not rest, so this waits as long as the cursor is held. Async
+only: a sync tool, which runs on a worker thread, cannot call it. <code>ValueError</code> for this
+handle's own cursor: waiting for itself would never end. No cycle between two cursors
+is detected; the user's abort is the way out: when this handle's own cursor is aborted
+(or sent elsewhere) while the wait is out, the wait ends at once and returns
+<code>Ending.Aborted()</code>, so a hook, which an abort never cancels, learns it was aborted. The
+cursor waited on is left as it is.</p>
+<h3 id="treehandleabort">TreeHandle.abort<a class="headerlink" href="#treehandleabort" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">abort</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Abort <code>cursor</code>'s step as a client's <code>abort</code> does: cancel its sample or calls, stop
+its command, decline its open questions, and turn its auto-step off. Safe from a sync
+tool's worker thread: it returns once the event loop has done it. <code>ValueError</code> for this
+handle's own cursor: aborting it would cancel this very call.</p>
+<h3 id="treehandleclose_cursor">TreeHandle.close_cursor<a class="headerlink" href="#treehandleclose_cursor" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">close_cursor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Close <code>cursor</code>: abort its step as <code>abort</code> does, wait for it to rest, drop its pending
+items, and close it (D17). It leaves <code>cursors()</code> and the clients' views; its id, its last
+node (in <code>closed()</code>) and its labels stay, which is what <code>reopen</code> restarts from. Anyone
+waiting on it sees the abort. <code>CursorClosed</code> if it is already closed. Async only, like
+<code>rest</code>. <code>ValueError</code> for this handle's own cursor: closing it would wait on itself.</p>
+<h3 id="treehandlereopen">TreeHandle.reopen<a class="headerlink" href="#treehandlereopen" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>
+<p>Open a new cursor at the closed <code>cursor</code>'s last node and move each of its labels
+onto it, as this extension. Returns the new id. <code>ValueError</code> if <code>cursor</code> is open,
+<code>NoSuchCursor</code> if it was never opened.</p>
+<h3 id="treehandleset_label">TreeHandle.set_label<a class="headerlink" href="#treehandleset_label" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Set <code>label</code> on <code>cursor</code>; a label set elsewhere moves.</p>
+<h3 id="treehandleremove_label">TreeHandle.remove_label<a class="headerlink" href="#treehandleremove_label" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">remove_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Remove <code>label</code>; raises <code>NoSuchLabel</code>.</p>
+<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Usage</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">'usage'</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="n">Options</span>
+</code></pre></div>
+<p>The built-in extension <code>usage</code> (the module docstring).</p>
+<h3 id="usageinit">Usage.<strong>init</strong><a class="headerlink" href="#usageinit" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<h3 id="usageusage">Usage.usage<a class="headerlink" href="#usageusage" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">usage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tree</span><span class="p">:</span> <span class="n">TreeHandle</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>
+<p>What this session has spent: one row per model, and a total.</p>
+<h3 id="usagepost_reply">Usage.post_reply<a class="headerlink" href="#usagepost_reply" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">post_reply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="n">Cursor</span><span class="p">,</span> <span class="n">subject</span><span class="p">:</span> <span class="n">Subject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Show the reply's counts on the cursor, and tell the clients if it missed the cache.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "content.code.copy"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+    
+  </body>
+</html>

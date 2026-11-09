@@ -1,0 +1,3915 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for Tectum, Tau, and JMFTS">
+      
+      
+      
+        <link rel="canonical" href="https://ffwfrobotics.github.io/tau/reference/extensions/">
+      
+      
+        <link rel="prev" href="../tau-agent-core/">
+      
+      
+        <link rel="next" href="../rpc/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
+    
+    
+      
+        <title>Extensions - FFWF Robotics Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/ffwf.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#extensions" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="FFWF Robotics Docs" class="md-header__button md-logo" aria-label="FFWF Robotics Docs" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            FFWF Robotics Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Extensions
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9 8.99 8.99 0 0 0 4 7.47V22h2v-3h2v3h2v-3h2v3h2v-3.54c2.47-1.65 4-4.46 4-7.46a9 9 0 0 0-9-9m-4 9a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m8 0a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m-4 3 1.5 3h-3z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 15a2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2m2.5 2 1.5-3 1.5 3zm5.5-2a2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2m6-4A10 10 0 0 0 12 1 10 10 0 0 0 2 11c0 2.8 1.2 5.3 3 7.1V22h14v-3.9c1.8-1.8 3-4.3 3-7.1m-5 9h-2v-2h-2v2h-2v-2H9v2H7v-2.8c-1.8-1.5-3-3.7-3-6.2a8 8 0 0 1 8-8 8 8 0 0 1 8 8c0 2.5-1.2 4.8-3 6.2z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../tectum/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tectum
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tau
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../preview/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tau 0.16 preview
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../jmfts/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  JMFTS
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../integrations/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Integrations
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../style-guide/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Style guide
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="FFWF Robotics Docs" class="md-nav__button md-logo" aria-label="FFWF Robotics Docs" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    FFWF Robotics Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../tectum/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tectum
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../tectum/tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tectum/tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tectum/cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tectum/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tectum/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tau
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_2" id="__nav_3_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_5" id="__nav_3_5_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tau-llm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_llm
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tau-agent-core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_agent_core
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extensions
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extensions
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#two-vocabularies-two-handler-contracts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two vocabularies, two handler contracts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Two vocabularies, two handler contracts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-raising-handler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A raising handler
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handler-policies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Handler policies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#two-sharp-edges" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two sharp edges
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-extensionapi-surface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The ExtensionAPI surface
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The ExtensionAPI surface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#register_tool-takes-a-plain-dict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        register_tool takes a plain dict
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#discovery-authorization-and-collisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discovery, authorization and collisions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#asking-the-user-and-locking-the-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Asking the user, and locking the session
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Asking the user, and locking the session">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#headless-dialogs-raise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Headless dialogs raise
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-bus-capability-grant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The bus capability grant
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rpc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RPC
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tau-coding-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_coding_agent
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../api/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_5_7" id="__nav_3_5_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_5_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/messages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Messages and content
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/providers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Providers and the client
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/constraints/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Constrained decoding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/agent-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The agent loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/sessions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sessions and the conversation tree
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/sdk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The SDK entry point
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/compaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compaction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/rpc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The RPC protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/export/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Export
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/runs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Run manifests and latency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../preview/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tau 0.16 preview
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preview/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preview/extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preview/operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operating it
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preview/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preview/differences/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What changed from 0.15
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../preview/api/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preview/api/clients/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Writing a frontend
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preview/api/config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Configuration and context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preview/api/diagnostics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Tracing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preview/api/driver/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Embedding tau
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preview/api/errors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Errors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preview/api/events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preview/api/extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Writing an extension
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preview/api/machine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The step machine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preview/api/providers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preview/api/records/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The session's records
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preview/api/sessions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Starting and finding sessions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preview/api/tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preview/api/tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The terminal UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preview/api/wire/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The wire
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preview/api/wire-protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The wire protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../jmfts/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JMFTS
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JMFTS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../jmfts/tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../jmfts/tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../jmfts/tutorials/ingest-a-document/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ingest a document
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../jmfts/tutorials/see-a-result-on-the-page/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    See a result on the page
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../jmfts/cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../jmfts/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../jmfts/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../jmfts/changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../jmfts/release-0-6-0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    0.6.0 — eyes and hands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../jmfts/release-0-3-0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    0.3.0 — the job system
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../integrations/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integrations
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Integrations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../integrations/tectum-tau/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum + Tau
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../integrations/tectum-jmfts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum + JMFTS
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../integrations/tau-jmfts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau + JMFTS
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../integrations/full-stack-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The FFwF Full Stack Agent
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../style-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guide
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stable"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#two-vocabularies-two-handler-contracts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two vocabularies, two handler contracts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Two vocabularies, two handler contracts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-raising-handler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A raising handler
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handler-policies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Handler policies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#two-sharp-edges" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two sharp edges
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-extensionapi-surface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The ExtensionAPI surface
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The ExtensionAPI surface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#register_tool-takes-a-plain-dict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        register_tool takes a plain dict
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#discovery-authorization-and-collisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discovery, authorization and collisions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#asking-the-user-and-locking-the-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Asking the user, and locking the session
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Asking the user, and locking the session">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#headless-dialogs-raise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Headless dialogs raise
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-bus-capability-grant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The bus capability grant
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="extensions">Extensions<a class="headerlink" href="#extensions" title="Permanent link">&para;</a></h1>
+<p class="axis">Cognition × Application</p>
+
+<p>Plain Python modules — <code>importlib</code>, no compile step, no manifest language. A
+module exposes <code>def register(api): ...</code> and <code>api</code> is an <code>ExtensionAPI</code>. The
+parameter is conventionally named <code>api</code>.</p>
+<p>Lives in <code>tau_agent_core</code>, so extensions work headlessly, under the TUI, and
+over RPC without knowing which. Python 3.12 or later.</p>
+<h2 id="two-vocabularies-two-handler-contracts">Two vocabularies, two handler contracts<a class="headerlink" href="#two-vocabularies-two-handler-contracts" title="Permanent link">&para;</a></h2>
+<p><code>api.on(name, handler)</code> subscribes to both kinds, and routes by name. The name
+you subscribe to therefore decides which contract you owe.</p>
+<figure class="dia"><svg viewBox="0 0 680 274" role="img" aria-labelledby="dia-hooks-t dia-hooks-d"><title id="dia-hooks-t">A mutating hook returns a value; a notify event does not</title><desc id="dia-hooks-d">A turn runs left to right along a horizontal spine through four stages: input, tool underscore call, tool underscore result and turn underscore end. Above the spine, under the heading mutating hooks, the return value is applied, sits a box reading handler with the arguments event and c t x, glossed that event is a plain dict. A plain arrow runs up from the tool underscore call stage into that handler, and a red arrow runs back down from the handler into the same stage, squared off in red where it leaves the handler. The red mark beside it reads the return is applied, glossed veto the call or patch its arguments. Below the spine, under the heading notify-only events, observer, cannot block, a wider box reads api dot on of all, or AgentSession dot subscribe, where the event is an AgentEvent object. Two faint arrows drop into it from the tool underscore call and tool underscore result stages, and neither returns.</desc><text x="0" y="22" class="label-soft">mutating hooks &#8212; the return value is applied</text><rect x="150" y="34" width="180" height="40" class="fill-ground stroke"/><text x="240" y="54" text-anchor="middle" class="label">handler(event, ctx)</text><text x="240" y="68" text-anchor="middle" class="label-soft">event is a plain dict</text><line x1="200" y1="134" x2="200" y2="82" class="stroke-hair"/><path d="M200 74 L196 83 L204 83 Z" class="fill-ink"/><rect x="275" y="69" width="10" height="10" class="fill-red"/><line x1="280" y1="79" x2="280" y2="126" class="stroke-red"/><path d="M280 134 L276 125 L284 125 Z" class="fill-red"/><text x="346" y="52" class="label-mark">the return is applied</text><text x="346" y="68" class="label-soft">veto the call, or patch its arguments</text><rect x="0" y="134" width="110" height="32" class="fill-ground stroke"/><text x="55" y="155" text-anchor="middle" class="label">input</text><line x1="110" y1="150" x2="150" y2="150" class="stroke"/><rect x="150" y="134" width="140" height="32" class="fill-ground stroke"/><text x="220" y="155" text-anchor="middle" class="label">tool_call</text><line x1="290" y1="150" x2="330" y2="150" class="stroke"/><rect x="330" y="134" width="150" height="32" class="fill-ground stroke"/><text x="405" y="155" text-anchor="middle" class="label">tool_result</text><line x1="480" y1="150" x2="520" y2="150" class="stroke"/><rect x="520" y="134" width="150" height="32" class="fill-ground stroke"/><text x="595" y="155" text-anchor="middle" class="label">turn_end</text><text x="0" y="196" class="label-soft">notify-only events &#8212; observer, cannot block</text><line x1="220" y1="166" x2="220" y2="208" class="stroke-soft"/><path d="M220 216 L216 207 L224 207 Z" class="fill-ash"/><line x1="405" y1="166" x2="405" y2="208" class="stroke-soft"/><path d="M405 216 L401 207 L409 207 Z" class="fill-ash"/><rect x="150" y="216" width="380" height="42" class="fill-ground stroke-hair"/><text x="340" y="236" text-anchor="middle" class="label">api.on(&quot;all&quot;)</text><text x="340" y="250" text-anchor="middle" class="label-soft">or AgentSession.subscribe() &#8212; event is an AgentEvent</text></svg><figcaption>One call, <code>api.on</code>, two contracts. Red marks the arrow that comes back, because that is the whole distinction: a mutating hook's return value is applied to the turn, so its handler takes <code>(event, ctx)</code> and gets a plain dict. A notify handler takes one argument and gets an <code>AgentEvent</code> object, and nothing it returns is read. Subscribing to a hook with a one-argument handler raises <code>TypeError</code> the first time it fires — which for <code>tool_call</code> blocks that call and ends the turn.</figcaption></figure>
+
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>Handler</th>
+<th><code>event</code> is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mutating hook, lifecycle hook</td>
+<td><code>handler(event, ctx)</code></td>
+<td>a plain <strong>dict</strong></td>
+</tr>
+<tr>
+<td>notify-only event</td>
+<td><code>handler(event)</code></td>
+<td>an <code>AgentEvent</code> <strong>object</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Mutating hooks</strong> — the return value is applied:</p>
+<table>
+<thead>
+<tr>
+<th>Hook</th>
+<th>What returning a value does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tool_call</code></td>
+<td>veto the call, or patch its arguments, before execution</td>
+</tr>
+<tr>
+<td><code>tool_result</code></td>
+<td>modify content or details, or terminate, after execution</td>
+</tr>
+<tr>
+<td><code>before_agent_start</code></td>
+<td>contribute to the system prompt</td>
+</tr>
+<tr>
+<td><code>input</code></td>
+<td>transform the user prompt; <code>{"handled": True}</code> consumes it without a turn, <code>{"refuse": "&lt;reason&gt;"}</code> refuses the submission (<code>submit</code> reports <code>accepted=False</code> with that reason and writes nothing)</td>
+</tr>
+<tr>
+<td><code>turn_end</code></td>
+<td>return <code>{message}</code> for a durable append before the next request</td>
+</tr>
+<tr>
+<td><code>user_turn_end</code></td>
+<td>return <code>{message}</code> for a durable append</td>
+</tr>
+<tr>
+<td><code>session_before_switch</code></td>
+<td>veto a session new, fork or switch operation</td>
+</tr>
+<tr>
+<td><code>annotate</code></td>
+<td>return JSON, stored on the message entry about to be written as <code>ext[&lt;extension name&gt;]</code> and never sent to the model. At most one handler per extension</td>
+</tr>
+<tr>
+<td><code>entry_written</code></td>
+<td>observe <code>{kind, entry_id, message, blocks}</code> for each message entry after it is in the store (a deep copy; the return is ignored). Not dispatched when <code>store_history</code> is off</td>
+</tr>
+<tr>
+<td><code>turn_setting_changed</code></td>
+<td>observe <code>{cursor_id, setting, old, new, source}</code> when a model or thinking change is recorded (return ignored)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Lifecycle hooks</strong> — <code>session_start</code>, <code>session_shutdown</code>. Each carries a
+<code>reason</code>, for example <code>"reload"</code>.</p>
+<p><strong>Notify-only events</strong> — every <code>AgentEvent</code> type: <code>agent_start</code>, <code>agent_end</code>,
+<code>turn_start</code>, <code>message_start</code> / <code>message_update</code> / <code>message_end</code>,
+<code>tool_execution_start</code> / <code>tool_execution_update</code> / <code>tool_execution_end</code>,
+<code>side_completion_start</code> / <code>_update</code> / <code>_end</code>, <code>provider_retry</code>,
+<code>follow_ups_dropped</code>, <code>suspension_open</code> / <code>suspension_closed</code> and
+<code>lock_changed</code>, plus the wildcard <code>"all"</code>.</p>
+<h3 id="a-raising-handler">A raising handler<a class="headerlink" href="#a-raising-handler" title="Permanent link">&para;</a></h3>
+<p>A hook whose result can change what the turn does <strong>ends the turn</strong> when its
+handler raises: <code>input</code>, <code>before_agent_start</code>, <code>tool_call</code>, <code>tool_result</code>,
+<code>turn_end</code>, <code>user_turn_end</code>, <code>session_before_switch</code> and <code>annotate</code>. The error
+reaches the error listeners first, and <code>agent_end</code> then carries
+<code>end_reason: "error"</code> naming your extension and the hook (<code>HookHandlerError</code>).
+For <code>tool_call</code> the failing call is answered with its block text, every other
+call in the batch is answered as aborted, and none runs. A raise at
+<code>entry_written</code>, <code>turn_setting_changed</code>, <code>session_start</code> or <code>session_shutdown</code>
+is reported and the turn goes on. <code>session_before_switch</code> has no turn: its
+failure means the swap does not happen and the <code>new_session</code>, <code>fork</code> or
+<code>switch_session</code> call raises. <code>turn_end</code> ends the turn even for a handler that
+only observes, so use <code>"all"</code> or <code>AgentSession.subscribe()</code> for pure
+observation. An unpoliced handler has no deadline.</p>
+<h3 id="handler-policies">Handler policies<a class="headerlink" href="#handler-policies" title="Permanent link">&para;</a></h3>
+<p><code>api.on(event, handler, policy=NAME)</code> runs a handler under a policy that
+decides its deadline and what its failure becomes. <code>gating</code>, <code>advisory</code> and
+<code>human</code> are built in, and <code>api.register_policy(name, policy)</code> adds one (a policy
+is anything with <code>async run(call, site)</code>). A policy applies to a mutating or
+lifecycle hook or an <code>ext:</code> channel, never a notify event. Under a policy a
+plain <code>def</code> handler runs on a worker thread and the hook returns at the
+deadline; <code>gating</code> fails on timeout (which ends the turn) and <code>advisory</code>
+proceeds and sets a <code>policy:&lt;hook&gt;</code> warning. Policies are experimental below
+1.0.</p>
+<p><strong>Handlers must not block.</strong> With no policy a handler runs inline on the event
+loop, so a <code>sleep()</code> or a slow call inside it stalls the agent. Give anything
+slow or remote a timeout policy.</p>
+<h3 id="two-sharp-edges">Two sharp edges<a class="headerlink" href="#two-sharp-edges" title="Permanent link">&para;</a></h3>
+<p><strong>Choose the turn-boundary hook by cadence.</strong> <code>turn_end</code> fires once per
+<em>agent-loop</em> turn, so one user request resolved in six tool round-trips fires
+it six times. <code>user_turn_end</code> fires once per <code>prompt()</code>. Anything that should
+happen once per thing-the-user-asked-for wants the latter.</p>
+<p><strong><code>api.on("turn_end", ...)</code> always resolves to the mutating hook</strong>, never the
+notify event of the same name. There is no way to observe a plain
+notify-grade <code>turn_end</code> through <code>api.on</code> — use <code>"all"</code> or
+<code>AgentSession.subscribe()</code>. <code>context</code> was a hook in an earlier design and is
+retired: calling <code>api.on("context", ...)</code> raises.</p>
+<h2 id="the-extensionapi-surface">The <code>ExtensionAPI</code> surface<a class="headerlink" href="#the-extensionapi-surface" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="c1"># Events — a mutating hook or a notify event through the same call.</span>
+<span class="c1"># Returns an unsubscribe callable.</span>
+<span class="n">api</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">handler</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">policy</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]</span>
+
+<span class="c1"># Tools</span>
+<span class="n">api</span><span class="o">.</span><span class="n">register_tool</span><span class="p">(</span><span class="n">definition</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="n">ExtensionToolDefinition</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+<span class="n">api</span><span class="o">.</span><span class="n">get_all_tools</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span>
+<span class="n">api</span><span class="o">.</span><span class="n">set_active_tools</span><span class="p">(</span><span class="n">names</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+
+<span class="c1"># Commands and shortcuts</span>
+<span class="n">api</span><span class="o">.</span><span class="n">register_command</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>   <span class="c1"># None, or the qualified name that holds it</span>
+<span class="n">api</span><span class="o">.</span><span class="n">get_command</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span>
+<span class="k">await</span> <span class="n">api</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">)</span>   <span class="c1"># wrap or defer to another command</span>
+<span class="n">api</span><span class="o">.</span><span class="n">unregister_command</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+<span class="n">api</span><span class="o">.</span><span class="n">register_shortcut</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
+                      <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>   <span class="c1"># ctrl+e &lt;key&gt;</span>
+
+<span class="c1"># A command that declares what it TAKES, so every head can complete and ask for it</span>
+<span class="n">api</span><span class="o">.</span><span class="n">register_flow</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span>
+                  <span class="n">argument</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+
+<span class="c1"># Put a request in front of whoever is attached; optionally lock the session</span>
+<span class="n">api</span><span class="o">.</span><span class="n">request_user_action</span><span class="p">(</span><span class="n">sentence</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">lock</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                        <span class="n">ask</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="n">release</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+
+<span class="c1"># Session state</span>
+<span class="n">api</span><span class="o">.</span><span class="n">append_entry</span><span class="p">(</span><span class="n">custom_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>   <span class="c1"># durable, not RAM-only</span>
+<span class="n">api</span><span class="o">.</span><span class="n">set_session_name</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+<span class="n">api</span><span class="o">.</span><span class="n">get_session_name</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+
+<span class="c1"># Messaging</span>
+<span class="n">api</span><span class="o">.</span><span class="n">send_user_message</span><span class="p">(</span><span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">deliver_as</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"followUp"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+<span class="n">api</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+
+<span class="c1"># Turn origination — the one door, for extensions</span>
+<span class="k">await</span> <span class="n">api</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="n">api</span><span class="o">.</span><span class="n">submit_threadsafe</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+
+<span class="c1"># Inter-extension pub/sub, on ext:&lt;name&gt;:&lt;topic&gt; channels</span>
+<span class="k">await</span> <span class="n">api</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+<span class="k">await</span> <span class="n">api</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">timeout_s</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">RequestReply</span><span class="p">]</span>
+<span class="n">api</span><span class="o">.</span><span class="n">subscriber_count</span><span class="p">(</span><span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+
+<span class="c1"># Waiting for an answer (step-debugger suspensions)</span>
+<span class="k">await</span> <span class="n">api</span><span class="o">.</span><span class="n">suspend</span><span class="p">(</span><span class="n">spec</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span>
+<span class="n">api</span><span class="o">.</span><span class="n">can_suspend</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span> <span class="p">;</span> <span class="n">api</span><span class="o">.</span><span class="n">can_suspend_here</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span> <span class="p">;</span> <span class="n">api</span><span class="o">.</span><span class="n">suspend_refusal</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+<span class="n">api</span><span class="o">.</span><span class="n">resumed</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span>
+
+<span class="c1"># Handler policies</span>
+<span class="n">api</span><span class="o">.</span><span class="n">register_policy</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">policy</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+
+<span class="c1"># Warnings that persist until cleared</span>
+<span class="n">api</span><span class="o">.</span><span class="n">set_warning</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">severity</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"warning"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+<span class="n">api</span><span class="o">.</span><span class="n">clear_warning</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+
+<span class="c1"># Per-extension config</span>
+<span class="n">api</span><span class="o">.</span><span class="n">config</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+
+<span class="n">api</span><span class="o">.</span><span class="n">ui</span>      <span class="o">-&gt;</span> <span class="n">ExtensionUI</span>
+<span class="n">api</span><span class="o">.</span><span class="n">context</span> <span class="o">-&gt;</span> <span class="n">ExtensionContext</span>
+</code></pre></div>
+<p><code>api.config</code> is sourced from <code>~/.tau/config.json</code>'s <code>extensions.&lt;name&gt;</code> block,
+keyed by the extension's identifier (a drop-in's file stem, an installed
+package's module name), and overridable per run with <code>--ext-config
+NAME:KEY=VALUE</code>, where the CLI wins. The value is JSON-decoded when it parses
+(<code>budget:ceiling=5.0</code>), else it is a string. It replaces <code>register_flag</code> and
+<code>get_flag</code>, which were <strong>deleted rather than deprecated</strong> — they never
+populated a value.</p>
+<p>A module may declare <code>CONFIG_SCHEMA</code>, a <code>ui.form</code> spec (<code>{title, fields}</code>)
+naming the keys <code>api.config</code> may hold. It is validated at load; an invalid one
+raises <code>ExtensionCapabilityError</code> and <code>register</code> never runs. The RPC verbs
+<code>get_extension_config</code> and <code>set_extension_config</code> read and write against it.
+Values set that way last for the session and are not written to <code>config.json</code>.</p>
+<p><code>send_user_message</code>'s default is <code>"followUp"</code>, not <code>"steer"</code>. The other valid
+values are <code>"nextTurn"</code> and <code>"steer"</code>.</p>
+<h3 id="register_tool-takes-a-plain-dict"><code>register_tool</code> takes a plain dict<a class="headerlink" href="#register_tool-takes-a-plain-dict" title="Permanent link">&para;</a></h3>
+<p>Not a <code>ToolDefinition</code>. <code>tau_llm.define_tool()</code> exists and is validated, but it
+builds the <em>other</em> tool shape: its <code>execute</code> takes the tool's own parameters,
+while an extension tool's <code>execute</code> is
+<code>execute(tool_call_id, params, signal, on_update, ctx)</code> and receives the bound
+<code>ExtensionContext</code>.</p>
+<p><code>register_tool</code> will not accept a <code>ToolDefinition</code>, and that is deliberate —
+the two contracts are not interchangeable. See
+<a href="../tau-llm/#three-tool-shapes-and-what-bridges-them"><code>tau_llm</code></a>.</p>
+<p><code>ExtensionAPI.register_tool()</code> <em>does</em> default <code>label</code> to <code>name</code>, where
+<code>define_tool</code> refuses to. That is a pi-compatible contract, not an
+inconsistency to harmonise away.</p>
+<h2 id="discovery-authorization-and-collisions">Discovery, authorization and collisions<a class="headerlink" href="#discovery-authorization-and-collisions" title="Permanent link">&para;</a></h2>
+<p>Finding is not loading. τ discovers two kinds of source and loads one only once
+it is authorized:</p>
+<ul>
+<li><strong>drop-ins</strong> in <code>~/.tau/extensions/</code>, bare <code>*.py</code> files or <code>&lt;dir&gt;/__init__.py</code>
+  packages, alphabetically. The identifier is the file stem.</li>
+<li><strong>installed packages</strong> that declare an entry point in the <code>tau.extensions</code>
+  group, naming a module that exposes <code>register(api)</code>:</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">[project.entry-points.</span><span class="s2">"tau.extensions"</span><span class="k">]</span>
+<span class="n">planner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"tau_router.planner"</span>
+</code></pre></div>
+<p>The identifier is the module name (<code>tau_router.planner</code>).</p>
+<p>An unauthorized source is offered in the TUI and named on stderr by the
+headless modes, which never prompt. The <code>tau ext</code> subcommands manage this:
+<code>list</code> (every source found and whether it would load; imports nothing),
+<code>authorize</code>, <code>revoke</code>, <code>disable</code> and <code>enable</code>. A package's authorization
+record names its distribution and version, so a new version asks again.
+Drop-ins present at the first 0.14.0 start were authorized once,
+automatically. A discovered extension that fails to load gets one notice and
+the run goes on; <code>tau ext disable</code> silences it.</p>
+<p>Every explicit <code>-e</code> / <code>--extension PATH|MODULE</code> is authorized by being named.
+It is repeatable, a value holding a <code>/</code> or ending in <code>.py</code> is a path and
+anything else an installed module, and it loads even under <code>--no-extensions</code>,
+which disables discovery only. An explicitly named extension that fails to load
+stops startup in <code>-p</code> and <code>--mode rpc</code>.</p>
+<p>There is <strong>no</strong> project-local <code>&lt;cwd&gt;/.tau/extensions/</code> discovery, and no
+dependency-manifest convention inside an extension directory. The first is
+deferred pending a trust gate rather than overlooked: a repository you cloned
+should not be able to run code by being opened.</p>
+<p>Collision handling differs by kind, on purpose:</p>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>On a duplicate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tool</td>
+<td><strong>raises</strong> <code>ValueError</code> at load time</td>
+</tr>
+<tr>
+<td>command</td>
+<td>first-wins on the typed name. The loser keeps its qualified name <code>ext:&lt;extension&gt;:&lt;command&gt;</code>, and <code>register_command</code> returns it</td>
+</tr>
+<tr>
+<td>shortcut</td>
+<td>last-write-wins, with a logged warning</td>
+</tr>
+<tr>
+<td><code>tool_call</code> hook chain</td>
+<td>the first <code>block: True</code> wins</td>
+</tr>
+<tr>
+<td><code>before_agent_start</code> system prompt</td>
+<td>last contribution wins</td>
+</tr>
+</tbody>
+</table>
+<h2 id="asking-the-user-and-locking-the-session">Asking the user, and locking the session<a class="headerlink" href="#asking-the-user-and-locking-the-session" title="Permanent link">&para;</a></h2>
+<p><code>api.request_user_action</code> appends one reserved <code>extension_request</code> entry to the
+session. That is what makes it different from a modal: it is on the record, it
+survives a restart, and <strong>every head renders it</strong> — the TUI, the REPL, and an
+RPC host through <code>get_pending_request</code> / <code>answer_request</code>.</p>
+<p>Two keys give four states. <code>lock=True</code> refuses further submissions until the
+request is answered; <code>ask</code> is a form spec (<code>{title, fields, actions}</code>) that
+draws a control rather than a sentence. A request with neither is a notice; one
+with both is a locked question. <code>release</code> names a command that clears the lock —
+a command is exempt from a lock by <em>placement</em> in the pipeline, not by name.</p>
+<p>Raise a request where nothing appends after it — <code>user_turn_end</code>,
+<code>session_start</code>, or a command handler. A <code>tool_call</code> hook is mid-turn, so its
+request ends up several entries behind the leaf and the cursor never reaches it.
+<code>api.suspend</code> is the in-process cousin: it pauses the turn and waits for a
+responder (a head, or an RPC host that has sent <code>declare_capabilities</code>), from
+<code>tool_call</code>, <code>entry_written</code>, <code>turn_end</code> or <code>user_turn_end</code>. See
+<a href="../rpc/#suspensions">RPC</a>. <code>examples/44_release_gate.py</code> is the worked demo, and
+<code>examples/30_permission_gate.py</code> is the human-in-the-loop bash gate.</p>
+<h3 id="headless-dialogs-raise">Headless dialogs raise<a class="headerlink" href="#headless-dialogs-raise" title="Permanent link">&para;</a></h3>
+<p><code>ctx.ui.form</code> raises <code>HeadlessDialogError</code> in headless mode unless a policy is
+configured — <code>--ui-defaults form=defaults</code> or <code>config.json</code>'s <code>ui_defaults</code>. A
+dialog that quietly picked a default would make an unattended run's result
+depend on a question nobody saw.</p>
+<p><code>confirm</code>, <code>select</code> and <code>input</code> <strong>no longer exist</strong>. Each is replaced by a
+field on an <code>ask</code> — a <code>confirm</code> field, a <code>select</code> field, a text field. They are
+named rather than silently dropped:
+<code>--ui-defaults confirm=yes</code> in an old script is refused with the replacement
+named, instead of parsing into a policy that governs nothing.</p>
+<h2 id="the-bus-capability-grant">The bus capability grant<a class="headerlink" href="#the-bus-capability-grant" title="Permanent link">&para;</a></h2>
+<p>An extension that touches a message bus declares <code>TOUCHES_BUS = True</code> and is
+<strong>refused at load time</strong> unless the run opts in with <code>--bus</code> (CLI) or
+<code>bus_available=True</code> (SDK). It is a capability grant, not a default.</p>
+<p>The declaration has a second half: such an extension must also declare a
+non-empty <code>SUBJECTS</code>, naming what it touches. Leaving it unset is refused even
+with <code>--bus</code> given, because the grant is per-subject rather than blanket.</p>
+<p>The shipped example is <code>nats_bus.py</code>, which needs
+<code>pip install 'ffwf-tau-agent-core[bus]'</code> for its NATS client.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+    
+  </body>
+</html>

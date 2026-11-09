@@ -1,0 +1,6142 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for Tectum, Tau, and JMFTS">
+      
+      
+      
+        <link rel="canonical" href="https://ffwfrobotics.github.io/tau/preview/api/machine/">
+      
+      
+        <link rel="prev" href="../extensions/">
+      
+      
+        <link rel="next" href="../providers/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
+    
+    
+      
+        <title>Tau 0.16 preview API: The step machine - FFWF Robotics Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/ffwf.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#the-step-machine" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../.." title="FFWF Robotics Docs" class="md-header__button md-logo" aria-label="FFWF Robotics Docs" data-md-component="logo">
+      
+  <img src="../../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            FFWF Robotics Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Tau 0.16 preview API: The step machine
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9 8.99 8.99 0 0 0 4 7.47V22h2v-3h2v3h2v-3h2v3h2v-3.54c2.47-1.65 4-4.46 4-7.46a9 9 0 0 0-9-9m-4 9a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m8 0a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m-4 3 1.5 3h-3z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 15a2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2m2.5 2 1.5-3 1.5 3zm5.5-2a2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2m6-4A10 10 0 0 0 12 1 10 10 0 0 0 2 11c0 2.8 1.2 5.3 3 7.1V22h14v-3.9c1.8-1.8 3-4.3 3-7.1m-5 9h-2v-2h-2v2h-2v-2H9v2H7v-2.8c-1.8-1.5-3-3.7-3-6.2a8 8 0 0 1 8-8 8 8 0 0 1 8 8c0 2.5-1.2 4.8-3 6.2z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../tectum/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tectum
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tau
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tau 0.16 preview
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../jmfts/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  JMFTS
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../integrations/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Integrations
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../style-guide/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Style guide
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="FFWF Robotics Docs" class="md-nav__button md-logo" aria-label="FFWF Robotics Docs" data-md-component="logo">
+      
+  <img src="../../../../assets/logo.png" alt="logo">
+
+    </a>
+    FFWF Robotics Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../tectum/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tectum
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../tectum/tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../tectum/tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../tectum/cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../tectum/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../tectum/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tau
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../reference/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/tau-llm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_llm
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/tau-agent-core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_agent_core
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extensions
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/rpc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RPC
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/tau-coding-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_coding_agent
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../reference/api/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_5_7" id="__nav_3_5_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_5_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/messages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Messages and content
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/providers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Providers and the client
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/constraints/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Constrained decoding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/agent-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The agent loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/sessions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sessions and the conversation tree
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/sdk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The SDK entry point
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/compaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compaction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/rpc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The RPC protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/export/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Export
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/runs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Run manifests and latency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tau 0.16 preview
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operating it
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../differences/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What changed from 0.15
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_7" id="__nav_4_7_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clients/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Writing a frontend
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Configuration and context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diagnostics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Tracing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../driver/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Embedding tau
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../errors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Errors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Writing an extension
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The step machine
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The step machine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#answer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Answer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#answerhooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.Hooks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Answer.Hooks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#answerhooksnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.Hooks.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#answerhooksstop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.Hooks.stop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#answerhooksdraft" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.Hooks.draft
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#answerhookfailed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.HookFailed
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Answer.HookFailed">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#answerhookfailednew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.HookFailed.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#answerhookfailederror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.HookFailed.error
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#answersampled" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.Sampled
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Answer.Sampled">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#answersamplednew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.Sampled.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#answersampledparts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.Sampled.parts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#answersampledend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.Sampled.end
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#answercalldone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.CallDone
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Answer.CallDone">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#answercalldonenew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.CallDone.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#answercalldonecall" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.CallDone.call
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#answercalldoneoutcome" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.CallDone.outcome
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#answercalldoneby" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.CallDone.by
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ending" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ending
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ending">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#endingdone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ending.Done
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ending.Done">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#endingdonenew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ending.Done.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#endinghalted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ending.Halted
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ending.Halted">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#endinghaltednew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ending.Halted.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#endinghaltedreason" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ending.Halted.reason
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#endingfailed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ending.Failed
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ending.Failed">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#endingfailednew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ending.Failed.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#endingfailederror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ending.Failed.error
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#endingaborted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ending.Aborted
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ending.Aborted">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#endingabortednew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ending.Aborted.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hook
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Hook">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hookname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hook.name
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#job" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Job">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jobhooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.Hooks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Job.Hooks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jobhooksnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.Hooks.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jobhookspoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.Hooks.point
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jobhooksdraft" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.Hooks.draft
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jobhooksnode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.Hooks.node
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jobhooksending" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.Hooks.ending
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jobsample" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.Sample
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Job.Sample">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jobsamplenew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.Sample.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jobruncalls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.RunCalls
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Job.RunCalls">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jobruncallsnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.RunCalls.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jobruncallsnode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.RunCalls.node
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jobruncallscalls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.RunCalls.calls
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jobpending" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.Pending
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Job.Pending">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jobpendingnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.Pending.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jobrest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.Rest
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Job.Rest">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jobrestnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.Rest.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Next
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#runcall" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RunCall
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RunCall">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#runcallid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RunCall.id
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#runcalltool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RunCall.tool
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#runcallargs_raw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RunCall.args_raw
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sampleend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SampleEnd
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SampleEnd">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sampleendfinished" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SampleEnd.Finished
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SampleEnd.Finished">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sampleendfinishednew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SampleEnd.Finished.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sampleendfinishedstop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SampleEnd.Finished.stop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sampleendfinishedreason" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SampleEnd.Finished.reason
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sampleendfinishedmeta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SampleEnd.Finished.meta
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sampleendfailed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SampleEnd.Failed
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SampleEnd.Failed">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sampleendfailednew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SampleEnd.Failed.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sampleendfailederror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SampleEnd.Failed.error
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sampleendfailedmeta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SampleEnd.Failed.meta
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sampleendcancelled" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SampleEnd.Cancelled
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SampleEnd.Cancelled">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sampleendcancellednew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SampleEnd.Cancelled.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Session">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sessioncreate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.create
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionload" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.load
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionread" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.read
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionfork" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.fork
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionclose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.close
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessiontree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.tree
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessioninput" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.input
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionstep" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.step
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessiongo_to" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.go_to
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionset_auto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.set_auto
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionabort" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.abort
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionclose_cursor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.close_cursor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionopen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.open
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionadd_item" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.add_item
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionremove_item" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.remove_item
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionappend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.append
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionappend_root" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.append_root
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionset_label" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.set_label
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionremove_label" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.remove_label
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionhook_move" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.hook_move
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionhook_write" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.hook_write
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionhook_set_auto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.hook_set_auto
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionnext_job" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.next_job
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionanswer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.answer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessioncursors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.cursors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionclosed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.closed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessioncursor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.cursor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionlabels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.labels
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionlabel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.label
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessiontake_notices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.take_notices
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../providers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../records/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The session's records
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sessions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Starting and finding sessions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The terminal UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wire/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The wire
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wire-protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The wire protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../jmfts/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JMFTS
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JMFTS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../jmfts/tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/tutorials/ingest-a-document/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ingest a document
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/tutorials/see-a-result-on-the-page/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    See a result on the page
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/release-0-6-0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    0.6.0 — eyes and hands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/release-0-3-0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    0.3.0 — the job system
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../integrations/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integrations
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Integrations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../integrations/tectum-tau/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum + Tau
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../integrations/tectum-jmfts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum + JMFTS
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../integrations/tau-jmfts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau + JMFTS
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../integrations/full-stack-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The FFwF Full Stack Agent
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../style-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guide
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stable"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#answer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Answer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#answerhooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.Hooks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Answer.Hooks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#answerhooksnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.Hooks.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#answerhooksstop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.Hooks.stop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#answerhooksdraft" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.Hooks.draft
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#answerhookfailed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.HookFailed
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Answer.HookFailed">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#answerhookfailednew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.HookFailed.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#answerhookfailederror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.HookFailed.error
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#answersampled" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.Sampled
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Answer.Sampled">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#answersamplednew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.Sampled.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#answersampledparts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.Sampled.parts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#answersampledend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.Sampled.end
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#answercalldone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.CallDone
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Answer.CallDone">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#answercalldonenew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.CallDone.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#answercalldonecall" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.CallDone.call
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#answercalldoneoutcome" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.CallDone.outcome
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#answercalldoneby" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answer.CallDone.by
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ending" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ending
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ending">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#endingdone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ending.Done
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ending.Done">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#endingdonenew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ending.Done.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#endinghalted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ending.Halted
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ending.Halted">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#endinghaltednew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ending.Halted.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#endinghaltedreason" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ending.Halted.reason
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#endingfailed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ending.Failed
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ending.Failed">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#endingfailednew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ending.Failed.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#endingfailederror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ending.Failed.error
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#endingaborted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ending.Aborted
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ending.Aborted">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#endingabortednew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ending.Aborted.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hook
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Hook">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hookname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hook.name
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#job" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Job">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jobhooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.Hooks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Job.Hooks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jobhooksnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.Hooks.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jobhookspoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.Hooks.point
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jobhooksdraft" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.Hooks.draft
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jobhooksnode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.Hooks.node
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jobhooksending" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.Hooks.ending
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jobsample" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.Sample
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Job.Sample">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jobsamplenew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.Sample.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jobruncalls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.RunCalls
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Job.RunCalls">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jobruncallsnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.RunCalls.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jobruncallsnode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.RunCalls.node
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jobruncallscalls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.RunCalls.calls
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jobpending" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.Pending
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Job.Pending">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jobpendingnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.Pending.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jobrest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.Rest
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Job.Rest">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jobrestnew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job.Rest.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Next
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#runcall" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RunCall
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RunCall">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#runcallid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RunCall.id
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#runcalltool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RunCall.tool
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#runcallargs_raw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RunCall.args_raw
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sampleend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SampleEnd
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SampleEnd">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sampleendfinished" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SampleEnd.Finished
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SampleEnd.Finished">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sampleendfinishednew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SampleEnd.Finished.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sampleendfinishedstop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SampleEnd.Finished.stop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sampleendfinishedreason" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SampleEnd.Finished.reason
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sampleendfinishedmeta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SampleEnd.Finished.meta
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sampleendfailed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SampleEnd.Failed
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SampleEnd.Failed">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sampleendfailednew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SampleEnd.Failed.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sampleendfailederror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SampleEnd.Failed.error
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sampleendfailedmeta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SampleEnd.Failed.meta
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sampleendcancelled" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SampleEnd.Cancelled
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SampleEnd.Cancelled">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sampleendcancellednew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SampleEnd.Cancelled.new
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Session">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sessioncreate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.create
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionload" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.load
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionread" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.read
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionfork" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.fork
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionclose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.close
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessiontree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.tree
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessioninput" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.input
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionstep" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.step
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessiongo_to" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.go_to
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionset_auto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.set_auto
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionabort" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.abort
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionclose_cursor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.close_cursor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionopen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.open
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionadd_item" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.add_item
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionremove_item" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.remove_item
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionappend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.append
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionappend_root" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.append_root
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionset_label" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.set_label
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionremove_label" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.remove_label
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionhook_move" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.hook_move
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionhook_write" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.hook_write
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionhook_set_auto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.hook_set_auto
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionnext_job" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.next_job
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionanswer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.answer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessioncursors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.cursors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionclosed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.closed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessioncursor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.cursor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionlabels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.labels
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionlabel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.label
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessiontake_notices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session.take_notices
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<div class="admonition warning">
+<p class="admonition-title">Unreleased</p>
+<p>Generated from the docstrings of Tau 0.16.0-dev (commit <code>c439c401</code>) by <code>scripts/api_docs.py</code> in the Tau repository. Not the 0.15 API.</p>
+</div>
+<h1 id="the-step-machine">The step machine<a class="headerlink" href="#the-step-machine" title="Permanent link">&para;</a></h1>
+<p>The sans-IO core: a <code>Session</code> hands out jobs and a program performs them. For a program that is its own driver.</p>
+<p>Names: <code>Answer</code>, <code>Ending</code>, <code>Hook</code>, <code>Job</code>, <code>Next</code>, <code>RunCall</code>, <code>SampleEnd</code>, <code>Session</code></p>
+<h2 id="answer">Answer<a class="headerlink" href="#answer" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Answer</span>
+</code></pre></div>
+<p>What the driver answers a <code>Job</code> with. <code>Session.answer</code> accepts one only while the job it
+answers is out; any other raises <code>WrongAnswer</code>.</p>
+<h3 id="answerhooks">Answer.Hooks<a class="headerlink" href="#answerhooks" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Hooks</span><span class="p">(</span><span class="n">Answer</span><span class="p">)</span>
+</code></pre></div>
+<p>The hooks ran.</p>
+<h4 id="answerhooksnew">Answer.Hooks.<strong>new</strong><a class="headerlink" href="#answerhooksnew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">stop</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">draft</span><span class="p">:</span> <span class="n">Draft</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Answer</span><span class="o">.</span><span class="n">Hooks</span>
+</code></pre></div>
+<h4 id="answerhooksstop">Answer.Hooks.stop<a class="headerlink" href="#answerhooksstop" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">stop</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>A halt reason if a hook halted the step, else <code>None</code>.</p>
+<h4 id="answerhooksdraft">Answer.Hooks.draft<a class="headerlink" href="#answerhooksdraft" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">draft</span><span class="p">:</span> <span class="n">Draft</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>The draft after the hooks edited it; <code>None</code> commits nothing. At <code>pre_sample</code>, a
+reply here stands in for the sample.</p>
+<h3 id="answerhookfailed">Answer.HookFailed<a class="headerlink" href="#answerhookfailed" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">HookFailed</span><span class="p">(</span><span class="n">Answer</span><span class="p">)</span>
+</code></pre></div>
+<p>A hook raised.</p>
+<h4 id="answerhookfailednew">Answer.HookFailed.<strong>new</strong><a class="headerlink" href="#answerhookfailednew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Answer</span><span class="o">.</span><span class="n">HookFailed</span>
+</code></pre></div>
+<h4 id="answerhookfailederror">Answer.HookFailed.error<a class="headerlink" href="#answerhookfailederror" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">error</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>What went wrong.</p>
+<h3 id="answersampled">Answer.Sampled<a class="headerlink" href="#answersampled" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Sampled</span><span class="p">(</span><span class="n">Answer</span><span class="p">)</span>
+</code></pre></div>
+<p>The sample ended.</p>
+<h4 id="answersamplednew">Answer.Sampled.<strong>new</strong><a class="headerlink" href="#answersamplednew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">parts</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Part</span><span class="p">],</span> <span class="n">end</span><span class="p">:</span> <span class="n">SampleEnd</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Answer</span><span class="o">.</span><span class="n">Sampled</span>
+</code></pre></div>
+<h4 id="answersampledparts">Answer.Sampled.parts<a class="headerlink" href="#answersampledparts" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">parts</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Part</span><span class="p">]</span>
+</code></pre></div>
+<p>What streamed before it ended.</p>
+<h4 id="answersampledend">Answer.Sampled.end<a class="headerlink" href="#answersampledend" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">end</span><span class="p">:</span> <span class="n">SampleEnd</span>
+</code></pre></div>
+<p>How it ended.</p>
+<h3 id="answercalldone">Answer.CallDone<a class="headerlink" href="#answercalldone" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">CallDone</span><span class="p">(</span><span class="n">Answer</span><span class="p">)</span>
+</code></pre></div>
+<p>One call of the batch ended.</p>
+<h4 id="answercalldonenew">Answer.CallDone.<strong>new</strong><a class="headerlink" href="#answercalldonenew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">call</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">outcome</span><span class="p">:</span> <span class="n">Outcome</span><span class="p">,</span> <span class="n">by</span><span class="p">:</span> <span class="n">Author</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Answer</span><span class="o">.</span><span class="n">CallDone</span>
+</code></pre></div>
+<h4 id="answercalldonecall">Answer.CallDone.call<a class="headerlink" href="#answercalldonecall" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">call</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The call's id.</p>
+<h4 id="answercalldoneoutcome">Answer.CallDone.outcome<a class="headerlink" href="#answercalldoneoutcome" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">outcome</span><span class="p">:</span> <span class="n">Outcome</span>
+</code></pre></div>
+<p>How it ended.</p>
+<h4 id="answercalldoneby">Answer.CallDone.by<a class="headerlink" href="#answercalldoneby" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">by</span><span class="p">:</span> <span class="n">Author</span>
+</code></pre></div>
+<p><code>Tools</code> if the tool ran unedited, else the extension that answered or last edited it.</p>
+<h2 id="ending">Ending<a class="headerlink" href="#ending" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Ending</span>
+</code></pre></div>
+<p>How a step ended; the subject of the <code>post_step</code> hook.</p>
+<h3 id="endingdone">Ending.Done<a class="headerlink" href="#endingdone" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Done</span><span class="p">(</span><span class="n">Ending</span><span class="p">)</span>
+</code></pre></div>
+<p>The step ran to its end.</p>
+<h4 id="endingdonenew">Ending.Done.<strong>new</strong><a class="headerlink" href="#endingdonenew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Ending</span><span class="o">.</span><span class="n">Done</span>
+</code></pre></div>
+<h3 id="endinghalted">Ending.Halted<a class="headerlink" href="#endinghalted" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Halted</span><span class="p">(</span><span class="n">Ending</span><span class="p">)</span>
+</code></pre></div>
+<p>A cursor hook halted it.</p>
+<h4 id="endinghaltednew">Ending.Halted.<strong>new</strong><a class="headerlink" href="#endinghaltednew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">reason</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Ending</span><span class="o">.</span><span class="n">Halted</span>
+</code></pre></div>
+<h4 id="endinghaltedreason">Ending.Halted.reason<a class="headerlink" href="#endinghaltedreason" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">reason</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The reason the hook gave.</p>
+<h3 id="endingfailed">Ending.Failed<a class="headerlink" href="#endingfailed" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Failed</span><span class="p">(</span><span class="n">Ending</span><span class="p">)</span>
+</code></pre></div>
+<p>A hook or the sample failed.</p>
+<h4 id="endingfailednew">Ending.Failed.<strong>new</strong><a class="headerlink" href="#endingfailednew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Ending</span><span class="o">.</span><span class="n">Failed</span>
+</code></pre></div>
+<h4 id="endingfailederror">Ending.Failed.error<a class="headerlink" href="#endingfailederror" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">error</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>What went wrong.</p>
+<h3 id="endingaborted">Ending.Aborted<a class="headerlink" href="#endingaborted" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Aborted</span><span class="p">(</span><span class="n">Ending</span><span class="p">)</span>
+</code></pre></div>
+<p>An abort ended it.</p>
+<h4 id="endingabortednew">Ending.Aborted.<strong>new</strong><a class="headerlink" href="#endingabortednew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Ending</span><span class="o">.</span><span class="n">Aborted</span>
+</code></pre></div>
+<h2 id="hook">Hook<a class="headerlink" href="#hook" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Hook</span>
+    <span class="n">PreStep</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Hook</span><span class="p">]</span>
+    <span class="n">PreInput</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Hook</span><span class="p">]</span>
+    <span class="n">PreSample</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Hook</span><span class="p">]</span>
+    <span class="n">PreReply</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Hook</span><span class="p">]</span>
+    <span class="n">PostReply</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Hook</span><span class="p">]</span>
+    <span class="n">PostResult</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Hook</span><span class="p">]</span>
+    <span class="n">PostStep</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Hook</span><span class="p">]</span>
+</code></pre></div>
+<p>The seven cursor hook points, in the order a step reaches them. It is not an integer.</p>
+<h3 id="hookname">Hook.name<a class="headerlink" href="#hookname" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The name an extension defines the hook by.</p>
+<h2 id="job">Job<a class="headerlink" href="#job" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Job</span>
+</code></pre></div>
+<p>What a step asks the driver to do next, from <code>Session.next_job</code>. Answer it with <code>Session.answer</code>.</p>
+<h3 id="jobhooks">Job.Hooks<a class="headerlink" href="#jobhooks" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Hooks</span><span class="p">(</span><span class="n">Job</span><span class="p">)</span>
+</code></pre></div>
+<p>Run the extensions' hooks for one hook point.</p>
+<h4 id="jobhooksnew">Job.Hooks.<strong>new</strong><a class="headerlink" href="#jobhooksnew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span>
+    <span class="bp">cls</span><span class="p">,</span>
+    <span class="n">point</span><span class="p">:</span> <span class="n">Hook</span><span class="p">,</span>
+    <span class="n">draft</span><span class="p">:</span> <span class="n">Draft</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">node</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">ending</span><span class="p">:</span> <span class="n">Ending</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Job</span><span class="o">.</span><span class="n">Hooks</span>
+</code></pre></div>
+<h4 id="jobhookspoint">Job.Hooks.point<a class="headerlink" href="#jobhookspoint" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">point</span><span class="p">:</span> <span class="n">Hook</span>
+</code></pre></div>
+<p>The hook point.</p>
+<h4 id="jobhooksdraft">Job.Hooks.draft<a class="headerlink" href="#jobhooksdraft" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">draft</span><span class="p">:</span> <span class="n">Draft</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>The subject at <code>pre_input</code>, <code>pre_sample</code> and <code>pre_reply</code>; otherwise <code>None</code>.</p>
+<h4 id="jobhooksnode">Job.Hooks.node<a class="headerlink" href="#jobhooksnode" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">node</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>The subject at <code>post_reply</code> and <code>post_result</code>: the node just committed; otherwise <code>None</code>.</p>
+<h4 id="jobhooksending">Job.Hooks.ending<a class="headerlink" href="#jobhooksending" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">ending</span><span class="p">:</span> <span class="n">Ending</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>The subject at <code>post_step</code>; otherwise <code>None</code>.</p>
+<h3 id="jobsample">Job.Sample<a class="headerlink" href="#jobsample" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Sample</span><span class="p">(</span><span class="n">Job</span><span class="p">)</span>
+</code></pre></div>
+<p>Ask the provider for a reply to the cursor's walk.</p>
+<h4 id="jobsamplenew">Job.Sample.<strong>new</strong><a class="headerlink" href="#jobsamplenew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Job</span><span class="o">.</span><span class="n">Sample</span>
+</code></pre></div>
+<h3 id="jobruncalls">Job.RunCalls<a class="headerlink" href="#jobruncalls" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">RunCalls</span><span class="p">(</span><span class="n">Job</span><span class="p">)</span>
+</code></pre></div>
+<p>Run a batch of calls and answer each with <code>Answer.CallDone</code>.</p>
+<h4 id="jobruncallsnew">Job.RunCalls.<strong>new</strong><a class="headerlink" href="#jobruncallsnew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">calls</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">RunCall</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Job</span><span class="o">.</span><span class="n">RunCalls</span>
+</code></pre></div>
+<h4 id="jobruncallsnode">Job.RunCalls.node<a class="headerlink" href="#jobruncallsnode" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">node</span><span class="p">:</span> <span class="nb">int</span>
+</code></pre></div>
+<p>The <code>Assistant</code> node holding the batch.</p>
+<h4 id="jobruncallscalls">Job.RunCalls.calls<a class="headerlink" href="#jobruncallscalls" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">calls</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">RunCall</span><span class="p">]</span>
+</code></pre></div>
+<p>The calls, in call order.</p>
+<h3 id="jobpending">Job.Pending<a class="headerlink" href="#jobpending" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Pending</span><span class="p">(</span><span class="n">Job</span><span class="p">)</span>
+</code></pre></div>
+<p>Calls are still out; nothing to do until they are answered.</p>
+<h4 id="jobpendingnew">Job.Pending.<strong>new</strong><a class="headerlink" href="#jobpendingnew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Job</span><span class="o">.</span><span class="n">Pending</span>
+</code></pre></div>
+<h3 id="jobrest">Job.Rest<a class="headerlink" href="#jobrest" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Rest</span><span class="p">(</span><span class="n">Job</span><span class="p">)</span>
+</code></pre></div>
+<p>The step is over and the cursor is at rest.</p>
+<h4 id="jobrestnew">Job.Rest.<strong>new</strong><a class="headerlink" href="#jobrestnew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Job</span><span class="o">.</span><span class="n">Rest</span>
+</code></pre></div>
+<h2 id="next">Next<a class="headerlink" href="#next" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Next</span>
+    <span class="n">Wait</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Next</span><span class="p">]</span>
+    <span class="n">Sample</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Next</span><span class="p">]</span>
+    <span class="n">RunTools</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Next</span><span class="p">]</span>
+</code></pre></div>
+<p>What a cursor's walk needs next.</p>
+<h2 id="runcall">RunCall<a class="headerlink" href="#runcall" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">RunCall</span>
+</code></pre></div>
+<p>One call of a batch, handed out in <code>Job.RunCalls</code> to be run.</p>
+<h3 id="runcallid">RunCall.id<a class="headerlink" href="#runcallid" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The call's id, as in the reply.</p>
+<h3 id="runcalltool">RunCall.tool<a class="headerlink" href="#runcalltool" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">tool</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The name of the tool to run.</p>
+<h3 id="runcallargs_raw">RunCall.args_raw<a class="headerlink" href="#runcallargs_raw" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">args_raw</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>The arguments exactly as the model produced them.</p>
+<h2 id="sampleend">SampleEnd<a class="headerlink" href="#sampleend" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SampleEnd</span>
+</code></pre></div>
+<p>How a sample ended, as the driver saw it. Core decides what the tree records.</p>
+<h3 id="sampleendfinished">SampleEnd.Finished<a class="headerlink" href="#sampleendfinished" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Finished</span><span class="p">(</span><span class="n">SampleEnd</span><span class="p">)</span>
+</code></pre></div>
+<p>The provider finished the reply.</p>
+<h4 id="sampleendfinishednew">SampleEnd.Finished.<strong>new</strong><a class="headerlink" href="#sampleendfinishednew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span>
+    <span class="bp">cls</span><span class="p">,</span>
+    <span class="n">stop</span><span class="p">:</span> <span class="n">Stop</span><span class="p">,</span>
+    <span class="n">reason</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">meta</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SampleEnd</span><span class="o">.</span><span class="n">Finished</span>
+</code></pre></div>
+<h4 id="sampleendfinishedstop">SampleEnd.Finished.stop<a class="headerlink" href="#sampleendfinishedstop" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">stop</span><span class="p">:</span> <span class="n">Stop</span>
+</code></pre></div>
+<p>Why the reply ended.</p>
+<h4 id="sampleendfinishedreason">SampleEnd.Finished.reason<a class="headerlink" href="#sampleendfinishedreason" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">reason</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>The provider's own finish string, or <code>None</code>.</p>
+<h4 id="sampleendfinishedmeta">SampleEnd.Finished.meta<a class="headerlink" href="#sampleendfinishedmeta" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">meta</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>What the response carried besides its parts, as JSON object text, or <code>None</code>.</p>
+<h3 id="sampleendfailed">SampleEnd.Failed<a class="headerlink" href="#sampleendfailed" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Failed</span><span class="p">(</span><span class="n">SampleEnd</span><span class="p">)</span>
+</code></pre></div>
+<p>The sample failed.</p>
+<h4 id="sampleendfailednew">SampleEnd.Failed.<strong>new</strong><a class="headerlink" href="#sampleendfailednew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">meta</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SampleEnd</span><span class="o">.</span><span class="n">Failed</span>
+</code></pre></div>
+<h4 id="sampleendfailederror">SampleEnd.Failed.error<a class="headerlink" href="#sampleendfailederror" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">error</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>What went wrong.</p>
+<h4 id="sampleendfailedmeta">SampleEnd.Failed.meta<a class="headerlink" href="#sampleendfailedmeta" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">meta</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>The failure's details as JSON object text, or <code>None</code>.</p>
+<h3 id="sampleendcancelled">SampleEnd.Cancelled<a class="headerlink" href="#sampleendcancelled" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Cancelled</span><span class="p">(</span><span class="n">SampleEnd</span><span class="p">)</span>
+</code></pre></div>
+<p>The cursor was aborted before the sample finished.</p>
+<h4 id="sampleendcancellednew">SampleEnd.Cancelled.<strong>new</strong><a class="headerlink" href="#sampleendcancellednew" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SampleEnd</span><span class="o">.</span><span class="n">Cancelled</span>
+</code></pre></div>
+<h2 id="session">Session<a class="headerlink" href="#session" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Session</span>
+</code></pre></div>
+<p>One session: its tree, cursors, scratchpad, and every cursor's step. It does no IO of its
+own: a program asks it for each cursor's next <code>Job</code> and gives back an <code>Answer</code>.</p>
+<p>A call that changes the session hands its records to the store (when there is one) before
+it returns, so a program never saves. Every call takes the session's one lock, so a
+session may be shared across threads. A closed session raises <code>Closed</code>.</p>
+<h3 id="sessioncreate">Session.create<a class="headerlink" href="#sessioncreate" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span>
+    <span class="n">config</span><span class="p">:</span> <span class="n">Config</span><span class="p">,</span>
+    <span class="n">system</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">now</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">directory</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PathLike</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Session</span>
+</code></pre></div>
+<p>A new session with a <code>Config</code> root, a <code>System</code> node, and cursor 0 on
+it. In <code>directory</code> (created if missing) when given, else in memory.</p>
+<h3 id="sessionload">Session.load<a class="headerlink" href="#sessionload" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="n">directory</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PathLike</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Session</span>
+</code></pre></div>
+<p>Open the session in <code>directory</code>, taking its lease. Every cursor loads
+with auto-step off, woken (load is a wake).</p>
+<h3 id="sessionread">Session.read<a class="headerlink" href="#sessionread" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span><span class="n">directory</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PathLike</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Session</span>
+</code></pre></div>
+<p>The session in <code>directory</code> as a copy in memory, as of its last sync, taking no lease
+and writing nothing (D18 section 7). It accepts changes and never saves them.</p>
+<h3 id="sessionfork">Session.fork<a class="headerlink" href="#sessionfork" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">fork</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">now</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">directory</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PathLike</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Session</span>
+</code></pre></div>
+<p>A new session holding a copy of <code>walk(node)</code> (D18 section 6): node <em>i</em> of the copy is
+node <em>i</em> of the walk, with cursor 0 on its tip. In <code>directory</code> (created if missing)
+when given, else in memory, written with one sync. <code>NoSuchNode</code> if <code>node</code> is absent.</p>
+<h3 id="sessionclose">Session.close<a class="headerlink" href="#sessionclose" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Drop the store and release the lease without writing what is not yet
+synced, as a crash would. Every later call raises <code>Closed</code>. A second
+close is <code>Closed</code> too.</p>
+<h3 id="sessiontree">Session.tree<a class="headerlink" href="#sessiontree" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">property</span> <span class="n">tree</span><span class="p">:</span> <span class="n">Tree</span>
+</code></pre></div>
+<p>The session's nodes.</p>
+<h3 id="sessioninput">Session.input<a class="headerlink" href="#sessioninput" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">by</span><span class="p">:</span> <span class="n">Author</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>
+<p>Add an <code>Input</code> item for <code>cursor</code>, written <code>by</code> the author, and wake the cursor.
+Returns the item's id. <code>NoSuchCursor</code> or <code>CursorClosed</code> if the cursor is not open.</p>
+<h3 id="sessionstep">Session.step<a class="headerlink" href="#sessionstep" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Run one step of <code>cursor</code> whether or not auto-step is on, and leave auto-step as it is.
+<code>Busy</code> if a step is already running.</p>
+<h3 id="sessiongo_to">Session.go_to<a class="headerlink" href="#sessiongo_to" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">go_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">to</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">now</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div>
+<p>Move <code>cursor</code> to node <code>to</code> for the frontend named <code>client</code>, turn auto-step off and wake
+the cursor. On a busy cursor the step is aborted and the move applies when it rests.
+Returns whether the driver must cancel the effect in flight. <code>NoSuchNode</code> if <code>to</code>
+is absent.</p>
+<h3 id="sessionset_auto">Session.set_auto<a class="headerlink" href="#sessionset_auto" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_auto</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">on</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Turn auto-step on or off for <code>cursor</code>; on wakes it.</p>
+<h3 id="sessionabort">Session.abort<a class="headerlink" href="#sessionabort" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">abort</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div>
+<p>Stop <code>cursor</code>'s step: auto-step goes off and no later phase runs. A running hook finishes.
+Returns whether the driver must cancel the effect in flight.</p>
+<h3 id="sessionclose_cursor">Session.close_cursor<a class="headerlink" href="#sessionclose_cursor" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">close_cursor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Close a cursor at rest (<code>Busy</code> otherwise): the driver aborts and waits first.</p>
+<h3 id="sessionopen">Session.open<a class="headerlink" href="#sessionopen" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">at</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">by</span><span class="p">:</span> <span class="n">Author</span><span class="p">,</span> <span class="n">now</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>
+<p>Open a new cursor at node <code>at</code> and wake it. Returns its id. <code>NoSuchNode</code> if <code>at</code> is absent.</p>
+<h3 id="sessionadd_item">Session.add_item<a class="headerlink" href="#sessionadd_item" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">to</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">ItemData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>
+<p>Add an item to cursor <code>to</code>'s scratchpad and wake it. Returns the item's id.</p>
+<h3 id="sessionremove_item">Session.remove_item<a class="headerlink" href="#sessionremove_item" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">remove_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Remove an item from the scratchpad. <code>NoSuchItem</code> if it is not there.</p>
+<h3 id="sessionappend">Session.append<a class="headerlink" href="#sessionappend" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">append</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">body</span><span class="p">:</span> <span class="n">Body</span><span class="p">,</span>
+    <span class="n">by</span><span class="p">:</span> <span class="n">Author</span><span class="p">,</span>
+    <span class="n">now</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">copied_from</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">derived_from</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>
+<p>Append a node under <code>parent</code> without moving any cursor. <code>copied_from</code> names the node it
+repeats verbatim, <code>derived_from</code> the node whose walk its content was computed from;
+<code>NoSuchNode</code> if either is not a node.</p>
+<h3 id="sessionappend_root">Session.append_root<a class="headerlink" href="#sessionappend_root" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">append_root</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Config</span><span class="p">,</span> <span class="n">by</span><span class="p">:</span> <span class="n">Author</span><span class="p">,</span> <span class="n">now</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>
+<p>Append a root <code>Config</code> (a detached tree) without moving any cursor.</p>
+<h3 id="sessionset_label">Session.set_label<a class="headerlink" href="#sessionset_label" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Put <code>label</code> on <code>cursor</code>; a label already on another cursor moves. <code>CursorClosed</code> if the
+cursor is closed.</p>
+<h3 id="sessionremove_label">Session.remove_label<a class="headerlink" href="#sessionremove_label" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">remove_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Remove <code>label</code>. <code>NoSuchLabel</code> if it is not set.</p>
+<h3 id="sessionhook_move">Session.hook_move<a class="headerlink" href="#sessionhook_move" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">hook_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">to</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">by</span><span class="p">:</span> <span class="n">Author</span><span class="p">,</span> <span class="n">now</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>A cursor hook's move of its own cursor to node <code>to</code>. <code>NotInHook</code> unless a cursor hook
+job is out for <code>cursor</code>.</p>
+<h3 id="sessionhook_write">Session.hook_write<a class="headerlink" href="#sessionhook_write" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">hook_write</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">cursor</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">body</span><span class="p">:</span> <span class="n">Body</span><span class="p">,</span>
+    <span class="n">delivers</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">by</span><span class="p">:</span> <span class="n">Author</span><span class="p">,</span>
+    <span class="n">now</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">copied_from</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">derived_from</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>
+<p>A cursor hook's write: append a node under the cursor's node, move onto it and consume
+the <code>delivers</code> items. Returns the new node's id. <code>NotInHook</code> unless a cursor hook job is
+out for <code>cursor</code>; <code>NotPending</code> if an item is not pending for it. <code>copied_from</code> and
+<code>derived_from</code> as for <code>append</code>.</p>
+<h3 id="sessionhook_set_auto">Session.hook_set_auto<a class="headerlink" href="#sessionhook_set_auto" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">hook_set_auto</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">on</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>A cursor hook's change of its own cursor's auto-step. <code>NotInHook</code> unless a cursor hook
+job is out for <code>cursor</code>.</p>
+<h3 id="sessionnext_job">Session.next_job<a class="headerlink" href="#sessionnext_job" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">next_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Job</span>
+</code></pre></div>
+<p>The cursor's next job; <code>Job.Rest</code> when it has no step.</p>
+<h3 id="sessionanswer">Session.answer<a class="headerlink" href="#sessionanswer" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">answer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">answer</span><span class="p">:</span> <span class="n">Answer</span><span class="p">,</span> <span class="n">now</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Answer the job last handed out for <code>cursor</code>.</p>
+<h3 id="sessioncursors">Session.cursors<a class="headerlink" href="#sessioncursors" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">cursors</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</code></pre></div>
+<p>Every open cursor, by id.</p>
+<h3 id="sessionclosed">Session.closed<a class="headerlink" href="#sessionclosed" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">closed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span>
+</code></pre></div>
+<p>Each closed cursor with its last node, in id order.</p>
+<h3 id="sessioncursor">Session.cursor<a class="headerlink" href="#sessioncursor" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">cursor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CursorState</span>
+</code></pre></div>
+<p>One cursor as it stands, all read under one lock.</p>
+<h3 id="sessionlabels">Session.labels<a class="headerlink" href="#sessionlabels" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">labels</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span>
+</code></pre></div>
+<p>Every label with its cursor, in string order.</p>
+<h3 id="sessionlabel">Session.label<a class="headerlink" href="#sessionlabel" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>
+<p>The cursor <code>label</code> is on.</p>
+<h3 id="sessiontake_notices">Session.take_notices<a class="headerlink" href="#sessiontake_notices" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">take_notices</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span>
+</code></pre></div>
+<p>Drain the <code>(client, text)</code> messages to clients, oldest first.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "content.code.copy"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+    
+  </body>
+</html>

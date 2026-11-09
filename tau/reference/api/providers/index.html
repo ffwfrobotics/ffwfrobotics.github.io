@@ -1,0 +1,4998 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for Tectum, Tau, and JMFTS">
+      
+      
+      
+        <link rel="canonical" href="https://ffwfrobotics.github.io/tau/reference/api/providers/">
+      
+      
+        <link rel="prev" href="../messages/">
+      
+      
+        <link rel="next" href="../constraints/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
+    
+    
+      
+        <title>Providers and the client - FFWF Robotics Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/ffwf.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#providers-and-the-client" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../.." title="FFWF Robotics Docs" class="md-header__button md-logo" aria-label="FFWF Robotics Docs" data-md-component="logo">
+      
+  <img src="../../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            FFWF Robotics Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Providers and the client
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9 8.99 8.99 0 0 0 4 7.47V22h2v-3h2v3h2v-3h2v3h2v-3.54c2.47-1.65 4-4.46 4-7.46a9 9 0 0 0-9-9m-4 9a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m8 0a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m-4 3 1.5 3h-3z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 15a2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2m2.5 2 1.5-3 1.5 3zm5.5-2a2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2m6-4A10 10 0 0 0 12 1 10 10 0 0 0 2 11c0 2.8 1.2 5.3 3 7.1V22h14v-3.9c1.8-1.8 3-4.3 3-7.1m-5 9h-2v-2h-2v2h-2v-2H9v2H7v-2.8c-1.8-1.5-3-3.7-3-6.2a8 8 0 0 1 8-8 8 8 0 0 1 8 8c0 2.5-1.2 4.8-3 6.2z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../tectum/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tectum
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tau
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../preview/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tau 0.16 preview
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../jmfts/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  JMFTS
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../integrations/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Integrations
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../style-guide/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Style guide
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="FFWF Robotics Docs" class="md-nav__button md-logo" aria-label="FFWF Robotics Docs" data-md-component="logo">
+      
+  <img src="../../../../assets/logo.png" alt="logo">
+
+    </a>
+    FFWF Robotics Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../tectum/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tectum
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../tectum/tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../tectum/tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../tectum/cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../tectum/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../tectum/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tau
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_2" id="__nav_3_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_5" id="__nav_3_5_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau-llm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_llm
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau-agent-core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_agent_core
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extensions
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rpc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RPC
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau-coding-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_coding_agent
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5_7" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_5_7" id="__nav_3_5_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_5_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_5_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../messages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Messages and content
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Providers and the client
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Providers and the client
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#abortsignal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AbortSignal
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AbortSignal">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#abort" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        abort
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is_aborted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        is_aborted
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#apifactory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ApiFactory
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ApiFactory">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#call" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        call
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assistantmessageeventstream" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AssistantMessageEventStream
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AssistantMessageEventStream">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aiter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        aiter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anext" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        anext
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#abort_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        abort
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#result" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        result
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compat
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Compat">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#max_tokens_field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        max_tokens_field
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#supports_usage_in_streaming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        supports_usage_in_streaming
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tool_call_schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tool_call_schema
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#doneevent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DoneEvent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#errorevent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ErrorEvent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#provider" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Provider
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Provider">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aclose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        aclose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        id
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stream_chat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        stream_chat
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#providerspec" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ProviderSpec
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ProviderSpec">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#resolve_api_key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        resolve_api_key
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resolvedcompat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ResolvedCompat
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ResolvedCompat">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#max_tokens_field_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        max_tokens_field
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#supports_usage_in_streaming_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        supports_usage_in_streaming
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tool_call_schema_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tool_call_schema
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#streameventstream" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StreamEventStream
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="StreamEventStream">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aiter_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        aiter
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#textdeltaevent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TextDeltaEvent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#thinkingdeltaevent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ThinkingDeltaEvent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#toolcalldeltaevent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ToolCallDeltaEvent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aclose_providers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        aclose_providers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#complete_simple" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        complete_simple
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#detect_compat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        detect_compat
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get_api_factory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_api_factory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get_provider_spec" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_provider_spec
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#register_api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        register_api
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#register_provider" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        register_provider
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#registered_apis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        registered_apis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#registered_providers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        registered_providers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resolve_compat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        resolve_compat
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#split_tool_result_content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        split_tool_result_content
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stream_simple" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        stream_simple
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unregister_api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        unregister_api
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unregister_provider" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        unregister_provider
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../constraints/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Constrained decoding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../agent-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The agent loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sessions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sessions and the conversation tree
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sdk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The SDK entry point
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../compaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compaction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rpc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The RPC protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../export/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Export
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../runs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Run manifests and latency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../preview/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tau 0.16 preview
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../preview/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../preview/extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../preview/operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operating it
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../preview/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../preview/differences/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What changed from 0.15
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../preview/api/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../preview/api/clients/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Writing a frontend
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../preview/api/config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Configuration and context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../preview/api/diagnostics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Tracing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../preview/api/driver/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Embedding tau
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../preview/api/errors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Errors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../preview/api/events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../preview/api/extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Writing an extension
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../preview/api/machine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The step machine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../preview/api/providers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../preview/api/records/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The session's records
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../preview/api/sessions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Starting and finding sessions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../preview/api/tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../preview/api/tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The terminal UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../preview/api/wire/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The wire
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../preview/api/wire-protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The wire protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../jmfts/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JMFTS
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JMFTS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../jmfts/tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/tutorials/ingest-a-document/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ingest a document
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/tutorials/see-a-result-on-the-page/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    See a result on the page
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/release-0-6-0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    0.6.0 — eyes and hands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../jmfts/release-0-3-0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    0.3.0 — the job system
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../integrations/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integrations
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Integrations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../integrations/tectum-tau/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum + Tau
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../integrations/tectum-jmfts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum + JMFTS
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../integrations/tau-jmfts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau + JMFTS
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../integrations/full-stack-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The FFwF Full Stack Agent
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../style-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guide
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stable"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#abortsignal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AbortSignal
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AbortSignal">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#abort" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        abort
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is_aborted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        is_aborted
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#apifactory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ApiFactory
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ApiFactory">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#call" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        call
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assistantmessageeventstream" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AssistantMessageEventStream
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AssistantMessageEventStream">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aiter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        aiter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anext" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        anext
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#abort_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        abort
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#result" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        result
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compat
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Compat">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#max_tokens_field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        max_tokens_field
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#supports_usage_in_streaming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        supports_usage_in_streaming
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tool_call_schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tool_call_schema
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#doneevent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DoneEvent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#errorevent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ErrorEvent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#provider" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Provider
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Provider">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aclose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        aclose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        id
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stream_chat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        stream_chat
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#providerspec" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ProviderSpec
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ProviderSpec">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#resolve_api_key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        resolve_api_key
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resolvedcompat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ResolvedCompat
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ResolvedCompat">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#max_tokens_field_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        max_tokens_field
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#supports_usage_in_streaming_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        supports_usage_in_streaming
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tool_call_schema_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tool_call_schema
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#streameventstream" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StreamEventStream
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="StreamEventStream">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aiter_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        aiter
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#textdeltaevent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TextDeltaEvent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#thinkingdeltaevent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ThinkingDeltaEvent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#toolcalldeltaevent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ToolCallDeltaEvent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aclose_providers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        aclose_providers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#complete_simple" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        complete_simple
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#detect_compat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        detect_compat
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get_api_factory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_api_factory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get_provider_spec" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_provider_spec
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#register_api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        register_api
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#register_provider" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        register_provider
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#registered_apis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        registered_apis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#registered_providers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        registered_providers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resolve_compat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        resolve_compat
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#split_tool_result_content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        split_tool_result_content
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stream_simple" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        stream_simple
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unregister_api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        unregister_api
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unregister_provider" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        unregister_provider
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="providers-and-the-client">Providers and the client<a class="headerlink" href="#providers-and-the-client" title="Permanent link">&para;</a></h1>
+<!-- generated by scripts/export_site_reference.py in the tau repository — do not edit by hand -->
+
+<h2 id="abortsignal">AbortSignal<a class="headerlink" href="#abortsignal" title="Permanent link">&para;</a></h2>
+<!-- agent: yes -->
+
+<p><code>tau_llm.abort.AbortSignal</code></p>
+<p>Signal that can be checked during async operations.</p>
+<p>When abort() is called, all subsequent is_aborted() checks return True.
+Async operations should check this periodically (e.g., every 100ms)
+and raise asyncio.CancelledError if aborted.</p>
+<p>Reference: SUBPHASE-0.0.md, "3. AbortSignal" section.</p>
+<h3 id="abort">abort<a class="headerlink" href="#abort" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">abort</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p><code>tau_llm.abort.AbortSignal.abort</code></p>
+<p>Signal that the current operation should be aborted.</p>
+<p>Idempotent: calling multiple times has no additional effect.
+Thread-safe: uses threading.Lock internally.</p>
+<h3 id="is_aborted">is_aborted<a class="headerlink" href="#is_aborted" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">is_aborted</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div>
+<p><code>tau_llm.abort.AbortSignal.is_aborted</code></p>
+<p>Check if the signal has been aborted.</p>
+<p>Thread-safe: uses threading.Lock internally.
+Idempotent: multiple calls return the same value.</p>
+<p><strong>Returns</strong></p>
+<p>True if abort() has been called, False otherwise.</p>
+<h2 id="apifactory">ApiFactory<a class="headerlink" href="#apifactory" title="Permanent link">&para;</a></h2>
+<!-- agent: yes -->
+
+<p><code>tau_llm.providers.base.ApiFactory</code></p>
+<p>Builds a :class:<code>Provider</code> for one wire protocol, bound to one endpoint.</p>
+<p>Keyword-only, so a factory can ignore what it does not need and so adding a
+field later does not silently shift a positional argument.</p>
+<h3 id="call"><strong>call</strong><a class="headerlink" href="#call" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="fm">__call__</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">provider_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Provider</span>
+</code></pre></div>
+<p><code>tau_llm.providers.base.ApiFactory.__call__</code></p>
+<p>Build the provider.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>provider_id: str</code> — Vendor id to stamp onto <code>Provider.id</code>.</li>
+<li><code>name: str</code> — Vendor display name to stamp onto <code>Provider.name</code>.</li>
+<li><code>base_url: str</code> — Fully resolved endpoint — the caller has already applied the model's own <code>base_url</code> and any vendor default, so a factory must NOT substitute one of its own.</li>
+<li><code>api_key: str | None</code> — Resolved credential, or None when neither the call, the model nor the vendor's environment variables supplied one. A factory that requires a key raises at request time (Fail-Early: no fabricated credential).</li>
+</ul>
+<p><strong>Returns</strong></p>
+<p>A provider bound to that endpoint.</p>
+<h2 id="assistantmessageeventstream">AssistantMessageEventStream<a class="headerlink" href="#assistantmessageeventstream" title="Permanent link">&para;</a></h2>
+<!-- agent: yes -->
+
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">AssistantMessageEventStream</span><span class="p">(</span><span class="n">provider_stream</span><span class="p">:</span> <span class="n">AsyncIterable</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">model</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span>
+</code></pre></div>
+<p><code>tau_llm.streaming.AssistantMessageEventStream</code></p>
+<p>Async iterator over streaming events from the LLM.</p>
+<p>Yields: TextDeltaEvent, ToolCallDeltaEvent, DoneEvent, ErrorEvent</p>
+<p>This class wraps an underlying provider stream (an async iterator of typed
+StreamEvents) and re-publishes those events through an internal queue. A
+background <code>_collect</code> coroutine drains the provider stream into the queue
+so <code>result()</code> and <code>async for</code> can be awaited independently; the main
+coroutine yields events from that queue.</p>
+<p><strong>Constructor parameters</strong></p>
+<ul>
+<li><code>provider_stream: AsyncIterable[Any]</code> — Async-iterable yielding typed provider StreamEvents.</li>
+<li><code>model: Any</code> — The Model configuration.</li>
+</ul>
+<p><strong>Usage</strong></p>
+<p>stream = await stream_simple(model, context, options)
+async for event in stream:
+    if event.type == "text_delta":
+        print(event.delta, end="")
+    elif event.type == "toolcall_delta":
+        print(f"\nTool: {event.delta.get('id', '')}")
+final = await stream.result()</p>
+<h3 id="aiter"><strong>aiter</strong><a class="headerlink" href="#aiter" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="fm">__aiter__</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="s1">'AssistantMessageEventStream'</span>
+</code></pre></div>
+<p><code>tau_llm.streaming.AssistantMessageEventStream.__aiter__</code></p>
+<p>Return self as the async iterator.</p>
+<h3 id="anext"><strong>anext</strong><a class="headerlink" href="#anext" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="fm">__anext__</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Any</span>
+</code></pre></div>
+<p><code>tau_llm.streaming.AssistantMessageEventStream.__anext__</code></p>
+<p>Yield the next event from the internal queue.</p>
+<p>If the stream is done and the queue is empty, raises
+StopAsyncIteration.</p>
+<p><strong>Returns</strong></p>
+<p>The next StreamEvent (TextDeltaEvent, ToolCallDeltaEvent, DoneEvent, or ErrorEvent).</p>
+<p><strong>Raises</strong></p>
+<ul>
+<li><code>StopAsyncIteration</code> — When the stream is complete.</li>
+</ul>
+<h3 id="abort_1">abort<a class="headerlink" href="#abort_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">abort</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p><code>tau_llm.streaming.AssistantMessageEventStream.abort</code></p>
+<p>Stop consuming the stream locally. Does NOT cancel the HTTP request.</p>
+<p>Against the real stack this cancels the collector task and nothing else.
+<code>OpenAICompletionsProvider.stream_chat()</code> returns a bare async generator,
+which has no <code>abort</code> attribute, so the propagation branch below never
+fires — it exists for a provider stream that chooses to expose one, and is
+exercised only by a fake in the tests.</p>
+<p>Real cancellation of an in-flight request is a separate mechanism: an
+:class:<code>~tau_llm.abort.AbortSignal</code> passed as <code>options={"abort_signal": ...}</code>,
+which the provider polls between chunks. Reach for that, not this.</p>
+<p>The partial state is preserved either way.</p>
+<h3 id="result">result<a class="headerlink" href="#result" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">result</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">AssistantMessage</span>
+</code></pre></div>
+<p><code>tau_llm.streaming.AssistantMessageEventStream.result</code></p>
+<p>Wait for the stream to complete and return the final message.</p>
+<p><strong>Returns</strong></p>
+<p>The fully accumulated AssistantMessage.</p>
+<p><strong>Raises</strong></p>
+<ul>
+<li><code>Exception</code> — If the stream produced an ErrorEvent. The ORIGINAL exception is re-raised with its type intact (e.g. <code>ConstraintViolation</code>, which carries the offending output), not flattened to a bare <code>Exception</code>.</li>
+</ul>
+<h2 id="compat">Compat<a class="headerlink" href="#compat" title="Permanent link">&para;</a></h2>
+<!-- agent: yes -->
+
+<p><code>tau_llm.compat.Compat</code></p>
+<p>Wire quirks an operator STATES for one endpoint.</p>
+<p>Every field is optional, and <code>None</code> means "not stated" rather than "false"
+— :func:<code>resolve_compat</code> falls through to the detected value for anything
+left unset, so an operator can correct one field without restating the rest.</p>
+<p>Set per-model in <code>~/.tau/config.json</code> (<code>models.&lt;name&gt;.compat</code>).</p>
+<h3 id="max_tokens_field">max_tokens_field<a class="headerlink" href="#max_tokens_field" title="Permanent link">&para;</a></h3>
+<p><code>tau_llm.compat.Compat.max_tokens_field: MaxTokensField | None</code></p>
+<p><em>No description. This object is marked but undocumented.</em></p>
+<h3 id="supports_usage_in_streaming">supports_usage_in_streaming<a class="headerlink" href="#supports_usage_in_streaming" title="Permanent link">&para;</a></h3>
+<p><code>tau_llm.compat.Compat.supports_usage_in_streaming: bool | None</code></p>
+<p><em>No description. This object is marked but undocumented.</em></p>
+<h3 id="tool_call_schema">tool_call_schema<a class="headerlink" href="#tool_call_schema" title="Permanent link">&para;</a></h3>
+<p><code>tau_llm.compat.Compat.tool_call_schema: ToolCallSchema | None</code></p>
+<p><em>No description. This object is marked but undocumented.</em></p>
+<h2 id="doneevent">DoneEvent<a class="headerlink" href="#doneevent" title="Permanent link">&para;</a></h2>
+<!-- agent: yes -->
+
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">DoneEvent</span><span class="p">(</span><span class="n">final</span><span class="p">:</span> <span class="n">AssistantMessage</span><span class="p">,</span> <span class="n">usage</span><span class="p">:</span> <span class="n">Usage</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s1">'done'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'done'</span><span class="p">)</span>
+</code></pre></div>
+<p><code>tau_llm.streaming.DoneEvent</code></p>
+<p>A done event signaling the stream is complete.</p>
+<p>Carries the fully accumulated AssistantMessage and token usage information.</p>
+<p>Reference: SUBPHASE-0.0.md, "4. Streaming Events" section.</p>
+<p><strong>Constructor parameters</strong></p>
+<ul>
+<li><code>final: AssistantMessage</code> — The fully accumulated AssistantMessage.</li>
+<li><code>usage: Usage</code> — Token usage information for the response.</li>
+<li><code>type: Literal['done'] = 'done'</code> — Always "done".</li>
+</ul>
+<h2 id="errorevent">ErrorEvent<a class="headerlink" href="#errorevent" title="Permanent link">&para;</a></h2>
+<!-- agent: yes -->
+
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ErrorEvent</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">is_error</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s1">'error'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'error'</span><span class="p">)</span>
+</code></pre></div>
+<p><code>tau_llm.streaming.ErrorEvent</code></p>
+<p>An error event from the LLM stream.</p>
+<p>Carries an error message. When the stream produces an ErrorEvent,
+no further events will be produced.</p>
+<p>Reference: SUBPHASE-0.0.md, "4. Streaming Events" section.</p>
+<p><strong>Constructor parameters</strong></p>
+<ul>
+<li><code>message: str</code> — Description of the error.</li>
+<li><code>is_error: Literal[True] = True</code> — Always True.</li>
+<li><code>type: Literal['error'] = 'error'</code> — Always "error".</li>
+</ul>
+<h2 id="provider">Provider<a class="headerlink" href="#provider" title="Permanent link">&para;</a></h2>
+<!-- agent: yes -->
+
+<p><code>tau_llm.providers.base.Provider</code></p>
+<p>Abstract base class for LLM chat providers.</p>
+<p>A Provider instance is bound to ONE endpoint: it bakes in a base URL and a
+credential at construction (that is why <code>tau_llm.client</code> pools instances
+per endpoint rather than per class). <code>id</code> and <code>name</code> say which vendor
+that endpoint belongs to — pi's <code>Provider.id</code>/<code>.name</code>
+(<code>models.ts:98-99</code>).</p>
+<p>Reference: SUBPHASE-0.0.md, Phase 1 Subphase 0 — Provider interface.</p>
+<h3 id="aclose">aclose<a class="headerlink" href="#aclose" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">aclose</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p><code>tau_llm.providers.base.Provider.aclose</code></p>
+<p>Release anything this instance holds open (HTTP connections, …).</p>
+<p><code>tau_llm.client.aclose_providers</code> calls this on EVERY pooled provider,
+so the contract has to live on the base class — otherwise a provider
+registered through :func:<code>register_api</code> would crash the shutdown path of
+an application that never heard of it. The default is a no-op because a
+provider that opens nothing has nothing to close; one that does (see
+<code>OpenAICompletionsProvider.aclose</code>) overrides it, and must stay
+idempotent — the pool may close an instance that never issued a request.</p>
+<h3 id="id">id<a class="headerlink" href="#id" title="Permanent link">&para;</a></h3>
+<p><code>tau_llm.providers.base.Provider.id: str</code></p>
+<p><em>No description. This object is marked but undocumented.</em></p>
+<h3 id="name">name<a class="headerlink" href="#name" title="Permanent link">&para;</a></h3>
+<p><code>tau_llm.providers.base.Provider.name: str</code></p>
+<p><em>No description. This object is marked but undocumented.</em></p>
+<h3 id="stream_chat">stream_chat<a class="headerlink" href="#stream_chat" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">stream_chat</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span> <span class="n">messages</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">tools</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ToolSpec</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StreamEventStream</span>
+</code></pre></div>
+<p><code>tau_llm.providers.base.Provider.stream_chat</code></p>
+<p>Stream chat completions from the LLM.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>model: Model</code> — The Model configuration to use for the request.</li>
+<li><code>messages: list[Any]</code> — List of τ message objects (user/assistant/toolResult).</li>
+<li><code>tools: list[ToolSpec] | None = None</code> — Optional list of objects satisfying ToolSpec. The agent loop passes <code>AgentTool</code> wrappers, not <code>ToolDefinition</code>; see ToolSpec for why this is a Protocol.</li>
+<li><code>options: dict[str, Any] | None = None</code> — Optional provider-specific options (temperature, max_tokens, etc.).</li>
+</ul>
+<p><strong>Returns</strong></p>
+<p>A StreamEventStream — an async iterator of typed streaming events (TextDeltaEvent, ThinkingDeltaEvent, ToolCallDeltaEvent, DoneEvent, ErrorEvent). <code>stream_simple</code> wraps it in AssistantMessageEventStream, which exposes the terminal AssistantMessage via <code>result()</code>.</p>
+<p><strong>Raises</strong></p>
+<ul>
+<li><code>NotImplementedError</code> — If the provider hasn't implemented this method.</li>
+</ul>
+<h2 id="providerspec">ProviderSpec<a class="headerlink" href="#providerspec" title="Permanent link">&para;</a></h2>
+<!-- agent: yes -->
+
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ProviderSpec</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">api</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">''</span><span class="p">,</span> <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">api_key_env</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">())</span>
+</code></pre></div>
+<p><code>tau_llm.providers.base.ProviderSpec</code></p>
+<p>One vendor, as data.</p>
+<p>Everything τ needs to reach an OpenAI-compatible vendor that is not OpenAI.
+pi's <code>CreateProviderOptions</code> (<code>models.ts:738</code>) minus the parts τ has no
+consumer for — see this module's docstring and <code>Provider</code> above.</p>
+<p><strong>Constructor parameters</strong></p>
+<ul>
+<li><code>id: str</code> — Vendor id. Matches <code>Model.provider</code>; that is the lookup key.</li>
+<li><code>api: str</code> — The ONE wire protocol this vendor speaks. A model claiming a different <code>api</code> for this vendor is a configuration error, not a request to be attempted — see <code>client._resolve_request</code>. A gateway that genuinely speaks two protocols registers two ids.</li>
+<li><code>name: str = ''</code> — Display name. Defaults to <code>id</code>, as pi's <code>createProvider</code> does.</li>
+<li><code>base_url: str | None = None</code> — Default endpoint, used only when the <code>Model</code> carries no <code>base_url</code> of its own. None means the vendor has no fixed endpoint (a self-hosted server), and a model must then supply one.</li>
+<li><code>api_key_env: tuple[str, ...] = tuple()</code> — Environment variables searched, in order, for this vendor's credential. Empty means "this vendor has no known credential source"; a NON-empty tuple that resolves to nothing is a hard error rather than a silent fall-through to another vendor's key.</li>
+</ul>
+<h3 id="resolve_api_key">resolve_api_key<a class="headerlink" href="#resolve_api_key" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">resolve_api_key</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p><code>tau_llm.providers.base.ProviderSpec.resolve_api_key</code></p>
+<p>First non-empty value among <code>api_key_env</code>, or None if none is set.</p>
+<h2 id="resolvedcompat">ResolvedCompat<a class="headerlink" href="#resolvedcompat" title="Permanent link">&para;</a></h2>
+<!-- agent: yes -->
+
+<p><code>tau_llm.compat.ResolvedCompat</code></p>
+<p>:class:<code>Compat</code> with every field decided. What the provider reads.</p>
+<h3 id="max_tokens_field_1">max_tokens_field<a class="headerlink" href="#max_tokens_field_1" title="Permanent link">&para;</a></h3>
+<p><code>tau_llm.compat.ResolvedCompat.max_tokens_field: MaxTokensField</code></p>
+<p><em>No description. This object is marked but undocumented.</em></p>
+<h3 id="supports_usage_in_streaming_1">supports_usage_in_streaming<a class="headerlink" href="#supports_usage_in_streaming_1" title="Permanent link">&para;</a></h3>
+<p><code>tau_llm.compat.ResolvedCompat.supports_usage_in_streaming: bool</code></p>
+<p><em>No description. This object is marked but undocumented.</em></p>
+<h3 id="tool_call_schema_1">tool_call_schema<a class="headerlink" href="#tool_call_schema_1" title="Permanent link">&para;</a></h3>
+<p><code>tau_llm.compat.ResolvedCompat.tool_call_schema: ToolCallSchema</code></p>
+<p><em>No description. This object is marked but undocumented.</em></p>
+<h2 id="streameventstream">StreamEventStream<a class="headerlink" href="#streameventstream" title="Permanent link">&para;</a></h2>
+<!-- agent: yes -->
+
+<p><code>tau_llm.providers.base.StreamEventStream</code></p>
+<p>Structural return type for <code>Provider.stream_chat</code>.</p>
+<p>A provider stream is async-iterable over typed streaming events
+(TextDeltaEvent / ThinkingDeltaEvent / ToolCallDeltaEvent / DoneEvent /
+ErrorEvent). The client (<code>stream_simple</code>) wraps it once in
+<code>AssistantMessageEventStream</code> (streaming.py) — the single stream type
+that adds queue buffering and the terminal <code>result()</code>.</p>
+<h3 id="aiter_1"><strong>aiter</strong><a class="headerlink" href="#aiter_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="fm">__aiter__</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span>
+</code></pre></div>
+<p><code>tau_llm.providers.base.StreamEventStream.__aiter__</code></p>
+<p><em>No description. This object is marked but undocumented.</em></p>
+<h2 id="textdeltaevent">TextDeltaEvent<a class="headerlink" href="#textdeltaevent" title="Permanent link">&para;</a></h2>
+<!-- agent: yes -->
+
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">TextDeltaEvent</span><span class="p">(</span><span class="n">delta</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">partial</span><span class="p">:</span> <span class="n">AssistantMessage</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s1">'text_delta'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'text_delta'</span><span class="p">)</span>
+</code></pre></div>
+<p><code>tau_llm.streaming.TextDeltaEvent</code></p>
+<p>A text delta event from the LLM stream.</p>
+<p>Carries a partial text chunk and the partially accumulated message.
+The consumer should append delta to the partial message's text content.</p>
+<p>Reference: SUBPHASE-0.0.md, "4. Streaming Events" section.</p>
+<p><strong>Constructor parameters</strong></p>
+<ul>
+<li><code>delta: str</code> — The text chunk from this event.</li>
+<li><code>partial: AssistantMessage</code> — The partially accumulated AssistantMessage.</li>
+<li><code>type: Literal['text_delta'] = 'text_delta'</code> — Always "text_delta".</li>
+</ul>
+<h2 id="thinkingdeltaevent">ThinkingDeltaEvent<a class="headerlink" href="#thinkingdeltaevent" title="Permanent link">&para;</a></h2>
+<!-- agent: yes -->
+
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ThinkingDeltaEvent</span><span class="p">(</span><span class="n">delta</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">partial</span><span class="p">:</span> <span class="n">AssistantMessage</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s1">'thinking_delta'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'thinking_delta'</span><span class="p">)</span>
+</code></pre></div>
+<p><code>tau_llm.streaming.ThinkingDeltaEvent</code></p>
+<p>A thinking/reasoning delta event from the LLM stream.</p>
+<p>Mirrors :class:<code>TextDeltaEvent</code> but carries <em>reasoning</em> content — the
+OpenAI-compatible <code>reasoning_content</code> / <code>reasoning</code> / <code>reasoning_text</code>
+delta fields (llama.cpp, vLLM, DeepSeek, OpenRouter). Kept as a distinct
+event so consumers can render reasoning separately from the answer and
+collapse it once the answer/tool content begins.</p>
+<p>Reference: pi <code>openai-completions.ts</code> <code>thinking_delta</code> event.</p>
+<p><strong>Constructor parameters</strong></p>
+<ul>
+<li><code>delta: str</code> — The reasoning chunk from this event.</li>
+<li><code>partial: AssistantMessage</code> — The partially accumulated AssistantMessage.</li>
+<li><code>type: Literal['thinking_delta'] = 'thinking_delta'</code> — Always "thinking_delta".</li>
+</ul>
+<h2 id="toolcalldeltaevent">ToolCallDeltaEvent<a class="headerlink" href="#toolcalldeltaevent" title="Permanent link">&para;</a></h2>
+<!-- agent: yes -->
+
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ToolCallDeltaEvent</span><span class="p">(</span><span class="n">delta</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">partial</span><span class="p">:</span> <span class="n">AssistantMessage</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s1">'toolcall_delta'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'toolcall_delta'</span><span class="p">)</span>
+</code></pre></div>
+<p><code>tau_llm.streaming.ToolCallDeltaEvent</code></p>
+<p>A tool call delta event from the LLM stream.</p>
+<p>Carries a partial tool call update and the partially accumulated message.
+Multiple deltas for the same tool call are accumulated until DoneEvent.</p>
+<p>Reference: SUBPHASE-0.0.md, "4. Streaming Events" section.</p>
+<p><strong>Constructor parameters</strong></p>
+<ul>
+<li><code>delta: dict[str, Any]</code> — The OpenAI-style tool call delta dict.</li>
+<li><code>partial: AssistantMessage</code> — The partially accumulated AssistantMessage.</li>
+<li><code>type: Literal['toolcall_delta'] = 'toolcall_delta'</code> — Always "toolcall_delta".</li>
+</ul>
+<h2 id="aclose_providers">aclose_providers<a class="headerlink" href="#aclose_providers" title="Permanent link">&para;</a></h2>
+<!-- agent: yes -->
+
+<div class="highlight"><pre><span></span><code><span class="n">aclose_providers</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p><code>tau_llm.client.aclose_providers</code></p>
+<p>Close and drop every pooled provider for the CURRENT event loop.</p>
+<p>Explicit teardown (docs/PROVIDER-LIFETIME.md §6.3: "closed explicitly,
+not by GC"). Call this from a shutdown path that still runs on the loop
+the providers were built on — a TUI's unmount handler, or a headless
+run's <code>finally</code> before the driving <code>asyncio.run()</code> returns. Calling
+it again (or with nothing pooled) is a no-op; a subsequent
+<code>stream_simple</code> call rebuilds providers on demand.</p>
+<h2 id="complete_simple">complete_simple<a class="headerlink" href="#complete_simple" title="Permanent link">&para;</a></h2>
+<!-- agent: yes -->
+
+<div class="highlight"><pre><span></span><code><span class="n">complete_simple</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">options</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AssistantMessage</span>
+</code></pre></div>
+<p><code>tau_llm.client.complete_simple</code></p>
+<p>Whole-message completion — drive a stream to its terminal message.</p>
+<p>Faithful port of pi's <code>completeSimple</code> (stream.ts:67), which is simply
+<code>stream(...).result()</code>. Used where the caller wants the whole
+AssistantMessage and not the intermediate deltas — e.g. compaction's
+summary generation, which has no streaming UI to feed.</p>
+<p>This is about the CALLER's shape, not the transport: it collapses the event
+stream for a caller that has no use for deltas, and the request underneath is
+still whatever <code>Model.stream</code> / <code>options["stream"]</code> selected (PLAN-0.9.3
+§4.1). A non-streaming BACKEND is a separate axis — set <code>stream=False</code> and
+every entry point here, this one included, keeps working unchanged.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>model: Any</code> — The Model configuration (has provider, id, etc.).</li>
+<li><code>context: dict[str, Any]</code> — Context dict (same shape as <code>stream_simple</code>): <code>messages</code> and optional <code>tools</code>. A leading <code>{"role": "system", ...}</code> message sets the system prompt (client.py does not read <code>system_prompt</code>).</li>
+<li><code>options: dict[str, Any] | None = None</code> — Optional provider options (<code>max_tokens</code>, <code>api_key</code>, <code>reasoning</code>, <code>temperature</code>, …).</li>
+</ul>
+<p><strong>Returns</strong></p>
+<p>The fully accumulated AssistantMessage.</p>
+<p><strong>Raises</strong></p>
+<ul>
+<li><code>Exception</code> — If the stream produced an ErrorEvent (propagated by <code>AssistantMessageEventStream.result</code>). Fail-Early: no fabricated fallback message.</li>
+</ul>
+<h2 id="detect_compat">detect_compat<a class="headerlink" href="#detect_compat" title="Permanent link">&para;</a></h2>
+<!-- agent: yes -->
+
+<div class="highlight"><pre><span></span><code><span class="n">detect_compat</span><span class="p">(</span><span class="n">provider</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ResolvedCompat</span>
+</code></pre></div>
+<p><code>tau_llm.compat.detect_compat</code></p>
+<p>Infer wire quirks from the endpoint URL.</p>
+<p>Only the URL decides anything today. pi also matches on the provider NAME,
+and τ cannot: <code>build_model_from_config</code> defaults an entry with no
+<code>backend</code> key to <code>provider="openai"</code>, so in τ that string means "the
+operator did not say" far more often than it means OpenAI. Matching it would
+switch a local llama.cpp to a spelling llama.cpp rejects, which is the
+regression this whole module is arranged to avoid.</p>
+<p>A proxy in front of real OpenAI therefore goes undetected. That is the
+correct trade: it is one explicit <code>compat.max_tokens_field</code> in the config,
+where the alternative silently breaks endpoints that work today.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>provider: str</code> — <code>Model.provider</code>. Accepted for signature stability and to keep the pi correspondence readable; not consulted, for the reason above.</li>
+<li><code>base_url: str</code> — <code>Model.base_url</code> — the endpoint the request goes to.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<p>A fully-decided :class:<code>ResolvedCompat</code>.</p>
+<h2 id="get_api_factory">get_api_factory<a class="headerlink" href="#get_api_factory" title="Permanent link">&para;</a></h2>
+<!-- agent: yes -->
+
+<div class="highlight"><pre><span></span><code><span class="n">get_api_factory</span><span class="p">(</span><span class="n">api</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ApiFactory</span>
+</code></pre></div>
+<p><code>tau_llm.providers.base.get_api_factory</code></p>
+<p>The factory for <code>api</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>api: str</code> — <em>(no description)</em></li>
+</ul>
+<p><strong>Raises</strong></p>
+<ul>
+<li><code>ValueError</code> — If <code>api</code> is unknown. The message names what was asked for and what exists — an unimplemented protocol must fail loudly here, never fall through to whichever client happens to be built in.</li>
+</ul>
+<h2 id="get_provider_spec">get_provider_spec<a class="headerlink" href="#get_provider_spec" title="Permanent link">&para;</a></h2>
+<!-- agent: yes -->
+
+<div class="highlight"><pre><span></span><code><span class="n">get_provider_spec</span><span class="p">(</span><span class="n">provider_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ProviderSpec</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p><code>tau_llm.providers.base.get_provider_spec</code></p>
+<p>The vendor's spec, or None if it was never registered.</p>
+<p>None is not an error: an unregistered vendor id is a free-form label on a
+<code>Model</code> that already carries its own endpoint. Only a model whose <code>api</code>
+is unknown cannot be served.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>provider_id: str</code> — <em>(no description)</em></li>
+</ul>
+<h2 id="register_api">register_api<a class="headerlink" href="#register_api" title="Permanent link">&para;</a></h2>
+<!-- agent: yes -->
+
+<div class="highlight"><pre><span></span><code><span class="n">register_api</span><span class="p">(</span><span class="n">api</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">factory</span><span class="p">:</span> <span class="n">ApiFactory</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">replace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p><code>tau_llm.providers.base.register_api</code></p>
+<p>Register the factory that builds clients for one wire protocol.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>api: str</code> — Wire-protocol id, matching <code>Model.api</code> (e.g. <code>"openai-completions"</code>).</li>
+<li><code>factory: ApiFactory</code> — See :class:<code>ApiFactory</code>.</li>
+<li><code>replace: bool = False</code> — Required to overwrite an existing registration. Without it a second registration of the same id raises: two libraries silently fighting over which client serves a protocol is the kind of invisible mis-routing this whole module exists to prevent.</li>
+</ul>
+<p><strong>Raises</strong></p>
+<ul>
+<li><code>ValueError</code> — On an empty id, or on a duplicate without <code>replace=True</code>.</li>
+</ul>
+<h2 id="register_provider">register_provider<a class="headerlink" href="#register_provider" title="Permanent link">&para;</a></h2>
+<!-- agent: yes -->
+
+<div class="highlight"><pre><span></span><code><span class="n">register_provider</span><span class="p">(</span><span class="n">spec</span><span class="p">:</span> <span class="n">ProviderSpec</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">replace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p><code>tau_llm.providers.base.register_provider</code></p>
+<p>Register a vendor's defaults.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>spec: ProviderSpec</code> — The vendor, as data.</li>
+<li><code>replace: bool = False</code> — Required to overwrite an existing registration, for the same reason as :func:<code>register_api</code> — a silently redirected vendor sends prompts and credentials somewhere the operator did not choose.</li>
+</ul>
+<p><strong>Raises</strong></p>
+<ul>
+<li><code>ValueError</code> — On a duplicate id without <code>replace=True</code>.</li>
+</ul>
+<h2 id="registered_apis">registered_apis<a class="headerlink" href="#registered_apis" title="Permanent link">&para;</a></h2>
+<!-- agent: yes -->
+
+<div class="highlight"><pre><span></span><code><span class="n">registered_apis</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+</code></pre></div>
+<p><code>tau_llm.providers.base.registered_apis</code></p>
+<p>Every registered wire-protocol id, sorted.</p>
+<h2 id="registered_providers">registered_providers<a class="headerlink" href="#registered_providers" title="Permanent link">&para;</a></h2>
+<!-- agent: yes -->
+
+<div class="highlight"><pre><span></span><code><span class="n">registered_providers</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+</code></pre></div>
+<p><code>tau_llm.providers.base.registered_providers</code></p>
+<p>Every registered vendor id, sorted.</p>
+<h2 id="resolve_compat">resolve_compat<a class="headerlink" href="#resolve_compat" title="Permanent link">&para;</a></h2>
+<!-- agent: yes -->
+
+<div class="highlight"><pre><span></span><code><span class="n">resolve_compat</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">Model</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ResolvedCompat</span>
+</code></pre></div>
+<p><code>tau_llm.compat.resolve_compat</code></p>
+<p>The compat τ will actually use for <code>model</code>.</p>
+<p>Detection first, then the operator's stated :class:<code>Compat</code> over the top,
+field by field — an unset field falls through to the detected value rather
+than to a type default, so stating one quirk never silently resets another.
+Mirrors pi's <code>getCompat</code> (<code>openai-completions.ts:1631</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>model: Model</code> — <em>(no description)</em></li>
+</ul>
+<h2 id="split_tool_result_content">split_tool_result_content<a class="headerlink" href="#split_tool_result_content" title="Permanent link">&para;</a></h2>
+<!-- agent: yes -->
+
+<div class="highlight"><pre><span></span><code><span class="n">split_tool_result_content</span><span class="p">(</span><span class="n">content</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]</span>
+</code></pre></div>
+<p><code>tau_llm.providers.base.split_tool_result_content</code></p>
+<p>A tool result's content as (text parts, [(mime_type, base64 data), ...]).</p>
+<p>Every client needs the same split, because every client has to put the text
+somewhere the wire format calls a tool result and the images somewhere it
+does not. It lives here rather than three times over: the copies in
+<code>openai.py</code> and <code>google.py</code> had already drifted on the join separator and
+on which non-block shapes they tolerated, and a shape rule that differs per
+provider is a shape rule nobody can state.</p>
+<p>Accepts the three shapes a tool result reaches a client in: a bare string,
+a list of pydantic blocks (the live path, <code>ToolResultMessage.content</code>), and
+a list of raw dicts (the persisted path — a reloaded session arrives as
+<code>model_dump()</code>ed messages).</p>
+<p>Text parts come back unjoined, because the separator is the caller's: the
+OpenAI client has always joined with a space and the Google client with an
+empty string, and quietly changing how a multi-block text result reads is not
+something an image change should do.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>content: Any</code> — The tool result's content, in any of the three shapes above.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<p>A <code>(text_parts, images)</code> pair. <code>images</code> holds <code>(mime_type, data)</code> with <code>data</code> still base64-encoded.</p>
+<p><strong>Raises</strong></p>
+<ul>
+<li><code>TypeError</code> — If <code>content</code> is neither a string nor an iterable of blocks, or if it holds a block of a type this cannot read. Fabricating text from an unreadable value is how an image became a filename in the first place; a wrong tool result must not reach the model looking like a right one.</li>
+</ul>
+<h2 id="stream_simple">stream_simple<a class="headerlink" href="#stream_simple" title="Permanent link">&para;</a></h2>
+<!-- agent: yes -->
+
+<div class="highlight"><pre><span></span><code><span class="n">stream_simple</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">options</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AssistantMessageEventStream</span>
+</code></pre></div>
+<p><code>tau_llm.client.stream_simple</code></p>
+<p>Simple streaming client for the agent loop.</p>
+<p>This is the ONLY entry point that τ-agent-core uses to talk to τ-llm.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>model: Any</code> — The Model configuration (has provider, id, etc.).</li>
+<li><code>context: dict[str, Any]</code> — Context dict with keys: - messages: List of message dicts (user/assistant/toolResult). - tools: Optional list of tool definitions. - system_prompt: Optional system prompt string.</li>
+<li><code>options: dict[str, Any] | None = None</code> — Optional provider-specific options (temperature, etc.). Two of them are TRANSPORT settings the provider strips from the request body rather than sending: <code>request_timeout</code> and <code>stream</code> (False = talk to a backend that does not implement SSE; the events below are produced either way — PLAN-0.9.3 §4.1).</li>
+</ul>
+<p><strong>Returns</strong></p>
+<p>AssistantMessageEventStream yielding TextDeltaEvent, ToolCallDeltaEvent, DoneEvent, and ErrorEvent instances.</p>
+<p><strong>Raises</strong></p>
+<ul>
+<li><code>ValueError</code> — If the model names a wire protocol τ has no implementation for, contradicts its own vendor's protocol, resolves to no endpoint, or to no credential for a vendor that declares where its credential lives. See <code>_resolve_request</code>.</li>
+</ul>
+<h2 id="unregister_api">unregister_api<a class="headerlink" href="#unregister_api" title="Permanent link">&para;</a></h2>
+<!-- agent: yes -->
+
+<div class="highlight"><pre><span></span><code><span class="n">unregister_api</span><span class="p">(</span><span class="n">api</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p><code>tau_llm.providers.base.unregister_api</code></p>
+<p>Remove a wire-protocol registration.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>api: str</code> — <em>(no description)</em></li>
+</ul>
+<p><strong>Raises</strong></p>
+<ul>
+<li><code>KeyError</code> — If nothing is registered under that id — undoing a registration that never happened means the caller's model of the registry is wrong, and saying so is cheaper than not.</li>
+</ul>
+<h2 id="unregister_provider">unregister_provider<a class="headerlink" href="#unregister_provider" title="Permanent link">&para;</a></h2>
+<!-- agent: yes -->
+
+<div class="highlight"><pre><span></span><code><span class="n">unregister_provider</span><span class="p">(</span><span class="n">provider_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p><code>tau_llm.providers.base.unregister_provider</code></p>
+<p>Remove a vendor registration.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>provider_id: str</code> — <em>(no description)</em></li>
+</ul>
+<p><strong>Raises</strong></p>
+<ul>
+<li><code>KeyError</code> — If that vendor was never registered.</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "content.code.copy"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+    
+  </body>
+</html>

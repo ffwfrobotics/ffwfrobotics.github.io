@@ -1,0 +1,4112 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for Tectum, Tau, and JMFTS">
+      
+      
+      
+        <link rel="canonical" href="https://ffwfrobotics.github.io/jmfts/release-0-6-0/">
+      
+      
+        <link rel="prev" href="../changelog/">
+      
+      
+        <link rel="next" href="../release-0-3-0/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
+    
+    
+      
+        <title>0.6.0 — eyes and hands - FFWF Robotics Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/ffwf.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#jmfts-060-eyes-and-hands" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="FFWF Robotics Docs" class="md-header__button md-logo" aria-label="FFWF Robotics Docs" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            FFWF Robotics Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              0.6.0 — eyes and hands
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9 8.99 8.99 0 0 0 4 7.47V22h2v-3h2v3h2v-3h2v3h2v-3.54c2.47-1.65 4-4.46 4-7.46a9 9 0 0 0-9-9m-4 9a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m8 0a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m-4 3 1.5 3h-3z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 15a2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2m2.5 2 1.5-3 1.5 3zm5.5-2a2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2m6-4A10 10 0 0 0 12 1 10 10 0 0 0 2 11c0 2.8 1.2 5.3 3 7.1V22h14v-3.9c1.8-1.8 3-4.3 3-7.1m-5 9h-2v-2h-2v2h-2v-2H9v2H7v-2.8c-1.8-1.5-3-3.7-3-6.2a8 8 0 0 1 8-8 8 8 0 0 1 8 8c0 2.5-1.2 4.8-3 6.2z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tectum/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tectum
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tau/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tau
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tau/preview/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tau 0.16 preview
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  JMFTS
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../integrations/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Integrations
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../style-guide/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Style guide
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="FFWF Robotics Docs" class="md-nav__button md-logo" aria-label="FFWF Robotics Docs" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    FFWF Robotics Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tectum/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tectum
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tectum/tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tectum/tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tectum/cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tectum/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tectum/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tau/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tau
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tau/tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tau/reference/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/tau-llm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_llm
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/tau-agent-core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_agent_core
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extensions
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/rpc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RPC
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/tau-coding-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tau_coding_agent
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tau/reference/api/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_5_7" id="__nav_3_5_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_5_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/api/messages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Messages and content
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/api/providers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Providers and the client
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/api/constraints/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Constrained decoding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/api/tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/api/agent-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The agent loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/api/sessions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sessions and the conversation tree
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/api/events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/api/sdk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The SDK entry point
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/api/extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/api/compaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compaction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/api/rpc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The RPC protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/api/export/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Export
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/reference/api/runs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Run manifests and latency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tau/preview/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tau 0.16 preview
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/preview/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/preview/extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/preview/operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operating it
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/preview/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/preview/differences/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What changed from 0.15
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tau/preview/api/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/preview/api/clients/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Writing a frontend
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/preview/api/config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Configuration and context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/preview/api/diagnostics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Tracing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/preview/api/driver/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Embedding tau
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/preview/api/errors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Errors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/preview/api/events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/preview/api/extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Writing an extension
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/preview/api/machine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The step machine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/preview/api/providers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/preview/api/records/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The session's records
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/preview/api/sessions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Starting and finding sessions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/preview/api/tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/preview/api/tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The terminal UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/preview/api/wire/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The wire
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tau/preview/api/wire-protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau 0.16 preview API: The wire protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JMFTS
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JMFTS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_2" id="__nav_5_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/ingest-a-document/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ingest a document
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/see-a-result-on-the-page/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    See a result on the page
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stub"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevOps Manual
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    0.6.0 — eyes and hands
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    0.6.0 — eyes and hands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#where-this-is-specified" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where this is specified
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-the-appliance-has-a-face" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. The appliance has a face
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. The appliance has a face">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-token-is-a-browser-fact-not-a-tab-fact" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The token is a browser fact, not a tab fact
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-seven-columns-one-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Seven columns, one query
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-a-page-that-can-prove-it-is-thin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. A page that can prove it is thin
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-three-routes-that-answer-with-bytes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Three routes that answer with bytes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Three routes that answer with bytes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#no-highlight-parameter-deliberately" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        No highlight parameter, deliberately
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-a-docx-gets-a-rectangle-and-the-page-says-whose-page-it-is" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. A .docx gets a rectangle, and the page says whose page it is
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. A .docx gets a rectangle, and the page says whose page it is">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#renditions-are-on-always-and-the-policy-is-eviction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Renditions are on, always, and the policy is eviction
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#libreoffice-is-a-system-package-so-it-is-an-image" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LibreOffice is a system package, so it is an image
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-two-access-gates-that-did-not-close" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Two access gates that did not close
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Two access gates that did not close">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#an-edge-takes-write-on-its-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        An edge takes write on its source
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#graph-analytics-compute-over-your-graph-not-the-corpus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Graph analytics compute over your graph, not the corpus
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-a-workbooks-rows-reach-its-own-index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. A workbook's rows reach its own index
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-explain-says-how-many-not-only-which" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. EXPLAIN says how many, not only which
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-a-collection-configures-what-is-ingested-under-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. A collection configures what is ingested under it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#upgrading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upgrading
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-not-here" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is not here
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-0-3-0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    0.3.0 — the job system
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../integrations/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integrations
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Integrations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integrations/tectum-tau/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum + Tau
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integrations/tectum-jmfts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tectum + JMFTS
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integrations/tau-jmfts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tau + JMFTS
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integrations/full-stack-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The FFwF Full Stack Agent
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../style-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guide
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--stable"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#where-this-is-specified" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where this is specified
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-the-appliance-has-a-face" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. The appliance has a face
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. The appliance has a face">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-token-is-a-browser-fact-not-a-tab-fact" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The token is a browser fact, not a tab fact
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-seven-columns-one-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Seven columns, one query
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-a-page-that-can-prove-it-is-thin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. A page that can prove it is thin
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-three-routes-that-answer-with-bytes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Three routes that answer with bytes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Three routes that answer with bytes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#no-highlight-parameter-deliberately" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        No highlight parameter, deliberately
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-a-docx-gets-a-rectangle-and-the-page-says-whose-page-it-is" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. A .docx gets a rectangle, and the page says whose page it is
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. A .docx gets a rectangle, and the page says whose page it is">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#renditions-are-on-always-and-the-policy-is-eviction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Renditions are on, always, and the policy is eviction
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#libreoffice-is-a-system-package-so-it-is-an-image" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LibreOffice is a system package, so it is an image
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-two-access-gates-that-did-not-close" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Two access gates that did not close
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Two access gates that did not close">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#an-edge-takes-write-on-its-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        An edge takes write on its source
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#graph-analytics-compute-over-your-graph-not-the-corpus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Graph analytics compute over your graph, not the corpus
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-a-workbooks-rows-reach-its-own-index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. A workbook's rows reach its own index
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-explain-says-how-many-not-only-which" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. EXPLAIN says how many, not only which
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-a-collection-configures-what-is-ingested-under-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. A collection configures what is ingested under it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#upgrading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upgrading
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-not-here" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is not here
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="jmfts-060-eyes-and-hands">JMFTS 0.6.0 — eyes and hands<a class="headerlink" href="#jmfts-060-eyes-and-hands" title="Permanent link">&para;</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Released 2026-10-12</p>
+<p>0.6.0 was the current release when this page was written (the current one is 0.8.0; see the <a href="../changelog/">Changelog</a>): tag <a href="https://github.com/jmccardle/jmfts/releases/tag/v0.6.0"><code>v0.6.0</code></a>, and <strong>three</strong> wheels on PyPI. The third is new — see <a href="#1-the-appliance-has-a-face">The appliance has a face</a>.</p>
+</div>
+<p><strong>Drag a PDF in, search it, click a result, see the page with the answer boxed on it.</strong> That
+is the release, and everything else here is either something that sentence needed or
+something that was found by being able to run it.</p>
+<p>Until now, every defect in this appliance was found by reading the source, because reading
+the source was the only way anybody had ever looked at it. Two access gates did not close.
+Three retrieval paths answered with nothing and said nothing about why. None of that was
+subtle; it was just never in front of anyone.</p>
+<h2 id="where-this-is-specified">Where this is specified<a class="headerlink" href="#where-this-is-specified" title="Permanent link">&para;</a></h2>
+<p><code>docs/SPRINT_0_6_0.md</code> is in the repository and is the plan this release was built from —
+seven blocks, thirty-five steps, with the measurements that chose the scope. It is worth
+reading if you want the arguments rather than the outcomes; the front end is Block F.</p>
+<h2 id="1-the-appliance-has-a-face">1. The appliance has a face<a class="headerlink" href="#1-the-appliance-has-a-face" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span><span class="s1">'jmfts[web]'</span>
+uvicorn<span class="w"> </span>jmfts_core.rest.main:app<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">8100</span>
+<span class="c1"># then open http://localhost:8100/app/</span>
+</code></pre></div>
+<p>Seven views, reachable from the navigation and addressable by URL fragment:</p>
+<table>
+<thead>
+<tr>
+<th>View</th>
+<th>At</th>
+<th>What it composes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ingest</td>
+<td><code>#/ingest</code></td>
+<td>Drop a file, see what <em>would</em> happen, then do it and watch it settle</td>
+</tr>
+<tr>
+<td>Search</td>
+<td><code>#/search</code></td>
+<td>The same query down seven columns, side by side</td>
+</tr>
+<tr>
+<td>Tree</td>
+<td><code>#/documents</code></td>
+<td>The corpus as the tree it is stored as</td>
+</tr>
+<tr>
+<td>Document</td>
+<td><code>#/document</code></td>
+<td>One node, rendered, with the box drawn on it</td>
+</tr>
+<tr>
+<td>Presets</td>
+<td><code>#/presets</code></td>
+<td>Search contexts, saved from the browser and run from it</td>
+</tr>
+<tr>
+<td>This appliance</td>
+<td><code>#/capabilities</code></td>
+<td><code>GET /capabilities</code> — extras installed, formats identified, methods available</td>
+</tr>
+<tr>
+<td>Call log</td>
+<td><code>#/calls</code></td>
+<td>Every request the page made, replayable</td>
+</tr>
+</tbody>
+</table>
+<p>An appliance without <code>jmfts-web</code> installed starts normally and serves no <code>/app</code>. The mount
+is conditional on the import succeeding, and it happens after every API route, so a future
+endpoint can never be shadowed by a static file.</p>
+<h3 id="the-token-is-a-browser-fact-not-a-tab-fact">The token is a browser fact, not a tab fact<a class="headerlink" href="#the-token-is-a-browser-fact-not-a-tab-fact" title="Permanent link">&para;</a></h3>
+<p>The token goes in one field at the top and stays until you press <strong>Forget</strong>. Forget signs
+out every tab on that appliance at once, which is the counterweight to storing it at all.
+The status line says which state you are in rather than only whether a value is present.</p>
+<h2 id="2-seven-columns-one-query">2. Seven columns, one query<a class="headerlink" href="#2-seven-columns-one-query" title="Permanent link">&para;</a></h2>
+<p>The search view runs the same query through every retrieval method the appliance has and
+puts the answers next to each other:</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Route</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vector</code></td>
+<td><code>POST /search/vector</code></td>
+<td>HNSW cosine over the 768-dim document embedding</td>
+</tr>
+<tr>
+<td><code>fulltext</code></td>
+<td><code>POST /search/fulltext</code></td>
+<td>PostgreSQL <code>ts_vector</code>, with a trigram fallback</td>
+</tr>
+<tr>
+<td><code>bm25</code></td>
+<td><code>POST /search/bm25</code></td>
+<td>The inverted index, <code>k1</code>/<code>b</code> tuned</td>
+</tr>
+<tr>
+<td><code>maxsim</code></td>
+<td><code>POST /search/maxsim</code></td>
+<td>Late interaction over the per-token 256-dim vectors</td>
+</tr>
+<tr>
+<td><code>hybrid</code></td>
+<td><code>POST /search/hybrid</code></td>
+<td>Reciprocal Rank Fusion over the first two by default</td>
+</tr>
+<tr>
+<td><code>auto</code></td>
+<td><code>POST /search/auto</code></td>
+<td>A router reads the query, picks one method, and says why</td>
+</tr>
+<tr>
+<td><code>quick (GET)</code></td>
+<td><code>GET /search/</code></td>
+<td>The same algorithms in a URL</td>
+</tr>
+</tbody>
+</table>
+<p>This is the demonstration, not a debug affordance. Four columns of the same query is the
+shortest explanation of what this appliance is that anybody has written down, and the
+<a href="#3-a-page-that-can-prove-it-is-thin">Call log</a> shows it is four calls and nothing else.</p>
+<p>The <code>hybrid</code> column deliberately does <strong>not</strong> send <code>methods</code>. Omitting it runs the tuned
+default, and the <code>applied</code> block in the response reports what that resolved to — which is
+the honest way to show a default, rather than the page naming one and being wrong later.</p>
+<h2 id="3-a-page-that-can-prove-it-is-thin">3. A page that can prove it is thin<a class="headerlink" href="#3-a-page-that-can-prove-it-is-thin" title="Permanent link">&para;</a></h2>
+<p>Every view talks to the appliance through one generated TypeScript client, and that client
+emits one event per call: operation id, method, resolved path, path params, query, body,
+status, response, elapsed milliseconds. The Call log is that event stream. Three things
+follow.</p>
+<p><strong>Replay.</strong> An event is a call plus its arguments, so it is re-sendable with any of them
+edited, and the response renders through the right visualisation instead of as a blob. It is
+<code>/docs</code>' "Try it out" with the result half fixed.</p>
+<p><strong>Verifiable thinness.</strong> A view that shows something the log has no call for computed it in
+the browser. "The front end thinly wraps the API" stops being a claim about the source and
+becomes something you can check on the page.</p>
+<p><strong>Copy-out.</strong> Any event prints three ways — <code>curl</code>, a <code>RemoteJmftsClient</code> call, and <code>fetch</code> —
+and none of the three prints your token. Each names the environment variable it lives in
+instead.</p>
+<p>The generated half of the bundle is rendered from the appliance's own <code>/openapi.json</code>, the
+way <code>jmfts-client</code>'s <code>_verbs.py</code> is rendered from the route table. A stale file fails the
+suite.</p>
+<div class="admonition note">
+<p class="admonition-title">No build step, no bundler, no CDN</p>
+<p>The front end is ES modules the browser runs as they stand. Nothing loads from another
+origin — not a script, not a stylesheet, not a font — and a test holds the whole bundle
+to that. An appliance is expected to run air-gapped, and a page that renders blank
+without internet access is worse than no page.</p>
+</div>
+<h2 id="4-three-routes-that-answer-with-bytes">4. Three routes that answer with bytes<a class="headerlink" href="#4-three-routes-that-answer-with-bytes" title="Permanent link">&para;</a></h2>
+<p>The beeline needed the appliance to hand over pixels, and no exposed operation could answer
+with anything but JSON. <code>ExposeSpec</code> grew a response media type; three routes followed.</p>
+<table>
+<thead>
+<tr>
+<th>Route</th>
+<th>Answers with</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /documents/{id}/blob</code></td>
+<td>the original upload, unchanged</td>
+<td>Served as an <strong>attachment</strong>, under the uploader's own filename</td>
+</tr>
+<tr>
+<td><code>GET /documents/{id}/image</code></td>
+<td>one page, PNG</td>
+<td><code>page</code> is <strong>0-based</strong>; <code>dpi</code> defaults to 150 and is bounded</td>
+</tr>
+<tr>
+<td><code>GET /documents/{id}/region</code></td>
+<td>a rectangle of a page, PNG</td>
+<td>From the node's own anchor, or from explicit bounds</td>
+</tr>
+</tbody>
+</table>
+<p>The bytes were always there — stored as Postgres large objects since 0.1.1 — but nothing
+under <code>jmfts_core/rest/</code> could reach one. All three callers were task handlers.</p>
+<p><strong><code>attachment</code> on <code>/blob</code> is the safe disposition, not a preference.</strong> That route serves
+uploaded bytes under the uploader's own content type from the appliance's own origin. An
+ingested <code>.html</code> or <code>.svg</code> served <code>inline</code> would execute in it.</p>
+<p><strong><code>/region</code> takes one way of naming the rectangle, not two with a precedence rule.</strong>
+<code>anchor=true</code> asks for the node's own <code>source_anchor</code>, which is the form a client has after
+a search hit. <code>page</code> with <code>bbox=x0,y0,x1,y1</code> names an explicit rectangle in PDF points.
+Passing both is a 400: there is no way to tell which was meant, and serving the wrong
+rectangle confidently is worse than serving none, because the reader cannot tell.</p>
+<p><strong>Omitting <code>page</code> on <code>/image</code> asks for the page this node is addressed at.</strong> A file node is
+the whole document, so that is page 0. Anything else — a chunk, a section — names its page
+through its own anchor, and a node with no anchor gets a 409 saying so rather than page 0.</p>
+<h3 id="no-highlight-parameter-deliberately">No <code>highlight</code> parameter, deliberately<a class="headerlink" href="#no-highlight-parameter-deliberately" title="Permanent link">&para;</a></h3>
+<p>Burning the rectangle into the PNG would make the page uncacheable per-anchor, make the box
+unselectable and undismissable, and give the tree a second place where a rectangle is drawn.
+The overlay is one client component that takes an anchor and a rendered surface, and
+<code>pdf-page</code>, <code>image</code> and <code>sheet-region</code> all use it. Writing it three times is how three
+surfaces end up disagreeing about which corner the origin is in.</p>
+<h2 id="5-a-docx-gets-a-rectangle-and-the-page-says-whose-page-it-is">5. A <code>.docx</code> gets a rectangle, and the page says whose page it is<a class="headerlink" href="#5-a-docx-gets-a-rectangle-and-the-page-says-whose-page-it-is" title="Permanent link">&para;</a></h2>
+<p>Office parity was the cut line and it landed. A <code>.docx</code> or <code>.pptx</code> is paginated by
+LibreOffice into a stored PDF, and a citation's rectangle is recovered off that.</p>
+<p>That makes two anchors on one node, and they are two evidence rows because they are two
+facts with different truth conditions:</p>
+<table>
+<thead>
+<tr>
+<th>Row</th>
+<th>What it is</th>
+<th>How much to trust it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>source_anchor</code></td>
+<td>The document's own address — an <code>ooxml</code> element, or a source PDF's own geometry</td>
+<td>Exact</td>
+</tr>
+<tr>
+<td><code>render_anchor</code></td>
+<td>A page and a rectangle recovered from the rendition</td>
+<td>Approximate</td>
+</tr>
+</tbody>
+</table>
+<p>A <code>PdfAnchor</code> now carries <code>of</code>, which is <code>"source"</code> or <code>"rendition"</code>. It <strong>defaults</strong> to
+<code>"source"</code>, and that is not laziness: every anchor written before this release is a source
+document's own geometry, and a default that says so is the only reading under which an old
+row and a new one parse alike.</p>
+<div class="admonition warning">
+<p class="admonition-title">\"Page 3\" and \"page 3 of our rendering\" are different claims</p>
+<p>Two LibreOffice versions paginate differently, and the recovery can fail outright — in
+which case there is a <code>render_anchor.unresolved</code> row and no anchor at all. A viewer that
+draws the box says which of the two it has. The alternative is a reader opening the
+<code>.docx</code> in Word, finding the passage on page 4, and having no way to know why.</p>
+</div>
+<h3 id="renditions-are-on-always-and-the-policy-is-eviction">Renditions are on, always, and the policy is eviction<a class="headerlink" href="#renditions-are-on-always-and-the-policy-is-eviction" title="Permanent link">&para;</a></h3>
+<p>Migration <code>023</code> adds <code>document_renditions</code>: derived bytes get their own table because the
+uploaded ones will not share theirs. <code>document_blobs.document_id</code> is UNIQUE, and migration
+<code>009</code> says why in its own DDL — one blob per document, a second version is a new node. A
+rendition is not a second version of the upload; it is derived from it.</p>
+<p>The storage argument was measured rather than assumed. On a 2988 MB reference database the
+original bytes are 144 MB — 4.8% — so the upper bound, if every stored byte were an office
+document with a same-sized rendition, is +4.8%. So renditions are on by default and the
+policy for them is <strong>cache eviction</strong> rather than retention: every rendition row can be
+deleted and regenerated by re-running <code>render:pdf</code>, and no row in <code>document_blobs</code> can be
+regenerated by anything.</p>
+<h3 id="libreoffice-is-a-system-package-so-it-is-an-image">LibreOffice is a system package, so it is an image<a class="headerlink" href="#libreoffice-is-a-system-package-so-it-is-an-image" title="Permanent link">&para;</a></h3>
+<p>Two new task types, <code>render:pdf</code> and <code>convert:ooxml</code>, and a third dependency tier to run
+them. <code>jmfts[convert]</code> is the <strong>client only</strong> — <code>unoserver</code> — and <code>Dockerfile.libreoffice</code>
+builds something for it to talk to. <code>JMFTS_CONVERT_URL</code> is how a JMFTS finds one.</p>
+<p><strong><code>render:pdf</code> is advisory, and that is the part the plan got wrong first.</strong> The original
+design gated the office anchor on <code>after render:pdf</code>, which is a claim on a COMPLETED row of
+an advisory task. On an appliance with no LibreOffice — the default — that stalls every
+office document short of settling, silently, forever. <code>anchor:render</code> is offered at the
+settling boundary instead. An appliance with no converter fails the conversion PERMANENTLY
+with a message naming the setting and the image that serves one; it never degrades quietly.</p>
+<h2 id="6-two-access-gates-that-did-not-close">6. Two access gates that did not close<a class="headerlink" href="#6-two-access-gates-that-did-not-close" title="Permanent link">&para;</a></h2>
+<p>Both are behaviour breaks and both are the reason this is a minor version.</p>
+<h3 id="an-edge-takes-write-on-its-source">An edge takes write on its source<a class="headerlink" href="#an-edge-takes-write-on-its-source" title="Permanent link">&para;</a></h3>
+<p><code>DocumentRepository.create_link</code> constructed and flushed a <code>DocumentLink</code> with no principal
+check of any kind. <code>DocumentService.create_link</code> checked only that the body's <code>source_id</code>
+matched the id in the URL. So a principal with read-only access to a document could attach
+edges to it.</p>
+<p>The rule is <strong>write on the source, read on the target</strong>, and it now applies to triples too:
+five <code>TripleService</code> write verbs took a subject document and an object document and gated
+neither, while the read side has been gated since 0.5.0. A triple is an edge, so asserting
+one takes write on its subject. Seventeen of the twenty-four cases in the new
+<code>tests/test_access_triple_writes.py</code> failed against the commit before the fix.</p>
+<h3 id="graph-analytics-compute-over-your-graph-not-the-corpus">Graph analytics compute over your graph, not the corpus<a class="headerlink" href="#graph-analytics-compute-over-your-graph-not-the-corpus" title="Permanent link">&para;</a></h3>
+<p><code>GET /graph/centrality</code>, <code>/graph/subtree-authority</code>, <code>/graph/spines</code> and <code>/graph/communities</code>
+took no principal and consulted none. A caller with no grant read back the ids and titles of
+documents that are 404 for it everywhere else.</p>
+<div class="admonition warning">
+<p class="admonition-title">This changes numbers, not just rows</p>
+<p>There were two possible fixes and they are different products. Filtering the <em>returned
+ids</em> leaks nothing but reports numbers derived from rows the caller cannot see. A
+centrality score is a property of the graph it was computed on, so that answer is a
+number about somebody else's corpus.</p>
+<p>The filter went one layer down, into the vertex and title queries, so the graph itself is
+the caller's. A node dropping out also removes its descendants, so <code>subtree_size</code> and
+<code>spread</code> are computed over the part of the tree the caller can see. <strong>If you run these
+verbs as a principal without full grants, expect different scores than 0.5.1 gave you.</strong>
+They were wrong before.</p>
+</div>
+<p>There is now a standing audit: a test that every <code>@expose</code>'d verb is principal-scoped or
+explicitly listed. It found eleven more gaps on its first run, and step 35 — the triple
+write gate above — was added to the sprint because of it.</p>
+<h2 id="7-a-workbooks-rows-reach-its-own-index">7. A workbook's rows reach its own index<a class="headerlink" href="#7-a-workbooks-rows-reach-its-own-index" title="Permanent link">&para;</a></h2>
+<p><code>index:bm25</code> named three prose rungs in <code>after_any</code> and did not name <code>structure:sheets</code>, and
+it required a text layer. So a spreadsheet was absent from its own index <em>and</em> from
+<code>universal</code>. On the reference corpus that read as <strong>zero</strong> <code>index:bm25</code> tasks anywhere in a
+21-workbook subtree, while 4,601 <code>record</code> nodes under it carried text averaging 457
+characters.</p>
+<p><code>index:bm25</code> is now planned at the settling boundary. The entry condition was a test written
+first and run against the tree before any fix: ingest one workbook under an indexed folder,
+drain the queue, search BM25 for a string that is in a cell.</p>
+<h2 id="8-explain-says-how-many-not-only-which">8. <code>EXPLAIN</code> says how many, not only which<a class="headerlink" href="#8-explain-says-how-many-not-only-which" title="Permanent link">&para;</a></h2>
+<p>The ingest plan could list the rungs a format would run and could not say how much work that
+was. A forty-sheet workbook's <code>profile:sheet</code> read as one task beside <code>structure:sheets</code>.</p>
+<p>The plan now folds a cost: tasks, child nodes, embeddings and LLM calls. Every accumulator
+returns an <strong>interval</strong>, because a fan-out atom declares a bound rather than a number, and
+the top of an interval is allowed to be open. <code>PlanCost.unmeasured</code> names what could not be
+counted and why — an unmeasurable count is reported, never guessed.</p>
+<p>This is what the Ingest view's "What would happen" panel displays, and it is why dropping a
+file there stores nothing.</p>
+<h2 id="9-a-collection-configures-what-is-ingested-under-it">9. A collection configures what is ingested under it<a class="headerlink" href="#9-a-collection-configures-what-is-ingested-under-it" title="Permanent link">&para;</a></h2>
+<p><code>GET</code> and <code>PUT /documents/{id}/ingest-options</code> write an options row onto a node, and upload
+walks up the ancestors to find one.</p>
+<p><strong>A collection is not a scope a table has to express.</strong> It is a subtree, and a setting on a
+node reaches the documents beneath it. So this adds no bindings table and no migration — the
+tree is already there, and access control, already subtree-scoped, answers "who may
+configure this collection" with "who may write to this node", for free.</p>
+<h2 id="upgrading">Upgrading<a class="headerlink" href="#upgrading" title="Permanent link">&para;</a></h2>
+<p>One migration, <code>023_document_renditions.sql</code>. It is additive.</p>
+<div class="highlight"><pre><span></span><code>jmfts-init-db<span class="w"> </span>--pending<span class="w">     </span><span class="c1"># ask the database which shipped deltas it has not applied</span>
+</code></pre></div>
+<p>That command has existed since 0.5.0, and <code>schema_migrations</code> (migration <code>017</code>) is what it
+reads. If you are coming from 0.3.0 you have <code>017</code> through <code>023</code> to apply, and <code>022</code> swaps
+the token index from IVFFlat to HNSW — see the <a href="../changelog/#050">Changelog</a>.</p>
+<p>Read <a href="#6-two-access-gates-that-did-not-close">Two access gates that did not close</a> before
+upgrading a multi-principal deployment. Nothing fails at deploy time; calls that used to
+succeed start returning 403, which is the point.</p>
+<h2 id="what-is-not-here">What is not here<a class="headerlink" href="#what-is-not-here" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>The specifications are still held back.</strong> <code>INGEST_SPEC.md</code>, <code>SPRINT_JOBS.md</code> and
+  <code>OFFICE_SPEC.md</code> are cited by several hundred source comments and are not in the public
+  repository yet. <code>docs/SPRINT_0_6_0.md</code> is, and so are the generated reference pages.</li>
+<li><strong>The sprint plans and the archive are staying internal</strong>, and that is now a decision
+  rather than a backlog item. The citations that name them dangle permanently.</li>
+<li><strong>No text-span search within a node's rectangle.</strong> Asking "where in this node's region does
+  this phrase sit" is a real capability and it is simply not in this release.</li>
+<li><strong><code>/region</code> serves a spreadsheet as cells, not as a picture of cells.</strong> For a sheet, JSON
+  is the better answer, and <code>GET /documents/{id}/cells</code> already gives it.</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+    
+  </body>
+</html>
